@@ -72,6 +72,8 @@ import org.scijava.ops.spi.OpDependency;
  * brightness channel instead.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Jan Brocher (BioVoxxel)
  * @param <T> input pixel type
  * @param <V> output pixel type

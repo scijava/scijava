@@ -33,8 +33,9 @@ import java.util.Map;
  * component of the skeleton image. Two vertices may be joined by several
  * edges, and an edge may join a vertex to itself.
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  */
 public final class SkeletonGraph {
 

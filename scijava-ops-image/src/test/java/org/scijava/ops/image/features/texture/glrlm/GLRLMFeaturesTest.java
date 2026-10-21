@@ -53,6 +53,7 @@ import org.scijava.ops.image.features.texture.TextureUtils;
  * digital phantom reference values (see {@link IBSIPhantom}).
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class GLRLMFeaturesTest extends AbstractOpTest {
 

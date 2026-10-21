@@ -75,6 +75,8 @@ import org.scijava.ops.spi.OpDependency;
  * computes the background in floating point.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Jan Brocher (BioVoxxel)
  * @param <T> input pixel type
  * @param <V> output pixel type

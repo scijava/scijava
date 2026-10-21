@@ -49,6 +49,9 @@ import org.scijava.ops.image.lgpl.AbstractOpTest;
  * closings were obtained by applying the openings to the inverted image
  * ({@code 255 - f}) and inverting the result.
  * </p>
+ *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class AttributeFilterOracleTest extends AbstractOpTest {
 

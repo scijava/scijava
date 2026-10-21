@@ -113,8 +113,9 @@ import org.scijava.ops.spi.OpDependency;
  * POSSIBILITY OF SUCH DAMAGE.
  * </pre>
  *
- * @author Nicolas Jaccard
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Nicolas Jaccard
  * @param <T> the input type
  * @implNote op names='filter.localContrast'
  */

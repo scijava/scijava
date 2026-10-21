@@ -48,6 +48,7 @@ import net.imglib2.type.numeric.RealType;
  * </ul>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 final class Reconstructions {
 

@@ -51,6 +51,7 @@ import org.scijava.types.Nil;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class Skeletonize3DTest extends AbstractOpTest {
 

@@ -31,8 +31,9 @@ import net.imglib2.Localizable;
  * Immutable statistics of one skeleton (tree): one row of the "Results" table
  * of the Fiji AnalyzeSkeleton plugin.
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  */
 public final class SkeletonStatistics {
 

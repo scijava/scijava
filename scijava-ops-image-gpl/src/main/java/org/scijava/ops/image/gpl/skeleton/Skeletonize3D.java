@@ -61,8 +61,9 @@ import net.imglib2.view.Views;
  * and Image Processing 56(6):462-478, 1994.
  * </p>
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  * @param <B> type of the binary input
  * @implNote op names='morphology.skeletonize3D'
  */

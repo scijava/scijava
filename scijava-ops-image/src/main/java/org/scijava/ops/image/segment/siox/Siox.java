@@ -94,11 +94,12 @@ import net.imglib2.view.Views;
  * of {@code SioxSegmentator.segmentate}.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Gerald Friedland
  * @author Kristian Jantz
  * @author Lars Knipping
  * @author Ignacio Arganda-Carreras
- * @author Curtis Rueden
  */
 public final class Siox {
 

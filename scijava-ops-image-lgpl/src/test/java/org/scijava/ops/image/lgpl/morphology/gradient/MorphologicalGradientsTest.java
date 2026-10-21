@@ -45,6 +45,7 @@ import org.scijava.ops.image.lgpl.AbstractOpTest;
  * Tests {@link MorphologicalGradients}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class MorphologicalGradientsTest extends AbstractOpTest {
 

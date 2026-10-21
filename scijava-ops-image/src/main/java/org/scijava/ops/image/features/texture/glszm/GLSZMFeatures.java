@@ -59,8 +59,9 @@ import org.scijava.ops.image.features.texture.MatrixFeatures;
  * Information Processing. 2009:140-145.
  * </p>
  *
- * @author Tatsuaki Kobayashi
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Tatsuaki Kobayashi
  */
 public final class GLSZMFeatures {
 

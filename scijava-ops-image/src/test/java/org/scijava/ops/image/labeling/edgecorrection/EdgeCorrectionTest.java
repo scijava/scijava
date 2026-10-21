@@ -50,6 +50,7 @@ import org.scijava.types.Nil;
  * Tests {@link EdgeCorrection}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class EdgeCorrectionTest extends AbstractOpTest {
 

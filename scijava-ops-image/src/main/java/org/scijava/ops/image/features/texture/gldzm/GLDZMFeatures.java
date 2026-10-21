@@ -59,8 +59,9 @@ import org.scijava.ops.image.features.texture.MatrixFeatures;
  * Biomedical Engineering. 2014;61(3):630-637.
  * </p>
  *
- * @author Tatsuaki Kobayashi
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Tatsuaki Kobayashi
  */
 public final class GLDZMFeatures {
 

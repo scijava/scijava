@@ -27,8 +27,9 @@ package org.scijava.ops.image.gpl.skeleton;
  * the Fiji AnalyzeSkeleton plugin. A ring without junctions is always broken
  * by removing one of its voxels.
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  */
 public enum CyclePruning {
 

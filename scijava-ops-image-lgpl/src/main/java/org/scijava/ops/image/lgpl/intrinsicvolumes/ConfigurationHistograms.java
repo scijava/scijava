@@ -49,8 +49,9 @@ import net.imglib2.view.Views;
  * overlapping labels.
  * </p>
  *
- * @author David Legland
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author David Legland
  */
 final class ConfigurationHistograms {
 

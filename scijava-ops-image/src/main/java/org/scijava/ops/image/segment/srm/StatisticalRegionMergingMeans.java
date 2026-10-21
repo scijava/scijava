@@ -63,8 +63,9 @@ import org.scijava.ops.spi.Nullable;
  * 0&ndash;255, the result is identical to that of the plugin.
  * </p>
  *
- * @author Johannes Schindelin
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Johannes Schindelin
  * @param <T> input type
  * @param <O> output type
  * @implNote op names='segment.statisticalRegionMerging'

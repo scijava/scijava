@@ -48,6 +48,7 @@ import org.scijava.util.MersenneTwisterFast;
  * Tests {@link CompactWatershed}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class CompactWatershedTest extends AbstractOpTest {
 

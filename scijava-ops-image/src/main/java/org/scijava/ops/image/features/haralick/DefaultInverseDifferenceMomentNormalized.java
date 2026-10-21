@@ -53,8 +53,9 @@ import net.imglib2.type.numeric.real.DoubleType;
  * doi:10.1148/radiol.2020191145.
  * </p>
  *
- * @author Tatsuaki Kobayashi
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Tatsuaki Kobayashi
  * @implNote op names='features.haralick.inverseDifferenceMomentNormalized'
  */
 public class DefaultInverseDifferenceMomentNormalized<T extends RealType<T>> extends

@@ -67,11 +67,12 @@ import org.scijava.ops.spi.OpDependency;
  * 2.0; see {@link Siox} for details and changes.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Gerald Friedland
  * @author Kristian Jantz
  * @author Lars Knipping
  * @author Ignacio Arganda-Carreras
- * @author Curtis Rueden
  * @param <B> type of the masks
  * @implNote op names='segment.siox'
  */

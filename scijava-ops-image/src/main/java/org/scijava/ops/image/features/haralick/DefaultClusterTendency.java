@@ -57,8 +57,9 @@ import org.scijava.ops.spi.OpDependency;
  * doi:10.1148/radiol.2020191145.
  * </p>
  *
- * @author Tatsuaki Kobayashi
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Tatsuaki Kobayashi
  * @implNote op names='features.haralick.clusterTendency'
  */
 public class DefaultClusterTendency<T extends RealType<T>> extends

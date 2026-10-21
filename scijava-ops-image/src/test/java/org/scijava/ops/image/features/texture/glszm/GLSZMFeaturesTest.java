@@ -54,6 +54,7 @@ import org.scijava.ops.image.features.texture.IBSIPhantom;
  * 2D features are computed per slice and averaged.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class GLSZMFeaturesTest extends AbstractOpTest {
 

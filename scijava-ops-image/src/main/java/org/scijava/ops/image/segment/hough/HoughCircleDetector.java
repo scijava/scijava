@@ -74,8 +74,9 @@ import org.scijava.ops.spi.Nullable;
  * thickness of 1 (divide the sensitivity by the thickness to reproduce the
  * original threshold).
  *
- * @author Jean-Yves Tinevez
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Jean-Yves Tinevez
  * @param <T> the type of the vote image
  * @implNote op names='segment.detectHoughCircles'
  */

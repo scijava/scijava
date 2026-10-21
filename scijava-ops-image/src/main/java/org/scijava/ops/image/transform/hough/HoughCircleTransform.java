@@ -71,8 +71,9 @@ import org.scijava.ops.spi.OpDependency;
  * detect lines and curves in pictures", Communications of the ACM 15(1),
  * 11-15, 1972.
  *
- * @author Jean-Yves Tinevez
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Jean-Yves Tinevez
  * @param <B> the type of the binary input pixels
  * @implNote op names='transform.houghCircle'
  */

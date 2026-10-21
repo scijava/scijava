@@ -55,6 +55,7 @@ import org.scijava.types.Nil;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class HelmholtzAnalysisTest extends AbstractOpTest {
 

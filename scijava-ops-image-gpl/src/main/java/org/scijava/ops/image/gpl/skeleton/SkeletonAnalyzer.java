@@ -50,9 +50,10 @@ import net.imglib2.view.Views;
  * computation by Huub Hovens. Images are handled as flat 3D arrays (a 2D image
  * is a single slice).
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Ignacio Arganda-Carreras
  * @author Huub Hovens
- * @author Curtis Rueden
  */
 final class SkeletonAnalyzer {
 

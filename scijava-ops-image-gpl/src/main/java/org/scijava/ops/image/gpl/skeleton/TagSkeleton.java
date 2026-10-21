@@ -54,8 +54,9 @@ import net.imglib2.view.Views;
  * 73(11):1019-1029, 2010.
  * </p>
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  * @param <B> type of the binary input
  * @implNote op names='morphology.tagSkeleton'
  */

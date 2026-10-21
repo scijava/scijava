@@ -53,8 +53,9 @@ import net.imglib2.view.Views;
  * those of the original plugin; see {@link #run} for the generalizations.
  * </p>
  *
- * @author Johannes Schindelin
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Johannes Schindelin
  */
 final class StatisticalRegionMerging {
 

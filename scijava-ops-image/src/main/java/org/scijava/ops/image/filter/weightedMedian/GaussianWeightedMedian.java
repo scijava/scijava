@@ -60,6 +60,7 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @param <T> input pixel type
  * @param <V> output pixel type
  * @see <a href="https://github.com/biovoxxel/BioVoxxel-Toolbox">BioVoxxel

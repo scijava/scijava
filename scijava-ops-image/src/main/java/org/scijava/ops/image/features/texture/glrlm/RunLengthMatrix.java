@@ -64,8 +64,9 @@ import org.scijava.ops.image.features.texture.TextureUtils;
  * level run lengths. Computer Graphics and Image Processing. 1975;4(2):172-179.
  * </p>
  *
- * @author Tatsuaki Kobayashi
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Tatsuaki Kobayashi
  */
 public final class RunLengthMatrix {
 

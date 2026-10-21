@@ -50,6 +50,7 @@ import org.scijava.concurrent.Parallelization;
  * Utility methods backing the {@code image.localExtrema} ops.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 final class LocalExtremaFinder {
 

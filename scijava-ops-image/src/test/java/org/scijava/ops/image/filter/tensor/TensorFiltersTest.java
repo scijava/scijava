@@ -54,6 +54,7 @@ import org.scijava.types.Nil;
  * images.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class TensorFiltersTest extends AbstractOpTest {
 

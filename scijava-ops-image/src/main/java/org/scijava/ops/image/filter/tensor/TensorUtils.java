@@ -62,6 +62,7 @@ import org.scijava.concurrent.Parallelization;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 final class TensorUtils {
 

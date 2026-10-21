@@ -45,6 +45,7 @@ import net.imglib2.view.Views;
  * Utility methods backing the {@code transform.bin} ops.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 final class Bins {
 

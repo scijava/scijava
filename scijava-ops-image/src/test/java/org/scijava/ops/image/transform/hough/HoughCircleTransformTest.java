@@ -47,6 +47,7 @@ import org.scijava.types.Nil;
  * Tests {@link HoughCircleTransform}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class HoughCircleTransformTest extends AbstractOpTest {
 

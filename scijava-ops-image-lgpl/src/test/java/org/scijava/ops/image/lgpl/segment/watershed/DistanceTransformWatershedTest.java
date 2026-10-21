@@ -43,6 +43,7 @@ import org.scijava.types.Nil;
  * Tests {@link DistanceTransformWatershed}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class DistanceTransformWatershedTest extends AbstractOpTest {
 

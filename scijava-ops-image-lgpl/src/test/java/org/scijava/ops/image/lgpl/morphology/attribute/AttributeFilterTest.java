@@ -59,6 +59,9 @@ import org.scijava.ops.image.lgpl.AbstractOpTest;
  * the set. The reference implementation floods each such component
  * explicitly, independently of the component tree.
  * </p>
+ *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class AttributeFilterTest extends AbstractOpTest {
 

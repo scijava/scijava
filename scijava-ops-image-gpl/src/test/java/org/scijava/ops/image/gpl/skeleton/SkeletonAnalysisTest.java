@@ -50,6 +50,7 @@ import org.scijava.types.Nil;
  * structure.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class SkeletonAnalysisTest extends AbstractOpTest {
 

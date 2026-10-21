@@ -69,8 +69,9 @@ import net.imglib2.type.numeric.IntegerType;
  * Biological Structures</i>, Springer, 1978.
  * </p>
  *
- * @author Jan Brocher (BioVoxxel)
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Jan Brocher (BioVoxxel)
  * @see <a href="https://github.com/biovoxxel/BioVoxxel-Toolbox">BioVoxxel
  *      Toolbox</a>
  */

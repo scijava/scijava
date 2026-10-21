@@ -102,6 +102,8 @@ import net.imglib2.view.Views;
  * are {@code 1..numLeaves()}, and merge nodes follow.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Benoit Lombardot (MPI-CBG)
  */
 public final class HSegmentTree {

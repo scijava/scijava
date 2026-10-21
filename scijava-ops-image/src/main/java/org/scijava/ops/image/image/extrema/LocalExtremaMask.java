@@ -44,6 +44,7 @@ import org.scijava.ops.spi.Nullable;
  * {@link DefaultLocalExtrema} for the definition of a local extremum.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @param <T> image type
  * @param <B> mask type
  * @implNote op names='image.localExtrema'

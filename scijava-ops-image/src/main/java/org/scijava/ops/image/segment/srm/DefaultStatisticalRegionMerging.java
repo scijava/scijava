@@ -72,8 +72,9 @@ import org.scijava.ops.spi.OpDependency;
  * flat iteration order, like the region index image of the original plugin.
  * </p>
  *
- * @author Johannes Schindelin
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Johannes Schindelin
  * @param <T> input type
  * @implNote op names='segment.statisticalRegionMerging'
  */

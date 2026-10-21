@@ -58,8 +58,9 @@ import net.imglib2.type.numeric.real.DoubleType;
  * 1989;19(5):1264-1274.
  * </p>
  *
- * @author Tatsuaki Kobayashi
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Tatsuaki Kobayashi
  */
 public final class NGTDMFeatures {
 

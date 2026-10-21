@@ -99,8 +99,9 @@ import org.scijava.ops.spi.Nullable;
  * <i>Bioinformatics</i> 32(22): 3532&ndash;3534, 2016.</li>
  * </ul>
  *
- * @author David Legland
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author David Legland
  */
 public final class IntrinsicVolumes {
 

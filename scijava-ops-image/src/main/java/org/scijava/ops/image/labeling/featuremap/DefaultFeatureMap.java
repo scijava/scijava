@@ -57,6 +57,8 @@ import org.scijava.ops.spi.Nullable;
  * per-label value in n dimensions.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Jan Brocher (BioVoxxel)
  * @param <L> label type
  * @param <I> index type of the labeling

@@ -45,6 +45,7 @@ import org.scijava.types.Nil;
  * Tests {@link DefaultLocalContrast}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class LocalContrastTest extends AbstractOpTest {
 

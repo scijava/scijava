@@ -31,6 +31,7 @@ import org.scijava.ops.api.OpEnvironment;
  * test JAR).
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public abstract class AbstractOpTest {
 

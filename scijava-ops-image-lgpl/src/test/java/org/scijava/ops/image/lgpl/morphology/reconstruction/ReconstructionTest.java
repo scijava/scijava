@@ -48,6 +48,9 @@ import org.scijava.types.Nil;
 /**
  * Tests the ops of this package on synthetic images with known answers, and
  * checks the defining properties of the transforms.
+ *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class ReconstructionTest extends AbstractOpTest {
 

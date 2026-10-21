@@ -103,6 +103,8 @@ import org.scijava.ops.spi.OpDependency;
  * integers and images of any dimensionality are supported.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Benoit Lombardot (MPI-CBG)
  * @param <T> element type of the input image
  * @implNote op names='segment.hWatershed'

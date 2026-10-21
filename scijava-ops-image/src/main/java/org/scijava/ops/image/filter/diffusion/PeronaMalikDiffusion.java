@@ -66,6 +66,7 @@ import org.scijava.ops.spi.Nullable;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @param <T> input pixel type
  * @param <V> output pixel type
  * @see <a href="https://doi.org/10.1109/34.56205">P. Perona and J. Malik,

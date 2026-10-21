@@ -49,6 +49,7 @@ import org.scijava.ops.image.AbstractOpTest;
  * Tests {@link PseudoFlatField}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class PseudoFlatFieldTest extends AbstractOpTest {
 

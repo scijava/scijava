@@ -31,8 +31,9 @@ import net.imglib2.Localizable;
  * An immutable vertex of a {@link SkeletonGraph}: an end point, a junction
  * (a cluster of adjacent junction voxels), or the starting voxel of a ring.
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  */
 public final class SkeletonVertex {
 

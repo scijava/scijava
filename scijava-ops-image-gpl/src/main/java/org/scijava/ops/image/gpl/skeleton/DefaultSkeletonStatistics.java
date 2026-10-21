@@ -55,9 +55,10 @@ import org.scijava.ops.spi.Nullable;
  * 73(11):1019-1029, 2010.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Ignacio Arganda-Carreras
  * @author Huub Hovens
- * @author Curtis Rueden
  * @param <B> type of the skeleton image
  * @param <T> type of the intensity image
  * @implNote op names='topology.skeletonStatistics'

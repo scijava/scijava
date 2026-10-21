@@ -59,6 +59,7 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @param <B> element type of the input image
  * @implNote op names='segment.distanceTransformWatershed'
  */

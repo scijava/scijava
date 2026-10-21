@@ -33,8 +33,9 @@ import net.imglib2.Localizable;
  * properties correspond to the columns of the "Branch information" table of
  * the Fiji AnalyzeSkeleton plugin.
  *
- * @author Ignacio Arganda-Carreras
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Ignacio Arganda-Carreras
  */
 public final class SkeletonEdge {
 

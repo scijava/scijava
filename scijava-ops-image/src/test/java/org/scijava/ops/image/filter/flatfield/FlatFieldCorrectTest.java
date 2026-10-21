@@ -46,6 +46,7 @@ import org.scijava.ops.image.AbstractOpTest;
  * Tests {@link FlatFieldCorrect}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class FlatFieldCorrectTest extends AbstractOpTest {
 

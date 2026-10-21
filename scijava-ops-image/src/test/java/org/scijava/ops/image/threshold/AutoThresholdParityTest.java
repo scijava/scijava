@@ -69,40 +69,41 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 
 	private static final String[] OPS = { "ij1", "intermodes", "isoData", "li",
 		"maxEntropy", "mean", "minError", "minimum", "moments", "otsu",
-		"percentile", "renyiEntropy", "shanbhag", "triangle", "yen" };
+		"percentile", "renyiEntropy", "shanbhag", "triangle", "yen", "huang",
+		"huang2" };
 
 	/** An 8-bit image spanning the full range, including 0 and 255. */
 	@Test
 	public void testBlobs8() {
 		assertFiji(blobs8(), 112, 119, 112, 93, 71, 69, 69, 155, 107, 112, 45, 72,
-			156, 73, 67);
+			156, 73, 67, 114, 115);
 	}
 
 	/** The "Ignore black" and "Ignore white" options. */
 	@Test
 	public void testBlobs8IgnoreBlackWhite() {
 		assertFiji(blobs8(), true, false, 112, 119, 113, 92, 71, 69, 69, 155, 108,
-			112, 45, 73, 156, 73, 67);
+			112, 45, 73, 156, 73, 67, 121, 113);
 		assertFiji(blobs8(), false, true, 111, 119, 111, 92, 71, 68, 68, 155, 105,
-			111, 45, 72, 155, 73, 67);
+			111, 45, 72, 155, 73, 67, 118, 116);
 		assertFiji(blobs8(), true, true, 111, 119, 111, 92, 71, 68, 68, 155, 106,
-			111, 45, 72, 156, 73, 67);
+			111, 45, 72, 156, 73, 67, 121, 124);
 		assertFiji(blobs8(), false, false, 112, 119, 112, 93, 71, 69, 69, 155,
-			107, 112, 45, 72, 156, 73, 67);
+			107, 112, 45, 72, 156, 73, 67, 114, 115);
 	}
 
 	/** An 8-bit image whose values lie in [70, 150]. */
 	@Test
 	public void testNarrow8() {
 		assertFiji(bytes(blobs(2, 90, 6, 130, 6, 70, 150, false)), 109, 119, 108,
-			105, 103, 99, 103, 112, 103, 108, 93, 102, 114, 108, 101);
+			105, 103, 99, 103, 112, 103, 108, 93, 102, 114, 108, 101, 108, 112);
 	}
 
 	/** A low-contrast 8-bit image whose values lie in [3, 60]. */
 	@Test
 	public void testLowContrast8() {
 		assertFiji(bytes(blobs(5, 20, 4, 34, 5, 3, 60, false)), 22, 36, 24, 24, 27,
-			22, 22, 50, 24, 25, 21, 27, 25, 29, 27);
+			22, 22, 50, 24, 25, 21, 27, 25, 29, 27, 24, 21);
 	}
 
 	/** A 16-bit image, thresholded with one histogram bin per grey level. */
@@ -110,7 +111,7 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 	public void testImg16() {
 		assertFiji(shorts(blobs(3, 1200, 150, 3000, 300, 0, 65535, false)), 2047,
 			2047, 2047, 1842, 1533, 1575, 1584, 2001, 927, 2040, 1268, 1492, 2097,
-			1225, 1470);
+			1225, 1470, 2001, 2017);
 	}
 
 	/**

@@ -34,7 +34,7 @@ Context context = new Context(LanguageServerService.class);
 // (a) Start the server: the plugin offering "python", for scripts run by the
 // server's own Python (or, e.g., new Environment(python, paths, null)).
 LanguageServer server = context.service(LanguageServerService.class)
-	.launch("python", Environment.NONE);
+	.launch("python", new Environment());
 server.initialize(new InitializeParams()).get();
 server.initialized(new InitializedParams());
 

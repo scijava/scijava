@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -100,7 +101,7 @@ final class PythonCompanion {
 
 	/** Where the server runs: its own Python, searching the Java stubs. */
 	static Environment environment(final JavaStubs stubs) {
-		return new Environment(null, Collections.singletonList(stubs.dir()
+		return new Environment().withPaths(Collections.singletonList(stubs.dir()
 			.getAbsolutePath()));
 	}
 

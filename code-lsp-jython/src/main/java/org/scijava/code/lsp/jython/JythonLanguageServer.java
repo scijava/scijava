@@ -40,6 +40,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
+import javax.script.SimpleBindings;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
@@ -312,14 +313,12 @@ public class JythonLanguageServer extends AbstractLanguageServer {
 	 */
 	private Map<String, DotAutocompletions> liveVariables() {
 		final Map<String, DotAutocompletions> vars = new LinkedHashMap<>();
-		final ScriptContext live = environment().live();
-		final Bindings bindings = live.getBindings(ScriptContext.ENGINE_SCOPE);
-		if (bindings != null) {
-			for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
-				final String name = entry.getKey();
-				if (name.startsWith("__") && name.endsWith("__")) continue;
-				vars.put(name, bindingCompletions(entry.getValue()));
-			}
+		final Bindings bindings = environment().live().map(l -> l.getBindings(
+			ScriptContext.ENGINE_SCOPE)).orElseGet(SimpleBindings::new);
+		for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
+			final String name = entry.getKey();
+			if (name.startsWith("__") && name.endsWith("__")) continue;
+			vars.put(name, bindingCompletions(entry.getValue()));
 		}
 		return vars.isEmpty() ? Collections.emptyMap() : vars;
 	}

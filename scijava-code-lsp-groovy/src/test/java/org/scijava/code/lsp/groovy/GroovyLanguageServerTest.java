@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -134,7 +136,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testDiagnostics() {
+	public void testDiagnostics() throws Exception {
 		// Syntax errors, and unresolvable classes: errors, where they are.
 		assertEquals(Collections.singletonList("Error@1:11-12 Unexpected input: '+'"),
 			problems("sigma = 1.5\ndef x = (1 +\n"));
@@ -289,8 +291,8 @@ public class GroovyLanguageServerTest {
 		final ScriptContext live = new SimpleScriptContext();
 		live.setAttribute("injected", new ArrayList<String>(),
 			ScriptContext.ENGINE_SCOPE);
-		final List<String> texts = labels(items(session(new Environment(null,
-			Collections.emptyList(), live)), "injected.si"));
+		final List<String> texts = labels(items(session(new Environment().withLive(
+			live)), "injected.si"));
 		assertTrue(texts.contains("size"), texts.toString());
 	}
 
@@ -348,15 +350,21 @@ public class GroovyLanguageServerTest {
 
 	/** A session about plain Groovy, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return new ScriptSession(context.service(LanguageServerService.class),
-			TEST_LANGUAGE, env.live());
+		final LanguageServerService servers = context.service(
+			LanguageServerService.class);
+		return env.live().map(live -> new ScriptSession(servers, TEST_LANGUAGE,
+			live)).orElseGet(() -> new ScriptSession(servers, TEST_LANGUAGE));
 	}
 
 	/** The problems found in a script, e.g. {@code Error@0:4-6 message}. */
-	private static List<String> problems(final String code) {
+	private static List<String> problems(final String code) throws Exception {
+		final CompletableFuture<List<Diagnostic>> heard =
+			new CompletableFuture<>();
 		final List<Diagnostic> found;
-		try (ScriptSession session = session(Environment.NONE)) {
-			found = session.update(code).diagnostics(20_000);
+		try (ScriptSession session = session(new Environment())) {
+			session.setDiagnosticsListener(heard::complete);
+			session.update(code);
+			found = heard.get(20, TimeUnit.SECONDS);
 		}
 		return found.stream().map(d -> d.getSeverity() + "@" + d.getRange().getStart()
 				.getLine() + ":" + d.getRange().getStart().getCharacter() + "-" + d
@@ -365,7 +373,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	private static SignatureHelp help(final String code) {
-		try (ScriptSession session = session(Environment.NONE)) {
+		try (ScriptSession session = session(new Environment())) {
 			return session.signatureHelp(code, code.length()).get(30,
 				TimeUnit.SECONDS);
 		}
@@ -386,7 +394,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	private static List<CompletionItem> items(final String code) {
-		return items(session(Environment.NONE), code);
+		return items(session(new Environment()), code);
 	}
 
 	private static List<CompletionItem> items(final ScriptSession session,

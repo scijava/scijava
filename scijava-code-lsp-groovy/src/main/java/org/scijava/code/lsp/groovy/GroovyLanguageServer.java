@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
+import javax.script.SimpleBindings;
 
 import groovy.lang.GroovySystem;
 import groovy.lang.MetaMethod;
@@ -650,16 +651,14 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	 */
 	private Map<String, Class<?>> liveVariables() {
 		final Map<String, Class<?>> vars = new LinkedHashMap<>();
-		final ScriptContext live = environment().live();
-		final Bindings bindings = live.getBindings(ScriptContext.ENGINE_SCOPE);
-		if (bindings != null) {
-			for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
-				final String name = entry.getKey();
-				if (!isIdentifier(name) || name.startsWith("__")) continue;
-				final Object value = entry.getValue();
-				vars.put(name, value == null ? Object.class : publicType(value
-					.getClass()));
-			}
+		final Bindings bindings = environment().live().map(l -> l.getBindings(
+			ScriptContext.ENGINE_SCOPE)).orElseGet(SimpleBindings::new);
+		for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
+			final String name = entry.getKey();
+			if (!isIdentifier(name) || name.startsWith("__")) continue;
+			final Object value = entry.getValue();
+			vars.put(name, value == null ? Object.class : publicType(value
+				.getClass()));
 		}
 		return vars;
 	}

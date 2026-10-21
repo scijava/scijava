@@ -64,8 +64,12 @@ import org.scijava.code.lsp.jvm.ClassIndex;
 /**
  * Writes Python type stubs ({@code .pyi}) of Java packages, so that a Python
  * language server (e.g. jedi-language-server) knows the Java classes a Jython
- * script uses: {@code from ij import IJ} then finds {@code ij/__init__.pyi},
- * with {@code IJ}'s methods, their parameters and return types.
+ * script uses.
+ * <p>
+ * For example, for {@code from ij import IJ}, the server finds
+ * {@code ij/__init__.pyi}, with {@code IJ}'s methods, their parameters and
+ * return types.
+ * </p>
  * <p>
  * Stubs are written on demand, per package, from the classes themselves (as
  * the given class loader loads them), in the background; and so are the
@@ -74,6 +78,10 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  * {@code String} becomes {@code str}); overloads become
  * {@code typing.overload}s; getters become properties too, as Jython offers
  * them.
+ * </p>
+ * <p>
+ * TODO: Consider scyjava's stubs instead (see
+ * <a href="https://github.com/scijava/scyjava/pull/86">scyjava.types</a>).
  * </p>
  *
  * @author Gabriel Selzer

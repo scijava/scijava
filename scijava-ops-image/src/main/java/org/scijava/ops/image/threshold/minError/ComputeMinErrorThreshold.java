@@ -35,7 +35,6 @@ import org.scijava.ops.image.threshold.mean.ComputeMeanThreshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.spi.OpExecutionException;
 
 // NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
 // plugin found in Fiji (version 1.14).
@@ -110,23 +109,16 @@ public class ComputeMinErrorThreshold<T extends RealType<T>> extends
 			// If the next threshold would be imaginary, return with the current
 			// one.
 			sqterm = (w1 * w1) - w0 * w2;
-			if (sqterm < 0) {
-				throw new OpExecutionException(
-					"MinError(I): not converging. Try \'Ignore black/white\' options");
-			}
+			if (sqterm < 0) return threshold;
 
 			// The updated threshold is the integer part of the solution of the
 			// quadratic equation.
 			Tprev = threshold;
 			temp = (w1 + Math.sqrt(sqterm)) / w0;
 
-			if (Double.isNaN(temp)) {
-				// FIXME: log, do not throw exception.
-//				throw new OpExecutionException(
-//					"MinError(I): NaN, not converging. Try \'Ignore black/white\' options");
-				threshold = Tprev;
-			}
-			threshold = (int) Math.floor(temp);
+			// Note: Like ImageJ, keep the current threshold if the solution is NaN.
+			if (Double.isNaN(temp)) threshold = Tprev;
+			else threshold = (int) Math.floor(temp);
 			// IJ.log("Iter: "+ counter+++" t:"+threshold);
 		}
 		return threshold;

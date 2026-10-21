@@ -66,7 +66,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class CompactWatershed<T extends RealType<T>, B extends BooleanType<B>>
 	implements
-	Functions.Arity6<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Double, Shape, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
+	Functions.Arity7<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Double, Shape, Boolean, RandomAccessibleInterval<B>, Integer, ImgLabeling<Integer, IntType>>
 {
 
 	@OpDependency(name = "create.imgLabeling")
@@ -87,14 +87,20 @@ public class CompactWatershed<T extends RealType<T>, B extends BooleanType<B>>
 	 *          {@code RectangleShape} of span 1 for full connectivity
 	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
 	 *          connectivity.
-	 * @param drawWatersheds if true, pixels where two regions meet are left
-	 *          unlabeled, forming watershed lines; otherwise every reachable
-	 *          pixel is labeled. Defaults to true.
+	 * @param drawWatersheds if true, pixels where two regions meet form
+	 *          watershed lines, which get the {@code watershedLabel} (or no
+	 *          label); otherwise every reachable pixel gets the label of a
+	 *          region. Defaults to true.
 	 * @param mask a binary image, of the same dimensions as {@code input},
 	 *          restricting the flooding to its true pixels; markers outside it
 	 *          are ignored. Defaults to the whole image.
-	 * @return a labeling with the label of the marker of each region; watershed
-	 *         lines and pixels outside the mask have no label
+	 * @param watershedLabel the label to give the watershed line pixels when
+	 *          {@code drawWatersheds} is true, such as 0 or -1; it must not be
+	 *          the label of a region. Ignored when {@code drawWatersheds} is
+	 *          false. Defaults to none: watershed lines are left unlabeled.
+	 * @return a labeling with the label of the marker of each region;
+	 *         watershed lines have the {@code watershedLabel} (or no label), and
+	 *         pixels outside the mask have no label
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply( //
@@ -103,7 +109,8 @@ public class CompactWatershed<T extends RealType<T>, B extends BooleanType<B>>
 		final Double compactness, //
 		@Nullable final Shape connectivity, //
 		@Nullable final Boolean drawWatersheds, //
-		@Nullable final RandomAccessibleInterval<B> mask //
+		@Nullable final RandomAccessibleInterval<B> mask, //
+		@Nullable final Integer watershedLabel //
 	) {
 		final var grid = new Flooding(input, connectivity);
 		final var ids = new ArrayList<Integer>();
@@ -111,7 +118,7 @@ public class CompactWatershed<T extends RealType<T>, B extends BooleanType<B>>
 			ids), grid.flags(mask), compactness, drawWatersheds == null ||
 				drawWatersheds);
 		final var output = labelingCreator.apply(input, new IntType());
-		grid.write(labels, ids, output);
+		grid.write(labels, ids, watershedLabel, output);
 		return output;
 	}
 }

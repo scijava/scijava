@@ -23,6 +23,7 @@
 package org.scijava.ops.image.lgpl.segment.watershed;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.scijava.ops.image.lgpl.segment.watershed.ExtendedMinimaWatershedTest.assertBoundaryDifferences;
 import static org.scijava.ops.image.lgpl.segment.watershed.ExtendedMinimaWatershedTest.assertFewDifferences;
@@ -84,6 +85,42 @@ public class CompactWatershedTest extends AbstractOpTest {
 		assertEquals(Set.of(7, 42, 3), labels(out));
 		final var ra = out.randomAccess();
 		assertEquals(Set.of(42), ra.setPositionAndGet(SEEDS[1]));
+	}
+
+	@Test
+	public void testWatershedLabel() {
+		final var img = random();
+		final var markers = seeds(W, H, SEEDS, 7, 42, 3);
+		final var all = ArrayImgs.bits(W, H);
+		for (final var t : all)
+			t.set(true);
+		final var lines = ops.op("segment.compactWatershed").input(img, markers,
+			0.1).outType(LABELING).apply();
+		final var labeled = ops.op("segment.compactWatershed").input(img, markers,
+			0.1, null, true, all, 0).outType(LABELING).apply();
+		final var ra = lines.randomAccess();
+		var lineCount = 0;
+		for (final var c = labeled.localizingCursor(); c.hasNext();) {
+			final var l = c.next();
+			final var expected = ra.setPositionAndGet(c);
+			assertEquals(1, l.size());
+			if (expected.isEmpty()) {
+				assertEquals(Set.of(0), l);
+				lineCount++;
+			}
+			else assertEquals(expected, l);
+		}
+		assertTrue(lineCount > 0);
+
+		// Without watershed lines, the watershed label is not used.
+		final var noLines = ops.op("segment.compactWatershed").input(img, markers,
+			0.1, null, false, all, 0).outType(LABELING).apply();
+		assertEquals(Set.of(7, 42, 3), labels(noLines));
+
+		// A watershed label which is also a region label is rejected.
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.compactWatershed").input(img, markers, 0.1, null, true, all, 42)
+			.outType(LABELING).apply());
 	}
 
 	/** Without compactness, the result is the classical seeded watershed. */

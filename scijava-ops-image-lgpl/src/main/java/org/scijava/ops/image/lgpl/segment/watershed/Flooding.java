@@ -284,16 +284,31 @@ final class Flooding {
 	 *          written
 	 * @param ids the label corresponding to each internal label, or null to
 	 *          write the internal labels themselves
+	 * @param lineLabel the label to write on watershed line pixels, or null to
+	 *          leave them unlabeled
 	 * @param labeling the labeling to write into
+	 * @throws IllegalArgumentException if {@code lineLabel} is also the label
+	 *           of a region
 	 */
 	void write(final int[] labels, final List<Integer> ids,
-		final ImgLabeling<Integer, IntType> labeling)
+		final Integer lineLabel, final ImgLabeling<Integer, IntType> labeling)
 	{
 		checkDimensions(labeling);
+		if (lineLabel != null) {
+			final boolean clash;
+			if (ids != null) clash = ids.contains(lineLabel);
+			else clash = lineLabel > 0 && Arrays.stream(labels).anyMatch(
+				l -> l == lineLabel);
+			if (clash) {
+				throw new IllegalArgumentException("The watershed label " +
+					lineLabel + " is also the label of a region");
+			}
+		}
 		var i = 0;
 		for (final var t : Views.flatIterable(labeling)) {
 			final var label = labels[i++];
 			if (label > 0) t.add(ids == null ? label : ids.get(label - 1));
+			else if (label == LINE && lineLabel != null) t.add(lineLabel);
 		}
 	}
 

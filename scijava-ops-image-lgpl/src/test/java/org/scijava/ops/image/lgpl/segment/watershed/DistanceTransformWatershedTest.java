@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.scijava.ops.image.lgpl.segment.watershed.ExtendedMinimaWatershedTest.labels;
 
+import java.util.Set;
+
 import net.imglib2.algorithm.neighborhood.DiamondShape;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
@@ -89,6 +91,37 @@ public class DistanceTransformWatershedTest extends AbstractOpTest {
 			}
 		}
 		assertTrue(lines > 0);
+	}
+
+	@Test
+	public void testWatershedLabel() {
+		final var img = twoDisks();
+		final var lines = ops.op("segment.distanceTransformWatershed").input(img)
+			.outType(LABELING).apply();
+		final var labeled = ops.op("segment.distanceTransformWatershed").input(img,
+			1.0, null, true, null, -1).outType(LABELING).apply();
+		final var ra = lines.randomAccess();
+		final var raIn = img.randomAccess();
+		var lineCount = 0;
+		for (final var c = labeled.localizingCursor(); c.hasNext();) {
+			final var l = c.next();
+			final var expected = ra.setPositionAndGet(c);
+			if (!raIn.setPositionAndGet(c).get()) {
+				// Note: The background is not part of the watershed lines.
+				assertTrue(l.isEmpty());
+			}
+			else if (expected.isEmpty()) {
+				assertEquals(Set.of(-1), l);
+				lineCount++;
+			}
+			else assertEquals(expected, l);
+		}
+		assertTrue(lineCount > 0);
+
+		// Without watershed lines, the watershed label is not used.
+		final var noLines = ops.op("segment.distanceTransformWatershed").input(img,
+			1.0, null, false, null, -1).outType(LABELING).apply();
+		assertEquals(Set.of(1, 2), labels(noLines));
 	}
 
 	@Test

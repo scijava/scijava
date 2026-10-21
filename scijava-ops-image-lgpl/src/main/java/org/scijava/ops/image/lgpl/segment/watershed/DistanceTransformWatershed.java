@@ -63,7 +63,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='segment.distanceTransformWatershed'
  */
 public class DistanceTransformWatershed<B extends BooleanType<B>> implements
-	Functions.Arity5<RandomAccessibleInterval<B>, Double, Shape, Boolean, double[], ImgLabeling<Integer, IntType>>
+	Functions.Arity6<RandomAccessibleInterval<B>, Double, Shape, Boolean, double[], Integer, ImgLabeling<Integer, IntType>>
 {
 
 	@OpDependency(name = "image.distanceTransform")
@@ -73,7 +73,7 @@ public class DistanceTransformWatershed<B extends BooleanType<B>> implements
 	private Computers.Arity2<RandomAccessibleInterval<B>, double[], RandomAccessibleInterval<FloatType>> calibratedDistanceTransform;
 
 	@OpDependency(name = "segment.watershedExtendedMinima")
-	private Functions.Arity6<RandomAccessibleInterval<FloatType>, Double, Shape, Boolean, RandomAccessibleInterval<B>, Double, ImgLabeling<Integer, IntType>> watershed;
+	private Functions.Arity7<RandomAccessibleInterval<FloatType>, Double, Shape, Boolean, RandomAccessibleInterval<B>, Double, Integer, ImgLabeling<Integer, IntType>> watershed;
 
 	/**
 	 * Computes the distance transform watershed of a binary image.
@@ -88,13 +88,19 @@ public class DistanceTransformWatershed<B extends BooleanType<B>> implements
 	 *          {@code RectangleShape} of span 1 for full connectivity
 	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
 	 *          connectivity.
-	 * @param drawWatersheds if true, pixels where two objects meet are left
-	 *          unlabeled, separating them by watershed lines; otherwise every
-	 *          foreground pixel is labeled. Defaults to true.
+	 * @param drawWatersheds if true, pixels where two objects meet form
+	 *          watershed lines separating them, which get the
+	 *          {@code watershedLabel} (or no label); otherwise every foreground
+	 *          pixel gets the label of an object. Defaults to true.
 	 * @param calibration the pixel spacing along each dimension, used by the
 	 *          distance transform. Defaults to 1 along every dimension.
-	 * @return a labeling with one label per object, numbered from 1; the
-	 *         background and watershed lines have no label
+	 * @param watershedLabel the label to give the watershed line pixels when
+	 *          {@code drawWatersheds} is true, such as 0 or -1; it must not be
+	 *          the label of a region. Ignored when {@code drawWatersheds} is
+	 *          false. Defaults to none: watershed lines are left unlabeled.
+	 * @return a labeling with one label per object, numbered from 1; watershed
+	 *         lines have the {@code watershedLabel} (or no label), and the
+	 *         background has no label
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply( //
@@ -102,7 +108,8 @@ public class DistanceTransformWatershed<B extends BooleanType<B>> implements
 		@Nullable final Double dynamic, //
 		@Nullable final Shape connectivity, //
 		@Nullable final Boolean drawWatersheds, //
-		@Nullable final double[] calibration //
+		@Nullable final double[] calibration, //
+		@Nullable final Integer watershedLabel //
 	) {
 		final var distances = ArrayImgs.floats(input.dimensionsAsLongArray());
 		if (calibration == null) distanceTransform.compute(input, distances);
@@ -110,6 +117,6 @@ public class DistanceTransformWatershed<B extends BooleanType<B>> implements
 		for (final var t : distances)
 			t.set(-t.get());
 		return watershed.apply(distances, dynamic == null ? 1.0 : dynamic,
-			connectivity, drawWatersheds, input, 0.0);
+			connectivity, drawWatersheds, input, 0.0, watershedLabel);
 	}
 }

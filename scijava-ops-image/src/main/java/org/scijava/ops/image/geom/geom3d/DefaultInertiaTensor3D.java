@@ -80,17 +80,17 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements
 			c.localize(pos);
 			output.setEntry(0, 0, output.getEntry(0, 0) + (pos[0] - mX) * (pos[0] -
 				mX));
-			output.setEntry(1, 1, output.getEntry(1, 1) + (pos[1] - mX) * (pos[1] -
+			output.setEntry(1, 1, output.getEntry(1, 1) + (pos[1] - mY) * (pos[1] -
 				mY));
-			output.setEntry(2, 2, output.getEntry(2, 2) + (pos[2] - mX) * (pos[2] -
+			output.setEntry(2, 2, output.getEntry(2, 2) + (pos[2] - mZ) * (pos[2] -
 				mZ));
-			output.setEntry(0, 1, output.getEntry(0, 1) + (pos[0] - mY) * (pos[1] -
+			output.setEntry(0, 1, output.getEntry(0, 1) + (pos[0] - mX) * (pos[1] -
 				mY));
 			output.setEntry(1, 0, output.getEntry(0, 1));
-			output.setEntry(0, 2, output.getEntry(0, 2) + (pos[0] - mY) * (pos[2] -
+			output.setEntry(0, 2, output.getEntry(0, 2) + (pos[0] - mX) * (pos[2] -
 				mZ));
 			output.setEntry(2, 0, output.getEntry(0, 2));
-			output.setEntry(1, 2, output.getEntry(1, 2) + (pos[1] - mZ) * (pos[2] -
+			output.setEntry(1, 2, output.getEntry(1, 2) + (pos[1] - mY) * (pos[2] -
 				mZ));
 			output.setEntry(2, 1, output.getEntry(1, 2));
 		}

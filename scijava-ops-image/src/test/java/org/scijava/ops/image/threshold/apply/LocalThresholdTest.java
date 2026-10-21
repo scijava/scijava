@@ -319,7 +319,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 			new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(
 				Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		// Note: The first pixel is closer to its local maximum than to its local
+		// minimum, so it is foreground.
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**

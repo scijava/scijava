@@ -109,6 +109,31 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 		assertFiji("Phansalkar", 40);
 	}
 
+	/**
+	 * Bernsen with Fiji parameters (contrast threshold 15, and 128 as the mid
+	 * grey of low-contrast regions). Fiji rounds the local mid grey
+	 * {@code (min + max) / 2} down to an integer before comparing pixels to it
+	 * with {@code >=}, so it also marks pixels half a grey level below it as
+	 * foreground (47 and 15 pixels on blobs8, 86 and 46 on narrow8). Rounding
+	 * the mid grey down in the op gives identical masks.
+	 */
+	@Test
+	public void testBernsen() throws IOException {
+		assertFiji("Bernsen", 90);
+	}
+
+	/**
+	 * Niblack with Fiji parameters k = 0.2 and c = 0. A few pixels differ (7 and
+	 * 0 on blobs8, 6 and 1 on narrow8) because ops computes the sample standard
+	 * deviation, where ImageJ RankFilters computes the population standard
+	 * deviation. That Fiji truncates the threshold to an integer makes no
+	 * difference, since pixels must be strictly above it.
+	 */
+	@Test
+	public void testNiblack() throws IOException {
+		assertFiji("Niblack", 10);
+	}
+
 	private void assertFiji(final String method) throws IOException {
 		assertFiji(method, 0);
 	}
@@ -173,6 +198,14 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 			case "MidGrey":
 				ops.op("threshold.localMidGrey").input(img, shape, 0.0).output(out)
 					.compute();
+				break;
+			case "Bernsen":
+				ops.op("threshold.localBernsen").input(img, shape, 15.0, 128.0)
+					.output(out).compute();
+				break;
+			case "Niblack":
+				ops.op("threshold.localNiblack").input(img, shape, 0.0, 0.2)
+					.output(out).compute();
 				break;
 			case "Phansalkar":
 				ops.op("threshold.localPhansalkar").input(img, shape, 0.25, 0.5)

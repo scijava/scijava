@@ -44,6 +44,12 @@ import org.scijava.ops.spi.OpDependency;
  * {@link ComputeLocalMidGreyThreshold}, but uses a constant value rather than
  * the value of the input pixel when the contrast in the neighborhood of that
  * pixel is too small.
+ * <p>
+ * A pixel is foreground if it is at least the local mid grey
+ * {@code (min + max) / 2}. Fiji's Auto_Local_Threshold rounds the mid grey
+ * down to an integer first, so on integer images it also marks pixels half a
+ * grey level below it as foreground.
+ * </p>
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)

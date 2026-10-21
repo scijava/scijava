@@ -876,6 +876,35 @@ public class LocalThresholdTest extends AbstractOpTest {
 		}
 	}
 
+	/**
+	 * Tests that {@code threshold.localPhansalkar} stretches its input to [0, 1],
+	 * so that a raw image and its normalized copy give the same mask, with
+	 * neighborhoods computed directly or via integral images.
+	 */
+	@Test
+	public void testLocalPhansalkarStretchesInput() {
+		final var shape = new RectangleShape(3, false);
+		final var oob =
+			new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(
+				Boundary.SINGLE);
+		ops.op("threshold.localPhansalkar").input(in, shape, 0.25, 0.5, oob)
+			.output(out).compute();
+
+		final Img<BitType> expected = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(normalizedIn, shape, 0.25, 0.5,
+			new OutOfBoundsMirrorFactory<DoubleType, RandomAccessibleInterval<DoubleType>>(
+				Boundary.SINGLE)).output(expected).compute();
+		testRandomAccessibleInterval(expected, out);
+
+		// Note: A CenteredRectangleShape yields the same neighborhoods as the
+		// RectangleShape, but is not computed via integral images.
+		final Img<BitType> nonIntegral = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(in, new CenteredRectangleShape(
+			new int[] { 3, 3 }, false), 0.25, 0.5, oob).output(nonIntegral)
+			.compute();
+		testRandomAccessibleInterval(expected, nonIntegral);
+	}
+
 	// /**
 	// * @see LocalPhansalkarThresholdIntegral
 	// */

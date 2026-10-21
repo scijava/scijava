@@ -100,7 +100,7 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 		final var stdDev = new DoubleType(Math.sqrt(variance.get()));
 
 		final var threshold = new DoubleType(mean.getRealDouble() * (1.0d +
-			k * ((Math.sqrt(stdDev.getRealDouble()) / r) - 1.0)));
+			k * ((stdDev.getRealDouble() / r) - 1.0)));
 
 		// Set value
 		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();

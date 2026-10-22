@@ -64,6 +64,7 @@ import org.codehaus.groovy.ast.expr.ConstructorCallExpression;
 import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.expr.MethodCallExpression;
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression;
+import org.codehaus.groovy.control.ResolveVisitor;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionItemLabelDetails;
@@ -95,10 +96,9 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 
 	private static final Set<String> KEYWORDS = keywords();
 
-	/** Packages Groovy imports by default. */
+	/** Packages Groovy imports by default, e.g. "java.util." */
 	private static final List<String> DEFAULT_IMPORTS = Arrays.asList(
-		"java.lang", "java.util", "java.io", "java.net", "groovy.lang",
-		"groovy.util");
+		ResolveVisitor.DEFAULT_IMPORTS);
 
 	/** Upper bound on class-name suggestions, which can be very numerous. */
 	private static final int MAX_CLASSES = 500;
@@ -536,7 +536,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	static int importOffset(final String text, final String className) {
 		final String pkg = className.substring(0, Math.max(0, className
 			.lastIndexOf('.')));
-		if (DEFAULT_IMPORTS.contains(pkg) || className.equals(
+		// NB: Groovy also imports BigDecimal and BigInteger, by name.
+		if (DEFAULT_IMPORTS.contains(pkg + ".") || className.equals(
 			"java.math.BigDecimal") || className.equals("java.math.BigInteger"))
 		{
 			return -1;

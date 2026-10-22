@@ -74,13 +74,25 @@ import net.imglib2.view.Views;
  * <a href="https://github.com/fiji/Siox_Segmentation">Fiji
  * Siox_Segmentation</a> project (SIOX reference implementation version 1.13,
  * with the user-marked component extension by Ignacio Arganda-Carreras),
- * Copyright 2005, 2006 by Gerald Friedland, Kristian Jantz and Lars Knipping,
- * licensed under the Apache License, Version 2.0
- * (<a href="https://www.apache.org/licenses/LICENSE-2.0">https://www.apache.org/licenses/LICENSE-2.0</a>).
- * Unless required by applicable law or agreed to in writing, that software is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.
+ * used under the Apache License, Version 2.0. The original license notice
+ * follows; the changes made are listed below it.
  * </p>
+ *
+ * <pre>
+ * Copyright 2005, 2006 by Gerald Friedland, Kristian Jantz and Lars Knipping
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * </pre>
  * <p>
  * Changes from the original: the post-processing (smoothing, erosion,
  * dilation and connected components) is generalized from 2D to n dimensions,

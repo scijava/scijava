@@ -38,14 +38,10 @@ import net.imglib2.type.numeric.real.DoubleType;
  * Implementation of the autocorrelation (IBSI QWB0) haralick feature: {@code sum_ij i j p_ij}, where the gray levels {@code i, j} are counted
  * from 1 as in IBSI (the co-occurrence matrix rows are 0-based).
  * <p>
- * Feature definition from the IBSI reference manual; this feature is also
- * implemented by {@code GLCMFeatures.java} of RadiomicsJ
- * (https://github.com/tatsunidas/RadiomicsJ), Copyright 2022 Tatsuaki
- * Kobayashi, licensed under the Apache License, Version 2.0
- * (http://www.apache.org/licenses/LICENSE-2.0). Unless required by applicable
- * law or agreed to in writing, software distributed under that License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.
+ * Implemented from the feature definition in the IBSI reference manual. The
+ * same feature is also computed by {@code GLCMFeatures.java} of RadiomicsJ
+ * (https://github.com/tatsunidas/RadiomicsJ) by Tatsuaki Kobayashi; this
+ * implementation was not derived from that code.
  * </p>
  * <p>
  * Reference: Zwanenburg A, Vallieres M, et al. The Image Biomarker
@@ -56,7 +52,6 @@ import net.imglib2.type.numeric.real.DoubleType;
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
- * @author Tatsuaki Kobayashi
  * @implNote op names='features.haralick.autocorrelation'
  */
 public class DefaultAutocorrelation<T extends RealType<T>> extends

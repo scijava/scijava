@@ -48,14 +48,28 @@ import org.scijava.ops.image.features.texture.TextureUtils;
  * counts; trailing columns without any run are removed. The
  * {@code features.glrlm.*} Ops compute IBSI features from this matrix.
  * <p>
- * These Ops are based on {@code GLRLMFeatures.java} from RadiomicsJ
- * (https://github.com/tatsunidas/RadiomicsJ), Copyright 2022 Tatsuaki
- * Kobayashi, licensed under the Apache License, Version 2.0
- * (http://www.apache.org/licenses/LICENSE-2.0). Unless required by applicable
- * law or agreed to in writing, software distributed under that License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.
+ * These Ops are adapted from {@code GLRLMFeatures.java} of RadiomicsJ
+ * (https://github.com/tatsunidas/RadiomicsJ) by Tatsuaki Kobayashi, used
+ * under the Apache License, Version 2.0. The code was modified: it was
+ * translated to n-dimensional ImgLib2 ops. The original license notice
+ * follows.
  * </p>
+ *
+ * <pre>
+ * Copyright 2022 Tatsuaki Kobayashi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * </pre>
  * <p>
  * References: Zwanenburg A, Vallieres M, et al. The Image Biomarker
  * Standardization Initiative: Standardized Quantitative Radiomics for

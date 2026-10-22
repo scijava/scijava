@@ -33,16 +33,19 @@ import org.scijava.ops.image.threshold.AbstractComputeThresholdHistogram;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-//NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
-//plugin found in Fiji (version 1.14).
-
 /**
  * Implements the fast variant of Huang's threshold method by Huang {@literal &}
  * Wang, rewritten by Johannes Schindelin to handle 16-bit histograms
  * efficiently. It corresponds to the "Huang2" method of ImageJ Auto_Threshold;
  * see {@code threshold.huang} for the original "Huang" method. The two can
  * differ by a few grey levels.
+ * <p>
+ * Adapted from the Auto_Threshold plugin (version 1.14) by Gabriel Landini, as
+ * found in Fiji. This code was previously the {@code threshold.huang} op.
+ * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Barry DeZonia
  * @author Gabriel Landini
  * @implNote op names='threshold.huang2'
@@ -52,7 +55,7 @@ public class ComputeHuang2Threshold<T extends RealType<T>> extends
 {
 
 	/**
-	 * TODO
+	 * Computes the Huang2 threshold bin of a histogram.
 	 *
 	 * @param hist the {@link Histogram1d}.
 	 * @return the Huang2 threshold value

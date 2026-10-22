@@ -31,18 +31,20 @@ package org.scijava.ops.image.threshold.localPhansalkar;
 
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.threshold.Thresholds;
 import org.scijava.ops.spi.Nullable;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * <p>
  * This is a modification of Sauvola's thresholding method to deal with low
  * contrast images. In this algorithm the threshold is computed as t =
  * mean*(1+p*exp(-q*mean)+k*((stdev/r)-1)) for an image that is normalized to
- * [0, 1].
+ * [0, 1], with the mean and the population standard deviation (as in Fiji's
+ * Auto_Local_Threshold plugin) of the neighborhood. This op applies the rule
+ * to the raw pixel values; {@code threshold.localPhansalkar} on images
+ * normalizes them first.
  * </p>
  * <p>
  * Phansalkar recommends k = 0.25, r = 0.5, p = 2 and q = 10. In the current
@@ -74,19 +76,13 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	private static final double P = 2.0;
 	private static final double Q = 10.0;
 
-	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<T>, DoubleType> meanOp;
-
-	@OpDependency(name = "stats.stdDev")
-	private Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp;
-
 	/**
 	 * Applies Phansalkar's rule to a pixel value of an image normalized to [0,
 	 * 1].
 	 *
 	 * @param value the pixel value
 	 * @param mean the mean of its neighborhood
-	 * @param stdDev the standard deviation of its neighborhood
+	 * @param stdDev the population standard deviation of its neighborhood
 	 * @param k the k parameter
 	 * @param r the r parameter
 	 * @return whether the pixel is foreground, i.e. strictly above the threshold
@@ -99,13 +95,13 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	}
 
 	/**
-	 * TODO
+	 * Applies Phansalkar's rule to one pixel of an image normalized to [0, 1].
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param k
-	 * @param r
-	 * @param output
+	 * @param inputNeighborhood the neighborhood of the pixel
+	 * @param inputCenterPixel the pixel
+	 * @param k the k parameter (default: 0.25)
+	 * @param r the r parameter (default: 0.5)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
@@ -114,14 +110,8 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	{
 		if (k == null) k = DEFAULT_K;
 		if (r == null) r = DEFAULT_R;
-
-		final var meanValue = new DoubleType();
-		meanOp.compute(inputNeighborhood, meanValue);
-
-		final var stdDevValue = new DoubleType();
-		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
-
-		output.set(isForeground(inputCenterPixel.getRealDouble(), meanValue.get(),
-			stdDevValue.get(), k, r));
+		final var stats = Thresholds.meanAndPopulationStdDev(inputNeighborhood);
+		output.set(isForeground(inputCenterPixel.getRealDouble(), stats[0],
+			stats[1], k, r));
 	}
 }

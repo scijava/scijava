@@ -30,7 +30,6 @@ package org.scijava.ops.image.morphology.reconstruction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -38,10 +37,10 @@ import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
-import net.imglib2.util.ConstantUtils;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
+
+import org.scijava.ops.image.util.Neighborhoods;
 
 /**
  * A flattened n-dimensional pixel grid (first dimension varying fastest)
@@ -103,8 +102,7 @@ final class PixelGrid {
 		}
 		size = s;
 
-		offsets = neighborOffsets(connectivity == null ? new RectangleShape(1,
-			false) : connectivity, n);
+		offsets = Neighborhoods.neighborOffsets(connectivity, n);
 		steps = new int[offsets.length];
 		final List<Integer> before = new ArrayList<>();
 		final List<Integer> after = new ArrayList<>();
@@ -275,40 +273,6 @@ final class PixelGrid {
 						.toString(dims));
 			}
 		}
-	}
-
-	/**
-	 * Lists the offsets of a shape around the origin, made symmetric and
-	 * without the origin itself.
-	 */
-	private static int[][] neighborOffsets(final Shape shape, final int n) {
-		final var source = ConstantUtils.constantRandomAccessible(new DoubleType(),
-			n);
-		final var ra = shape.neighborhoodsRandomAccessible(source).randomAccess();
-		ra.setPosition(new long[n]);
-		final var set = new LinkedHashSet<List<Integer>>();
-		final var c = ra.get().localizingCursor();
-		while (c.hasNext()) {
-			c.fwd();
-			final var o = new ArrayList<Integer>(n);
-			final var neg = new ArrayList<Integer>(n);
-			var zero = true;
-			for (var d = 0; d < n; d++) {
-				final var v = c.getIntPosition(d);
-				o.add(v);
-				neg.add(-v);
-				if (v != 0) zero = false;
-			}
-			if (zero) continue;
-			set.add(o);
-			set.add(neg);
-		}
-		final var result = new int[set.size()][];
-		var k = 0;
-		for (final var o : set) {
-			result[k++] = o.stream().mapToInt(Integer::intValue).toArray();
-		}
-		return result;
 	}
 
 	/**

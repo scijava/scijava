@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.image.sdt;
 
-import java.util.Arrays;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
@@ -41,8 +40,10 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -97,20 +98,11 @@ public class SignedDistanceTransform<B extends BooleanType<B>> implements
 		@Nullable final double[] calibration)
 	{
 		final var n = mask.numDimensions();
-		final double[] cal;
-		if (calibration == null) {
-			cal = new double[n];
-			Arrays.fill(cal, 1);
-		}
-		else if (calibration.length != n) {
-			throw new IllegalArgumentException("Expected " + n +
-				" calibration values but got " + calibration.length);
-		}
-		else cal = calibration;
+		final var cal = Calibrations.spacing(calibration, n, "calibration");
 
 		var hasFg = false;
 		var hasBg = false;
-		for (final var b : net.imglib2.view.Views.iterable(mask)) {
+		for (final var b : Views.iterable(mask)) {
 			if (b.get()) hasFg = true;
 			else hasBg = true;
 			if (hasFg && hasBg) break;

@@ -39,6 +39,7 @@ import net.imglib2.type.numeric.IntegerType;
 
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -88,11 +89,7 @@ public final class EquivalentEllipsoids {
 			@Nullable double[] spacing)
 	{
 		final var n = labeling.numDimensions();
-		final var s = spacing == null ? InscribedBalls.ones(n) : spacing;
-		if (s.length != n) {
-			throw new IllegalArgumentException("Expected " + n +
-				" spacing values but got " + s.length);
-		}
+		final var s = Calibrations.spacing(spacing, n, "spacing");
 		final var result = new LinkedHashMap<L, EquivalentEllipsoid>();
 		final var pos = new double[n];
 		for (final var region : new LabelRegions<>(labeling)) {

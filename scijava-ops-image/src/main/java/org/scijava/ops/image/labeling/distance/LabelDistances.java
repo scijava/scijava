@@ -45,6 +45,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -106,7 +107,7 @@ public final class LabelDistances {
 	{
 		final var regions = Regions.of(labeling);
 		final var d = squaredDistances(regions.ids, regions.empty, regions.dims,
-			spacing(spacing, regions.dims.length));
+			Calibrations.spacing(spacing, regions.dims.length, "spacing"));
 		for (var i = 0; i < d.length; i++)
 			d[i] = Math.sqrt(d[i]);
 		final RandomAccessibleInterval<DoubleType> img = ArrayImgs.doubles(d,
@@ -271,8 +272,8 @@ public final class LabelDistances {
 		}
 		else areas = ids;
 		final var empty = backgroundOnly ? 0 : regions.empty;
-		final var d = squaredDistances(areas, empty, regions.dims, spacing(
-			spacing, regions.dims.length));
+		final var d = squaredDistances(areas, empty, regions.dims,
+			Calibrations.spacing(spacing, regions.dims.length, "spacing"));
 		final var r2 = radius * radius;
 		for (var i = 0; i < d.length; i++)
 			if (d[i] <= r2) ids[i] = regions.empty;
@@ -286,7 +287,7 @@ public final class LabelDistances {
 		final double[] spacing)
 	{
 		final var n = regions.dims.length;
-		final var s = spacing(spacing, n);
+		final var s = Calibrations.spacing(spacing, n, "spacing");
 		final var weights = new double[n];
 		for (var d = 0; d < n; d++)
 			weights[d] = s[d] * s[d];
@@ -298,19 +299,6 @@ public final class LabelDistances {
 		for (final var v : Views.flatIterable(distances))
 			result[i++] = v.get();
 		return result;
-	}
-
-	private static double[] spacing(final double[] spacing, final int n) {
-		if (spacing == null) {
-			final var ones = new double[n];
-			Arrays.fill(ones, 1);
-			return ones;
-		}
-		if (spacing.length != n) {
-			throw new IllegalArgumentException("Expected " + n +
-				" spacing values but got " + spacing.length);
-		}
-		return spacing;
 	}
 
 	/**

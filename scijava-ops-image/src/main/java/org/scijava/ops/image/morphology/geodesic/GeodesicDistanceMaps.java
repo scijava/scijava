@@ -40,6 +40,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -162,8 +163,8 @@ public final class GeodesicDistanceMaps {
 						.dimensionsAsLongArray()));
 		}
 		final var dims = domain.dimensionsAsLongArray();
-		final var graph = new GeodesicGraph(dims, region, spacing(spacing,
-			dims.length), radius == null ? 2 : radius);
+		final var graph = new GeodesicGraph(dims, region, Calibrations
+			.spacing(spacing, dims.length, "spacing"), radius == null ? 2 : radius);
 		final var seeds = new int[region.length];
 		var count = 0;
 		var i = 0;
@@ -183,18 +184,5 @@ public final class GeodesicDistanceMaps {
 				" pixels");
 		}
 		return (int) size;
-	}
-
-	static double[] spacing(final double[] spacing, final int n) {
-		if (spacing == null) {
-			final var ones = new double[n];
-			Arrays.fill(ones, 1);
-			return ones;
-		}
-		if (spacing.length != n) {
-			throw new IllegalArgumentException("Expected " + n +
-				" spacing values but got " + spacing.length);
-		}
-		return spacing;
 	}
 }

@@ -38,6 +38,7 @@ import java.util.Map;
 import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -165,21 +166,7 @@ public class DefaultLocalThickness<B extends BooleanType<B>> implements
 		@Nullable Boolean maskToInput //
 	) {
 		final int n = input.numDimensions();
-		if (calibration == null) {
-			calibration = new double[n];
-			Arrays.fill(calibration, 1);
-		}
-		if (calibration.length != n) {
-			throw new IllegalArgumentException("Calibration length (" +
-				calibration.length + ") does not match image dimensionality (" + n +
-				")");
-		}
-		for (final double c : calibration) {
-			if (!(c > 0) || Double.isInfinite(c)) {
-				throw new IllegalArgumentException(
-					"Calibration values must be positive and finite");
-			}
-		}
+		calibration = Calibrations.spacing(calibration, n, "calibration");
 		if (maskToInput == null) maskToInput = true;
 
 		final long[] dims = Intervals.dimensionsAsLongArray(input);

@@ -42,6 +42,7 @@ import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.roi.labeling.LabelRegions;
 import net.imglib2.type.numeric.IntegerType;
 
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -99,8 +100,8 @@ public final class GeodesicDiameters {
 		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
 		@Nullable Integer radius)
 	{
-		final var s = GeodesicDistanceMaps.spacing(spacing, labeling
-			.numDimensions());
+		final var s = Calibrations.spacing(spacing, labeling
+			.numDimensions(), "spacing");
 		double diagonal = 0;
 		for (final var si : s)
 			diagonal += si * si;
@@ -136,8 +137,8 @@ public final class GeodesicDiameters {
 		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
 		@Nullable Integer radius)
 	{
-		final var s = GeodesicDistanceMaps.spacing(spacing, labeling
-			.numDimensions());
+		final var s = Calibrations.spacing(spacing, labeling
+			.numDimensions(), "spacing");
 		final var result = new LinkedHashMap<L, List<Point>>();
 		for (final var region : new LabelRegions<>(labeling)) {
 			if (region.inside().size() == 0) continue;

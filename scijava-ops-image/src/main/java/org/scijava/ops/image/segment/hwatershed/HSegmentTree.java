@@ -69,9 +69,12 @@ package org.scijava.ops.image.segment.hwatershed;
 import java.util.ArrayDeque;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
+
+import org.scijava.ops.image.util.Neighborhoods;
 
 /**
  * Hierarchy of the peaks (regional maxima) of an n-dimensional image, together
@@ -172,15 +175,14 @@ public final class HSegmentTree {
 	 * Builds the peak hierarchy of the given image.
 	 *
 	 * @param image the image whose bright peaks are to be organized.
-	 * @param fullConnectivity if true, pixels touching by a corner are neighbors
-	 *          (8-connectivity in 2D, 26 in 3D); otherwise only pixels sharing a
-	 *          face are (4-connectivity in 2D, 6 in 3D). This applies to the
-	 *          flooding; regional maxima are always detected with full
+	 * @param connectivity the neighborhood defining which pixels are adjacent
+	 *          during the flooding, or null for full connectivity (8 in 2D, 26
+	 *          in 3D); regional maxima are always detected with full
 	 *          connectivity, as in the original plugin.
 	 * @return the peak hierarchy
 	 */
 	public static <T extends RealType<T>> HSegmentTree build(
-		final RandomAccessibleInterval<T> image, final boolean fullConnectivity)
+		final RandomAccessibleInterval<T> image, final Shape connectivity)
 	{
 		final var size = Intervals.numElements(image);
 		if (size > Integer.MAX_VALUE) {
@@ -233,7 +235,7 @@ public final class HSegmentTree {
 		}
 
 		// Flood the image from the seeds, building the tree as basins meet.
-		final var offsets = neighborOffsets(dims.length, fullConnectivity);
+		final var offsets = neighborOffsets(dims.length, connectivity);
 		final var dequeued = new boolean[values.length];
 		final var pos = new long[dims.length];
 		final var nPos = new long[dims.length];
@@ -475,7 +477,7 @@ public final class HSegmentTree {
 		java.util.Arrays.fill(par, -1);
 
 		// Only the neighbors preceding the center pixel in flat order are needed.
-		final var allOffsets = neighborOffsets(dims.length, true);
+		final var allOffsets = neighborOffsets(dims.length, null);
 		final var offsets = java.util.Arrays.copyOf(allOffsets, allOffsets.length /
 			2);
 		final var pos = new long[dims.length];
@@ -592,23 +594,14 @@ public final class HSegmentTree {
 	 * 0 varying fastest.
 	 */
 	private static long[][] neighborOffsets(final int nDims,
-		final boolean fullConnectivity)
+		final Shape connectivity)
 	{
-		final var count = (int) Math.pow(3, nDims);
-		final var list = new java.util.ArrayList<long[]>();
-		for (var i = 0; i < count; i++) {
-			final var offset = new long[nDims];
-			var idx = i;
-			var nonZero = 0;
-			for (var d = 0; d < nDims; d++) {
-				offset[d] = idx % 3 - 1;
-				idx /= 3;
-				if (offset[d] != 0) nonZero++;
-			}
-			if (nonZero == 0) continue;
-			if (fullConnectivity || nonZero == 1) list.add(offset);
-		}
-		return list.toArray(new long[0][]);
+		final var offsets = Neighborhoods.rasterOffsets(connectivity, nDims);
+		final var result = new long[offsets.length][nDims];
+		for (var i = 0; i < offsets.length; i++)
+			for (var d = 0; d < nDims; d++)
+				result[i][d] = offsets[i][d];
+		return result;
 	}
 
 	private static boolean neighbor(final long[] pos, final long[] offset,

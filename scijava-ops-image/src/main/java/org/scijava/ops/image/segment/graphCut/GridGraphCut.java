@@ -35,9 +35,12 @@ import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
+
+import org.scijava.ops.image.util.Neighborhoods;
 
 /**
  * Binary segmentation of an n-dimensional grid by a minimum graph cut, shared
@@ -78,21 +81,20 @@ public final class GridGraphCut {
 	 * @param backgroundCost the cost of labeling each pixel background
 	 * @param contrast the contrast image, or {@code null}
 	 * @param lambda the weight of the smoothness term
-	 * @param fullConnectivity whether pixels neighbor diagonally too, or only
-	 *          across faces
+	 * @param connectivity the neighborhood defining which pixels are adjacent,
+	 *          or null for full connectivity
 	 * @return whether each pixel is foreground
 	 */
 	public static boolean[] segment(final long[] dims,
 		final double[] foregroundCost, final double[] backgroundCost,
-		final double[] contrast, final double lambda,
-		final boolean fullConnectivity)
+		final double[] contrast, final double lambda, final Shape connectivity)
 	{
 		if (!(lambda >= 0) || Double.isInfinite(lambda))
 			throw new IllegalArgumentException(
 				"The smoothness weight must be finite and nonnegative.");
 		final var n = dims.length;
 		final var size = foregroundCost.length;
-		final var offsets = offsets(n, fullConnectivity);
+		final var offsets = offsets(n, connectivity);
 		final var strides = new long[n];
 		var stride = 1L;
 		for (var d = 0; d < n; d++) {
@@ -192,26 +194,16 @@ public final class GridGraphCut {
 	 * Gets the offsets to half of the neighbors (those whose last nonzero
 	 * coordinate is positive), so that each pair is visited once.
 	 */
-	private static List<Offset> offsets(final int n,
-		final boolean fullConnectivity)
-	{
+	private static List<Offset> offsets(final int n, final Shape connectivity) {
 		final List<Offset> offsets = new ArrayList<>();
-		final var offset = new int[n];
-		final var total = (int) Math.pow(3, n);
-		for (var k = 0; k < total; k++) {
-			var rest = k;
-			var nonzero = 0;
+		for (final var offset : Neighborhoods.rasterOffsets(connectivity, n)) {
 			var last = 0;
+			var norm2 = 0;
 			for (var d = 0; d < n; d++) {
-				offset[d] = rest % 3 - 1;
-				rest /= 3;
-				if (offset[d] != 0) {
-					nonzero++;
-					last = offset[d];
-				}
+				if (offset[d] != 0) last = offset[d];
+				norm2 += offset[d] * offset[d];
 			}
-			if (last > 0 && (fullConnectivity || nonzero == 1)) offsets.add(
-				new Offset(offset.clone(), Math.sqrt(nonzero)));
+			if (last > 0) offsets.add(new Offset(offset, Math.sqrt(norm2)));
 		}
 		return offsets;
 	}

@@ -34,6 +34,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
@@ -82,8 +85,8 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 			4), EPS);
 		assertEquals(16, euler(bin, 4), EPS);
 		assertEquals(-2, euler(bin, 8), EPS);
-		// Default connectivity is 4.
-		assertEquals(16, euler(bin, null), EPS);
+		// The default connectivity is full, i.e. 8 in 2D.
+		assertEquals(-2, euler(bin, null), EPS);
 
 		var d = densities(bin, null, 4, 4);
 		assertEquals(0.5050505050505051, d.get("areaDensity"), EPS);
@@ -105,8 +108,8 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 			81.5746529883182, 64.03028441037807);
 		assertMap(perLabel("perimeter", lab, s, 2), 86.3937979737193,
 			91.89158511750144, 70.68583470577032);
-		assertMap(perLabel("eulerNumber", lab, 4), 17, 18, 13);
-		assertMap(perLabel("eulerNumber", lab, 8), 8, 9, 11);
+		assertMap(perLabel("eulerNumber", lab, shape(4)), 17, 18, 13);
+		assertMap(perLabel("eulerNumber", lab, shape(8)), 8, 9, 11);
 	}
 
 	@Test
@@ -150,17 +153,17 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 			115.0421554549595, 133.77511595792024);
 		assertMap(perLabel("surfaceArea", lab, null, 3), 156.0, 145.33333333333334,
 			171.99999999999997);
-		assertMap(perLabel("meanBreadth", lab, null, 13, 8), 16.857054988715547,
-			16.555114166411823, 17.500310986470176);
+		assertMap(perLabel("meanBreadth", lab, null, 13, shape(8)),
+			16.857054988715547, 16.555114166411823, 17.500310986470176);
 		assertMap(perLabel("volume", lab, s), 70.5, 72, 84);
 		assertMap(perLabel("surfaceArea", lab, s, 13), 193.98294227181546,
 			184.78292739636024, 215.70041383821234);
 		assertMap(perLabel("surfaceArea", lab, s, 3), 247.33333333333323,
 			229.66666666666663, 269.33333333333337);
-		assertMap(perLabel("meanBreadth", lab, s, 13, 8), 13.315660795567057,
-			13.059382787120807, 13.804732421239835);
-		assertMap(perLabel("eulerNumber", lab, 6), 24, 17, 19);
-		assertMap(perLabel("eulerNumber", lab, 26), -8, 1, 0);
+		assertMap(perLabel("meanBreadth", lab, s, 13, shape(8)),
+			13.315660795567057, 13.059382787120807, 13.804732421239835);
+		assertMap(perLabel("eulerNumber", lab, shape(6)), 24, 17, 19);
+		assertMap(perLabel("eulerNumber", lab, shape(26)), -8, 1, 0);
 
 		assertEquals(19.292030554601833, interfaceArea(lab, 1, 2, null, 13), EPS);
 		assertEquals(32.416057513642365, interfaceArea(lab, 1, 2, s, 13), EPS);
@@ -299,7 +302,7 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 		final var lab = labeling(20, 18, 1, p -> hash(p[0], p[1], 7) % 3);
 		final var areas = perLabel("area", lab);
 		final var perims = perLabel("perimeter", lab, null, 4);
-		final var eulers = perLabel("eulerNumber", lab, 8);
+		final var eulers = perLabel("eulerNumber", lab, shape(8));
 		for (var label = 1; label <= 2; label++) {
 			final var l = label;
 			final var mask = binary(20, 18, 1, p -> hash(p[0], p[1], 7) % 3 == l);
@@ -388,8 +391,15 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 		assertThrows(IllegalArgumentException.class, () -> perimeter(img2, null,
 			3));
 		assertThrows(IllegalArgumentException.class, () -> surface(img3, null, 4));
-		assertThrows(IllegalArgumentException.class, () -> euler(img2, 6));
-		assertThrows(IllegalArgumentException.class, () -> euler(img3, 8));
+		// Note: Shapes are dimensionless, so a connectivity cannot mismatch the
+		// dimensionality, but shapes other than face and full connectivity are
+		// rejected.
+		assertThrows(IllegalArgumentException.class, () -> call("eulerNumber",
+			img2, new DiamondShape(2)));
+		assertThrows(IllegalArgumentException.class, () -> call("eulerNumber",
+			img3, new RectangleShape(2, false)));
+		assertThrows(IllegalArgumentException.class, () -> call("meanBreadth",
+			img3, null, 13, new DiamondShape(2)));
 		assertThrows(IllegalArgumentException.class, () -> volume(img2, null));
 		assertThrows(IllegalArgumentException.class, () -> area(img2,
 			new double[] { 1, 1, 1 }));
@@ -425,20 +435,31 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 		final RandomAccessibleInterval<BitType> img, final double[] spacing,
 		final Integer dirs, final Integer conn2d)
 	{
-		return call("meanBreadth", img, spacing, dirs, conn2d);
+		return call("meanBreadth", img, spacing, dirs, shape(conn2d));
 	}
 
 	private static double euler(final RandomAccessibleInterval<BitType> img,
 		final Integer conn)
 	{
-		return call("eulerNumber", img, conn);
+		return call("eulerNumber", img, shape(conn));
 	}
 
 	private static Map<String, Double> densities(
 		final RandomAccessibleInterval<BitType> img, final double[] spacing,
 		final Integer dirs, final Integer conn)
 	{
-		return run("densities", DENSITIES, inputs(img, spacing, dirs, conn));
+		return run("densities", DENSITIES, inputs(img, spacing, dirs, shape(
+			conn)));
+	}
+
+	/**
+	 * Gets the shape of the connectivity with the given number of neighbors (4
+	 * or 6 for face connectivity, 8 or 26 for full connectivity), or null.
+	 */
+	private static Shape shape(final Integer conn) {
+		if (conn == null) return null;
+		return conn == 4 || conn == 6 ? new DiamondShape(1) : new RectangleShape(
+			1, false);
 	}
 
 	private static double interfaceArea(final ImgLabeling<Integer, IntType> lab,

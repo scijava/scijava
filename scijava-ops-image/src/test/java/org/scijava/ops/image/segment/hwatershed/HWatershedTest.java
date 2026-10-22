@@ -37,6 +37,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
@@ -413,9 +416,10 @@ public class HWatershedTest extends AbstractOpTest {
 		final ImgLabeling<Integer, IntType> defaults = ops.op("segment.hWatershed")
 			.input(img).outType(new Nil<ImgLabeling<Integer, IntType>>()
 			{}).apply();
-		// By default, hMin is 5% of the range and threshold is the image minimum.
+		// By default, hMin is 5% of the range, threshold is the image minimum,
+		// and the connectivity is full.
 		final var range = 115 - 10;
-		assertEquals(digits(hWatershed(img, 0.05 * range, 10, 100, true, false)),
+		assertEquals(digits(hWatershed(img, 0.05 * range, 10, 100, true, true)),
 			digits(defaults));
 	}
 
@@ -469,8 +473,10 @@ public class HWatershedTest extends AbstractOpTest {
 		final double threshold, final double peakFlooding,
 		final boolean allowSplitting, final boolean useEightConnectivity)
 	{
+		final Shape connectivity = useEightConnectivity ? new RectangleShape(1,
+			false) : new DiamondShape(1);
 		return ops.op("segment.hWatershed").input(img, hMin, threshold,
-			peakFlooding, allowSplitting, useEightConnectivity).outType(
+			peakFlooding, allowSplitting, connectivity).outType(
 				new Nil<ImgLabeling<Integer, IntType>>()
 				{}).apply();
 	}

@@ -30,6 +30,7 @@
 package org.scijava.ops.image.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -49,6 +50,28 @@ public final class Neighborhoods {
 
 	private Neighborhoods() {
 		// Prevent instantiation of static utility class.
+	}
+
+	/**
+	 * Lists the offsets of a shape around the origin like
+	 * {@link #neighborOffsets(Shape, int)}, sorted in raster order: as their
+	 * pixels are visited by a flat iteration with dimension 0 varying fastest.
+	 * The offsets of a symmetric neighborhood that precede the center pixel
+	 * thus come first, in the first half of the array.
+	 *
+	 * @param shape the neighborhood shape, or null for full connectivity
+	 * @param n the number of dimensions
+	 * @return the sorted offsets
+	 */
+	public static int[][] rasterOffsets(final Shape shape, final int n) {
+		final var offsets = neighborOffsets(shape, n);
+		Arrays.sort(offsets, (a, b) -> {
+			for (var d = n - 1; d >= 0; d--) {
+				if (a[d] != b[d]) return Integer.compare(a[d], b[d]);
+			}
+			return 0;
+		});
+		return offsets;
 	}
 
 	/**

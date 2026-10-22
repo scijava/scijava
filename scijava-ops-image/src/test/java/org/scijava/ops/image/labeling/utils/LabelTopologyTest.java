@@ -36,7 +36,8 @@ import java.util.Map;
 import java.util.Set;
 
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.logic.BitType;
@@ -87,7 +88,7 @@ public class LabelTopologyTest extends AbstractOpTest {
 		// Touching regions: both sides of the shared edge are boundaries.
 		final var g = grid();
 		final RandomAccessibleInterval<BitType> all = ops.op("labeling.boundaries")
-			.input(g, StructuringElement.FOUR_CONNECTED).outType(MASK).apply();
+			.input(g, new DiamondShape(1)).outType(MASK).apply();
 		// All pixels except the corners of the field of view.
 		assertEquals(32, count(all));
 
@@ -97,10 +98,10 @@ public class LabelTopologyTest extends AbstractOpTest {
 		paint(corner, 1, 0, 1, 0, 1);
 		paint(corner, 2, 1, 1, 1, 1);
 		final RandomAccessibleInterval<BitType> face = ops.op("labeling.boundaries")
-			.input(corner, StructuringElement.FOUR_CONNECTED).outType(MASK).apply();
+			.input(corner, new DiamondShape(1)).outType(MASK).apply();
 		assertEquals(3, count(face));
 		final RandomAccessibleInterval<BitType> full = ops.op("labeling.boundaries")
-			.input(corner, StructuringElement.EIGHT_CONNECTED).outType(MASK).apply();
+			.input(corner, new RectangleShape(1, false)).outType(MASK).apply();
 		assertEquals(4, count(full));
 	}
 
@@ -108,15 +109,18 @@ public class LabelTopologyTest extends AbstractOpTest {
 	public void testAdjacency() {
 		final var g = grid();
 		final Map<Integer, Set<Integer>> four = ops.op("labeling.adjacency").input(
-			g).outType(GRAPH).apply();
+			g, new DiamondShape(1)).outType(GRAPH).apply();
 		assertEquals(9, four.size());
 		assertEquals(set(1, 3, 5, 7), four.get(4));
 		assertEquals(set(1, 3), four.get(0));
 		assertEquals(set(0, 2, 4), four.get(1));
 		final Map<Integer, Set<Integer>> eight = ops.op("labeling.adjacency").input(
-			g, StructuringElement.EIGHT_CONNECTED).outType(GRAPH).apply();
+			g, new RectangleShape(1, false)).outType(GRAPH).apply();
 		assertEquals(set(0, 1, 2, 3, 5, 6, 7, 8), eight.get(4));
 		assertEquals(set(1, 3, 4), eight.get(0));
+		// The default is full connectivity.
+		assertEquals(eight, ops.op("labeling.adjacency").input(g).outType(GRAPH)
+			.apply());
 		for (final var entry : eight.entrySet())
 			for (final var neighbor : entry.getValue())
 				assertEquals(true, eight.get(neighbor).contains(entry.getKey()));

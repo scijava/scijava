@@ -39,7 +39,8 @@ import java.util.Map;
 import java.util.Set;
 
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.logic.BitType;
@@ -146,13 +147,17 @@ public class LabelEditingTest extends AbstractOpTest {
 			ra.setPositionAndGet(p[0], p[1]).add(1);
 		}
 		final ImgLabeling<Integer, IntType> four = ops.op("labeling.fillHoles")
-			.input(labeling, StructuringElement.FOUR_CONNECTED).outType(LABELING)
+			.input(labeling, new DiamondShape(1)).outType(LABELING)
 			.apply();
 		assertEquals(Map.of(1, 13L), sizes(four));
 		final ImgLabeling<Integer, IntType> eight = ops.op("labeling.fillHoles")
-			.input(labeling, StructuringElement.EIGHT_CONNECTED).outType(LABELING)
+			.input(labeling, new RectangleShape(1, false)).outType(LABELING)
 			.apply();
 		assertEquals(Map.of(1, 8L), sizes(eight));
+		// The default is full connectivity, so the outline is not filled.
+		final ImgLabeling<Integer, IntType> defaults = ops.op("labeling.fillHoles")
+			.input(labeling).outType(LABELING).apply();
+		assertEquals(Map.of(1, 8L), sizes(defaults));
 	}
 
 	@Test

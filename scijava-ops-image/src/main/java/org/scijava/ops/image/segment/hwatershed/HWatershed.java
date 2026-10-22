@@ -70,6 +70,7 @@ import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.IntType;
@@ -110,7 +111,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='segment.hWatershed'
  */
 public class HWatershed<T extends RealType<T>> implements
-	Functions.Arity6<RandomAccessibleInterval<T>, Double, Double, Double, Boolean, Boolean, ImgLabeling<Integer, IntType>>
+	Functions.Arity6<RandomAccessibleInterval<T>, Double, Double, Double, Boolean, Shape, ImgLabeling<Integer, IntType>>
 {
 
 	@OpDependency(name = "create.imgLabeling")
@@ -134,10 +135,14 @@ public class HWatershed<T extends RealType<T>> implements
 	 *          but which get separated from their segment by the threshold or the
 	 *          peak flooding level form segments of their own; if false they are
 	 *          discarded. Defaults to true.
-	 * @param useEightConnectivity if true, pixels touching by a corner are
-	 *          neighbors during flooding (8-connectivity in 2D, 26 in 3D);
-	 *          otherwise only pixels sharing a face are (4-connectivity in 2D, 6
-	 *          in 3D). Defaults to false, as in the original plugin.
+	 * @param connectivity the neighborhood defining which pixels are adjacent
+	 *          during the flooding, such as a {@code DiamondShape} of radius 1
+	 *          for face connectivity (4-connectivity in 2D, 6-connectivity in
+	 *          3D) or a {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
+	 *          connectivity, unlike the original plugin, which defaults to face
+	 *          connectivity. Regional maxima are always detected with full
+	 *          connectivity.
 	 * @return a labeling with one label (numbered from 1) per segment;
 	 *         background pixels have no label
 	 */
@@ -148,13 +153,12 @@ public class HWatershed<T extends RealType<T>> implements
 		@Nullable Double threshold, //
 		@Nullable Double peakFlooding, //
 		@Nullable Boolean allowSplitting, //
-		@Nullable Boolean useEightConnectivity //
+		@Nullable Shape connectivity //
 	) {
-		if (useEightConnectivity == null) useEightConnectivity = false;
 		if (peakFlooding == null) peakFlooding = 100.0;
 		if (allowSplitting == null) allowSplitting = true;
 
-		final var tree = HSegmentTree.build(input, useEightConnectivity);
+		final var tree = HSegmentTree.build(input, connectivity);
 		if (hMin == null) hMin = 0.05 * (tree.max() - tree.min());
 		if (threshold == null) threshold = tree.min();
 		if (hMin < 0) {

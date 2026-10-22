@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.logic.BitType;
@@ -48,11 +48,11 @@ import org.scijava.ops.spi.Nullable;
  * Ops analyzing the spatial relations between the labels of an
  * {@link ImgLabeling}: their boundaries and their adjacency.
  * <p>
- * Neighborhoods are given as a {@link StructuringElement}, as for
- * {@code labeling.cca}: {@code FOUR_CONNECTED} means face neighbors only (4
- * in 2D, 6 in 3D) and {@code EIGHT_CONNECTED} means all neighbors sharing a
- * face, edge or corner (8 in 2D, 26 in 3D). Neighbors outside the labeling
- * interval are ignored.
+ * Neighborhoods are given as a connectivity {@link Shape}: a
+ * {@code DiamondShape} of radius 1 for face neighbors only (4 in 2D, 6 in 3D)
+ * or a {@code RectangleShape} of span 1 for all neighbors sharing a face, edge
+ * or corner (8 in 2D, 26 in 3D), which is the default. Neighbors outside the
+ * labeling interval are ignored.
  * </p>
  * <p>
  * These are clean-room implementations of the label boundaries and region
@@ -80,7 +80,12 @@ public final class LabelTopology {
 	 * regions are marked.
 	 *
 	 * @param labeling the labeled objects
-	 * @param connectivity the neighborhood (default: {@code FOUR_CONNECTED})
+	 * @param connectivity the neighborhood defining which pixels are adjacent,
+	 *          such as a {@code DiamondShape} of radius 1 for face connectivity
+	 *          (4-connectivity in 2D, 6-connectivity in 3D) or a
+	 *          {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
+	 *          connectivity.
 	 * @return a binary image of the boundary pixels, with the interval of the
 	 *         labeling
 	 * @param <L> label type
@@ -89,10 +94,8 @@ public final class LabelTopology {
 	 */
 	public static <L, I extends IntegerType<I>> RandomAccessibleInterval<BitType>
 		boundaries(final ImgLabeling<L, I> labeling,
-			@Nullable StructuringElement connectivity)
+			@Nullable Shape connectivity)
 	{
-		final var se = connectivity == null ? StructuringElement.FOUR_CONNECTED
-			: connectivity;
 		final var indexImg = labeling.getIndexImg();
 		final var mapping = labeling.getMapping();
 		final var n = labeling.numDimensions();
@@ -104,7 +107,7 @@ public final class LabelTopology {
 			.bits(indexImg.dimensionsAsLongArray()), indexImg.minAsLongArray());
 		final var out = output.randomAccess();
 		final var ra = indexImg.randomAccess();
-		final var offsets = Labelings.offsets(n, se, false);
+		final var offsets = Labelings.offsets(n, connectivity, false);
 		final var position = new long[n];
 		final var neighbor = new long[n];
 		final var cursor = Views.flatIterable(indexImg).localizingCursor();
@@ -129,7 +132,12 @@ public final class LabelTopology {
 	 * they overlap (share a pixel).
 	 *
 	 * @param labeling the labeled objects
-	 * @param connectivity the neighborhood (default: {@code FOUR_CONNECTED})
+	 * @param connectivity the neighborhood defining which pixels are adjacent,
+	 *          such as a {@code DiamondShape} of radius 1 for face connectivity
+	 *          (4-connectivity in 2D, 6-connectivity in 3D) or a
+	 *          {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
+	 *          connectivity.
 	 * @return a map from each label present in the labeling to the set of its
 	 *         adjacent labels (empty if it has none); the relation is
 	 *         symmetric and never contains a label itself
@@ -139,10 +147,8 @@ public final class LabelTopology {
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Set<L>> adjacency(
 		final ImgLabeling<L, I> labeling,
-		@Nullable StructuringElement connectivity)
+		@Nullable Shape connectivity)
 	{
-		final var se = connectivity == null ? StructuringElement.FOUR_CONNECTED
-			: connectivity;
 		final var indexImg = labeling.getIndexImg();
 		final var mapping = labeling.getMapping();
 		final var n = labeling.numDimensions();
@@ -151,7 +157,7 @@ public final class LabelTopology {
 		final var used = new boolean[(int) numSets];
 		final var pairs = new HashSet<Long>();
 		final var ra = indexImg.randomAccess();
-		final var offsets = Labelings.offsets(n, se, true);
+		final var offsets = Labelings.offsets(n, connectivity, true);
 		final var position = new long[n];
 		final var neighbor = new long[n];
 		final var cursor = Views.flatIterable(indexImg).localizingCursor();

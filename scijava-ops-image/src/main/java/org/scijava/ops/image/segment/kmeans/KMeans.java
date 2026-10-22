@@ -66,8 +66,8 @@ import org.scijava.ops.spi.OpDependency;
  * unlabeled.
  * </p>
  * <p>
- * The clusters are numbered {@code 0, ..., k-1} in lexicographic order of
- * their centers, so for intensity clustering label 0 is the darkest cluster.
+ * The clusters are labeled {@code 1, ..., k} in lexicographic order of their
+ * centers, so for intensity clustering label 1 is the darkest cluster.
  * </p>
  * <p>
  * Implemented from the papers.
@@ -105,7 +105,7 @@ public class KMeans<T extends RealType<T>> implements
 	 *          assigned to the nearest k-means++ seeds
 	 * @return a labeling of the pixels (over all axes except the channel axis,
 	 *         with the same interval as the input) with cluster labels
-	 *         {@code 0, ..., k-1}
+	 *         {@code 1, ..., k}; pixels with a NaN value are unlabeled
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply(
@@ -229,7 +229,7 @@ public class KMeans<T extends RealType<T>> implements
 		var p = 0;
 		var q = 0;
 		for (final var label : Views.flatIterable(output))
-			if (valid[p++]) label.add(rank[assignment[q++]]);
+			if (valid[p++]) label.add(rank[assignment[q++]] + 1);
 		return output;
 	}
 

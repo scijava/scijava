@@ -68,8 +68,9 @@ import org.scijava.ops.spi.OpDependency;
  * the full range 0&ndash;255, the result is identical to that of the plugin.
  * </p>
  * <p>
- * Regions are labeled {@code 0, 1, 2, ...} in order of their first sample in
- * flat iteration order, like the region index image of the original plugin.
+ * Every sample is labeled: regions are labeled {@code 1, 2, 3, ...} in order
+ * of their first sample in flat iteration order, i.e. the region index image
+ * of the original plugin plus one.
  * </p>
  * <p>
  * The original Statistical_Region_Merging license notice follows.
@@ -127,7 +128,7 @@ public class DefaultStatisticalRegionMerging<T extends RealType<T>> implements
 	 *          values are mapped (default 256); it determines the scale of the
 	 *          merging predicate and the number of buckets used to sort the
 	 *          neighbor pairs
-	 * @return a labeling assigning each sample its region label
+	 * @return a labeling assigning each sample its region label, from 1
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply( //
@@ -141,7 +142,7 @@ public class DefaultStatisticalRegionMerging<T extends RealType<T>> implements
 		final var output = imgLabelingCreator.apply(input, new IntType());
 		final var c = Views.flatIterable(output).cursor();
 		for (final var label : srm.labels) {
-			c.next().add(label);
+			c.next().add(label + 1);
 		}
 		return output;
 	}

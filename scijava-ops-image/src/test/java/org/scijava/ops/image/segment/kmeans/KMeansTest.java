@@ -74,8 +74,8 @@ public class KMeansTest extends AbstractOpTest {
 		final ImgLabeling<Integer, IntType> labels = ops.op("segment.kMeans")
 			.input(in, 3)
 			.outType(LABELS).apply();
-		// Labels are ordered by center: 20 -> 0, 100 -> 1, 200 -> 2.
-		final var expected = new int[] { 2, 0, 1 };
+		// Labels are ordered by center: 20 -> 1, 100 -> 2, 200 -> 3.
+		final var expected = new int[] { 3, 1, 2 };
 		i = 0;
 		for (final var set : Views.flatIterable(labels)) {
 			assertEquals(1, set.size());
@@ -106,7 +106,7 @@ public class KMeansTest extends AbstractOpTest {
 			.outType(LABELS).apply();
 		assertArrayEquals(new long[] { 16, 12 }, labels.dimensionsAsLongArray());
 		// Lexicographic order: (0,50), (10,0), (60,0), (70,50).
-		final var expected = new int[] { 2, 0, 3, 1 };
+		final var expected = new int[] { 3, 1, 4, 2 };
 		var i = 0;
 		for (final var set : Views.flatIterable(labels))
 			assertEquals(expected[truth[i++]], set.iterator().next());
@@ -127,7 +127,7 @@ public class KMeansTest extends AbstractOpTest {
 		final var labels = Views.flatIterable(a).cursor();
 		while (ac.hasNext()) {
 			assertEquals(ac.next().get(), bc.next().get());
-			used[labels.next().iterator().next()] = true;
+			used[labels.next().iterator().next() - 1] = true;
 		}
 		for (final var u : used)
 			assertEquals(true, u);
@@ -135,7 +135,7 @@ public class KMeansTest extends AbstractOpTest {
 		final ImgLabeling<Integer, IntType> one = ops.op("segment.kMeans").input(
 			in, 1).outType(LABELS).apply();
 		for (final var set : Views.flatIterable(one))
-			assertEquals(0, set.iterator().next());
+			assertEquals(1, set.iterator().next());
 	}
 
 	@Test
@@ -172,7 +172,7 @@ public class KMeansTest extends AbstractOpTest {
 				for (final var set : Views.flatIterable(labels)) {
 					final var v = ic.next().get();
 					assertEquals(1, set.size());
-					final int l = set.iterator().next();
+					final int l = set.iterator().next() - 1;
 					min[l] = Math.min(min[l], v);
 					max[l] = Math.max(max[l], v);
 				}
@@ -180,7 +180,7 @@ public class KMeansTest extends AbstractOpTest {
 					if (max[l] == Double.NEGATIVE_INFINITY) continue;
 					for (var m = l + 1; m < 4; m++) {
 						assertTrue(max[l] <= min[m], "seed " + seed + ", maxIterations " +
-							maxIter + ": label " + l + " overlaps label " + m);
+							maxIter + ": label " + (l + 1) + " overlaps label " + (m + 1));
 					}
 				}
 			}
@@ -207,7 +207,7 @@ public class KMeansTest extends AbstractOpTest {
 		final var lc = labels.localizingCursor();
 		while (lc.hasNext()) {
 			final var set = lc.next();
-			assertEquals(lc.getIntPosition(0) < 9 ? 0 : 1, set.iterator().next());
+			assertEquals(lc.getIntPosition(0) < 9 ? 1 : 2, set.iterator().next());
 		}
 	}
 
@@ -228,7 +228,7 @@ public class KMeansTest extends AbstractOpTest {
 			final var set = lc.next();
 			final var x = lc.getIntPosition(0);
 			if (x == 3) assertEquals(0, set.size());
-			else assertEquals(x < 5 ? 0 : 1, set.iterator().next());
+			else assertEquals(x < 5 ? 1 : 2, set.iterator().next());
 		}
 		in.forEach(t -> t.set(Double.NaN));
 		assertThrows(IllegalArgumentException.class, () -> ops.op("segment.kMeans")

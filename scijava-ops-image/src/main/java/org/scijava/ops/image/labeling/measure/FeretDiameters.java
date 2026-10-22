@@ -56,7 +56,10 @@ import org.scijava.ops.spi.Nullable;
  * corner strictly between two other corners of the region on an axis-aligned
  * line cannot be a vertex, which leaves the corners that are extreme on all
  * axis-aligned lines through them. The remaining candidates are compared
- * exhaustively. For 2D polygons, see also {@code geom.maximumFeretsDiameter}.
+ * exhaustively, which takes time quadratic in their number: fine for typical
+ * cells and nuclei, but slow for very large 3D regions (a digital ball of
+ * radius 200 leaves on the order of 10<sup>5</sup> candidates). For 2D polygons, see
+ * also {@code geom.maximumFeretsDiameter}.
  * </p>
  *
  * @author Curtis Rueden

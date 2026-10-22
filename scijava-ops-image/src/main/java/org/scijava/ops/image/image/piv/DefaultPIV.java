@@ -89,6 +89,12 @@ import org.scijava.ops.spi.OpDependency;
  * step, as many as fit inside the frame. Windows without contrast in the
  * first frame give {@code NaN} vectors (before replacement).
  * </p>
+ * <p>
+ * Implemented from the papers above. Like Fiji's PIV_analyser, this is a
+ * single-pass analysis without window deformation or iterative refinement;
+ * unlike it, windows of any size are allowed (not only powers of two). Each
+ * frame is limited to 2<sup>31</sup> pixels.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

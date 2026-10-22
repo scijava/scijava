@@ -54,7 +54,8 @@ import org.scijava.ops.spi.Nullable;
  * </p>
  * <p>
  * NaN input values are not supported and cause an
- * {@link IllegalArgumentException}.
+ * {@link IllegalArgumentException}. Images are limited to 2<sup>31</sup>
+ * pixels.
  * </p>
  *
  * @author Curtis Rueden

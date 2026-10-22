@@ -62,7 +62,9 @@ import org.scijava.ops.spi.Nullable;
  * intensity is preserved. The scheme is stable for {@code dt <= 1 / (2n)}.
  * </p>
  * <p>
- * Implemented from the paper.
+ * Implemented from the paper. Note: Fiji's "Anisotropic Diffusion 2D" plugin
+ * implements a different algorithm (Tschumperl&eacute;-Deriche tensor-driven
+ * diffusion), hence the more specific name {@code filter.peronaMalik}.
  * </p>
  * <p>
  * Results are clamped to the range of the output type, so an integer output
@@ -76,7 +78,7 @@ import org.scijava.ops.spi.Nullable;
  * @see <a href="https://doi.org/10.1109/34.56205">P. Perona and J. Malik,
  *      "Scale-space and edge detection using anisotropic diffusion", IEEE
  *      Trans. Pattern Anal. Mach. Intell. 12(7):629-639, 1990</a>
- * @implNote op names='filter.anisotropicDiffusion'
+ * @implNote op names='filter.peronaMalik'
  */
 public class PeronaMalikDiffusion<T extends RealType<T>, V extends RealType<V>>
 	implements

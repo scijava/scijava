@@ -183,10 +183,10 @@ public class TensorFiltersTest extends AbstractOpTest {
 			.input(img, 1.0).outType(OUT).apply());
 	}
 
-	// -- filter.surfaceness --
+	// -- filter.sheetness --
 
 	@Test
-	public void testSurfaceness() {
+	public void testSheetness() {
 		final double s = 2, sigma = 2;
 		final var plate = image(p -> gauss(p[2], s), 21, 21, 21);
 		final var line = image(p -> gauss(p[1], s) * gauss(p[2], s), 21, 21, 21);
@@ -198,27 +198,27 @@ public class TensorFiltersTest extends AbstractOpTest {
 		// center is -s / w³; scale-normalized, the response is σ² s / w³.
 		final var w = Math.sqrt(s * s + sigma * sigma);
 		final var expected = sigma * sigma * s / (w * w * w);
-		final var plateResponse = surfaceness(plate, sigma)[0];
+		final var plateResponse = sheetness(plate, sigma)[0];
 		assertEquals(expected, plateResponse, 0.05 * expected);
 
-		final var lineResponse = surfaceness(line, sigma)[0];
-		final var blobResponse = surfaceness(blob, sigma)[0];
+		final var lineResponse = sheetness(line, sigma)[0];
+		final var blobResponse = sheetness(blob, sigma)[0];
 		assertEquals(0, lineResponse, 1e-3 * plateResponse);
 		assertEquals(0, blobResponse, 1e-3 * plateResponse);
 
 		// A dark plate, whose curvature across it is positive, gives 0.
 		final var darkPlate = image(p -> -gauss(p[2], s), 21, 21, 21);
-		assertEquals(0, surfaceness(darkPlate, sigma)[0], 0);
+		assertEquals(0, sheetness(darkPlate, sigma)[0], 0);
 
 		// Away from the plate center, on its flank, the response decreases.
-		final var flank = surfaceness(plate, sigma)[1];
+		final var flank = sheetness(plate, sigma)[1];
 		assertTrue(flank < plateResponse);
 	}
 
 	@Test
-	public void testSurfacenessRequires3D() {
+	public void testSheetnessRequires3D() {
 		final var img = image(p -> 0, 5, 5);
-		assertThrows(RuntimeException.class, () -> ops.op("filter.surfaceness")
+		assertThrows(RuntimeException.class, () -> ops.op("filter.sheetness")
 			.input(img, 1.0).outType(OUT).apply());
 	}
 
@@ -341,9 +341,9 @@ public class TensorFiltersTest extends AbstractOpTest {
 		assertEquals(expected, at(si, 10, 10)[0], 1e-6);
 	}
 
-	/** Returns surfaceness at the center and 3 pixels off the plate center. */
-	private double[] surfaceness(final Img<DoubleType> img, final double sigma) {
-		final var out = ops.op("filter.surfaceness").input(img, sigma).outType(OUT)
+	/** Returns sheetness at the center and 3 pixels off the plate center. */
+	private double[] sheetness(final Img<DoubleType> img, final double sigma) {
+		final var out = ops.op("filter.sheetness").input(img, sigma).outType(OUT)
 			.apply();
 		return new double[] { at(out, 10, 10, 10)[0], at(out, 10, 10, 13)[0] };
 	}

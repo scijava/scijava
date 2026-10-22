@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.filter.localContrast;
+package org.scijava.ops.image.filter.localCoefficientOfVariation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -42,12 +42,12 @@ import org.scijava.ops.image.segment.phantast.PhantastTest;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link DefaultLocalContrast}.
+ * Tests {@link DefaultLocalCoefficientOfVariation}.
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
  */
-public class LocalContrastTest extends AbstractOpTest {
+public class LocalCoefficientOfVariationTest extends AbstractOpTest {
 
 	private static final Nil<RandomAccessibleInterval<FloatType>> FLOATS =
 		new Nil<>()
@@ -61,8 +61,8 @@ public class LocalContrastTest extends AbstractOpTest {
 	 * kernel differs slightly from that of {@code filter.gauss}.
 	 */
 	@Test
-	public void testLocalContrastRegression() {
-		final var lc = ops.op("filter.localContrast").input(PhantastTest.synth(), 1.2)
+	public void testLocalCoefficientOfVariationRegression() {
+		final var lc = ops.op("filter.localCoefficientOfVariation").input(PhantastTest.synth(), 1.2)
 			.outType(FLOATS).apply();
 		final var ra = lc.randomAccess();
 		final int[][] pos = { { 0, 0 }, { 20, 22 }, { 10, 20 }, { 33, 22 }, { 40,
@@ -78,11 +78,11 @@ public class LocalContrastTest extends AbstractOpTest {
 
 	/** The local contrast is 0 on flat images and invariant to scaling. */
 	@Test
-	public void testLocalContrastInvariants() {
+	public void testLocalCoefficientOfVariationInvariants() {
 		final var flat = ArrayImgs.floats(16, 16, 4);
 		for (final var t : flat)
 			t.set(42);
-		final var lcFlat = ops.op("filter.localContrast").input(flat, 2.0)
+		final var lcFlat = ops.op("filter.localCoefficientOfVariation").input(flat, 2.0)
 			.outType(FLOATS).apply();
 		for (final var t : Views.iterable(lcFlat))
 			assertEquals(0, t.get(), 1e-5);
@@ -93,9 +93,9 @@ public class LocalContrastTest extends AbstractOpTest {
 		final var sc = scaled.cursor();
 		while (c.hasNext())
 			sc.next().set(7 * c.next().get());
-		final var lc = ops.op("filter.localContrast").input(img, 1.5).outType(
+		final var lc = ops.op("filter.localCoefficientOfVariation").input(img, 1.5).outType(
 			FLOATS).apply();
-		final var lcScaled = ops.op("filter.localContrast").input(scaled, 1.5)
+		final var lcScaled = ops.op("filter.localCoefficientOfVariation").input(scaled, 1.5)
 			.outType(FLOATS).apply();
 		final var a = Views.flatIterable(lc).cursor();
 		final var b = Views.flatIterable(lcScaled).cursor();
@@ -122,7 +122,7 @@ public class LocalContrastTest extends AbstractOpTest {
 			final var odd = (c.getIntPosition(0) + c.getIntPosition(1)) % 2 != 0;
 			c.get().set(odd ? 40005 : 39995);
 		}
-		final var lc = ops.op("filter.localContrast").input(img, 3.0).outType(
+		final var lc = ops.op("filter.localCoefficientOfVariation").input(img, 3.0).outType(
 			FLOATS).apply();
 		final var ra = lc.randomAccess();
 		for (int y = 10; y < n - 10; y++) {

@@ -35,6 +35,7 @@ import java.util.Map;
 
 import net.imglib2.KDTree;
 import net.imglib2.RealLocalizable;
+import net.imglib2.RealPoint;
 import net.imglib2.neighborsearch.KNearestNeighborSearchOnKDTree;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelRegions;
@@ -43,6 +44,7 @@ import net.imglib2.util.Intervals;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.special.Gamma;
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -70,10 +72,11 @@ public final class NearestNeighbors {
 	}
 
 	/**
-	 * Computes, for each label, the Euclidean distance (in pixels) from its
-	 * centroid to the nearest centroid of any other label.
+	 * Computes, for each label, the Euclidean distance (in calibrated units)
+	 * from its centroid to the nearest centroid of any other label.
 	 *
 	 * @param labeling the labeled objects
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a map from each label to its nearest-neighbor distance (positive
 	 *         infinity if there is only one label)
 	 * @param <L> label type
@@ -81,14 +84,20 @@ public final class NearestNeighbors {
 	 * @implNote op names='labeling.nearestNeighborDistances', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> distances(
-		final ImgLabeling<L, I> labeling)
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration)
 	{
+		final var n = labeling.numDimensions();
+		final var s = Calibrations.spacing(calibration, n, "calibration");
 		final var labels = new ArrayList<L>();
 		final var centroids = new ArrayList<RealLocalizable>();
 		for (final var region : new LabelRegions<>(labeling)) {
 			if (region.inside().size() == 0) continue;
 			labels.add(region.getLabel());
-			centroids.add(region.getCenterOfMass());
+			final var centroid = new RealPoint(n);
+			final var center = region.getCenterOfMass();
+			for (var d = 0; d < n; d++)
+				centroid.setPosition(center.getDoublePosition(d) * s[d], d);
+			centroids.add(centroid);
 		}
 		final var result = new LinkedHashMap<L, Double>();
 		if (labels.size() < 2) {
@@ -132,9 +141,10 @@ public final class NearestNeighbors {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the labeled objects (at least two)
-	 * @param volume the area or volume (in pixels) of the region the objects
-	 *          were sampled from (default: the size of the interval of the
-	 *          labeling)
+	 * @param volume the area or volume (in calibrated units) of the region the
+	 *          objects were sampled from (default: the calibrated size of the
+	 *          interval of the labeling)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a map with the entries {@code "n"} (number of objects),
 	 *         {@code "observedMeanDistance"}, {@code "expectedMeanDistance"},
 	 *         {@code "R"}, {@code "standardError"}, {@code "z"} (the z-score of
@@ -143,10 +153,17 @@ public final class NearestNeighbors {
 	 * @implNote op names='labeling.clarkEvans', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<String, Double> clarkEvans(
-		final ImgLabeling<L, I> labeling, @Nullable Double volume)
+		final ImgLabeling<L, I> labeling, @Nullable Double volume,
+		@Nullable double[] calibration)
 	{
-		if (volume == null) volume = (double) Intervals.numElements(labeling);
-		final var distances = distances(labeling).values();
+		final var s = Calibrations.spacing(calibration, labeling.numDimensions(),
+			"calibration");
+		if (volume == null) {
+			volume = (double) Intervals.numElements(labeling);
+			for (final var v : s)
+				volume *= v;
+		}
+		final var distances = distances(labeling, s).values();
 		final var n = distances.size();
 		if (n < 2) {
 			throw new IllegalArgumentException(

@@ -87,7 +87,7 @@ public final class GeodesicDistanceMaps {
 	 * @param marker the pixels from which distances are measured, with the
 	 *          same dimensions as the mask
 	 * @param mask the pixels within which paths must stay
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param radius the radius of the neighborhood of path steps, 1 (adjacent
 	 *          pixels) or 2 (also knight moves and their n-D analogs; default)
 	 * @return the geodesic distance map, with the interval of the mask
@@ -98,14 +98,14 @@ public final class GeodesicDistanceMaps {
 	public static <B extends BooleanType<B>, M extends BooleanType<M>>
 		RandomAccessibleInterval<DoubleType> binary(
 			final RandomAccessibleInterval<B> marker,
-			final RandomAccessibleInterval<M> mask, @Nullable double[] spacing,
-			@Nullable Integer radius)
+			final RandomAccessibleInterval<M> mask,
+			@Nullable double[] calibration, @Nullable Integer radius)
 	{
 		final var region = new int[checkedSize(mask)];
 		var i = 0;
 		for (final var m : Views.flatIterable(mask))
 			region[i++] = m.get() ? 0 : -1;
-		return compute(marker, mask, region, spacing, radius);
+		return compute(marker, mask, region, calibration, radius);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public final class GeodesicDistanceMaps {
 	 * @param marker the pixels from which distances are measured, with the
 	 *          same dimensions as the labeling
 	 * @param labeling the regions within which paths must stay
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param radius the radius of the neighborhood of path steps, 1 (adjacent
 	 *          pixels) or 2 (also knight moves and their n-D analogs; default)
 	 * @return the geodesic distance map, with the interval of the labeling
@@ -132,7 +132,7 @@ public final class GeodesicDistanceMaps {
 	public static <B extends BooleanType<B>, L, I extends IntegerType<I>>
 		RandomAccessibleInterval<DoubleType> labeling(
 			final RandomAccessibleInterval<B> marker,
-			final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
+			final ImgLabeling<L, I> labeling, @Nullable double[] calibration,
 			@Nullable Integer radius)
 	{
 		final var region = new int[checkedSize(labeling)];
@@ -145,14 +145,14 @@ public final class GeodesicDistanceMaps {
 			final var s = index.getInteger();
 			region[i++] = empty[s] ? -1 : s;
 		}
-		return compute(marker, labeling, region, spacing, radius);
+		return compute(marker, labeling, region, calibration, radius);
 	}
 
 	private static <B extends BooleanType<B>>
 		RandomAccessibleInterval<DoubleType> compute(
 			final RandomAccessibleInterval<B> marker,
 			final RandomAccessibleInterval<?> domain, final int[] region,
-			final double[] spacing, final Integer radius)
+			final double[] calibration, final Integer radius)
 	{
 		if (!Arrays.equals(marker.dimensionsAsLongArray(), domain
 			.dimensionsAsLongArray()))
@@ -164,7 +164,8 @@ public final class GeodesicDistanceMaps {
 		}
 		final var dims = domain.dimensionsAsLongArray();
 		final var graph = new GeodesicGraph(dims, region, Calibrations
-			.spacing(spacing, dims.length, "spacing"), radius == null ? 2 : radius);
+			.spacing(calibration, dims.length, "calibration"), radius == null
+				? 2 : radius);
 		final var seeds = new int[region.length];
 		var count = 0;
 		var i = 0;

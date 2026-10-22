@@ -41,6 +41,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -87,8 +88,10 @@ public class InterpolateSlices<B extends BooleanType<B>> implements
 	 * @param mask the mask, at least 2D, with foreground drawn on some slices
 	 * @param dim the dimension along which slices are taken (default: the last
 	 *          dimension)
-	 * @param calibration the pixel spacing along each dimension except
-	 *          {@code dim}, i.e. within a slice (default: 1 in every dimension)
+	 * @param calibration the pixel spacing along each dimension of the mask,
+	 *          including {@code dim} (default: 1 in every dimension); only the
+	 *          spacing within a slice matters, since the interpolation between
+	 *          slices is linear in the slice index
 	 * @return the interpolated mask
 	 */
 	@Override
@@ -102,6 +105,7 @@ public class InterpolateSlices<B extends BooleanType<B>> implements
 		if (d < 0 || d >= n) {
 			throw new IllegalArgumentException("No such dimension: " + d);
 		}
+		final var sliceCalibration = sliceCalibration(calibration, n, d);
 		final var output = createOp.apply(mask, new BitType());
 		final long mMin = mask.min(d), oMin = output.min(d);
 
@@ -125,8 +129,9 @@ public class InterpolateSlices<B extends BooleanType<B>> implements
 		for (var i = 0; i + 1 < annotated.size(); i++) {
 			final long a = annotated.get(i), b = annotated.get(i + 1);
 			final var sdtA = sdtB != null ? sdtB : sdtOp.apply(Views.hyperSlice(mask,
-				d, mMin + a), calibration);
-			sdtB = sdtOp.apply(Views.hyperSlice(mask, d, mMin + b), calibration);
+				d, mMin + a), sliceCalibration);
+			sdtB = sdtOp.apply(Views.hyperSlice(mask, d, mMin + b),
+				sliceCalibration);
 			final var span = (double) (b - a);
 			for (var z = a + 1; z < b; z++) {
 				final var wa = (b - z) / span;
@@ -137,5 +142,18 @@ public class InterpolateSlices<B extends BooleanType<B>> implements
 			}
 		}
 		return output;
+	}
+
+	/** Drops the spacing along {@code d} from a validated calibration. */
+	private static double[] sliceCalibration(final double[] calibration,
+		final int n, final int d)
+	{
+		if (calibration == null) return null;
+		final var c = Calibrations.spacing(calibration, n, "calibration");
+		final var slice = new double[n - 1];
+		var j = 0;
+		for (var i = 0; i < n; i++)
+			if (i != d) slice[j++] = c[i];
+		return slice;
 	}
 }

@@ -73,14 +73,14 @@ public final class InscribedBalls {
 	 * Finds the largest inscribed ball of each label. Its center is the center
 	 * of the pixel with the largest distance to the region boundary (the first
 	 * such pixel in flat iteration order), in calibrated coordinates (the
-	 * pixel position times the spacing), and its radius is that distance. A
+	 * pixel position times the calibration), and its radius is that distance. A
 	 * single pixel has the smallest pixel spacing as radius. With overlapping
 	 * labels, the distance map is that of the label sets, so the regions of
 	 * overlap count as separate regions.
 	 *
 	 * @param distanceMap the op computing the label distance map
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a map from each label to its largest inscribed ball
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
@@ -89,10 +89,10 @@ public final class InscribedBalls {
 	public static <L, I extends IntegerType<I>> Map<L, Sphere> inscribedBalls(
 		@OpDependency(
 			name = "labeling.distanceMap") BiFunction<ImgLabeling<L, I>, double[], RandomAccessibleInterval<DoubleType>> distanceMap,
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration)
 	{
 		final var n = labeling.numDimensions();
-		final var s = Calibrations.spacing(spacing, n, "spacing");
+		final var s = Calibrations.spacing(calibration, n, "calibration");
 		final var map = distanceMap.apply(labeling, s);
 		final var mapping = labeling.getMapping();
 		final var best = new double[mapping.numSets()];

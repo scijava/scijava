@@ -34,9 +34,9 @@ import java.util.Arrays;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.filter.FlatImage;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -117,21 +117,10 @@ public class DefaultTVDenoise<T extends RealType<T>, V extends RealType<V>>
 		if (!(step > 0)) {
 			throw new IllegalArgumentException("Tau must be positive: " + step);
 		}
-		final var size = Intervals.numElements(input);
-		if (size > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException("Image is too large: " + size +
-				" pixels");
-		}
-		final var count = (int) size;
+		final var f = FlatImage.read(input);
+		final var count = f.length;
 		final var dims = input.dimensionsAsLongArray();
-		final var strides = new int[n];
-		for (var d = 0; d < n; d++)
-			strides[d] = d == 0 ? 1 : strides[d - 1] * (int) dims[d - 1];
-
-		final var f = new double[count];
-		var i = 0;
-		for (final var t : Views.flatIterable(input))
-			f[i++] = t.getRealDouble();
+		final var strides = FlatImage.strides(dims);
 
 		final var p = new double[n][count];
 		final var divP = new double[count];
@@ -139,10 +128,10 @@ public class DefaultTVDenoise<T extends RealType<T>, V extends RealType<V>>
 		final var g = new double[n];
 		final var pos = new long[n];
 		for (var it = 0; it < iters; it++) {
-			for (i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 				w[i] = divP[i] - f[i] / lambda;
 			Arrays.fill(pos, 0);
-			for (i = 0; i < count; i++) {
+			for (var i = 0; i < count; i++) {
 				var norm = 0.0;
 				for (var d = 0; d < n; d++) {
 					g[d] = pos[d] < dims[d] - 1 ? w[i + strides[d]] - w[i] : 0;
@@ -151,17 +140,15 @@ public class DefaultTVDenoise<T extends RealType<T>, V extends RealType<V>>
 				final var denom = 1 + step * Math.sqrt(norm);
 				for (var d = 0; d < n; d++)
 					p[d][i] = (p[d][i] + step * g[d]) / denom;
-				increment(pos, dims);
+				FlatImage.increment(pos, dims);
 			}
 			divergence(p, dims, strides, pos, divP);
 		}
 
-		i = 0;
-		for (final var t : Views.flatIterable(output)) {
-			final var v = f[i] - lambda * divP[i];
-			t.setReal(Math.max(t.getMinValue(), Math.min(t.getMaxValue(), v)));
-			i++;
-		}
+		final var u = new double[count];
+		for (var i = 0; i < count; i++)
+			u[i] = f[i] - lambda * divP[i];
+		FlatImage.write(u, output);
 	}
 
 	/** Computes the discrete divergence, the negative adjoint of the gradient. */
@@ -177,15 +164,7 @@ public class DefaultTVDenoise<T extends RealType<T>, V extends RealType<V>>
 				if (pos[d] > 0) div -= p[d][i - strides[d]];
 			}
 			out[i] = div;
-			increment(pos, dims);
-		}
-	}
-
-	/** Advances a position in flat iteration order. */
-	private static void increment(final long[] pos, final long[] dims) {
-		for (var d = 0; d < pos.length; d++) {
-			if (++pos[d] < dims[d]) return;
-			pos[d] = 0;
+			FlatImage.increment(pos, dims);
 		}
 	}
 }

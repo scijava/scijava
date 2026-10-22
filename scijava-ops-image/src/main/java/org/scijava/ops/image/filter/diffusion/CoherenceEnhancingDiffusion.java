@@ -40,6 +40,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.image.filter.FlatImage;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -149,28 +150,18 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 		if (!(cc > 0)) {
 			throw new IllegalArgumentException("C must be positive: " + cc);
 		}
-		final var size = Intervals.numElements(input);
 		final var m = n * (n + 1) / 2;
-		if (size * m > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException("Image is too large: " + size +
-				" pixels");
-		}
-		final var count = (int) size;
+		final var count = FlatImage.size(input, m);
 		final var dims = input.dimensionsAsLongArray();
-		final var strides = new int[n];
-		for (var d = 0; d < n; d++)
-			strides[d] = d == 0 ? 1 : strides[d - 1] * (int) dims[d - 1];
+		final var strides = FlatImage.strides(dims);
 		// Index of the tensor component (r, s) in upper-triangular order.
 		final var comp = new int[n][n];
 		for (int r = 0, k = 0; r < n; r++)
 			for (var s = r; s < n; s++, k++)
 				comp[r][s] = comp[s][r] = k;
 
-		var u = new double[count];
+		var u = FlatImage.read(input);
 		var next = new double[count];
-		var i = 0;
-		for (final var t : Views.flatIterable(input))
-			u[i++] = t.getRealDouble();
 
 		final var diffusion = new double[m * count];
 		final var mat = new double[n][n];
@@ -181,7 +172,7 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 			// Compute the diffusion tensor from the structure tensor.
 			final var tensor = structureTensorOp.apply(ArrayImgs.doubles(u, dims),
 				sigma, rho);
-			i = 0;
+			var i = 0;
 			for (final var t : Views.flatIterable(tensor))
 				diffusion[i++] = t.get();
 			for (var p = 0; p < count; p++) {
@@ -232,17 +223,14 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 					}
 				}
 				next[p] = u[p] + step * change;
-				increment(pos, dims);
+				FlatImage.increment(pos, dims);
 			}
 			final var tmp = u;
 			u = next;
 			next = tmp;
 		}
 
-		i = 0;
-		for (final var t : Views.flatIterable(output))
-			t.setReal(Math.max(t.getMinValue(), Math.min(t.getMaxValue(),
-				u[i++])));
+		FlatImage.write(u, output);
 	}
 
 	/**
@@ -254,14 +242,6 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 	{
 		final var q = pos[d] + dir;
 		return q < 0 || q >= dims[d] ? 0 : dir * strides[d];
-	}
-
-	/** Advances a position in flat iteration order. */
-	private static void increment(final int[] pos, final long[] dims) {
-		for (var d = 0; d < pos.length; d++) {
-			if (++pos[d] < dims[d]) return;
-			pos[d] = 0;
-		}
 	}
 
 	/**

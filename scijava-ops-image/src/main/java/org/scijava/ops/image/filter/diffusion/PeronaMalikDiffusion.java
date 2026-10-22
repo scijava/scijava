@@ -35,9 +35,9 @@ import java.util.Locale;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.filter.FlatImage;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -124,29 +124,18 @@ public class PeronaMalikDiffusion<T extends RealType<T>, V extends RealType<V>>
 		else throw new IllegalArgumentException(
 			"Conductance must be exponential or quadratic: " + conductance);
 
-		final var size = Intervals.numElements(input);
-		if (size > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException("Image is too large: " + size +
-				" pixels");
-		}
-		final var count = (int) size;
-		final var dims = input.dimensionsAsLongArray();
-		final var strides = new int[n];
-		for (var d = 0; d < n; d++)
-			strides[d] = d == 0 ? 1 : strides[d - 1] * (int) dims[d - 1];
-
-		var current = new double[count];
+		var current = FlatImage.read(input);
+		final var count = current.length;
 		var next = new double[count];
-		var i = 0;
-		for (final var t : Views.flatIterable(input))
-			current[i++] = t.getRealDouble();
+		final var dims = input.dimensionsAsLongArray();
+		final var strides = FlatImage.strides(dims);
 
 		final var invKappaSq = 1 / (kappa * kappa);
 		final var pos = new long[n];
 		for (var it = 0; it < iters; it++) {
 			System.arraycopy(current, 0, next, 0, count);
 			Arrays.fill(pos, 0);
-			for (i = 0; i < count; i++) {
+			for (var i = 0; i < count; i++) {
 				final var v = current[i];
 				for (var d = 0; d < n; d++) {
 					// Note: Each neighbour pair is visited once, from its lower pixel,
@@ -161,24 +150,13 @@ public class PeronaMalikDiffusion<T extends RealType<T>, V extends RealType<V>>
 						next[j] -= flux;
 					}
 				}
-				increment(pos, dims);
+				FlatImage.increment(pos, dims);
 			}
 			final var tmp = current;
 			current = next;
 			next = tmp;
 		}
 
-		i = 0;
-		for (final var t : Views.flatIterable(output))
-			t.setReal(Math.max(t.getMinValue(), Math.min(t.getMaxValue(),
-				current[i++])));
-	}
-
-	/** Advances a position in flat iteration order. */
-	private static void increment(final long[] pos, final long[] dims) {
-		for (var d = 0; d < pos.length; d++) {
-			if (++pos[d] < dims[d]) return;
-			pos[d] = 0;
-		}
+		FlatImage.write(current, output);
 	}
 }

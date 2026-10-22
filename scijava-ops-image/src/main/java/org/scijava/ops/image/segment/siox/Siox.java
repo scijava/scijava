@@ -428,7 +428,11 @@ public final class Siox {
 		final float[] cm = new float[size(trimap)];
 		int i = 0;
 		for (final R t : Views.flatIterable(trimap)) {
-			cm[i++] = t.getRealFloat();
+			final float v = t.getRealFloat();
+			if (Float.isNaN(v)) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
+			cm[i++] = v;
 		}
 		return cm;
 	}
@@ -489,6 +493,9 @@ public final class Siox {
 		for (int i = 0; i < n; i++) {
 			for (int ch = 0; ch < 3; ch++) {
 				final float v = cursors.get(ch).next().getRealFloat() / white;
+				if (Float.isNaN(v)) {
+					throw new IllegalArgumentException("NaN values are not supported");
+				}
 				rgb[ch] = Math.max(0f, Math.min(1f, v));
 			}
 			lab[i] = rgbToLab(rgb[0], rgb[1], rgb[2]);

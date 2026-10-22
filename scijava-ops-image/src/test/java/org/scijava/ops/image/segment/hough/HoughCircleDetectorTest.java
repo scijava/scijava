@@ -179,4 +179,15 @@ public class HoughCircleDetectorTest extends AbstractOpTest {
 		assertThrows(IllegalArgumentException.class, () -> detect(ArrayImgs.bits(
 			10, 10), 1, 3, null, 0.0));
 	}
+
+	/** NaN votes are ignored instead of being reported as circles. */
+	@Test
+	public void testNaNVotes() {
+		final var votes = ArrayImgs.doubles(20, 20, 3);
+		votes.randomAccess().setPositionAndGet(10, 10, 1).set(Double.NaN);
+		final List<HoughCircle> circles = ops.op("segment.detectHoughCircles")
+			.input(votes, 3, 1, 20.0).outType(new Nil<List<HoughCircle>>()
+			{}).apply();
+		assertTrue(circles.isEmpty());
+	}
 }

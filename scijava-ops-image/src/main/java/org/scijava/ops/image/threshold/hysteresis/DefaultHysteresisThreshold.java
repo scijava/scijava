@@ -56,7 +56,8 @@ import org.scijava.ops.spi.OpDependency;
  * given by a {@link Shape}: the neighbors of a pixel are the pixels of the
  * shape's neighborhood around it. The result therefore keeps every connected
  * component of {@code input >= low} that contains at least one pixel with
- * {@code input >= high}, and removes all others.
+ * {@code input >= high}, and removes all others. NaN pixels are never
+ * foreground, and do not connect their neighbors.
  * </p>
  * <p>
  * Implemented from the description in the paper, as a breadth-first flood

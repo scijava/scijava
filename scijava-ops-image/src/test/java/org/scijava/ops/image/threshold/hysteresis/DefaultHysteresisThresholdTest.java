@@ -199,4 +199,13 @@ public class DefaultHysteresisThresholdTest extends AbstractOpTest {
 		for (final var b : out)
 			assertEquals(expected[i++] == 1, b.get(), "index " + (i - 1));
 	}
+
+	/** NaN pixels are never foreground and do not connect their neighbors. */
+	@Test
+	public void testNaN() {
+		final var in = ArrayImgs.floats(new float[] { 20, 8, Float.NaN, 8, 0 }, 5);
+		final var out = ops.op("threshold.hysteresis").input(in, 5.0, 10.0)
+			.outType(BITS).apply();
+		assertBits(out, 1, 1, 0, 0, 0);
+	}
 }

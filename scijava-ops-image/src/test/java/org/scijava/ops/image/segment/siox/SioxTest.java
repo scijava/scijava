@@ -399,4 +399,16 @@ public class SioxTest extends AbstractOpTest {
 		}
 		return rows;
 	}
+
+	/** Images and trimaps containing NaN are rejected. */
+	@Test
+	public void testNaN() {
+		final Img<FloatType> f32 = ArrayImgs.floats(W, H, 3);
+		f32.forEach(t -> t.set(0.5f));
+		f32.firstElement().set(Float.NaN);
+		assertThrows(IllegalArgumentException.class, () -> siox(f32, trimap(1f)));
+		final var tri = trimap(1f);
+		tri.firstElement().set(Float.NaN);
+		assertThrows(IllegalArgumentException.class, () -> siox(image(), tri));
+	}
 }

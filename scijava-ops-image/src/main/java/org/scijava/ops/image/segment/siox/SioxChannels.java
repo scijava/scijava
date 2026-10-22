@@ -90,11 +90,11 @@ public class SioxChannels<T extends RealType<T>, R extends RealType<R>> implemen
 	 * Segments the input image using SIOX.
 	 *
 	 * @param image the color image to segment, with three channels along its
-	 *          last axis
+	 *          last axis, without NaN
 	 * @param trimap the foreground confidence of each sample, with the spatial
 	 *          dimensions of the image: at most 0.1 for known background, at
 	 *          least 0.8 for known foreground (exactly 1 to also always keep
-	 *          the connected component), anything else for unknown
+	 *          the connected component), anything else (but NaN) for unknown
 	 * @param smoothness the number of smoothing steps in the post-processing
 	 *          (default 6); larger values yield smoother outlines
 	 * @param sizeFactorToKeep which connected components to keep (default 0):

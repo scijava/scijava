@@ -55,7 +55,8 @@ import org.scijava.ops.spi.Nullable;
  * plugin (which only handles 8-bit images); other types use 256 bins between
  * the minimum and maximum of the image. The median is computed as in the
  * plugin: one past the last bin whose cumulative count is at most half the
- * pixel count, except that it is 0 when that bin is the first one.
+ * pixel count, except that it is 0 when that bin is the first one. NaN
+ * pixels are left out of the histogram and are always background.
  * </p>
  * <p>
  * This is a translation of the {@code Limited_Mean} plugin of the
@@ -119,15 +120,22 @@ public class LimitedMeanThreshold<T extends RealType<T>> implements
 			scale = hi > lo ? BINS / (hi - lo) : 0;
 		}
 		final long[] hist = new long[BINS];
-		for (final T t : Views.iterable(input))
-			hist[bin(t.getRealDouble(), min, scale)]++;
+		for (final T t : Views.iterable(input)) {
+			final double v = t.getRealDouble();
+			if (!Double.isNaN(v)) hist[bin(v, min, scale)]++;
+		}
 
 		final int[] result = threshold(hist, differential == null || differential,
 			Boolean.TRUE.equals(force));
 		final int t = result[0];
 		final boolean inverted = result[1] != 0;
 		LoopBuilder.setImages(input, output).forEachPixel((in, out) -> {
-			final int b = bin(in.getRealDouble(), min, scale);
+			final double v = in.getRealDouble();
+			if (Double.isNaN(v)) {
+				out.set(false);
+				return;
+			}
+			final int b = bin(v, min, scale);
 			out.set((inverted ? BINS - 1 - b : b) > t);
 		});
 	}

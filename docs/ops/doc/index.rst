@@ -25,6 +25,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    SearchingForOps
    CallingOps
    IntrospectingOps
+   FijiPluginEquivalents
 
 .. toctree::
    :maxdepth: 2

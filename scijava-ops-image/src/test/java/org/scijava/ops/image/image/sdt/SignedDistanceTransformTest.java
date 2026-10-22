@@ -29,11 +29,16 @@
 
 package org.scijava.ops.image.image.sdt;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.loops.LoopBuilder;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
@@ -99,5 +104,35 @@ public class SignedDistanceTransformTest extends AbstractOpTest {
 			"image.signedDistanceTransform").input(full).outType(OUT).apply();
 		for (final var t : Views.iterable(f))
 			assertTrue(t.get() > 4);
+	}
+
+	@Test
+	public void testNonZeroMin() {
+		// A random mask embedded in a larger image with foreground all around it.
+		final var big = ArrayImgs.bits(24, 21);
+		final var random = new Random(42);
+		for (final var b : big)
+			b.set(random.nextDouble() < 0.6);
+		final var crop = Views.interval(big, new long[] { 3, 5 }, new long[] { 19,
+			17 });
+		checkNonZeroMin(crop);
+		checkNonZeroMin(Views.translate(big, 40, -12));
+	}
+
+	private void checkNonZeroMin(final RandomAccessibleInterval<BitType> view) {
+		final var copy = ArrayImgs.bits(view.dimensionsAsLongArray());
+		LoopBuilder.setImages(view, copy).forEachPixel((s,
+			t) -> t.set(s));
+		for (final var cal : new double[][] { null, { 1.5, 0.75 } }) {
+			final RandomAccessibleInterval<FloatType> expected = ops.op(
+				"image.signedDistanceTransform").input(copy, cal).outType(OUT).apply();
+			final RandomAccessibleInterval<FloatType> actual = ops.op(
+				"image.signedDistanceTransform").input(view, cal).outType(OUT).apply();
+			assertArrayEquals(view.minAsLongArray(), actual.minAsLongArray());
+			assertArrayEquals(view.maxAsLongArray(), actual.maxAsLongArray());
+			final var e = Views.flatIterable(expected).cursor();
+			for (final var a : Views.flatIterable(actual))
+				assertEquals(e.next().get(), a.get(), 1e-5);
+		}
 	}
 }

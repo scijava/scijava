@@ -29,6 +29,7 @@
 
 package org.scijava.ops.image.morphology.interpolate;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,6 +37,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.basictypeaccess.array.LongArray;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.view.Views;
 
@@ -142,5 +144,53 @@ public class InterpolateSlicesTest extends AbstractOpTest {
 		final var mc = mask.cursor();
 		for (final var t : Views.flatIterable(out))
 			assertEquals(mc.next().get(), t.get());
+	}
+
+	@Test
+	public void testNonZeroMin() {
+		// Squares of growing size on every third slice along z, in a larger
+		// image with foreground outside of the cropped region.
+		final var big = ArrayImgs.bits(18, 16, 13);
+		final var c = big.localizingCursor();
+		while (c.hasNext()) {
+			c.fwd();
+			final long x = c.getLongPosition(0), y = c.getLongPosition(1), z = c
+				.getLongPosition(2);
+			final var r = 1 + z / 3;
+			final var inCrop = x >= 2 && x <= 15 && y >= 3 && y <= 14 && z >= 1;
+			if (!inCrop) c.get().set((x + y) % 2 == 0);
+			else if ((z - 1) % 3 == 0) c.get().set(Math.abs(x - 8) <= r && Math.abs(
+				y - 9) <= r);
+		}
+		final var crop = Views.interval(big, new long[] { 2, 3, 1 }, new long[] {
+			15, 14, 12 });
+		checkNonZeroMin(crop, null);
+		checkNonZeroMin(crop, 2);
+		checkNonZeroMin(Views.translate(crop, 30, -20, 7), null);
+	}
+
+	private void checkNonZeroMin(final RandomAccessibleInterval<BitType> view,
+		final Integer dim)
+	{
+		final var copy = ArrayImgs.bits(view.dimensionsAsLongArray());
+		LoopBuilder.setImages(view, copy).forEachPixel((s, t) -> t.set(s));
+		final RandomAccessibleInterval<BitType> expected = ops.op(
+			"morphology.interpolateSlices").input(copy, dim).outType(OUT).apply();
+		final RandomAccessibleInterval<BitType> actual = ops.op(
+			"morphology.interpolateSlices").input(view, dim).outType(OUT).apply();
+		assertArrayEquals(view.minAsLongArray(), actual.minAsLongArray());
+		assertArrayEquals(view.maxAsLongArray(), actual.maxAsLongArray());
+		final var e = Views.flatIterable(expected).cursor();
+		var filled = 0;
+		for (final var a : Views.flatIterable(actual)) {
+			final var ev = e.next().get();
+			assertEquals(ev, a.get());
+			if (ev) filled++;
+		}
+		// Sanity check: the interpolation filled more than the annotated slices.
+		var annotated = 0;
+		for (final var b : copy)
+			if (b.get()) annotated++;
+		assertTrue(filled > annotated, filled + " <= " + annotated);
 	}
 }

@@ -28,18 +28,21 @@
 
 package org.scijava.ops.image.segment.watershed;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.scijava.ops.image.segment.watershed.ExtendedMinimaWatershedTest.labels;
 
 import java.util.Set;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.DiamondShape;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.IntType;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
@@ -185,5 +188,41 @@ public class DistanceTransformWatershedTest extends AbstractOpTest {
 
 	private static double sq(final double v) {
 		return v * v;
+	}
+
+	@Test
+	public void testNonZeroMin() {
+		final var img = twoDisks();
+		checkNonZeroMin(img, Views.translate(img, 25, -9), null);
+		checkNonZeroMin(img, Views.translate(img, 25, -9), new double[] { 1, 1 });
+
+		// The disks cropped from a larger image with foreground around them.
+		final var big = ArrayImgs.bits(46, 30);
+		final var ra = big.randomAccess();
+		final var raIn = img.randomAccess();
+		for (var y = 0; y < 30; y++) {
+			for (var x = 0; x < 46; x++) {
+				final var inCrop = x >= 4 && x < 44 && y >= 5 && y < 27;
+				ra.setPositionAndGet(x, y).set(inCrop ? raIn.setPositionAndGet(x - 4,
+					y - 5).get() : true);
+			}
+		}
+		checkNonZeroMin(img, Views.interval(big, new long[] { 4, 5 }, new long[] {
+			43, 26 }), null);
+	}
+
+	private void checkNonZeroMin(final Img<BitType> img,
+		final RandomAccessibleInterval<BitType> view, final double[] calibration)
+	{
+		final var expected = ops.op("segment.distanceTransformWatershed").input(
+			img, 1.0, null, true, calibration).outType(LABELING).apply();
+		final var actual = ops.op("segment.distanceTransformWatershed").input(view,
+			1.0, null, true, calibration).outType(LABELING).apply();
+		assertArrayEquals(view.minAsLongArray(), actual.minAsLongArray());
+		assertArrayEquals(view.maxAsLongArray(), actual.maxAsLongArray());
+		assertEquals(2, labels(actual).size());
+		final var e = Views.flatIterable(expected).cursor();
+		for (final var a : Views.flatIterable(actual))
+			assertEquals(e.next(), a);
 	}
 }

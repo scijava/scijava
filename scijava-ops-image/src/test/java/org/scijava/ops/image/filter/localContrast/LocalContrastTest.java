@@ -105,4 +105,32 @@ public class LocalContrastTest extends AbstractOpTest {
 		}
 	}
 
+	/**
+	 * A 16-bit checkerboard of {@code 40000 ± 5} has a local mean of 40000 and a
+	 * local standard deviation of 5 wherever the Gaussian window averages over
+	 * many squares, so {@code C = 5 / 40000}. Computing {@code E[I²] - E[I]²} in
+	 * single precision loses this entirely, since {@code E[I²] ≈ 1.6e9} has a
+	 * float ulp of 128.
+	 */
+	@Test
+	public void testSixteenBitWithLargeOffset() {
+		final int n = 32;
+		final var img = ArrayImgs.unsignedShorts(n, n);
+		final var c = img.localizingCursor();
+		while (c.hasNext()) {
+			c.fwd();
+			final var odd = (c.getIntPosition(0) + c.getIntPosition(1)) % 2 != 0;
+			c.get().set(odd ? 40005 : 39995);
+		}
+		final var lc = ops.op("filter.localContrast").input(img, 3.0).outType(
+			FLOATS).apply();
+		final var ra = lc.randomAccess();
+		for (int y = 10; y < n - 10; y++) {
+			for (int x = 10; x < n - 10; x++) {
+				assertEquals(5.0 / 40000, ra.setPositionAndGet(x, y).get(), 1e-2 * 5.0 /
+					40000, "at " + x + "," + y);
+			}
+		}
+	}
+
 }

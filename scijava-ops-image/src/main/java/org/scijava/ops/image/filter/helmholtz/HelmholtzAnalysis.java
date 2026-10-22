@@ -161,7 +161,10 @@ public final class HelmholtzAnalysis {
 	 * from the x axis towards the y axis (clockwise on screen, since y points
 	 * down). For example, stripes that run along the y axis have orientation
 	 * 90. Averaging uses the linear mean of the angles, as the plugin does, so
-	 * averaged orientations near 0 or 180 degrees are typically rejected.
+	 * averaged orientations near 0 or 180 degrees are typically rejected. This
+	 * convention differs from {@code filter.orientation} (radians in
+	 * {@code [-pi/2, pi/2]}, counterclockwise with y up), so convert before
+	 * passing the result to {@code filter.kuwaharaLinear}.
 	 *
 	 * @param <T> the input type
 	 * @param gaussOp the Gaussian filter op

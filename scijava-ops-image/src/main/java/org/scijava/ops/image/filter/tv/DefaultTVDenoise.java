@@ -59,7 +59,12 @@ import org.scijava.ops.spi.Nullable;
  * and the result is {@code u = f - lambda div p}. Gradients are forward
  * differences with Neumann boundary conditions, and {@code div} is their
  * negative adjoint, so the mean intensity is preserved exactly. Convergence is
- * guaranteed for {@code tau <= 1 / (4n)}.
+ * guaranteed for {@code tau <= 1 / (4n)}; larger steps are accepted (unlike
+ * the time step of {@code filter.peronaMalik}) but may not converge.
+ * </p>
+ * <p>
+ * The computation is single-threaded on double-precision flat arrays, so the
+ * image is limited to 2<sup>31</sup> pixels.
  * </p>
  * <p>
  * Implemented from the paper. The ROF_Denoise plugin of Fiji (GPL) uses the

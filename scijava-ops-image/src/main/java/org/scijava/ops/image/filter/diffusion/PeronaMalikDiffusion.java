@@ -59,7 +59,10 @@ import org.scijava.ops.spi.Nullable;
  * which favours high-contrast edges, and {@code "quadratic"},
  * {@code g(s) = 1 / (1 + (s/kappa)^2)}, which favours wide regions over
  * smaller ones. There is no flux across the image border, so the total
- * intensity is preserved. The scheme is stable for {@code dt <= 1 / (2n)}.
+ * intensity is preserved. The scheme is stable for {@code dt <= 1 / (2n)},
+ * and larger time steps are rejected. The computation is single-threaded on
+ * double-precision flat arrays, so the image is limited to 2<sup>31</sup>
+ * pixels.
  * </p>
  * <p>
  * Implemented from the paper. Note: Fiji's "Anisotropic Diffusion 2D" plugin

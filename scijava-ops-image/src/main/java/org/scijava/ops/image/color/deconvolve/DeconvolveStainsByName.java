@@ -39,6 +39,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.image.color.ColorUtils;
 
 /**
  * Separates the stains of a brightfield RGB image by colour deconvolution
@@ -84,7 +85,7 @@ public class DeconvolveStainsByName<T extends RealType<T>> implements
 		@Nullable final Integer channelDim, @Nullable final Double i0)
 	{
 		final var stains = StainVectors.fromName(stainName).vectors();
-		final int cd = channelDim == null ? ColourDeconvolution.defaultChannelDim(
+		final int cd = channelDim == null ? ColorUtils.defaultChannelDim(
 			input) : channelDim;
 		final double intensity = i0 == null ? ColourDeconvolution.defaultI0(input)
 			: i0;

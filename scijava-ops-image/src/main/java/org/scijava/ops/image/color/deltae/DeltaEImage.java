@@ -40,9 +40,9 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.image.color.deconvolve.ColourDeconvolution;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.image.color.ColorUtils;
 
 /**
  * Computes the per-pixel colour difference between two CIELAB images, whose
@@ -89,7 +89,7 @@ public class DeltaEImage<T extends RealType<T>, U extends RealType<U>>
 				"Both images must have the same dimensions");
 		}
 		final var f = formula == null ? DeltaE.CIEDE2000 : DeltaE.byName(formula);
-		final int cd = channelDim == null ? ColourDeconvolution.defaultChannelDim(
+		final int cd = channelDim == null ? ColorUtils.defaultChannelDim(
 			lab1) : channelDim;
 		if (cd < 0 || cd >= lab1.numDimensions() || lab1.dimension(cd) != 3) {
 			throw new IllegalArgumentException("Channel dimension " + cd +

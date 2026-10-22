@@ -42,9 +42,9 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.image.color.deconvolve.ColourDeconvolution;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.image.color.ColorUtils;
 
 /**
  * Converts an image between colour spaces: RGB (gamma-encoded sRGB), linear
@@ -97,7 +97,7 @@ public class ColorConvert<T extends RealType<T>> implements
 	{
 		final var src = ColorSpace.byName(from);
 		final var dst = ColorSpace.byName(to);
-		final int cd = channelDim == null ? ColourDeconvolution.defaultChannelDim(
+		final int cd = channelDim == null ? ColorUtils.defaultChannelDim(
 			input) : channelDim;
 		final double scale = rgbMax == null ? defaultRGBMax(input, src) : rgbMax;
 		final var output = createOp.apply(input, new DoubleType());

@@ -78,7 +78,7 @@ public final class FeretDiameters {
 	 * @return a map from each label to its maximum Feret diameter
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
-	 * @implNote op names='labeling.maximumFeretDiameter', type=Function
+	 * @implNote op names='labeling.maximumFeretsDiameter', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> diameters(
 		final ImgLabeling<L, I> labeling, @Nullable double[] calibration)

@@ -61,11 +61,11 @@ import org.scijava.ops.spi.Nullable;
  * filters the primary objects by size and circularity and excludes edge
  * objects; with these ops, build and filter the primary labeling beforehand
  * (e.g. with {@code labeling.cca}, {@code labeling.filterBySize},
- * {@code labeling.filter} and {@code labeling.removeBorderLabels}). The plugin
- * delimits each primary object by its outer outline, so secondary objects in
- * its holes are counted too; to do the same, fill the holes of the primary
- * labeling first ({@code labeling.fillHoles}). The circularity limits of the
- * secondary objects are not supported.
+ * {@code labeling.filterByValue} and {@code labeling.removeBorderLabels}).
+ * The plugin delimits each primary object by its outer outline, so secondary
+ * objects in its holes are counted too; to do the same, fill the holes of the
+ * primary labeling first ({@code labeling.fillHoles}). The circularity limits
+ * of the secondary objects are not supported.
  * </p>
  * <p>
  * The BSD-3 license notice of the BioVoxxel Toolbox, which the original file

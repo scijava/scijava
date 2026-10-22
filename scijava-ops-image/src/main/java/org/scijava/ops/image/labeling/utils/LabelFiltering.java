@@ -104,7 +104,7 @@ public final class LabelFiltering {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param <N> value type
-	 * @implNote op names='labeling.filter', type=Function
+	 * @implNote op names='labeling.filterByValue', type=Function
 	 */
 	public static <L, I extends IntegerType<I>, N extends Number>
 		ImgLabeling<L, I> filterByValue(final ImgLabeling<L, I> labeling,

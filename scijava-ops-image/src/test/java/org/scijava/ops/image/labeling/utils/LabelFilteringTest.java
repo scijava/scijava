@@ -178,14 +178,18 @@ public class LabelFilteringTest extends AbstractOpTest {
 			}
 		};
 		assertEquals(set(2, 4), labels(apply("labeling.filter", labeling, even)));
+	}
 
+	@Test
+	public void testFilterByValue() {
+		final var labeling = boxes();
 		final Map<Integer, Double> values = Map.of(1, 0.5, 2, 1.5, 3, 2.5);
-		assertEquals(set(2, 3), labels(apply("labeling.filter", labeling, values,
-			1.0)));
-		assertEquals(set(1, 2), labels(apply("labeling.filter", labeling, values,
-			Double.NEGATIVE_INFINITY, 2.0)));
+		assertEquals(set(2, 3), labels(apply("labeling.filterByValue", labeling,
+			values, 1.0)));
+		assertEquals(set(1, 2), labels(apply("labeling.filterByValue", labeling,
+			values, Double.NEGATIVE_INFINITY, 2.0)));
 		// Label 4 has no value, so it is removed.
-		assertEquals(set(1, 2, 3), labels(apply("labeling.filter", labeling,
+		assertEquals(set(1, 2, 3), labels(apply("labeling.filterByValue", labeling,
 			values)));
 	}
 

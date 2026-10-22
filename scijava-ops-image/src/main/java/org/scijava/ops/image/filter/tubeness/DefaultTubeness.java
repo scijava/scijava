@@ -103,14 +103,13 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	@OpDependency(name = "create.imgFactory")
 	private Function<Dimensions, ImgFactory<DoubleType>> createFactoryOp;
 
-	// TODO: make sure this works
 	@OpDependency(name = "transform.project")
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	/**
 	 * Computes the tubeness of the input image.
 	 *
-	 * @param input the input image
+	 * @param input the 2D or 3D input image
 	 * @param sigma the scale of the Gaussian smoothing, in calibrated units
 	 * @param calibration the physical size of a pixel along each dimension
 	 *          (missing entries default to 1); both the Gaussian smoothing and
@@ -124,6 +123,10 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	{
 
 		final var numDimensions = input.numDimensions();
+		if (numDimensions != 2 && numDimensions != 3) {
+			throw new IllegalArgumentException("Cannot compute tubeness for " +
+				numDimensions + "D images");
+		}
 		// Sigmas in pixel units.
 		final var sigmas = new double[numDimensions];
 		final var cals = new double[numDimensions];
@@ -161,8 +164,10 @@ public class DefaultTubeness<T extends RealType<T>> implements
 
 		try {
 			var es = Parallelization.getExecutorService();
-			// Hessian calculation.
-			HessianMatrix.calculateMatrix(Views.extendBorder(input), gaussian,
+			// Hessian calculation. Note: The created images are zero-min, so the
+			// input must be too, or the wrong window of the input is filtered.
+			HessianMatrix.calculateMatrix(Views.extendBorder(Views.zeroMin(input)),
+				gaussian,
 				gradient, hessian, new OutOfBoundsBorderFactory<>(), nThreads, es,
 				sigmas);
 			calibrateHessian(hessian, cals);
@@ -173,28 +178,16 @@ public class DefaultTubeness<T extends RealType<T>> implements
 					.createAppropriateResultImg(hessian, factory, new DoubleType()),
 					nThreads, es);
 
-			final Computers.Arity1<Iterable<DoubleType>, DoubleType> method;
-			switch (numDimensions) {
-				case 2:
-					method = new Tubeness2D(sigma);
-					break;
-				case 3:
-					method = new Tubeness3D(sigma);
-					break;
-				default:
-					System.err.println("Cannot compute tubeness for " + numDimensions +
-						"D images.");
-					return;
-			}
+			final Computers.Arity1<Iterable<DoubleType>, DoubleType> method =
+				numDimensions == 2 ? new Tubeness2D(sigma) : new Tubeness3D(sigma);
 			projector.compute(evs, method, numDimensions, tubeness);
-
-			return;
 		}
-		catch (final IncompatibleTypeException | InterruptedException
-				| ExecutionException e)
-		{
-			e.printStackTrace();
-			return;
+		catch (final IncompatibleTypeException | ExecutionException e) {
+			throw new IllegalStateException(e);
+		}
+		catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new IllegalStateException(e);
 		}
 	}
 
@@ -266,6 +259,10 @@ public class DefaultTubeness<T extends RealType<T>> implements
 }
 
 /**
+ * The tubeness filter without calibration, i.e. with a pixel size of 1 along
+ * every dimension. See {@link DefaultTubeness}.
+ *
+ * @param <T> the type of the source pixels
  * @implNote op names='filter.tubeness'
  */
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
@@ -276,16 +273,16 @@ class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
 	/**
-	 * TODO Can this be removed?
+	 * Computes the tubeness of an uncalibrated input image.
 	 *
-	 * @param in1
-	 * @param in3
-	 * @param out
+	 * @param input the 2D or 3D input image
+	 * @param sigma the scale of the Gaussian smoothing, in pixels
+	 * @param tubeness the output tubeness image
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<T> in1, Double in3,
-		IterableInterval<DoubleType> out)
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Double sigma, final IterableInterval<DoubleType> tubeness)
 	{
-		tubenessOp.compute(in1, in3, new double[] {}, out);
+		tubenessOp.compute(input, sigma, new double[] {}, tubeness);
 	}
 }

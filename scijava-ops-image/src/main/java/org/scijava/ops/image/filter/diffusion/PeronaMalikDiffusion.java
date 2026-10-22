@@ -64,6 +64,10 @@ import org.scijava.ops.spi.Nullable;
  * <p>
  * Implemented from the paper.
  * </p>
+ * <p>
+ * Results are clamped to the range of the output type, so an integer output
+ * saturates rather than wrapping around.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -166,7 +170,8 @@ public class PeronaMalikDiffusion<T extends RealType<T>, V extends RealType<V>>
 
 		i = 0;
 		for (final var t : Views.flatIterable(output))
-			t.setReal(current[i++]);
+			t.setReal(Math.max(t.getMinValue(), Math.min(t.getMaxValue(),
+				current[i++])));
 	}
 
 	/** Advances a position in flat iteration order. */

@@ -60,6 +60,10 @@ import net.imglib2.view.Views;
  * preserving orientation adaptive filtering", Proc. IEEE CVPR 1999, pp.
  * 535-540.
  * </p>
+ * <p>
+ * Results are clamped to the range of the output type, so an integer output
+ * saturates rather than wrapping around.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -240,7 +244,9 @@ public final class LinearKuwahara {
 					}
 				}
 			}
-			cursor.get().setReal(bestMean);
+			final var o = cursor.get();
+			o.setReal(Math.max(o.getMinValue(), Math.min(o.getMaxValue(),
+				bestMean)));
 		}
 	}
 }

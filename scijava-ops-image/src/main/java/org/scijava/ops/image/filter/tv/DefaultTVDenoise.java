@@ -66,6 +66,10 @@ import org.scijava.ops.spi.Nullable;
  * same algorithm with different boundary handling, so results differ near the
  * image border and slightly elsewhere.
  * </p>
+ * <p>
+ * Results are clamped to the range of the output type, so an integer output
+ * saturates rather than wrapping around.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -154,7 +158,8 @@ public class DefaultTVDenoise<T extends RealType<T>, V extends RealType<V>>
 
 		i = 0;
 		for (final var t : Views.flatIterable(output)) {
-			t.setReal(f[i] - lambda * divP[i]);
+			final var v = f[i] - lambda * divP[i];
+			t.setReal(Math.max(t.getMinValue(), Math.min(t.getMaxValue(), v)));
 			i++;
 		}
 	}

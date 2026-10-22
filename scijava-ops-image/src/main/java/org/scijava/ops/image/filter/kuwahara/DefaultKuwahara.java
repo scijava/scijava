@@ -63,6 +63,10 @@ import org.scijava.ops.spi.OpDependency;
  * 187-202, 1976. For 2D 8-bit images, the result agrees with the Fiji
  * Kuwahara_Filter plugin up to rounding, away from the image border.
  * </p>
+ * <p>
+ * Results are clamped to the range of the output type, so an integer output
+ * saturates rather than wrapping around.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -155,7 +159,9 @@ public class DefaultKuwahara<T extends RealType<T>, V extends RealType<V>>
 					bestMean = mean;
 				}
 			}
-			cursor.get().setReal(bestMean);
+			final var o = cursor.get();
+			o.setReal(Math.max(o.getMinValue(), Math.min(o.getMaxValue(),
+				bestMean)));
 		}
 	}
 

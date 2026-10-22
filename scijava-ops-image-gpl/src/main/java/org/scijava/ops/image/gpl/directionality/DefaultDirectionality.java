@@ -66,7 +66,13 @@ import org.scijava.ops.spi.Nullable;
  * {@code Minimizer}, which reaches the same least-squares optimum; and the
  * amount takes the 180 degree periodicity of the histogram into account, as
  * documented by the plugin (whose implementation compares radians with
- * degrees, so it never wraps).
+ * degrees, so it never wraps). With
+ * {@link DirectionalityMethod#LOCAL_GRADIENT_ORIENTATION}, each pixel goes to
+ * the bin whose center is nearest to its orientation; the plugin truncates
+ * instead, so its bins collect the orientations in
+ * {@code [center, center + width)} and its histogram and fitted direction are
+ * offset by half a bin (about 1 degree with the default 90 bins). The first
+ * and last bins thus cover only half a bin width each.
  * </p>
  * <p>
  * Reference: Z.-Q. Liu, "Scale space approach to directional analysis of
@@ -224,10 +230,11 @@ public class DefaultDirectionality<T extends RealType<T>> implements
 					angleRef -= 180;
 				while (angleRef < binStart)
 					angleRef += 180;
-				int index = (int) ((angleRef - binStart) / binWidth);
-				// Circular shift in case of exact vertical orientation.
-				if (index == nBins) index = 0;
-				normDir[index] += norm;
+				// Note: The plugin truncates here, which fills each bin with the
+				// angles in [center, center + width) and so biases the histogram by
+				// half a bin. Rounding assigns each angle to its nearest bin center.
+				final int index = (int) Math.round((angleRef - binStart) / binWidth);
+				normDir[Math.min(index, nBins - 1)] += norm;
 			}
 		}
 		return normDir;

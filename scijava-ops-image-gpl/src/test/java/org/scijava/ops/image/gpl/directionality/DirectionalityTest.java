@@ -140,6 +140,21 @@ public class DirectionalityTest extends AbstractOpTest {
 				start, end);
 			assertEquals(nBins, d.binCount(), what);
 			final double[] h = d.histogram();
+			if (method == DirectionalityMethod.LOCAL_GRADIENT_ORIENTATION) {
+				// Note: The op bins by rounding where the plugin truncates, so the
+				// plugin histogram is offset by half a bin and only its fitted
+				// direction can be compared, shifted by that half bin.
+				double sum = 0;
+				for (final double v : h)
+					sum += v;
+				assertEquals(1, sum, 1e-9, what);
+				if (kind == 2) continue;
+				final double binWidth = (end - start) / (nBins - 1);
+				assertEquals(Double.parseDouble(fit[3]) + binWidth / 2, d.direction(),
+					binWidth / 4, what);
+				cases++;
+				continue;
+			}
 			for (int i = 0; i < nBins; i++) {
 				final double expected = Double.parseDouble(hist[i + 1]);
 				assertEquals(expected, h[i], 1e-4 * expected + 1e-9, what +
@@ -167,6 +182,28 @@ public class DirectionalityTest extends AbstractOpTest {
 			cases++;
 		}
 		assertEquals(8, cases);
+	}
+
+	/**
+	 * The local gradient method is not biased by half a bin. Before the fix,
+	 * each bin collected the orientations in {@code [center, center + width)},
+	 * so over these gratings the direction was off by -1.0 degrees on average
+	 * with 90 bins and by -3.1 degrees with 30 bins, half a bin width each time.
+	 */
+	@Test
+	public void testGradientBinningUnbiased() {
+		for (final int nBins : new int[] { 90, 30 }) {
+			double sum = 0;
+			int n = 0;
+			for (double angle = -70; angle <= 70; angle += 7.3) {
+				final Directionality d = directionality(grating(angle, 128, 12),
+					DirectionalityMethod.LOCAL_GRADIENT_ORIENTATION, nBins, -90, 90);
+				sum += d.direction() - angle;
+				n++;
+			}
+			final double halfBin = 90.0 / (nBins - 1);
+			assertEquals(0, sum / n, halfBin / 4, "nBins=" + nBins);
+		}
 	}
 
 	/** Gratings at known orientations give their orientation as direction. */

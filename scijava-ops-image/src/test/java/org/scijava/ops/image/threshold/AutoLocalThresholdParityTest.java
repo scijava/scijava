@@ -86,13 +86,41 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Sauvola with Fiji parameters k = 0.5 and r = 128. A few pixels differ
-	 * because ops computes the sample standard deviation, where ImageJ
-	 * RankFilters computes the population standard deviation.
+	 * Sauvola with Fiji parameters k = 0.5 and r = 128. Before the op used the
+	 * population standard deviation, as ImageJ RankFilters do, rather than the
+	 * sample standard deviation, a few pixels differed.
 	 */
 	@Test
 	public void testSauvola() throws IOException {
-		assertFiji("Sauvola", 10);
+		assertFiji("Sauvola");
+	}
+
+	/**
+	 * Sauvola with the default parameters of the op, which are those of Fiji on
+	 * 8-bit images. Before the default r was half the type range, it was 0.5,
+	 * which made nearly every pixel of an 8-bit image background.
+	 */
+	@Test
+	public void testSauvolaDefaults() throws IOException {
+		assertFiji("Sauvola", (img, shape, out) -> ops.op("threshold.localSauvola")
+			.input(img, shape).output(out).compute());
+	}
+
+	/**
+	 * Sauvola with the default parameters on a floating-point image with the
+	 * values of the 8-bit image divided by 256, for which the default r is 0.5
+	 * (since 256 is a power of 2, all the statistics scale exactly).
+	 */
+	@Test
+	public void testSauvolaDefaultsFloat() throws IOException {
+		assertFiji("Sauvola", (img, shape, out) -> {
+			final var scaled = ArrayImgs.doubles(img.dimensionsAsLongArray());
+			final var c = img.cursor();
+			for (final var t : scaled)
+				t.set(c.next().get() / 256.0);
+			ops.op("threshold.localSauvola").input(scaled, shape).output(out)
+				.compute();
+		});
 	}
 
 	/**
@@ -134,12 +162,31 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 		assertFiji("Niblack");
 	}
 
+	private interface Method {
+
+		void compute(Img<UnsignedByteType> img, HyperSphereShape shape,
+			Img<BitType> out);
+	}
+
 	private void assertFiji(final String method) throws IOException {
 		assertFiji(method, 0);
 	}
 
 	private void assertFiji(final String method, final int maxDiff)
 		throws IOException
+	{
+		assertFiji(method, maxDiff, (img, shape, out) -> compute(method, img,
+			shape, out));
+	}
+
+	private void assertFiji(final String method, final Method op)
+		throws IOException
+	{
+		assertFiji(method, 0, op);
+	}
+
+	private void assertFiji(final String method, final int maxDiff,
+		final Method op) throws IOException
 	{
 		var checked = 0;
 		try (var in = new BufferedReader(new InputStreamReader(getClass()
@@ -153,7 +200,7 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 				final var img = image(f[0]);
 				final var r = Integer.parseInt(f[2]);
 				final Img<BitType> actual = ArrayImgs.bits(img.dimensionsAsLongArray());
-				compute(method, img, new HyperSphereShape(r), actual);
+				op.compute(img, new HyperSphereShape(r), actual);
 				var diff = 0;
 				var i = 0;
 				for (final var b : actual) {

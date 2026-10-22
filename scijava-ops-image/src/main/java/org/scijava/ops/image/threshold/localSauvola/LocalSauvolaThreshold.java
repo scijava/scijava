@@ -48,6 +48,14 @@ import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
+ * Sauvola's local threshold: a pixel is foreground if it is strictly above
+ * {@code mean * (1 + k * (sd / r - 1))}, with {@code mean} and {@code sd} the
+ * mean and the population standard deviation (as in Fiji's
+ * Auto_Local_Threshold plugin) of its neighborhood. With the default
+ * parameters, the result on 8-bit images is that of Fiji (k = 0.5, r = 128);
+ * see {@link ComputeLocalSauvolaThreshold} for the defaults of other types.
+ *
+ * @see ComputeLocalSauvolaThreshold
  * @implNote op names='threshold.localSauvola', priority='-100.'
  */
 public class LocalSauvolaThreshold<T extends RealType<T>> extends
@@ -68,14 +76,17 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
 
 	/**
-	 * TODO
+	 * Computes Sauvola's local threshold of an image.
 	 *
-	 * @param input
-	 * @param inputNeighborhoodShape
-	 * @param k
-	 * @param r
-	 * @param outOfBoundsFactory
-	 * @param output
+	 * @param input the image to threshold
+	 * @param inputNeighborhoodShape the shape of the local neighborhood
+	 * @param k the k parameter (default: 0.5)
+	 * @param r the dynamic range of the standard deviation, in the units of the
+	 *          image (default: half the nominal range of the pixel type, i.e.
+	 *          128 for 8-bit images, 32768 for 16-bit images, and 0.5 for
+	 *          floating-point images, which are assumed to be in [0, 1])
+	 * @param outOfBoundsFactory the out-of-bounds strategy (default border)
+	 * @param output the mask, true where a pixel is above its local threshold
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
@@ -86,7 +97,8 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	{
 		// Use integral images for sufficiently large windows.
 		if (inputNeighborhoodShape instanceof RectangleShape &&
-			((RectangleShape) inputNeighborhoodShape).getSpan() > 2)
+			((RectangleShape) inputNeighborhoodShape).getSpan() > 2 &&
+			!((RectangleShape) inputNeighborhoodShape).isSkippingCenter())
 		{
 			computeIntegral(input, (RectangleShape) inputNeighborhoodShape, k, r,
 				outOfBoundsFactory, getIntegralImageOp(INTEGRAL_IMAGE_ORDER_1),

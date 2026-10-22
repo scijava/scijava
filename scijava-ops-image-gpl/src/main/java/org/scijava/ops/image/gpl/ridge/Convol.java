@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 package org.scijava.ops.image.gpl.ridge;
 
 import org.scijava.ops.image.gpl.ridge.LinesUtil.MutableInt;
@@ -26,8 +27,8 @@ import org.scijava.ops.image.gpl.ridge.LinesUtil.MutableInt;
 /**
  * Convolution of an image with the derivatives of a Gaussian kernel, using
  * masks of integrated Gaussian functions and mirrored borders, from the
- * ij-ridgedetection {@code Convol} class (a translation of the
- * {@code convol.c} of Carsten Steger).
+ * ij-ridgedetection {@code Convol} class (a translation of the {@code convol.c}
+ * of Carsten Steger).
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -65,24 +66,25 @@ class Convol {
 
 	/*
 	 * Functions to compute the one-dimensional convolution masks of the 0th, 1st,
-	 * and 2nd derivative of the Gaussian kernel for a certain smoothing level given
-	 * by sigma. The mask is allocated by the function and given as the return
-	 * value. The caller must ensure that this memory is freed. The output is
-	 * intended to be used as an array with range [-num:num]. Therefore, the caller
-	 * should add num to the return value. Examples for the calling sequence can be
-	 * found in convolve_gauss. Examples for the usage of the masks are given in
-	 * convolve_rows_gauss and convolve_cols_gauss.
+	 * and 2nd derivative of the Gaussian kernel for a certain smoothing level
+	 * given by sigma. The mask is allocated by the function and given as the
+	 * return value. The caller must ensure that this memory is freed. The output
+	 * is intended to be used as an array with range [-num:num]. Therefore, the
+	 * caller should add num to the return value. Examples for the calling
+	 * sequence can be found in convolveGauss. Examples for the usage of the masks
+	 * are given in convolveRowsGauss and convolveColsGauss.
 	 */
 
 	/* Gaussian smoothing mask */
 
-	double[] compute_gauss_mask_0(MutableInt num, double sigma) {
+	double[] computeGaussMask0(MutableInt num, double sigma) {
 
 		int i, n;
 		double limit;
 		double[] h;
 
-		limit = LinesUtil.MASK_SIZE(LinesUtil.MAX_SIZE_MASK_0, sigma); /* Error < 0.001 on each side */
+		limit = LinesUtil.maskSize(LinesUtil.MAX_SIZE_MASK_0,
+			sigma); /* Error < 0.001 on each side */
 		n = (int) limit;
 		h = new double[2 * n + 1];
 		for (i = -n + 1; i <= n - 1; i++)
@@ -94,12 +96,13 @@ class Convol {
 	}
 
 	/* First derivative of Gaussian smoothing mask */
-	double[] compute_gauss_mask_1(MutableInt num, double sigma) {
+	double[] computeGaussMask1(MutableInt num, double sigma) {
 		int i, n;
 		double limit;
 		double[] h;
 
-		limit = LinesUtil.MASK_SIZE(LinesUtil.MAX_SIZE_MASK_1, sigma); /* Error < 0.001 on each side */
+		limit = LinesUtil.maskSize(LinesUtil.MAX_SIZE_MASK_1,
+			sigma); /* Error < 0.001 on each side */
 		n = (int) limit;
 		h = new double[2 * n + 1];
 
@@ -112,12 +115,13 @@ class Convol {
 	}
 
 	/* Second derivative of Gaussian smoothing mask */
-	double[] compute_gauss_mask_2(MutableInt num, double sigma) {
+	double[] computeGaussMask2(MutableInt num, double sigma) {
 		int i, n;
 		double limit;
 		double[] h;
 
-		limit = LinesUtil.MASK_SIZE(LinesUtil.MAX_SIZE_MASK_2, sigma); /* Error < 0.001 on each side */
+		limit = LinesUtil.maskSize(LinesUtil.MAX_SIZE_MASK_2,
+			sigma); /* Error < 0.001 on each side */
 		n = (int) limit;
 		h = new double[2 * n + 1];
 
@@ -130,24 +134,26 @@ class Convol {
 	}
 
 	/*
-	 * Convolve an image with the derivatives of a Gaussian smoothing kernel. Since
-	 * all of the masks are separable, this is done in two steps in the function
-	 * convolve_gauss. Firstly, the rows of the image are convolved by an
-	 * appropriate one-dimensional mask in convolve_rows_gauss, yielding an
+	 * Convolve an image with the derivatives of a Gaussian smoothing kernel.
+	 * Since all of the masks are separable, this is done in two steps in the
+	 * function convolveGauss. Firstly, the rows of the image are convolved by an
+	 * appropriate one-dimensional mask in convolveRowsGauss, yielding an
 	 * intermediate float-image h. Then the columns of this image are convolved by
-	 * another appropriate mask in convolve_cols_gauss to yield the final result k.
+	 * another appropriate mask in convolveColsGauss to yield the final result k.
 	 * At the border of the image the gray values are mirrored.
 	 */
 
 	/* Convolve the rows of an image with the derivatives of a Gaussian. */
-	private void convolve_rows_gauss(float[] image, double[] mask, int n, float[] h, int width, int height) {
+	private void convolveRowsGauss(float[] image, double[] mask, int n, float[] h,
+		int width, int height)
+	{
 		int j, r, c, l;
 		double sum;
 
 		/* Inner region */
 		for (r = n; r < height - n; r++) {
 			for (c = 0; c < width; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				sum = 0.0;
 				for (j = -n; j <= n; j++)
 					sum += (double) (image[(l + j * width)]) * mask[(j + n)];
@@ -157,33 +163,37 @@ class Convol {
 		/* Border regions */
 		for (r = 0; r < n; r++) {
 			for (c = 0; c < width; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				sum = 0.0;
 				for (j = -n; j <= n; j++)
-					sum += (double) (image[LinesUtil.LINCOOR(LinesUtil.BR(r + j, height), c, width)]) * mask[(j + n)];
+					sum += (double) (image[LinesUtil.linCoor(LinesUtil.mirrorRow(r + j,
+						height), c, width)]) * mask[(j + n)];
 				h[l] = (float) sum;
 			}
 		}
 		for (r = height - n; r < height; r++) {
 			for (c = 0; c < width; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				sum = 0.0;
 				for (j = -n; j <= n; j++)
-					sum += (double) (image[LinesUtil.LINCOOR(LinesUtil.BR(r + j, height), c, width)]) * mask[(j + n)];
+					sum += (double) (image[LinesUtil.linCoor(LinesUtil.mirrorRow(r + j,
+						height), c, width)]) * mask[(j + n)];
 				h[l] = (float) sum;
 			}
 		}
 	}
 
 	/* Convolve the columns of an image with the derivatives of a Gaussian. */
-	private void convolve_cols_gauss(float[] h, double[] mask, int n, float[] k, int width, int height) {
+	private void convolveColsGauss(float[] h, double[] mask, int n, float[] k,
+		int width, int height)
+	{
 		int j, r, c, l;
 		double sum;
 
 		/* Inner region */
 		for (r = 0; r < height; r++) {
 			for (c = n; c < width - n; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				sum = 0.0;
 				for (j = -n; j <= n; j++)
 					sum += h[(l + j)] * mask[(j + n)];
@@ -193,26 +203,30 @@ class Convol {
 		/* Border regions */
 		for (r = 0; r < height; r++) {
 			for (c = 0; c < n; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				sum = 0.0;
 				for (j = -n; j <= n; j++)
-					sum += h[LinesUtil.LINCOOR(r, LinesUtil.BC(c + j, width), width)] * mask[(j + n)];
+					sum += h[LinesUtil.linCoor(r, LinesUtil.mirrorCol(c + j, width),
+						width)] * mask[(j + n)];
 				k[l] = (float) sum;
 			}
 		}
 		for (r = 0; r < height; r++) {
 			for (c = width - n; c < width; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				sum = 0.0;
 				for (j = -n; j <= n; j++)
-					sum += h[LinesUtil.LINCOOR(r, LinesUtil.BC(c + j, width), width)] * mask[(j + n)];
+					sum += h[LinesUtil.linCoor(r, LinesUtil.mirrorCol(c + j, width),
+						width)] * mask[(j + n)];
 				k[l] = (float) sum;
 			}
 		}
 	}
 
 	/* Convolve an image with a derivative of the Gaussian. */
-	void convolve_gauss(float[] image, float[] k, int width, int height, double sigma, int deriv_type) {
+	void convolveGauss(float[] image, float[] k, int width, int height,
+		double sigma, int derivType)
+	{
 		double[] hr = null, hc = null;
 		double[] maskr, maskc;
 		MutableInt nr = new MutableInt(), nc = new MutableInt();
@@ -220,34 +234,34 @@ class Convol {
 
 		h = new float[(width * height)];
 
-		switch (deriv_type) {
-		case LinesUtil.DERIV_R:
-			hr = compute_gauss_mask_1(nr, sigma);
-			hc = compute_gauss_mask_0(nc, sigma);
-			break;
-		case LinesUtil.DERIV_C:
-			hr = compute_gauss_mask_0(nr, sigma);
-			hc = compute_gauss_mask_1(nc, sigma);
-			break;
-		case LinesUtil.DERIV_RR:
-			hr = compute_gauss_mask_2(nr, sigma);
-			hc = compute_gauss_mask_0(nc, sigma);
-			break;
-		case LinesUtil.DERIV_RC:
-			hr = compute_gauss_mask_1(nr, sigma);
-			hc = compute_gauss_mask_1(nc, sigma);
-			break;
-		case LinesUtil.DERIV_CC:
-			hr = compute_gauss_mask_0(nr, sigma);
-			hc = compute_gauss_mask_2(nc, sigma);
-			break;
+		switch (derivType) {
+			case LinesUtil.DERIV_R:
+				hr = computeGaussMask1(nr, sigma);
+				hc = computeGaussMask0(nc, sigma);
+				break;
+			case LinesUtil.DERIV_C:
+				hr = computeGaussMask0(nr, sigma);
+				hc = computeGaussMask1(nc, sigma);
+				break;
+			case LinesUtil.DERIV_RR:
+				hr = computeGaussMask2(nr, sigma);
+				hc = computeGaussMask0(nc, sigma);
+				break;
+			case LinesUtil.DERIV_RC:
+				hr = computeGaussMask1(nr, sigma);
+				hc = computeGaussMask1(nc, sigma);
+				break;
+			case LinesUtil.DERIV_CC:
+				hr = computeGaussMask0(nr, sigma);
+				hc = computeGaussMask2(nc, sigma);
+				break;
 		}
 
 		maskr = hr;
 		maskc = hc;
 
-		convolve_rows_gauss(image, maskr, nr.intValue(), h, width, height);
-		convolve_cols_gauss(h, maskc, nc.intValue(), k, width, height);
+		convolveRowsGauss(image, maskr, nr.intValue(), h, width, height);
+		convolveColsGauss(h, maskc, nc.intValue(), k, width, height);
 
 	}
 

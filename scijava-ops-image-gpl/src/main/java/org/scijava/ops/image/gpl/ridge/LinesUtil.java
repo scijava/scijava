@@ -73,26 +73,26 @@ final class LinesUtil {
 	static final double MAX_SIZE_MASK_2 = 3.82922419517181;
 
 	/** Maximum mask index. */
-	static int MASK_SIZE(final double MAX, final double sigma) {
-		return (int) Math.ceil(MAX * sigma);
+	static int maskSize(final double max, final double sigma) {
+		return (int) Math.ceil(max * sigma);
 	}
 
 	/**
 	 * Translate row and column coordinates of an image into an index into its
 	 * one-dimensional array.
 	 */
-	static int LINCOOR(final int row, final int col, final int width) {
+	static int linCoor(final int row, final int col, final int width) {
 		return row * width + col;
 	}
 
 	/** Mirror the row coordinate at the borders of the image. */
-	static int BR(final int row, final int height) {
+	static int mirrorRow(final int row, final int height) {
 		return ((row) < 0 ? -(row) : (row) >= height ? height - (row) + height - 2
 			: (row));
 	}
 
 	/** Mirror the column coordinate at the borders of the image. */
-	static int BC(final int col, final int width) {
+	static int mirrorCol(final int col, final int width) {
 		return ((col) < 0 ? -(col) : (col) >= width ? width - (col) + width - 2
 			: (col));
 	}

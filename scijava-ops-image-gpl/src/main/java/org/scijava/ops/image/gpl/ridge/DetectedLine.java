@@ -64,8 +64,8 @@ public class DetectedLine extends DefaultWritablePolyline {
 		contourClass = line.getContourClass();
 		angle = toDouble(line.angle, n);
 		response = toDouble(line.response, n);
-		widthLeft = width ? toDouble(line.width_l, n) : null;
-		widthRight = width ? toDouble(line.width_r, n) : null;
+		widthLeft = width ? toDouble(line.widthL, n) : null;
+		widthRight = width ? toDouble(line.widthR, n) : null;
 		asymmetry = corrected ? toDouble(line.asymmetry, n) : null;
 		intensity = corrected ? toDouble(line.intensity, n) : null;
 	}

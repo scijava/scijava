@@ -19,12 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 package org.scijava.ops.image.gpl.ridge;
 
 /**
- * Run-length encoding of the pixels of a byte image above a threshold, from
- * the ij-ridgedetection {@code Threshold}, {@code Region} and {@code Chord}
- * classes (a translation of the C code of Carsten Steger).
+ * Run-length encoding of the pixels of a byte image above a threshold, from the
+ * ij-ridgedetection {@code Threshold}, {@code Region} and {@code Chord} classes
+ * (a translation of the C code of Carsten Steger).
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -60,17 +61,19 @@ final class Threshold {
 		short ce;
 	}
 
-	static void threshold(byte[] image, int min, int width, int height, Region out) {
+	static void threshold(byte[] image, int min, int width, int height,
+		Region out)
+	{
 		int grey;
-		int r, c, l, num, num_max;
+		int r, c, l, num, numMax;
 		boolean inside;
 		Chord[] rl;
 
 		inside = false;
 		num = 0;
-		num_max = LinesUtil.INITIAL_SIZE;
-		rl = new Chord[num_max];
-		for (int i = 0; i < num_max; i++) {
+		numMax = LinesUtil.INITIAL_SIZE;
+		rl = new Chord[numMax];
+		for (int i = 0; i < numMax; i++) {
 			rl[i] = new Chord();
 		}
 		out.rl = null;
@@ -78,7 +81,7 @@ final class Threshold {
 
 		for (r = 0; r < height; r++) {
 			for (c = 0; c < width; c++) {
-				l = LinesUtil.LINCOOR(r, c, width);
+				l = LinesUtil.linCoor(r, c, width);
 				grey = image[l];
 				if (grey >= min) {
 					if (!inside) {
@@ -86,19 +89,19 @@ final class Threshold {
 						rl[num].r = (short) r;
 						rl[num].cb = (short) c;
 					}
-				} else {
+				}
+				else {
 					if (inside) {
 						inside = false;
 						rl[num].ce = (short) (c - 1);
 						num++;
-						if (num >= num_max) {
-							num_max = (int) Math.floor((double) (num_max * LinesUtil.REALLOC_FACTOR));
-							Chord[] rlh = new Chord[num_max];
+						if (num >= numMax) {
+							numMax = (int) Math.floor((double) (numMax *
+								LinesUtil.REALLOC_FACTOR));
+							Chord[] rlh = new Chord[numMax];
 							for (int i = 0; i < rlh.length; i++) {
-								if (i < rl.length)
-									rlh[i] = rl[i];
-								else
-									rlh[i] = new Chord();
+								if (i < rl.length) rlh[i] = rl[i];
+								else rlh[i] = new Chord();
 							}
 							rl = rlh;
 						}
@@ -109,14 +112,13 @@ final class Threshold {
 				inside = false;
 				rl[num].ce = (short) (width - 1);
 				num++;
-				if (num >= num_max) {
-					num_max = (int) Math.floor((double) (num_max * LinesUtil.REALLOC_FACTOR));
-					Chord[] rlh = new Chord[num_max];
+				if (num >= numMax) {
+					numMax = (int) Math.floor((double) (numMax *
+						LinesUtil.REALLOC_FACTOR));
+					Chord[] rlh = new Chord[numMax];
 					for (int i = 0; i < rlh.length; i++) {
-						if (i < rl.length)
-							rlh[i] = rl[i];
-						else
-							rlh[i] = new Chord();
+						if (i < rl.length) rlh[i] = rl[i];
+						else rlh[i] = new Chord();
 					}
 					rl = rlh;
 				}

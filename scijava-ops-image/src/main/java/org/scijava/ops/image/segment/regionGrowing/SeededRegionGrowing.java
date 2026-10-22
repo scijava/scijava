@@ -31,13 +31,12 @@ package org.scijava.ops.image.segment.regionGrowing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
@@ -46,6 +45,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.image.util.Neighborhoods;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -89,7 +89,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='segment.seededRegionGrowing'
  */
 public class SeededRegionGrowing<T extends RealType<T>, L> implements
-	Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<LabelingType<L>>, StructuringElement, ImgLabeling<L, IntType>>
+	Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<LabelingType<L>>, Shape, ImgLabeling<L, IntType>>
 {
 
 	@OpDependency(name = "create.img")
@@ -102,14 +102,18 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 	 * @param seeds the seed labeling, with the same dimensions as the image;
 	 *          unlabeled pixels are to be assigned, and no pixel may have
 	 *          several labels
-	 * @param connectivity the pixel adjacency, FOUR_CONNECTED (the default) or
-	 *          EIGHT_CONNECTED, i.e. sharing a face or touching in any way
+	 * @param connectivity the neighborhood defining which pixels are adjacent,
+	 *          such as a {@code DiamondShape} of radius 1 for face connectivity
+	 *          (4-connectivity in 2D, 6-connectivity in 3D) or a
+	 *          {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
+	 *          connectivity.
 	 * @return the grown labeling
 	 */
 	@Override
 	public ImgLabeling<L, IntType> apply(final RandomAccessibleInterval<T> input,
 		final RandomAccessibleInterval<LabelingType<L>> seeds,
-		@Nullable final StructuringElement connectivity)
+		@Nullable final Shape connectivity)
 	{
 		if (!Intervals.equalDimensions(input, seeds)) {
 			throw new IllegalArgumentException(
@@ -123,7 +127,6 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 		}
 		final var count = (int) size;
 		final var dims = input.dimensionsAsLongArray();
-		final var full = connectivity == StructuringElement.EIGHT_CONNECTED;
 
 		final var values = new double[count];
 		var i = 0;
@@ -164,7 +167,7 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 			}
 		}
 
-		final var offsets = neighborOffsets(n, full);
+		final var offsets = Neighborhoods.rasterOffsets(connectivity, n);
 		final var coords = new int[n];
 		final var queue = new PriorityQueue<Candidate>();
 		var order = 0L;
@@ -216,34 +219,6 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 			i++;
 		}
 		return output;
-	}
-
-	/** Lists the neighbor offsets for the given connectivity. */
-	private static List<int[]> neighborOffsets(final int n, final boolean full) {
-		final var offsets = new ArrayList<int[]>();
-		if (!full) {
-			for (var d = 0; d < n; d++) {
-				for (final var s : new int[] { -1, 1 }) {
-					final var o = new int[n];
-					o[d] = s;
-					offsets.add(o);
-				}
-			}
-			return offsets;
-		}
-		final var total = (int) Math.pow(3, n);
-		for (var c = 0; c < total; c++) {
-			final var o = new int[n];
-			var rest = c;
-			var zero = true;
-			for (var d = 0; d < n; d++) {
-				o[d] = rest % 3 - 1;
-				rest /= 3;
-				if (o[d] != 0) zero = false;
-			}
-			if (!zero) offsets.add(o);
-		}
-		return offsets;
 	}
 
 	private static void position(int p, final long[] dims, final int[] coords) {

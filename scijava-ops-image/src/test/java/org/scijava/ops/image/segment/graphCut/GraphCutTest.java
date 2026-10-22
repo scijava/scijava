@@ -38,6 +38,9 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -69,9 +72,12 @@ public class GraphCutTest extends AbstractOpTest {
 		final var pixelwise = errorRate(segment(image, 0.0, null, null, null,
 			null), truth);
 		assertTrue(pixelwise > 0.1, "pixelwise error " + pixelwise);
-		final var smooth = errorRate(segment(image, null, null, null, null, null),
+		final var smooth = errorRate(segment(image, null, null, null, null, false),
 			truth);
 		assertTrue(smooth < 0.01, "graph cut error " + smooth);
+		// The defaults are lambda = 1 and full connectivity.
+		assertArrayEquals(bits(segment(image, 1.0, null, null, false, true)), bits(
+			segment(image, null, null, null, null, null)));
 		final var full = errorRate(segment(image, 1.0, null, null, false, true),
 			truth);
 		assertTrue(full < 0.01, "full connectivity error " + full);
@@ -206,7 +212,7 @@ public class GraphCutTest extends AbstractOpTest {
 		final Boolean full)
 	{
 		return ops.op("segment.graphCut").input(image, lambda, fgMean, bgMean,
-			contrast, full).outType(MASK).apply();
+			contrast, connectivity(full)).outType(MASK).apply();
 	}
 
 	private RandomAccessibleInterval<BitType> segmentCosts(
@@ -215,7 +221,13 @@ public class GraphCutTest extends AbstractOpTest {
 		final RandomAccessibleInterval<DoubleType> contrast, final Boolean full)
 	{
 		return ops.op("segment.graphCut").input(fgCost, bgCost, lambda, contrast,
-			full).outType(MASK).apply();
+			connectivity(full)).outType(MASK).apply();
+	}
+
+	/** Gets full or face connectivity, or null for the default. */
+	private static Shape connectivity(final Boolean full) {
+		if (full == null) return null;
+		return full ? new RectangleShape(1, false) : new DiamondShape(1);
 	}
 
 	private static boolean[] bits(final RandomAccessibleInterval<BitType> mask) {

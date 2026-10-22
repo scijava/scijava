@@ -43,13 +43,15 @@ import java.util.function.Predicate;
 
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
+
+import org.scijava.ops.image.util.Neighborhoods;
 
 /**
  * Internal helpers shared by the label-map utility ops.
@@ -189,43 +191,26 @@ final class Labelings {
 	}
 
 	/**
-	 * Gets the neighbor offsets of a structuring element in {@code n}
-	 * dimensions: the {@code 2n} face neighbors for
-	 * {@link StructuringElement#FOUR_CONNECTED}, or the {@code 3^n - 1} face,
-	 * edge and corner neighbors for {@link StructuringElement#EIGHT_CONNECTED}.
-	 * If {@code forwardOnly} is set, only the offsets whose first nonzero
+	 * Gets the neighbor offsets of a connectivity in {@code n} dimensions,
+	 * without the origin (see {@link Neighborhoods#rasterOffsets}). If
+	 * {@code forwardOnly} is set, only the offsets whose first nonzero
 	 * coordinate is positive are returned, so that each pair of neighboring
 	 * pixels is visited once.
+	 *
+	 * @param connectivity the connectivity, or null for full connectivity
 	 */
-	static List<long[]> offsets(final int n, final StructuringElement se,
+	static List<long[]> offsets(final int n, final Shape connectivity,
 		final boolean forwardOnly)
 	{
 		final var offsets = new ArrayList<long[]>();
-		if (se == StructuringElement.FOUR_CONNECTED) {
-			for (var d = 0; d < n; d++) {
-				for (final var step : new long[] { 1, -1 }) {
-					if (forwardOnly && step < 0) continue;
-					final var offset = new long[n];
-					offset[d] = step;
-					offsets.add(offset);
-				}
-			}
-			return offsets;
-		}
-		var total = 1;
-		for (var d = 0; d < n; d++)
-			total *= 3;
-		for (var k = 0; k < total; k++) {
-			final var offset = new long[n];
-			var rest = k;
-			for (var d = 0; d < n; d++) {
-				offset[d] = rest % 3 - 1;
-				rest /= 3;
-			}
-			var first = 0L;
+		for (final var o : Neighborhoods.rasterOffsets(connectivity, n)) {
+			var first = 0;
 			for (var d = 0; d < n && first == 0; d++)
-				first = offset[d];
-			if (first == 0 || forwardOnly && first < 0) continue;
+				first = o[d];
+			if (forwardOnly && first < 0) continue;
+			final var offset = new long[n];
+			for (var d = 0; d < n; d++)
+				offset[d] = o[d];
 			offsets.add(offset);
 		}
 		return offsets;

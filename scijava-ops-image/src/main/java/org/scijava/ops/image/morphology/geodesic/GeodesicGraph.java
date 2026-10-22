@@ -32,6 +32,10 @@ package org.scijava.ops.image.morphology.geodesic;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+
+import org.scijava.ops.image.util.Neighborhoods;
+
 /**
  * A pixel grid graph for shortest-path (geodesic) distance propagation within
  * regions. Each pixel belongs to a region (a non-negative id) or to none
@@ -85,15 +89,10 @@ final class GeodesicGraph {
 		pred = new int[size];
 
 		final var offs = new ArrayList<int[]>();
-		final var v = new int[n];
-		Arrays.fill(v, -radius);
-		while (true) {
-			if (isPrimitive(v)) offs.add(v.clone());
-			var d = 0;
-			while (d < n && v[d] == radius)
-				v[d++] = -radius;
-			if (d == n) break;
-			v[d]++;
+		for (final var v : Neighborhoods.rasterOffsets(new RectangleShape(radius,
+			false), n))
+		{
+			if (isPrimitive(v)) offs.add(v);
 		}
 		final var count = offs.size();
 		offsets = offs.toArray(new int[count][]);

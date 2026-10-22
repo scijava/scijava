@@ -33,6 +33,7 @@ import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
@@ -72,7 +73,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='segment.graphCut'
  */
 public class DefaultGraphCut<T extends RealType<T>> implements
-	Functions.Arity6<RandomAccessibleInterval<T>, Double, Double, Double, Boolean, Boolean, RandomAccessibleInterval<BitType>>
+	Functions.Arity6<RandomAccessibleInterval<T>, Double, Double, Double, Boolean, Shape, RandomAccessibleInterval<BitType>>
 {
 
 	private static final int MAX_ITERATIONS = 1000;
@@ -94,22 +95,25 @@ public class DefaultGraphCut<T extends RealType<T>> implements
 	 *          edges, by the factor exp(-beta (I_p - I_q)^2) with beta the
 	 *          inverse of twice the mean squared neighbor difference (default
 	 *          false)
-	 * @param fullConnectivity whether diagonal neighbors are connected too, with
-	 *          weights divided by their distance, or only face neighbors
-	 *          (default false); full connectivity makes boundaries costlier,
-	 *          by a factor of about 2.4 in 2D and 6 in 3D, so it calls for a
-	 *          smaller lambda
+	 * @param connectivity the neighborhood defining which pixels are adjacent,
+	 *          such as a {@code DiamondShape} of radius 1 for face connectivity
+	 *          (4-connectivity in 2D, 6-connectivity in 3D) or a
+	 *          {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D), with the weight
+	 *          of each pair divided by its distance. Defaults to full
+	 *          connectivity. Full connectivity makes boundaries costlier than
+	 *          face connectivity, by a factor of about 2.4 in 2D and 6 in 3D, so
+	 *          it calls for a smaller lambda.
 	 * @return the foreground mask
 	 */
 	@Override
 	public RandomAccessibleInterval<BitType> apply(
 		final RandomAccessibleInterval<T> image, @Nullable Double lambda,
 		@Nullable Double foregroundMean, @Nullable Double backgroundMean,
-		@Nullable Boolean contrast, @Nullable Boolean fullConnectivity)
+		@Nullable Boolean contrast, @Nullable Shape connectivity)
 	{
 		if (lambda == null) lambda = 1.0;
 		if (contrast == null) contrast = false;
-		if (fullConnectivity == null) fullConnectivity = false;
 
 		final var values = GridGraphCut.flatten(image);
 		final var means = intermeans(values);
@@ -129,7 +133,7 @@ public class DefaultGraphCut<T extends RealType<T>> implements
 		}
 
 		final var foreground = GridGraphCut.segment(image.dimensionsAsLongArray(),
-			fgCost, bgCost, contrast ? values : null, lambda, fullConnectivity);
+			fgCost, bgCost, contrast ? values : null, lambda, connectivity);
 		return GridGraphCut.mask(createOp, image, foreground);
 	}
 

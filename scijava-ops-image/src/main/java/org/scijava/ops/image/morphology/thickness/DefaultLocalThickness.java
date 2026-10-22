@@ -39,6 +39,7 @@ import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.image.util.Calibrations;
+import org.scijava.ops.image.util.Neighborhoods;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -457,30 +458,15 @@ public class DefaultLocalThickness<B extends BooleanType<B>> implements
 			this.size = size;
 			final int n = size.length;
 			final int[] strides = strides(size);
-			int total = 1;
-			for (int d = 0; d < n; d++)
-				total *= 3;
-			count = total - 1;
-			offsets = new int[count][n];
+			offsets = Neighborhoods.rasterOffsets(null, n);
+			count = offsets.length;
 			delta = new int[count];
 			mask = new int[count];
-			int o = 0;
-			for (int code = 0; code < total; code++) {
-				final int[] off = new int[n];
-				int c = code;
-				int m = 0;
-				int dl = 0;
+			for (int o = 0; o < count; o++) {
 				for (int d = 0; d < n; d++) {
-					off[d] = c % 3 - 1;
-					c /= 3;
-					if (off[d] != 0) m |= 1 << d;
-					dl += off[d] * strides[d];
+					if (offsets[o][d] != 0) mask[o] |= 1 << d;
+					delta[o] += offsets[o][d] * strides[d];
 				}
-				if (m == 0) continue;
-				offsets[o] = off;
-				delta[o] = dl;
-				mask[o] = m;
-				o++;
 			}
 		}
 

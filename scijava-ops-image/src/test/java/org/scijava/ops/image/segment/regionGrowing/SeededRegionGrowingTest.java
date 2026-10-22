@@ -35,7 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.integer.IntType;
@@ -73,8 +75,8 @@ public class SeededRegionGrowingTest extends AbstractOpTest {
 			c.get().set((c.getLongPosition(0) < 12 ? 50 : 150) + 10 * rnd
 				.nextGaussian());
 		}
-		for (final var se : new StructuringElement[] {
-			StructuringElement.FOUR_CONNECTED, StructuringElement.EIGHT_CONNECTED })
+		for (final var se : new Shape[] { new DiamondShape(1),
+			new RectangleShape(1, false) })
 		{
 			final var seeds = new ImgLabeling<String, IntType>(ArrayImgs.ints(w, h));
 			final var ra = seeds.randomAccess();

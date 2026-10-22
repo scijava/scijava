@@ -23,15 +23,21 @@
 
 package org.scijava.ops.image.lgpl.intrinsicvolumes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.BooleanType;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.IntegerType;
+import net.imglib2.util.ConstantUtils;
 
 import org.scijava.ops.spi.Nullable;
 
@@ -49,8 +55,13 @@ import org.scijava.ops.spi.Nullable;
  * or 13 directions in 3D, which (for 4 and 13 directions) are much less biased
  * than counting boundary pixels or measuring the length of a polygonal
  * contour. Euler numbers are computed for a chosen connectivity of the
- * foreground (4 or 8 in 2D, 6 or 26 in 3D). Spatial calibration is supported
- * via the pixel spacing.
+ * foreground, given as a {@link Shape}: face connectivity (a
+ * {@code DiamondShape} of radius 1, i.e. 4-connectivity in 2D and
+ * 6-connectivity in 3D) or full connectivity (a {@code RectangleShape} of span
+ * 1, i.e. 8-connectivity in 2D and 26-connectivity in 3D), which is the
+ * default; other shapes are rejected. (MorphoLibJ defaults to face
+ * connectivity for Euler numbers.) Spatial calibration is supported via the
+ * pixel spacing.
  * </p>
  * <p>
  * Per-object measures consider every configuration that contains at least one
@@ -276,18 +287,21 @@ public final class IntrinsicVolumes {
 	 * @param image the 3D binary image
 	 * @param spacing the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
-	 * @param connectivity2D the connectivity used to compute the Euler numbers
-	 *          of planar sections, 4 or 8 (default 8)
+	 * @param connectivity the connectivity used to compute the Euler numbers of
+	 *          planar sections: face connectivity (a {@code DiamondShape} of
+	 *          radius 1, i.e. 4-connected sections) or full connectivity (a
+	 *          {@code RectangleShape} of span 1, i.e. 8-connected sections).
+	 *          Defaults to full connectivity.
 	 * @return the mean breadth
 	 * @implNote op names='features.intrinsicVolumes.meanBreadth', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double meanBreadth(
 		final RandomAccessibleInterval<B> image, @Nullable double[] spacing,
-		@Nullable Integer directions, @Nullable Integer connectivity2D)
+		@Nullable Integer directions, @Nullable Shape connectivity)
 	{
 		final var s = spacing(image, spacing, 3);
 		return measure(image, IntrinsicVolumesLuts.meanBreadthLut(s, or(
-			directions, 13), or(connectivity2D, 8)));
+			directions, 13), isFace(connectivity, 3) ? 4 : 8));
 	}
 
 	/**
@@ -300,18 +314,21 @@ public final class IntrinsicVolumes {
 	 * @param labeling the 3D labeling
 	 * @param spacing the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
-	 * @param connectivity2D the connectivity used to compute the Euler numbers
-	 *          of planar sections, 4 or 8 (default 8)
+	 * @param connectivity the connectivity used to compute the Euler numbers of
+	 *          planar sections: face connectivity (a {@code DiamondShape} of
+	 *          radius 1, i.e. 4-connected sections) or full connectivity (a
+	 *          {@code RectangleShape} of span 1, i.e. 8-connected sections).
+	 *          Defaults to full connectivity.
 	 * @return the mean breadth of each label
 	 * @implNote op names='features.intrinsicVolumes.meanBreadth', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> meanBreadth(
 		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
-		@Nullable Integer directions, @Nullable Integer connectivity2D)
+		@Nullable Integer directions, @Nullable Shape connectivity)
 	{
 		final var s = spacing(labeling, spacing, 3);
 		return measure(labeling, IntrinsicVolumesLuts.meanBreadthLut(s, or(
-			directions, 13), or(connectivity2D, 8)));
+			directions, 13), isFace(connectivity, 3) ? 4 : 8));
 	}
 
 	/**
@@ -356,13 +373,16 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> pixel type
 	 * @param image the 2D or 3D binary image
-	 * @param connectivity the connectivity of the foreground, 4 or 8 in 2D
-	 *          (default 4), 6 or 26 in 3D (default 6)
+	 * @param connectivity the connectivity of the foreground: face connectivity
+	 *          (a {@code DiamondShape} of radius 1, i.e. 4-connectivity in 2D
+	 *          and 6-connectivity in 3D) or full connectivity (a
+	 *          {@code RectangleShape} of span 1, i.e. 8-connectivity in 2D and
+	 *          26-connectivity in 3D). Defaults to full connectivity.
 	 * @return the Euler number
 	 * @implNote op names='features.intrinsicVolumes.eulerNumber', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double eulerNumber(
-		final RandomAccessibleInterval<B> image, @Nullable Integer connectivity)
+		final RandomAccessibleInterval<B> image, @Nullable Shape connectivity)
 	{
 		return measure(image, eulerLut(image, connectivity));
 	}
@@ -376,13 +396,16 @@ public final class IntrinsicVolumes {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the 2D or 3D labeling
-	 * @param connectivity the connectivity of the labels, 4 or 8 in 2D (default
-	 *          4), 6 or 26 in 3D (default 6)
+	 * @param connectivity the connectivity of the labels: face connectivity (a
+	 *          {@code DiamondShape} of radius 1, i.e. 4-connectivity in 2D and
+	 *          6-connectivity in 3D) or full connectivity (a
+	 *          {@code RectangleShape} of span 1, i.e. 8-connectivity in 2D and
+	 *          26-connectivity in 3D). Defaults to full connectivity.
 	 * @return the Euler number of each label
 	 * @implNote op names='features.intrinsicVolumes.eulerNumber', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> eulerNumber(
-		final ImgLabeling<L, I> labeling, @Nullable Integer connectivity)
+		final ImgLabeling<L, I> labeling, @Nullable Shape connectivity)
 	{
 		return measure(labeling, eulerLut(labeling, connectivity));
 	}
@@ -403,7 +426,11 @@ public final class IntrinsicVolumes {
 	 * @param directions the number of directions of the Crofton formula: 2 or 4
 	 *          in 2D (default 4), 3 or 13 in 3D (default 13)
 	 * @param connectivity the connectivity of the foreground for the Euler
-	 *          number, 4 or 8 in 2D (default 4), 6 or 26 in 3D (default 6)
+	 *          number: face connectivity (a {@code DiamondShape} of radius 1,
+	 *          i.e. 4-connectivity in 2D and 6-connectivity in 3D) or full
+	 *          connectivity (a {@code RectangleShape} of span 1, i.e.
+	 *          8-connectivity in 2D and 26-connectivity in 3D). Defaults to full
+	 *          connectivity.
 	 * @return in 2D, a map with the entries {@code areaDensity} (the area
 	 *         fraction), {@code perimeterDensity} and
 	 *         {@code eulerNumberDensity}; in 3D, a map with the entries
@@ -414,7 +441,7 @@ public final class IntrinsicVolumes {
 	 */
 	public static <B extends BooleanType<B>> Map<String, Double> densities(
 		final RandomAccessibleInterval<B> image, @Nullable double[] spacing,
-		@Nullable Integer directions, @Nullable Integer connectivity)
+		@Nullable Integer directions, @Nullable Shape connectivity)
 	{
 		final var nd = image.numDimensions();
 		for (var d = 0; d < nd; d++) {
@@ -470,13 +497,15 @@ public final class IntrinsicVolumes {
 	}
 
 	private static double[] eulerLut(final Interval interval,
-		final Integer connectivity)
+		final Shape connectivity)
 	{
 		switch (interval.numDimensions()) {
 			case 2:
-				return IntrinsicVolumesLuts.eulerNumberLut2D(or(connectivity, 4));
+				return IntrinsicVolumesLuts.eulerNumberLut2D(isFace(connectivity, 2)
+					? 4 : 8);
 			case 3:
-				return IntrinsicVolumesLuts.eulerNumberLut3D(or(connectivity, 6));
+				return IntrinsicVolumesLuts.eulerNumberLut3D(isFace(connectivity, 3)
+					? 6 : 26);
 			default:
 				throw new IllegalArgumentException(
 					"Only 2D and 3D images are supported, not " + interval
@@ -501,6 +530,45 @@ public final class IntrinsicVolumes {
 				" spacing values, not " + spacing.length);
 		}
 		return spacing;
+	}
+
+	/**
+	 * Tells whether a connectivity is face connectivity (true) or full
+	 * connectivity (false, also for null), by enumerating its neighborhood in
+	 * {@code n} dimensions.
+	 *
+	 * @throws IllegalArgumentException if it is neither
+	 */
+	private static boolean isFace(final Shape connectivity, final int n) {
+		if (connectivity == null) return false;
+		final var source = ConstantUtils.constantRandomAccessible(new BitType(),
+			n);
+		final var ra = connectivity.neighborhoodsRandomAccessible(source)
+			.randomAccess();
+		ra.setPosition(new long[n]);
+		final var c = ra.get().localizingCursor();
+		final var offsets = new HashSet<List<Integer>>();
+		var face = true;
+		var full = true;
+		while (c.hasNext()) {
+			c.fwd();
+			final var o = new ArrayList<Integer>(n);
+			var nonzero = 0;
+			for (var d = 0; d < n; d++) {
+				final var v = c.getIntPosition(d);
+				o.add(v);
+				if (v != 0) nonzero++;
+				if (Math.abs(v) > 1) full = false;
+			}
+			if (nonzero == 0) continue;
+			if (nonzero != 1) face = false;
+			offsets.add(o);
+		}
+		if (face && offsets.size() == 2 * n) return true;
+		if (full && offsets.size() == (int) Math.pow(3, n) - 1) return false;
+		throw new IllegalArgumentException("Unsupported connectivity: expected " +
+			"face connectivity (a DiamondShape of radius 1) or full connectivity " +
+			"(a RectangleShape of span 1), not " + connectivity);
 	}
 
 	private static int or(final Integer value, final int defaultValue) {

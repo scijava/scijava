@@ -33,6 +33,7 @@ import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
@@ -67,7 +68,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class GraphCutCosts<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 	implements
-	Functions.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double, RandomAccessibleInterval<V>, Boolean, RandomAccessibleInterval<BitType>>
+	Functions.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double, RandomAccessibleInterval<V>, Shape, RandomAccessibleInterval<BitType>>
 {
 
 	@OpDependency(name = "create.img")
@@ -85,11 +86,15 @@ public class GraphCutCosts<T extends RealType<T>, U extends RealType<U>, V exten
 	 *          edges, by the factor exp(-beta (I_p - I_q)^2) with beta the
 	 *          inverse of twice the mean squared neighbor difference (default:
 	 *          no contrast term)
-	 * @param fullConnectivity whether diagonal neighbors are connected too, with
-	 *          weights divided by their distance, or only face neighbors
-	 *          (default false); full connectivity makes boundaries costlier,
-	 *          by a factor of about 2.4 in 2D and 6 in 3D, so it calls for a
-	 *          smaller lambda
+	 * @param connectivity the neighborhood defining which pixels are adjacent,
+	 *          such as a {@code DiamondShape} of radius 1 for face connectivity
+	 *          (4-connectivity in 2D, 6-connectivity in 3D) or a
+	 *          {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D), with the weight
+	 *          of each pair divided by its distance. Defaults to full
+	 *          connectivity. Full connectivity makes boundaries costlier than
+	 *          face connectivity, by a factor of about 2.4 in 2D and 6 in 3D, so
+	 *          it calls for a smaller lambda.
 	 * @return the foreground mask
 	 */
 	@Override
@@ -97,10 +102,9 @@ public class GraphCutCosts<T extends RealType<T>, U extends RealType<U>, V exten
 		final RandomAccessibleInterval<T> foregroundCost,
 		final RandomAccessibleInterval<U> backgroundCost, @Nullable Double lambda,
 		@Nullable RandomAccessibleInterval<V> contrastImage,
-		@Nullable Boolean fullConnectivity)
+		@Nullable Shape connectivity)
 	{
 		if (lambda == null) lambda = 1.0;
-		if (fullConnectivity == null) fullConnectivity = false;
 		GridGraphCut.checkDimensions(foregroundCost, backgroundCost);
 		if (contrastImage != null) GridGraphCut.checkDimensions(foregroundCost,
 			contrastImage);
@@ -108,7 +112,7 @@ public class GraphCutCosts<T extends RealType<T>, U extends RealType<U>, V exten
 		final var foreground = GridGraphCut.segment(foregroundCost
 			.dimensionsAsLongArray(), GridGraphCut.flatten(foregroundCost),
 			GridGraphCut.flatten(backgroundCost), contrastImage == null ? null
-				: GridGraphCut.flatten(contrastImage), lambda, fullConnectivity);
+				: GridGraphCut.flatten(contrastImage), lambda, connectivity);
 		return GridGraphCut.mask(createOp, foregroundCost, foreground);
 	}
 }

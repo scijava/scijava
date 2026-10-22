@@ -87,4 +87,20 @@ public class CalibrationsTest extends AbstractOpTest {
 		final var face = Neighborhoods.neighborOffsets(new DiamondShape(1), 3);
 		assertEquals(6, face.length);
 	}
+
+	@Test
+	public void testRasterOffsets() {
+		// Dimension 0 varies fastest, as in a flat iteration.
+		final var full = Neighborhoods.rasterOffsets(null, 2);
+		final int[][] expected = { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, {
+			1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } };
+		assertEquals(expected.length, full.length);
+		for (var i = 0; i < expected.length; i++)
+			assertArrayEquals(expected[i], full[i]);
+		final var face = Neighborhoods.rasterOffsets(new DiamondShape(1), 2);
+		final int[][] expectedFace = { { 0, -1 }, { -1, 0 }, { 1, 0 }, { 0, 1 } };
+		assertEquals(expectedFace.length, face.length);
+		for (var i = 0; i < expectedFace.length; i++)
+			assertArrayEquals(expectedFace[i], face[i]);
+	}
 }

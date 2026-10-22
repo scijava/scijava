@@ -34,13 +34,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.labeling.ConnectedComponents;
-import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
-import net.imglib2.converter.Converters;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.roi.labeling.ImgLabeling;
@@ -50,7 +49,6 @@ import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
-import org.scijava.concurrent.Parallelization;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -158,23 +156,32 @@ public final class LabelEditing {
 	 * interval. It is filled with the labels shared by all labeled pixels
 	 * adjacent to it, i.e. the labels enclosing it; a hole between several
 	 * regions that do not share a label is left unlabeled.
+	 * <p>
+	 * The connectivity applies to the background: it defines the connected
+	 * components of unlabeled pixels and their adjacency to labeled pixels, as
+	 * the connectivity of {@code morphology.fillHoles} does. With the default
+	 * full connectivity, a hole leaks out through a diagonal gap in its
+	 * enclosing region and is not filled. For regions that are only connected
+	 * diagonally (such as a thin outline drawn with diagonal steps), use face
+	 * connectivity, the dual of their full connectivity.
+	 * </p>
 	 *
 	 * @param labeling the labeled objects
 	 * @param connectivity the connectivity of the unlabeled components and of
-	 *          their adjacency to labeled pixels (default:
-	 *          {@code FOUR_CONNECTED}, i.e. face neighbors only, so that holes
-	 *          of regions with diagonal gaps are still filled)
+	 *          their adjacency to labeled pixels, such as a
+	 *          {@code DiamondShape} of radius 1 for face connectivity
+	 *          (4-connectivity in 2D, 6-connectivity in 3D) or a
+	 *          {@code RectangleShape} of span 1 for full connectivity
+	 *          (8-connectivity in 2D, 26-connectivity in 3D). Defaults to full
+	 *          connectivity.
 	 * @return a new labeling with the holes filled
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @implNote op names='labeling.fillHoles', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> ImgLabeling<L, I> fillHoles(
-		final ImgLabeling<L, I> labeling,
-		@Nullable StructuringElement connectivity)
+		final ImgLabeling<L, I> labeling, @Nullable Shape connectivity)
 	{
-		final var se = connectivity == null ? StructuringElement.FOUR_CONNECTED
-			: connectivity;
 		final var mapping = labeling.getMapping();
 		final var indexImg = labeling.getIndexImg();
 		final var n = labeling.numDimensions();
@@ -182,20 +189,27 @@ public final class LabelEditing {
 		for (var i = 0; i < empty.length; i++)
 			empty[i] = mapping.labelsAtIndex(i).isEmpty();
 
-		final RandomAccessibleInterval<BitType> background = Converters.convert(
-			indexImg, (in, out) -> out.set(empty[in.getInteger()]), new BitType());
+		final var offsets = Labelings.offsets(n, connectivity, false);
+		final var dims = indexImg.dimensionsAsLongArray();
+		final var size = Intervals.numElements(indexImg);
+		if (size > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Labeling is too large: " + size +
+				" pixels");
+		}
+		final var background = new boolean[(int) size];
+		var p = 0;
+		for (final var t : Views.flatIterable(indexImg))
+			background[p++] = empty[t.getInteger()];
+		final var ids = new int[(int) size];
+		final var count = labelComponents(background, dims, offsets, ids);
 		final RandomAccessibleInterval<IntType> components = Views.translate(
-			ArrayImgs.ints(indexImg.dimensionsAsLongArray()), indexImg
-				.minAsLongArray());
-		final var count = ConnectedComponents.labelAllConnectedComponents(
-			background, components, se, Parallelization.getExecutorService());
+			ArrayImgs.ints(ids, dims), indexImg.minAsLongArray());
 
 		// The labels enclosing each component, or null if none are known yet.
 		final var enclosing = new ArrayList<Set<L>>();
 		final var touchesBorder = new boolean[count + 1];
 		for (var c = 0; c <= count; c++)
 			enclosing.add(null);
-		final var offsets = Labelings.offsets(n, se, false);
 		final var ra = indexImg.randomAccess();
 		final var position = new long[n];
 		final var neighbor = new long[n];
@@ -209,7 +223,7 @@ public final class LabelEditing {
 				continue;
 			}
 			for (final var offset : offsets) {
-				Labelings.shift(position, offset, indexImg, neighbor);
+				if (!Labelings.shift(position, offset, indexImg, neighbor)) continue;
 				final var labels = mapping.labelsAtIndex(ra.setPositionAndGet(neighbor)
 					.getInteger());
 				if (labels.isEmpty()) continue;
@@ -235,6 +249,58 @@ public final class LabelEditing {
 			out.setInteger(f != 0 ? f : lut[in.getInteger()]);
 		});
 		return ImgLabeling.fromImageAndLabelSets(output, table.sets());
+	}
+
+	/**
+	 * Labels the connected components of the true pixels of a flat mask, with
+	 * dimension 0 varying fastest, numbering them from 1 in raster order.
+	 *
+	 * @return the number of components
+	 */
+	private static int labelComponents(final boolean[] mask, final long[] dims,
+		final List<long[]> offsets, final int[] labels)
+	{
+		final var n = dims.length;
+		final var strides = new long[n];
+		var stride = 1L;
+		for (var d = 0; d < n; d++) {
+			strides[d] = stride;
+			stride *= dims[d];
+		}
+		final var position = new long[n];
+		final var queue = new int[mask.length];
+		var count = 0;
+		for (var start = 0; start < mask.length; start++) {
+			if (!mask[start] || labels[start] != 0) continue;
+			labels[start] = ++count;
+			var head = 0;
+			var tail = 0;
+			queue[tail++] = start;
+			while (head < tail) {
+				final var p = queue[head++];
+				var rest = (long) p;
+				for (var d = 0; d < n; d++) {
+					position[d] = rest % dims[d];
+					rest /= dims[d];
+				}
+				for (final var offset : offsets) {
+					var q = 0L;
+					var inside = true;
+					for (var d = 0; d < n; d++) {
+						final var c = position[d] + offset[d];
+						if (c < 0 || c >= dims[d]) {
+							inside = false;
+							break;
+						}
+						q += c * strides[d];
+					}
+					if (!inside || !mask[(int) q] || labels[(int) q] != 0) continue;
+					labels[(int) q] = count;
+					queue[tail++] = (int) q;
+				}
+			}
+		}
+		return count;
 	}
 
 	/**

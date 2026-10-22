@@ -260,9 +260,12 @@ public final class HelmholtzAnalysis {
 			if (wavelength < lambdaMin || wavelength > lambdaMax) continue;
 			result.lambda[i] = wavelength;
 			final double gx = gradX[i], gy = gradY[i];
-			var phiRad = Math.atan2(gx, gy);
-			if (phiRad < 0) phiRad += Math.PI;
-			result.phi[i] = (float) (180 * phiRad / Math.PI);
+			// Note: atan2 returns ±π for gx = ±0 and gy < 0, which is the same
+			// orientation as 0; the angle is reduced to [0, 180) in float precision.
+			var phiDeg = (float) Math.toDegrees(Math.atan2(gx, gy));
+			if (phiDeg < 0) phiDeg += 180;
+			if (phiDeg >= 180) phiDeg -= 180;
+			result.phi[i] = phiDeg;
 			result.weight[i] = (float) Math.sqrt(gx * gx + gy * gy);
 		}
 		return result;

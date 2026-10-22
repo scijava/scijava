@@ -155,6 +155,16 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 				2).outType(LABELING).apply());
 	}
 
+	/** NaN has no order, so reliefs containing NaN are rejected. */
+	@Test
+	public void testNaN() {
+		final var img = twoBasins();
+		img.firstElement().set(Double.NaN);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.watershedExtendedMinima").input(img, 1.0).outType(LABELING)
+			.apply());
+	}
+
 	@Test
 	public void testMask() {
 		final var img = twoBasins();

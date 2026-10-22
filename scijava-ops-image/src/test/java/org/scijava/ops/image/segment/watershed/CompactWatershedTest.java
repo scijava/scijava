@@ -85,6 +85,16 @@ public class CompactWatershedTest extends AbstractOpTest {
 		return img;
 	}
 
+	/** NaN has no order, so reliefs containing NaN are rejected. */
+	@Test
+	public void testNaN() {
+		final var img = random();
+		img.firstElement().set(Double.NaN);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.compactWatershed").input(img, seeds(W, H, SEEDS, 1, 2, 3), 0.1)
+			.outType(LABELING).apply());
+	}
+
 	@Test
 	public void testLabelsArePreserved() {
 		final var out = ops.op("segment.compactWatershed").input(random(), seeds(W,

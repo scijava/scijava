@@ -194,6 +194,9 @@ public final class HSegmentTree {
 		var i = 0;
 		for (final var t : Views.flatIterable(image)) {
 			final var v = t.getRealDouble();
+			if (Double.isNaN(v)) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
 			values[i++] = v;
 			if (v < min) min = v;
 			if (v > max) max = v;

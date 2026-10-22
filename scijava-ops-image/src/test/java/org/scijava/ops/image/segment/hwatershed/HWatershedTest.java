@@ -453,6 +453,15 @@ public class HWatershedTest extends AbstractOpTest {
 			100, true, false));
 	}
 
+	/** NaN has no order, so images containing NaN are rejected. */
+	@Test
+	public void testNaN() {
+		final var img = twoPeaks();
+		img.firstElement().set(Float.NaN);
+		assertThrows(IllegalArgumentException.class, () -> hWatershed(img, 1, 0,
+			100, true, false));
+	}
+
 	// -- Helper methods --
 
 	private ImgLabeling<Integer, IntType> hWatershed(

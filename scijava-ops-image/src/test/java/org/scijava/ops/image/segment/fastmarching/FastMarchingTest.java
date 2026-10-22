@@ -48,7 +48,7 @@ import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@code image.fastMarching} and {@code segment.fastMarching}.
+ * Tests {@code image.fastMarchingTimes} and {@code segment.fastMarching}.
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -84,8 +84,8 @@ public class FastMarchingTest extends AbstractOpTest {
 		for (var d = 0; d < dims.length; d++)
 			center[d] = dims[d] / 2;
 		final RandomAccessibleInterval<DoubleType> times = ops.op(
-			"image.fastMarching").input(List.of(new Point(center)), speed, cal,
-				null, secondOrder).outType(TIMES).apply();
+			"image.fastMarchingTimes").input(List.of(new Point(center)), speed,
+				cal, null, secondOrder).outType(TIMES).apply();
 		var maxAbs = 0.0;
 		var maxRel = 0.0;
 		final var c = Views.iterable(times).localizingCursor();
@@ -147,8 +147,8 @@ public class FastMarchingTest extends AbstractOpTest {
 		}
 		final double sx = 8, sy = 5, x0 = 19.5;
 		final RandomAccessibleInterval<DoubleType> times = ops.op(
-			"image.fastMarching").input(List.of(new Point(8, 5)), speed).outType(
-				TIMES).apply();
+			"image.fastMarchingTimes").input(List.of(new Point(8, 5)), speed)
+			.outType(TIMES).apply();
 		final var tc = Views.iterable(times).localizingCursor();
 		var maxErr = 0.0;
 		while (tc.hasNext()) {
@@ -201,7 +201,7 @@ public class FastMarchingTest extends AbstractOpTest {
 		sa.setPositionAndGet(2, 15).set(true);
 		sa.setPositionAndGet(3, 15).set(true);
 		final RandomAccessibleInterval<DoubleType> times = ops.op(
-			"image.fastMarching").input(seeds, speed).outType(TIMES).apply();
+			"image.fastMarchingTimes").input(seeds, speed).outType(TIMES).apply();
 		final var ra = times.randomAccess();
 		assertEquals(0, ra.setPositionAndGet(2, 15).get());
 		assertEquals(Double.POSITIVE_INFINITY, ra.setPositionAndGet(10, 15)
@@ -215,19 +215,19 @@ public class FastMarchingTest extends AbstractOpTest {
 		for (final var s : speed)
 			cc.next().set(1 / s.get());
 		final RandomAccessibleInterval<DoubleType> fromCost = ops.op(
-			"image.fastMarching").input(seeds, cost, null, null, null, true)
+			"image.fastMarchingTimes").input(seeds, cost, null, null, null, true)
 			.outType(TIMES).apply();
 		assertArrayEquals(values(times), values(fromCost));
 
 		// Points and the equivalent mask give the same result.
 		final RandomAccessibleInterval<DoubleType> fromPoints = ops.op(
-			"image.fastMarching").input(List.of(new Point(2, 15), new Point(3, 15)),
-				speed).outType(TIMES).apply();
+			"image.fastMarchingTimes").input(List.of(new Point(2, 15), new Point(3,
+				15)), speed).outType(TIMES).apply();
 		assertArrayEquals(values(times), values(fromPoints));
 
 		// Determinism.
 		final RandomAccessibleInterval<DoubleType> again = ops.op(
-			"image.fastMarching").input(seeds, speed).outType(TIMES).apply();
+			"image.fastMarchingTimes").input(seeds, speed).outType(TIMES).apply();
 		assertArrayEquals(values(times), values(again));
 	}
 
@@ -237,9 +237,9 @@ public class FastMarchingTest extends AbstractOpTest {
 		speed.forEach(t -> t.set(1));
 		final var seed = List.of(new Point(15, 15));
 		final RandomAccessibleInterval<DoubleType> full = ops.op(
-			"image.fastMarching").input(seed, speed).outType(TIMES).apply();
+			"image.fastMarchingTimes").input(seed, speed).outType(TIMES).apply();
 		final RandomAccessibleInterval<DoubleType> stopped = ops.op(
-			"image.fastMarching").input(seed, speed, null, 6.0).outType(TIMES)
+			"image.fastMarchingTimes").input(seed, speed, null, 6.0).outType(TIMES)
 			.apply();
 		final RandomAccessibleInterval<BitType> mask = ops.op(
 			"segment.fastMarching").input(seed, speed, 6.0).outType(MASK).apply();
@@ -259,11 +259,11 @@ public class FastMarchingTest extends AbstractOpTest {
 		// An offset interval is respected.
 		final var shifted = Views.translate(speed, 100, -50);
 		final RandomAccessibleInterval<DoubleType> st = ops.op(
-			"image.fastMarching").input(List.of(new Point(115, -35)), shifted)
+			"image.fastMarchingTimes").input(List.of(new Point(115, -35)), shifted)
 			.outType(TIMES).apply();
 		assertEquals(100, st.min(0));
 		assertArrayEquals(values(full), values(st));
-		assertThrows(RuntimeException.class, () -> ops.op("image.fastMarching")
-			.input(List.of(new Point(0, 0)), shifted).outType(TIMES).apply());
+		assertThrows(RuntimeException.class, () -> ops.op(
+			"image.fastMarchingTimes").input(List.of(new Point(0, 0)), shifted).outType(TIMES).apply());
 	}
 }

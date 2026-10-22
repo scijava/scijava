@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.transform.piv;
+package org.scijava.ops.image.image.piv;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -199,7 +199,7 @@ public class DefaultPIVTest extends AbstractOpTest {
 		final int[] windowSize, final int[] step, final int[] searchRange,
 		final Boolean subpixel, final Double medianThreshold)
 	{
-		return ops.op("transform.piv").input(frames[0], frames[1], windowSize,
+		return ops.op("image.piv").input(frames[0], frames[1], windowSize,
 			step, searchRange, subpixel, medianThreshold).outType(PIVResult.class)
 			.apply();
 	}

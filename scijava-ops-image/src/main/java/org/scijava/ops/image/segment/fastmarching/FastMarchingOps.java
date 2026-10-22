@@ -104,7 +104,7 @@ public final class FastMarchingOps {
 	 *         unreachable pixels are positive infinity
 	 * @param <B> seed mask type
 	 * @param <T> speed image type
-	 * @implNote op names='image.fastMarching', type=Function
+	 * @implNote op names='image.fastMarchingTimes', type=Function
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>>
 		RandomAccessibleInterval<DoubleType> timesFromMask(
@@ -138,7 +138,7 @@ public final class FastMarchingOps {
 	 * @return the arrival times, with the interval of the speed image;
 	 *         unreachable pixels are positive infinity
 	 * @param <T> speed image type
-	 * @implNote op names='image.fastMarching', type=Function
+	 * @implNote op names='image.fastMarchingTimes', type=Function
 	 */
 	public static <T extends RealType<T>> RandomAccessibleInterval<DoubleType>
 		timesFromPoints(final List<? extends Localizable> seeds,
@@ -153,7 +153,7 @@ public final class FastMarchingOps {
 	/**
 	 * Segments the region reached by a front starting at the pixels of a seed
 	 * mask within a given time: the pixels whose fast marching arrival time
-	 * (see {@code image.fastMarching}) is at most {@code threshold}.
+	 * (see {@code image.fastMarchingTimes}) is at most {@code threshold}.
 	 *
 	 * @param seeds the seed pixels, where the arrival time is 0; must have the
 	 *          dimensions of the speed image
@@ -187,7 +187,7 @@ public final class FastMarchingOps {
 	/**
 	 * Segments the region reached by a front starting at seed points within a
 	 * given time: the pixels whose fast marching arrival time (see
-	 * {@code image.fastMarching}) is at most {@code threshold}.
+	 * {@code image.fastMarchingTimes}) is at most {@code threshold}.
 	 *
 	 * @param seeds the seed points, in the coordinates of the speed image, where
 	 *          the arrival time is 0

@@ -47,7 +47,8 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 
 /**
- * Shared implementation of {@code image.levelSet} and {@code segment.levelSet}.
+ * Shared implementation of {@code image.levelSetFunction} and
+ * {@code segment.levelSet}.
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

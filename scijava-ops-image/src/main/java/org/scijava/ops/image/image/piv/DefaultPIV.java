@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.transform.piv;
+package org.scijava.ops.image.image.piv;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,7 +94,7 @@ import org.scijava.ops.spi.OpDependency;
  * @author Claude Opus 5.5
  * @param <T> type of the first frame
  * @param <U> type of the second frame
- * @implNote op names='transform.piv'
+ * @implNote op names='image.piv'
  */
 public class DefaultPIV<T extends RealType<T>, U extends RealType<U>>
 	implements

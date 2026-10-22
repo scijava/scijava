@@ -181,4 +181,28 @@ public class LimitedMeanThresholdTest extends AbstractOpTest {
 		for (final BitType b : threshold(img, false, true))
 			assertEquals(true, b.get());
 	}
+
+	/**
+	 * NaN pixels are excluded from the histogram and are never foreground,
+	 * with a dark or a bright background: the other pixels are classified as
+	 * in the same image without the NaN rows.
+	 */
+	@Test
+	public void testNaN() {
+		final double[][] cases = { { 10, 100, 200 }, { 245, 155, 55 } };
+		for (final double[] v : cases) {
+			final Img<FloatType> ref = bimodal(ArrayImgs.floats(10, 7), v[0], v[1],
+				v[2]);
+			final Img<FloatType> img = bimodal(ArrayImgs.floats(10, 10), v[0], v[1],
+				v[2]);
+			final Cursor<FloatType> c = img.localizingCursor();
+			while (c.hasNext()) {
+				c.fwd();
+				if (c.getIntPosition(1) >= 7) c.get().set(Float.NaN);
+			}
+			final String expected = bits(threshold(ref, false, false));
+			final String actual = bits(threshold(img, false, false));
+			assertEquals(expected + "000000000000000000000000000000", actual);
+		}
+	}
 }

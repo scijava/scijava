@@ -188,6 +188,50 @@ public class RetinexTest extends AbstractOpTest {
 			assertEquals(t.get(), fa.next().get(), 1e-6);
 	}
 
+	/**
+	 * Checks the MSRCR value analytically. If channel {@code c} is
+	 * {@code k_c f(x, y)} for a spatial pattern {@code f}, the retinex of each
+	 * channel equals the (single-channel) retinex {@code R_f} of {@code f}, as
+	 * the constant factor cancels in {@code log I - log(G * I)}, and the colour
+	 * restoration factor {@code β (log(α I_c) - log Σ_j I_j)} reduces to the
+	 * constant {@code β log(α k_c / Σ_j k_j)}. With {@code dynamic = 0}, the
+	 * output is therefore {@code R_f β log(α k_c / Σ_j k_j)}, with
+	 * {@code α = 125} and {@code β = 46}.
+	 */
+	@Test
+	public void testColorRestorationValue() {
+		final long w = 14, h = 11;
+		final double[] k = { 1, 2, 5 };
+		final var rnd = new Random(5);
+		final var pattern = ArrayImgs.doubles(w, h);
+		for (final var t : pattern)
+			t.set(10 + 90 * rnd.nextDouble());
+		final var color = ArrayImgs.doubles(w, h, 3);
+		final var pa = pattern.randomAccess();
+		final var ca = color.randomAccess();
+		for (var y = 0; y < h; y++)
+			for (var x = 0; x < w; x++)
+				for (var c = 0; c < 3; c++)
+					ca.setPositionAndGet(x, y, c).set(k[c] * pa.setPositionAndGet(x, y)
+						.get());
+
+		final var sigmas = new double[] { 2, 5 };
+		final var rf = retinex(pattern, sigmas, 0.0).randomAccess();
+		final RandomAccessibleInterval<FloatType> out = ops.op("filter.retinex")
+			.input(color, 2, sigmas, 0.0).outType(OUT).apply();
+		final var oa = out.randomAccess();
+		for (var c = 0; c < 3; c++) {
+			final var restoration = 46 * Math.log(125 * k[c] / 8);
+			for (var y = 0; y < h; y++) {
+				for (var x = 0; x < w; x++) {
+					final var expected = rf.setPositionAndGet(x, y).get() * restoration;
+					assertEquals(expected, oa.setPositionAndGet(x, y, c).get(), 1e-4 *
+						(1 + Math.abs(expected)));
+				}
+			}
+		}
+	}
+
 	private static double mean(
 		final RandomAccessibleInterval<? extends net.imglib2.type.numeric.RealType<?>> img)
 	{

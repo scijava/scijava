@@ -89,7 +89,8 @@ public class ExtendedMinimaWatershed<T extends RealType<T>, B extends BooleanTyp
 	/**
 	 * Computes the extended-minima watershed of an image.
 	 *
-	 * @param input the relief to segment, typically a gradient image
+	 * @param input the relief to segment, typically a gradient image, without
+	 *          NaN
 	 * @param dynamic the (non-negative) minimal dynamic of the minima seeding a
 	 *          region: the depth of a basin below the lowest saddle leading to a
 	 *          deeper basin, in intensity units

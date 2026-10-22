@@ -68,6 +68,11 @@ import org.scijava.ops.spi.OpDependency;
  * original algorithm, so that the result is a complete partition.
  * </p>
  * <p>
+ * Images containing NaN are rejected with an
+ * {@link IllegalArgumentException}, since NaN has no order, and so are seeds
+ * with several labels at one pixel.
+ * </p>
+ * <p>
  * Implemented from the papers.
  * </p>
  *
@@ -93,10 +98,10 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 	/**
 	 * Grows the seed regions.
 	 *
-	 * @param input the intensity image
+	 * @param input the intensity image, without NaN
 	 * @param seeds the seed labeling, with the same dimensions as the image;
-	 *          unlabeled pixels are to be assigned, and a pixel with several
-	 *          labels seeds the first of them
+	 *          unlabeled pixels are to be assigned, and no pixel may have
+	 *          several labels
 	 * @param connectivity the pixel adjacency, FOUR_CONNECTED (the default) or
 	 *          EIGHT_CONNECTED, i.e. sharing a face or touching in any way
 	 * @return the grown labeling
@@ -122,8 +127,13 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 
 		final var values = new double[count];
 		var i = 0;
-		for (final var t : Views.flatIterable(input))
-			values[i++] = t.getRealDouble();
+		for (final var t : Views.flatIterable(input)) {
+			final var v = t.getRealDouble();
+			if (Double.isNaN(v)) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
+			values[i++] = v;
+		}
 
 		// Map seed labels to region indices.
 		final var region = new int[count];
@@ -132,6 +142,10 @@ public class SeededRegionGrowing<T extends RealType<T>, L> implements
 		i = 0;
 		for (final var set : Views.flatIterable(seeds)) {
 			if (set.isEmpty()) region[i] = -1;
+			else if (set.size() > 1) {
+				throw new IllegalArgumentException(
+					"Seeds must have at most one label per pixel");
+			}
 			else {
 				final var label = set.iterator().next();
 				region[i] = indices.computeIfAbsent(label, l -> {

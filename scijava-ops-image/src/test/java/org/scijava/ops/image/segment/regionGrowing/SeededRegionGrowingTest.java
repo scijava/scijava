@@ -30,6 +30,7 @@
 package org.scijava.ops.image.segment.regionGrowing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -155,5 +156,27 @@ public class SeededRegionGrowingTest extends AbstractOpTest {
 			assertTrue(!set.isEmpty());
 			assertEquals(oc.getLongPosition(0) < 7 ? 1 : 2, set.iterator().next());
 		}
+	}
+
+	/**
+	 * Images containing NaN (which has no order) and seeds with several labels
+	 * at one pixel (whose "first" label is not well-defined) are rejected.
+	 */
+	@Test
+	public void testInvalidInputs() {
+		final var in = ArrayImgs.doubles(5, 1);
+		final var seeds = new ImgLabeling<Integer, IntType>(ArrayImgs.ints(5, 1));
+		final var ra = seeds.randomAccess();
+		ra.setPositionAndGet(0, 0).add(1);
+		ra.setPositionAndGet(4, 0).add(2);
+		in.firstElement().set(Double.NaN);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.seededRegionGrowing").input(in, seeds).outType(LABELS)
+			.apply());
+		in.firstElement().set(0);
+		ra.setPositionAndGet(4, 0).add(3);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.seededRegionGrowing").input(in, seeds).outType(LABELS)
+			.apply());
 	}
 }

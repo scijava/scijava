@@ -82,7 +82,7 @@ public class CompactWatershed<T extends RealType<T>, B extends BooleanType<B>>
 	/**
 	 * Computes the compact watershed of an image.
 	 *
-	 * @param input the relief to flood, typically a gradient image
+	 * @param input the relief to flood, typically a gradient image, without NaN
 	 * @param markers the markers, of the same dimensions as {@code input}, with
 	 *          at most one label per pixel; each label defines one region
 	 * @param compactness the (non-negative) weight of the distance to the marker

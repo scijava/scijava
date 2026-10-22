@@ -119,7 +119,8 @@ public class HWatershed<T extends RealType<T>> implements
 	/**
 	 * Computes the H-watershed segmentation of an image.
 	 *
-	 * @param input the grayscale image to segment; bright peaks become segments.
+	 * @param input the grayscale image to segment, without NaN; bright peaks
+	 *          become segments.
 	 * @param hMin the minimal dynamics (peak height above its saddle) for a peak
 	 *          to seed its own segment. Defaults to 5% of the image intensity
 	 *          range.

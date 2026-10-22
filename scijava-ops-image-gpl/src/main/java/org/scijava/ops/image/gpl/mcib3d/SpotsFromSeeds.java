@@ -112,6 +112,11 @@ import org.scijava.ops.spi.OpDependency;
  * next spot (a quirk of the original); and the computed thresholds are not
  * truncated for non-integer images.
  * </p>
+ * <p>
+ * NaN pixels are outside the domain: they never join a spot, they are left
+ * out of the {@code "mean"} and {@code "gaussian"} thresholds, and a seed on a
+ * NaN pixel produces no spot.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -328,7 +333,7 @@ public class SpotsFromSeeds<T extends RealType<T>, P extends Localizable>
 					}
 					index += p[d] * strides[d];
 				}
-				if (label[index] != 0) continue;
+				if (label[index] != 0 || Double.isNaN(v[index])) continue;
 				final double t = localThreshold(p, index);
 				if (Double.isNaN(t)) continue;
 				threshold = t;
@@ -390,15 +395,17 @@ public class SpotsFromSeeds<T extends RealType<T>, P extends Localizable>
 				profile[maxR - r] = m;
 				profile[maxR + r] = m;
 			}
-			int cm = 0;
-			while (Double.isNaN(profile[cm]))
-				cm++;
-			final int len = profile.length - 2 * cm;
+			// Note: Shells without pixels (outside the image, or all NaN) are
+			// left out of the fit.
+			int len = 0;
+			for (final double m : profile)
+				if (!Double.isNaN(m)) len++;
 			final double[] x = new double[len];
 			final double[] y = new double[len];
-			for (int i = 0; i < len; i++) {
-				x[i] = i - (maxR - cm);
-				y[i] = profile[cm + i];
+			for (int i = 0, j = 0; i < profile.length; i++) {
+				if (Double.isNaN(profile[i])) continue;
+				x[j] = i - maxR;
+				y[j++] = profile[i];
 			}
 			final double[] g = ProfileGaussianFit.fit(x, y, 0, 3);
 			if (g == null) return Double.NaN;
@@ -434,7 +441,9 @@ public class SpotsFromSeeds<T extends RealType<T>, P extends Localizable>
 					d2 += dd * dd;
 					index += q[d] * strides[d];
 				}
-				if (d2 >= min && (inclusive ? d2 <= max : d2 < max)) {
+				if (d2 >= min && (inclusive ? d2 <= max : d2 < max) && !Double
+					.isNaN(v[index]))
+				{
 					sum += v[index];
 					count++;
 				}
@@ -502,8 +511,9 @@ public class SpotsFromSeeds<T extends RealType<T>, P extends Localizable>
 			for (int k = 0; k < offsets.length; k++) {
 				if (!inside(deltas[k])) continue;
 				final int q = index + offsets[k];
-				if (label[q] != 0 || v[q] < threshold) continue;
-				if (growth == MAXIMUM && v[q] > center) continue;
+				// Note: The negated comparisons keep NaN pixels out of the spot.
+				if (label[q] != 0 || !(v[q] >= threshold)) continue;
+				if (growth == MAXIMUM && !(v[q] <= center)) continue;
 				label[q] = val;
 				add(q);
 				if (growth == CLASSICAL && volume > maxVolume) return false;
@@ -520,9 +530,9 @@ public class SpotsFromSeeds<T extends RealType<T>, P extends Localizable>
 			for (int k = 0; k < offsets.length; k++) {
 				if (!inside(deltas[k])) continue;
 				final int q = index + offsets[k];
-				if (label[q] != 0 || v[q] < threshold) continue;
+				if (label[q] != 0 || !(v[q] >= threshold)) continue;
 				neigh[count++] = k;
-				if (v[q] > center) ok = false;
+				if (!(v[q] <= center)) ok = false;
 			}
 			if (count < 2 || !ok) return true;
 			change = true;

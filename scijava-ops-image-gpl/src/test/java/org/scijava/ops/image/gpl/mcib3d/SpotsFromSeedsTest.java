@@ -282,6 +282,33 @@ public class SpotsFromSeedsTest extends AbstractOpTest {
 		assertEquals(Map.of(1, 4), sizes(result));
 	}
 
+	/**
+	 * NaN pixels never join a spot, are ignored by the local thresholds, and a
+	 * seed on a NaN pixel produces no spot.
+	 */
+	@Test
+	public void testNaN() {
+		final Img<FloatType> img = ArrayImgs.floats(20, 12);
+		fill(img, 2, 2, 5, 5, 100);
+		fill(img, 7, 2, 2, 5, Float.NaN);
+		final List<Point> seed = points(new int[] { 4, 4 });
+		for (final String growth : Arrays.asList("classical", "maximum",
+			"block"))
+		{
+			assertEquals(Map.of(1, 25), sizes(spots(img, seed, "constant", 50.0,
+				null, growth, null, null)), growth);
+		}
+		// A NaN pixel inside the square is left out of the spot and of the
+		// local mean.
+		img.getAt(3, 3).set(Float.NaN);
+		assertEquals(Map.of(1, 24), sizes(spots(img, seed, "mean", null, null,
+			null, null, null)));
+		assertEquals(Map.of(1, 24), sizes(spots(img, seed, "constant", 50.0, null,
+			"maximum", null, null)));
+		assertEquals(Map.of(), sizes(spots(img, points(new int[] { 3, 3 }),
+			"constant", 50.0, null, null, 1, null)));
+	}
+
 	@Test
 	public void testInvalidArguments() {
 		final Img<FloatType> img = ArrayImgs.floats(5, 5);

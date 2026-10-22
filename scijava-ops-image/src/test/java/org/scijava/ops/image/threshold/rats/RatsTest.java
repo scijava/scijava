@@ -40,6 +40,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
@@ -148,6 +149,82 @@ public class RatsTest extends AbstractOpTest {
 				if (b.get() != truth[i++]) errors++;
 			assertTrue(errors < 0.02 * w * h, "sigma=" + sigma + ": " + errors +
 				" errors");
+		}
+	}
+
+	/**
+	 * A quantized, low-noise 8-bit image: a background of 10 with about 10% of
+	 * the pixels at 11, and a bright disk. More than half of the horizontal
+	 * differences are 0, so the median absolute deviation of the differences is
+	 * 0. Before the noise estimate was floored at the quantization noise, sigma
+	 * was 0 and every isolated 11 became foreground speckle.
+	 */
+	@Test
+	public void testQuantizedLowNoise() {
+		final int w = 64, h = 64;
+		final var rnd = new Random(5);
+		final var in = ArrayImgs.unsignedBytes(w, h);
+		final var truth = new boolean[w * h];
+		final var c = in.localizingCursor();
+		var i = 0;
+		while (c.hasNext()) {
+			c.fwd();
+			final int x = c.getIntPosition(0) - 32, y = c.getIntPosition(1) - 32;
+			final var inside = x * x + y * y <= 100;
+			truth[i++] = inside;
+			c.get().set(inside ? 100 : rnd.nextDouble() < 0.1 ? 11 : 10);
+		}
+		final var out = ops.op("threshold.rats").input(in, null, 3.0, 16)
+			.outType(BITS).apply();
+		var errors = 0;
+		i = 0;
+		for (final var b : out)
+			if (b.get() != truth[i++]) errors++;
+		assertEquals(0, errors);
+	}
+
+	/** Inputs with a non-zero min give results at the same coordinates. */
+	@Test
+	public void testTranslatedInput() {
+		final var in = ArrayImgs.unsignedBytes(64, 40);
+		final var c = in.localizingCursor();
+		while (c.hasNext())
+			c.next().set(c.getIntPosition(0) < 20 ? 10 : 90);
+		final var translated = Views.translate(in, 7, -3);
+		final var surface = ops.op("threshold.ratsSurface").input(translated, 1.0,
+			3.0, 16).outType(FLOATS).apply();
+		assertArrayEquals(new long[] { 7, -3 }, surface.minAsLongArray());
+		assertArrayEquals(new long[] { 70, 36 }, surface.maxAsLongArray());
+		final var out = ops.op("threshold.rats").input(translated, 1.0, 3.0, 16)
+			.outType(BITS).apply();
+		assertArrayEquals(new long[] { 7, -3 }, out.minAsLongArray());
+		final var oc = out.localizingCursor();
+		final var ra = translated.randomAccess();
+		while (oc.hasNext()) {
+			final var b = oc.next().get();
+			assertEquals(ra.setPositionAndGet(oc).get() == 90, b);
+		}
+	}
+
+	/** NaN pixels are ignored and do not spoil the other pixels. */
+	@Test
+	public void testNaN() {
+		final var rnd = new Random(9);
+		final var in = ArrayImgs.floats(64, 40);
+		final var c = in.localizingCursor();
+		while (c.hasNext()) {
+			c.fwd();
+			c.get().set(rnd.nextDouble() < 0.02 ? Float.NaN : c.getIntPosition(
+				0) < 32 ? 10 : 90);
+		}
+		final var out = ops.op("threshold.rats").input(in).outType(BITS)
+			.apply();
+		final var oc = out.localizingCursor();
+		final var ic = in.cursor();
+		while (oc.hasNext()) {
+			final var b = oc.next().get();
+			final var v = ic.next().get();
+			assertEquals(!Float.isNaN(v) && oc.getIntPosition(0) >= 32, b);
 		}
 	}
 }

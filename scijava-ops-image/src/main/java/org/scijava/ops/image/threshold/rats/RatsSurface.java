@@ -75,9 +75,11 @@ import org.scijava.ops.spi.OpDependency;
  * single root region covers the image. Each region accumulates
  * {@code sum(e)} and {@code sum(e m)}.</li>
  * <li>Minimum edge strength: a region is reliable if
- * {@code sum(e) > lambda * sigma * minLeafSize}, which is roughly the edge
- * strength of a single boundary just above the noise gate crossing a leaf
- * region. A reliable region gets the threshold {@code sum(e m) / sum(e)}; an
+ * {@code sum(e) > lambda * sigma * minLeafSize^(n - 1)} in n dimensions, which
+ * is roughly the edge strength of a single boundary, with a step just above
+ * the noise gate, crossing a leaf region (a boundary of length
+ * {@code minLeafSize} in 2D, of area {@code minLeafSize^2} in 3D). A reliable
+ * region gets the threshold {@code sum(e m) / sum(e)}; an
  * unreliable region inherits the threshold of its parent. If the root is not
  * reliable either (which means that the image has no edges at all), it gets
  * the maximum intensity of the image, so that no pixel is foreground.</li>
@@ -89,7 +91,19 @@ import org.scijava.ops.spi.OpDependency;
  * If {@code sigma} is not given, it is estimated robustly from the
  * differences {@code d} of horizontally neighboring pixels (along dimension
  * 0) as {@code 1.4826 * MAD(d) / sqrt(2)}, which is insensitive to edges
- * and to smooth illumination gradients.
+ * and to smooth illumination gradients. On quantized images with little
+ * noise (such as an 8-bit background where most neighbors are equal), more
+ * than half of the differences are 0, so this estimate is 0, and any
+ * fluctuation by a single grey level would count as an edge. Therefore, if
+ * all (non-NaN) pixel values are integers, the estimate is never less than
+ * {@code 1 / sqrt(12)}, the standard deviation of the noise caused by
+ * rounding to integers, so that by default (lambda = 3) a fluctuation by one
+ * grey level is below the noise gate. Images with non-integer values get no
+ * such floor.
+ * </p>
+ * <p>
+ * NaN pixels are ignored: they contribute no edges and no noise samples, and
+ * are never foreground.
  * </p>
  * <p>
  * This implementation was written from the general description of the
@@ -217,7 +231,7 @@ public class RatsSurface<T extends RealType<T>> implements
 				sumE[0][cell] += e;
 				sumEI[0][cell] += e * gm / g2;
 			}
-			max = Math.max(max, img[i]);
+			if (img[i] > max) max = img[i];
 			increment(pos, dims);
 		}
 
@@ -240,7 +254,7 @@ public class RatsSurface<T extends RealType<T>> implements
 		}
 
 		// Thresholds, from the root down to the leaves.
-		final var minEdge = gate * leaf;
+		final var minEdge = gate * Math.pow(leaf, n - 1);
 		var thresholds = new double[] { sumE[nLevels - 1][0] > minEdge
 			? sumEI[nLevels - 1][0] / sumE[nLevels - 1][0] : max };
 		for (var l = nLevels - 2; l >= 0; l--) {
@@ -326,18 +340,28 @@ public class RatsSurface<T extends RealType<T>> implements
 
 	/**
 	 * Estimates the noise standard deviation from the differences of
-	 * neighbors along dimension 0.
+	 * neighbors along dimension 0, floored at the rounding noise of integers.
 	 */
-	private static double estimateNoise(final double[] img, final int[] dims) {
+	static double estimateNoise(final double[] img, final int[] dims) {
 		if (dims[0] < 2) return 0;
 		final var diffs = new double[img.length / dims[0] * (dims[0] - 1)];
 		var k = 0;
-		for (var i = 0; i < img.length; i++)
-			if (i % dims[0] < dims[0] - 1) diffs[k++] = img[i + 1] - img[i];
-		final var median = median(diffs);
-		for (var j = 0; j < diffs.length; j++)
-			diffs[j] = Math.abs(diffs[j] - median);
-		return 1.4826 * median(diffs) / Math.sqrt(2);
+		var integers = true;
+		for (final var v : img)
+			if (!Double.isNaN(v) && v != Math.rint(v)) integers = false;
+		for (var i = 0; i < img.length; i++) {
+			if (i % dims[0] < dims[0] - 1) {
+				final var d = img[i + 1] - img[i];
+				if (!Double.isNaN(d)) diffs[k++] = d;
+			}
+		}
+		if (k == 0) return 0;
+		final var valid = Arrays.copyOf(diffs, k);
+		final var median = median(valid);
+		for (var j = 0; j < valid.length; j++)
+			valid[j] = Math.abs(valid[j] - median);
+		final var mad = 1.4826 * median(valid) / Math.sqrt(2);
+		return integers ? Math.max(mad, 1 / Math.sqrt(12)) : mad;
 	}
 
 	private static double median(final double[] values) {

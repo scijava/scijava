@@ -43,7 +43,10 @@ import org.scijava.ops.spi.Nullable;
  * The result is the reconstruction by erosion, over the input, of a marker
  * equal to the input on the border and to the input maximum elsewhere. On a
  * binary image this is equivalent to the {@code BooleanType} variant of
- * {@code morphology.fillHoles}, which takes precedence for such images.
+ * {@code morphology.fillHoles}, which takes precedence for such images when
+ * a connectivity is given; since that variant requires one, a binary image
+ * passed without a connectivity takes this grayscale path, with the same
+ * result.
  * </p>
  * <p>
  * See P. Soille, <em>Morphological Image Analysis</em>, 2nd ed., Springer,
@@ -51,7 +54,8 @@ import org.scijava.ops.spi.Nullable;
  * </p>
  * <p>
  * NaN input values are not supported and cause an
- * {@link IllegalArgumentException}.
+ * {@link IllegalArgumentException}. Images are limited to 2<sup>31</sup>
+ * pixels.
  * </p>
  *
  * @author Curtis Rueden

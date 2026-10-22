@@ -69,7 +69,10 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  * <p>
  * Implemented from the paper. For matching a single image to a reference
- * distribution, see {@code image.histogramMatch}.
+ * distribution, see {@code image.histogramMatch}. Each image is sorted as a
+ * list of boxed pixel indices, which needs about 20 bytes of memory per
+ * pixel, so the op suits typical microscopy images rather than very large
+ * volumes.
  * </p>
  *
  * @author Curtis Rueden

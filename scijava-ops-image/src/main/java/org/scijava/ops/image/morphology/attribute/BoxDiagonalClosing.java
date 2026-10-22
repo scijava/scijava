@@ -48,7 +48,9 @@ import org.scijava.ops.spi.Nullable;
  * centers of two opposite corner pixels of the box: a single pixel has a
  * diagonal of 0, two adjacent pixels a diagonal of 1, and a square of 2x2
  * pixels a diagonal of the square root of 2. Unlike the area, this attribute
- * preserves thin elongated structures such as lines and fibres.
+ * preserves thin elongated structures such as lines and fibres. Computing
+ * the boxes takes two integers per pixel and dimension on top of the
+ * component tree, e.g. about 3 GB for a 512<sup>3</sup> volume.
  * </p>
  * <p>
  * Implemented by pruning the min-tree of the image (Salembier, Oliveras and
@@ -63,7 +65,8 @@ import org.scijava.ops.spi.Nullable;
  * </p>
  * <p>
  * NaN input values are not supported and cause an
- * {@link IllegalArgumentException}.
+ * {@link IllegalArgumentException}. Images are limited to 2<sup>31</sup>
+ * pixels.
  * </p>
  *
  * @author Curtis Rueden

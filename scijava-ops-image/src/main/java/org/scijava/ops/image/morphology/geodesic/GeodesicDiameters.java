@@ -82,7 +82,9 @@ public final class GeodesicDiameters {
 	 * Computes the geodesic diameter of each label. The diameter is the
 	 * geodesic distance between the centers of the two extremity pixels plus
 	 * the length of the diagonal of one pixel, which accounts for the extent
-	 * of the extremity pixels themselves: a single pixel has diameter
+	 * of the extremity pixels themselves (as in MorphoLibJ, whose chamfer
+	 * distances otherwise differ slightly from these exact step lengths): a
+	 * single pixel has diameter
 	 * &radic;2 in 2D, and a straight bar of {@code N} pixels has diameter
 	 * {@code N - 1 + √2}. A label whose region is not connected (with respect
 	 * to the steps of the neighborhood) has an infinite diameter.

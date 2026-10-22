@@ -60,7 +60,13 @@ import org.scijava.ops.spi.Nullable;
  * Andrey, "MorphoLibJ: integrated library and plugins for mathematical
  * morphology with ImageJ", <i>Bioinformatics</i> 32(22): 3532&ndash;3534,
  * 2016), generalized to n-dimensional labelings with arbitrary, possibly
- * overlapping labels.
+ * overlapping labels. Results differ from MorphoLibJ: its label boundaries
+ * mark only the pixel before each change along each axis (which may be a
+ * background pixel), whereas {@code labeling.boundaries} marks the labeled
+ * pixels on both sides; and its region adjacency graph pairs labels two
+ * pixels apart along an axis (i.e. separated by a one-pixel watershed line),
+ * whereas {@code labeling.adjacency} pairs labels that touch, so dilate a
+ * labeling with watershed lines first (e.g. with {@code labeling.dilate}).
  * </p>
  *
  * @author Curtis Rueden

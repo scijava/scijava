@@ -77,7 +77,9 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  * <p>
  * Implemented from the papers. This is the method of the "Directional
- * Filtering" plugin of MorphoLibJ.
+ * Filtering" plugin of MorphoLibJ, but the line segments are discretized
+ * differently (see {@link OrientedLineShape}), so results are not identical
+ * to those of the plugin.
  * </p>
  *
  * @author Curtis Rueden

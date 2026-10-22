@@ -29,6 +29,7 @@
 
 package org.scijava.ops.image.threshold.hysteresis;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,6 +44,7 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
@@ -174,6 +176,20 @@ public class DefaultHysteresisThresholdTest extends AbstractOpTest {
 					}
 		}
 		return on;
+	}
+
+	/** A translated input gives the same mask, at the translated coordinates. */
+	@Test
+	public void testTranslatedInput() {
+		final var in = randomImage(new Random(8), 9, 7, 5);
+		final var expected = ops.op("threshold.hysteresis").input(in, 80.0, 160.0)
+			.outType(BITS).apply();
+		final var out = ops.op("threshold.hysteresis").input(Views.translate(in, 4,
+			-2, 6), 80.0, 160.0).outType(BITS).apply();
+		assertArrayEquals(new long[] { 4, -2, 6 }, out.minAsLongArray());
+		final var ec = Views.flatIterable(expected).cursor();
+		for (final var b : Views.flatIterable(out))
+			assertEquals(ec.next().get(), b.get());
 	}
 
 	private static void assertBits(final RandomAccessibleInterval<BitType> out,

@@ -147,4 +147,42 @@ public class FocusStackTest extends AbstractOpTest {
 				assertEquals(77, t.get(), 1e-6);
 		}
 	}
+
+	/**
+	 * A translated stack gives the results of the original stack, at the
+	 * translated coordinates (without the focus dimension).
+	 */
+	@Test
+	public void testTranslatedInput() {
+		final var translated = Views.translate(stack(), 3, -5, 7);
+		for (final var method : new String[] { "max", "weighted" }) {
+			final var expected = ops.op("transform.focusStack").input(stack(), 0,
+				1.0, method).outType(FLOATS).apply();
+			final var out = ops.op("transform.focusStack").input(translated, 0, 1.0,
+				method).outType(FLOATS).apply();
+			assertArrayEquals(new long[] { -5, 7 }, out.minAsLongArray());
+			assertArrayEquals(new long[] { W - 6, H + 6 }, out.maxAsLongArray());
+			final var er = expected.randomAccess();
+			final var oc = out.localizingCursor();
+			while (oc.hasNext()) {
+				final var v = oc.next().get();
+				er.setPosition(new long[] { oc.getLongPosition(0) + 5, oc
+					.getLongPosition(1) - 7 });
+				assertEquals(er.get().get(), v, 1e-5, method);
+			}
+		}
+		final var expectedIndex = ops.op("transform.focusStackIndex").input(
+			stack(), 0).outType(INTS).apply();
+		final var index = ops.op("transform.focusStackIndex").input(translated, 0)
+			.outType(INTS).apply();
+		assertArrayEquals(new long[] { -5, 7 }, index.minAsLongArray());
+		final var er = expectedIndex.randomAccess();
+		final var ic = index.localizingCursor();
+		while (ic.hasNext()) {
+			final var v = ic.next().get();
+			er.setPosition(new long[] { ic.getLongPosition(0) + 5, ic
+				.getLongPosition(1) - 7 });
+			assertEquals(er.get().get(), v);
+		}
+	}
 }

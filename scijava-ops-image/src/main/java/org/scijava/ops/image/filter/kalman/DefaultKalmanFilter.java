@@ -47,10 +47,10 @@ import org.scijava.ops.spi.Nullable;
  * ImageJ by C. P. Mauer (<a href=
  * "https://imagej.net/ij/plugins/kalman.html">imagej.net/ij/plugins/kalman</a>).
  * Each pixel is modelled as a constant state observed through noisy
- * measurements {@code z_t} (the successive frames). The estimate is seeded
- * with the first frame, {@code x_0 = z_0}, and the error variance with the
- * noise variance, {@code P_0 = R}. For each later frame, the previous estimate
- * {@code x_(t-1)} is the prediction, and
+ * measurements {@code z_t} (the successive frames) with noise variance
+ * {@code R}. The estimate is seeded with the first frame, {@code x_0 = z_0},
+ * and the error variance with the noise variance, {@code P_0 = R}. For each
+ * later frame, the previous estimate {@code x_(t-1)} is the prediction, and
  * </p>
  * <pre>
  * K_t = P_(t-1) / (P_(t-1) + R)
@@ -60,9 +60,9 @@ import org.scijava.ops.spi.Nullable;
  * <p>
  * where {@code g} is the filter gain. The output frame {@code t} is the
  * estimate {@code x_t}. Since {@code P_0 = R}, the Kalman gain is
- * {@code K_t = 1 / (t + 1)} whatever the value of {@code R} (with
- * {@code R = 0} taken as the limit), so the noise variance does not affect
- * the result. With {@code g = 1}, the estimate is the running mean of all
+ * {@code K_t = 1 / (t + 1)} whatever the value of {@code R}, so the noise
+ * variance does not affect the result and is not a parameter of this op.
+ * With {@code g = 1}, the estimate is the running mean of all
  * frames so far. For smaller {@code g}, the Kalman term vanishes over time and
  * the estimate converges to an exponential moving average with weight
  * {@code 1 - g} on the newest frame. Each update moves the estimate by the
@@ -85,7 +85,7 @@ import org.scijava.ops.spi.Nullable;
  */
 public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 	implements
-	Computers.Arity4<RandomAccessibleInterval<T>, Integer, Double, Double, RandomAccessibleInterval<V>>
+	Computers.Arity3<RandomAccessibleInterval<T>, Integer, Double, RandomAccessibleInterval<V>>
 {
 
 	/**
@@ -96,29 +96,20 @@ public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 	 *          the last dimension)
 	 * @param gain the filter gain g within [0, 1]: the weight of the prediction
 	 *          against the newest frame (default: 0.8)
-	 * @param noiseVariance the estimate of the noise variance R, which also
-	 *          seeds the error variance; it cancels out of the Kalman gain
-	 *          (default: 0.05)
 	 * @param output the filtered series, with the same dimensions as the input
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		@Nullable final Integer dim, @Nullable final Double gain,
-		@Nullable final Double noiseVariance,
 		final RandomAccessibleInterval<V> output)
 	{
 		final int d = dim == null ? input.numDimensions() - 1 : dim;
 		final double g = gain == null ? 0.8 : gain;
-		final double r = noiseVariance == null ? 0.05 : noiseVariance;
 		if (d < 0 || d >= input.numDimensions()) {
 			throw new IllegalArgumentException("No such dimension: " + d);
 		}
 		if (!(g >= 0 && g <= 1)) {
 			throw new IllegalArgumentException("Gain must be within [0, 1]: " + g);
-		}
-		if (!(r >= 0)) {
-			throw new IllegalArgumentException(
-				"Noise variance must be non-negative: " + r);
 		}
 		if (!Intervals.equalDimensions(input, output)) {
 			throw new IllegalArgumentException(
@@ -127,7 +118,6 @@ public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 
 		final var first = Views.hyperSlice(input, d, input.min(d));
 		final var estimate = ArrayImgs.doubles(first.dimensionsAsLongArray());
-		var p = r;
 		final var frames = input.dimension(d);
 		for (long t = 0; t < frames; t++) {
 			final var z = Views.hyperSlice(input, d, input.min(d) + t);
@@ -137,10 +127,8 @@ public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 				a = 1;
 			}
 			else {
-				final var k = p + r == 0 ? 1.0 / (t + 1) : p / (p + r);
-				p = (1 - k) * p;
 				// x_t = g x + (1 - g) z + K (z - x) = x + (1 - g + K) (z - x)
-				a = 1 - g + k;
+				a = 1 - g + 1.0 / (t + 1);
 			}
 			LoopBuilder.setImages(z, estimate, out).multiThreaded().forEachPixel((
 				zi, x, o) -> {

@@ -69,24 +69,22 @@ public class KalmanFilterTest extends AbstractOpTest {
 	@Test
 	public void testRunningMean() {
 		// With g = 1, the update is x += K (z - x) with K_t = 1 / (t + 1), so the
-		// estimate is the mean of all frames so far, whatever the variance.
+		// estimate is the mean of all frames so far.
 		final var rnd = new Random(8);
 		final var img = ArrayImgs.unsignedShorts(3, 2, 20);
 		for (final var t : img)
 			t.set(rnd.nextInt(1000));
-		for (final double r : new double[] { 0.05, 1, 30 }) {
-			final var out = ArrayImgs.doubles(3, 2, 20);
-			ops.op("filter.kalman").input(img, 2, 1.0, r).output(out).compute();
-			final var ia = img.randomAccess();
-			final var oa = out.randomAccess();
-			for (var x = 0; x < 3; x++) {
-				for (var y = 0; y < 2; y++) {
-					var sum = 0.0;
-					for (var t = 0; t < 20; t++) {
-						sum += ia.setPositionAndGet(x, y, t).get();
-						assertEquals(sum / (t + 1), oa.setPositionAndGet(x, y, t).get(),
-							1e-9);
-					}
+		final var out = ArrayImgs.doubles(3, 2, 20);
+		ops.op("filter.kalman").input(img, 2, 1.0).output(out).compute();
+		final var ia = img.randomAccess();
+		final var oa = out.randomAccess();
+		for (var x = 0; x < 3; x++) {
+			for (var y = 0; y < 2; y++) {
+				var sum = 0.0;
+				for (var t = 0; t < 20; t++) {
+					sum += ia.setPositionAndGet(x, y, t).get();
+					assertEquals(sum / (t + 1), oa.setPositionAndGet(x, y, t).get(),
+						1e-9);
 				}
 			}
 		}
@@ -94,8 +92,9 @@ public class KalmanFilterTest extends AbstractOpTest {
 
 	/**
 	 * A step from 0 to 100 at frame 1, filtered along dimension 0 with the
-	 * default parameters (g = 0.8, R = 0.05). By the documented update of the
-	 * Kalman stack filter, seeded with {@code x_0 = z_0} and {@code P_0 = R}:
+	 * default gain g = 0.8. By the documented update of the Kalman stack
+	 * filter, seeded with {@code x_0 = z_0} and {@code P_0 = R}, the Kalman gain
+	 * is {@code K_t = 1 / (t + 1)}:
 	 * <ul>
 	 * <li>t = 1: K = 1/2, x = 0.8·0 + 0.2·100 + 0.5·(100 - 0) = 70;</li>
 	 * <li>t = 2: K = 1/3, x = 0.8·70 + 0.2·100 + (100 - 70)/3 = 86;</li>

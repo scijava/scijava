@@ -112,6 +112,24 @@ public class HelmholtzAnalysisTest extends AbstractOpTest {
 		}
 	}
 
+	/**
+	 * Exactly horizontal fringes, whose gradient has no x component, must have
+	 * orientation 0 everywhere, never 180, which is outside {@code [0, 180)}.
+	 */
+	@Test
+	public void testHorizontalFringes() {
+		final var p = new float[W * H];
+		for (var y = 0; y < H; y++)
+			for (var x = 0; x < W; x++)
+				p[x + W * y] = (float) (100 + 50 * Math.cos(2 * Math.PI * y / 8));
+		final var in = ArrayImgs.floats(p, W, H);
+		final var phi = ops.op("filter.helmholtzOrientation").input(in, 4.0, 16.0)
+			.outType(FLOATS).apply();
+		assertTrue(validFraction(phi) > 0.5);
+		for (final var v : valid(phi))
+			assertEquals(0, v, 1e-3);
+	}
+
 	@Test
 	public void testOutOfRange() {
 		final var in = grating(6, 45);

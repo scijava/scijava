@@ -58,7 +58,10 @@ import org.scijava.ops.spi.OpDependency;
  * out = in &times; mean(G) / G
  * </pre>
  * <p>
- * Pixels where {@code G == 0} are copied unchanged. The sigma should be
+ * Pixels where {@code G == 0} are copied unchanged. Results are clamped to
+ * the range of the output type, so an integer output saturates rather than
+ * wrapping around; use a floating-point output to keep the full range. The
+ * sigma should be
  * considerably larger than the largest foreground object, so that the blurred
  * image contains only the illumination profile.
  * </p>
@@ -123,8 +126,9 @@ public class PseudoFlatField<T extends RealType<T>, V extends RealType<V>>
 		LoopBuilder.setImages(input, background, output).forEachPixel((i, g,
 			o) -> {
 			final var gv = g.getRealDouble();
-			o.setReal(gv == 0 ? i.getRealDouble() : i.getRealDouble() *
-				meanBackground / gv);
+			final var v = gv == 0 ? i.getRealDouble() : i.getRealDouble() *
+				meanBackground / gv;
+			o.setReal(Math.max(o.getMinValue(), Math.min(o.getMaxValue(), v)));
 		});
 	}
 }

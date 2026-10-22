@@ -37,6 +37,7 @@ import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.basictypeaccess.array.DoubleArray;
 import net.imglib2.loops.LoopBuilder;
+import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.Test;
@@ -118,5 +119,39 @@ public class FlatFieldCorrectTest extends AbstractOpTest {
 		final var o = out.cursor();
 		for (final double e : expected)
 			assertEquals(e, o.next().get(), 1e-12);
+	}
+
+	/**
+	 * Integer outputs must saturate rather than wrap around: values above 255
+	 * become 255, and {@code in < dark} becomes 0.
+	 */
+	@Test
+	public void testUnsignedByteOutputIsClamped() {
+		final var in = ArrayImgs.unsignedBytes(new byte[] { 10, (byte) 200,
+			(byte) 250, 5 }, 4);
+		final var flat = ArrayImgs.unsignedBytes(new byte[] { 100, 50, 100, 100 },
+			4);
+		final var dark = ArrayImgs.unsignedBytes(new byte[] { 8, 8, 8, 8 }, 4);
+
+		// Without dark: mean(flat) = 87.5, so the values are 8.75, 350 (too
+		// bright), 218.75 and 4.375.
+		final var out = ArrayImgs.unsignedBytes(4);
+		ops.op("filter.flatFieldCorrect").input(in, flat).output(out).compute();
+		assertValues(new int[] { 9, 255, 219, 4 }, out);
+
+		// With dark: mean(flat - dark) = 79.5, so the values are 1.73, 363.4 (too
+		// bright), 209.1 and -2.59 (in < dark).
+		final var outDark = ArrayImgs.unsignedBytes(4);
+		ops.op("filter.flatFieldCorrect").input(in, flat, dark).output(outDark)
+			.compute();
+		assertValues(new int[] { 2, 255, 209, 0 }, outDark);
+	}
+
+	private static void assertValues(final int[] expected,
+		final Iterable<UnsignedByteType> actual)
+	{
+		final var c = actual.iterator();
+		for (final int e : expected)
+			assertEquals(e, c.next().get());
 	}
 }

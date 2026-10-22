@@ -136,4 +136,31 @@ public class PseudoFlatFieldTest extends AbstractOpTest {
 			i.getRealDouble() * meanBg, o.getRealDouble() * g.getRealDouble(),
 			1e-2 * i.getRealDouble()));
 	}
+
+	/**
+	 * A bright pixel in a dim region is brightened beyond the range of an 8-bit
+	 * output. It must saturate at 255 rather than wrap around, and every other
+	 * pixel must match the floating-point result.
+	 */
+	@Test
+	public void testUnsignedByteOutputIsClamped() {
+		final int n = 64;
+		final var in = ArrayImgs.unsignedBytes(n);
+		final var c = in.cursor();
+		for (int x = 0; x < n; x++)
+			c.next().set(x < n / 2 ? 200 : x == n - 8 ? 250 : 20);
+		final var outFloat = ArrayImgs.floats(n);
+		ops.op("filter.pseudoFlatField").input(in, 4.0).output(outFloat)
+			.compute();
+		final var outByte = ArrayImgs.unsignedBytes(n);
+		ops.op("filter.pseudoFlatField").input(in, 4.0).output(outByte).compute();
+
+		// The bright pixel lies where the background is far below its mean.
+		assertTrue(outFloat.getAt(n - 8).get() > 300, "" + outFloat.getAt(n - 8));
+		assertEquals(255, outByte.getAt(n - 8).get());
+		LoopBuilder.setImages(outFloat, outByte).forEachPixel((f, b) -> {
+			final double expected = Math.min(255, f.get());
+			assertEquals(expected, b.get(), 0.5 + 1e-6);
+		});
+	}
 }

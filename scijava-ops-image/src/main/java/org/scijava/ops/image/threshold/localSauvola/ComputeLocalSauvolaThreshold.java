@@ -30,24 +30,42 @@
 package org.scijava.ops.image.threshold.localSauvola;
 
 import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.threshold.Thresholds;
 import org.scijava.ops.spi.Nullable;
-import org.scijava.ops.spi.OpDependency;
 
 /**
+ * Sauvola's local threshold, a modification of Niblack's method: a pixel is
+ * foreground if it is strictly above
+ * {@code mean * (1 + k * (sd / r - 1))}, with {@code mean} and {@code sd} the
+ * mean and the population standard deviation (as in Fiji's
+ * Auto_Local_Threshold plugin) of its neighborhood.
  * <p>
- * This is a modification of Niblack's thresholding method. In contrast to the
- * recommendation on parameters in the publication, this implementation operates
- * on normalized images (to the [0, 1] range). Hence, the r parameter defaults
- * to half the possible standard deviation in a normalized image, namely 0.5.
+ * The parameter {@code r} is the dynamic range of the standard deviation, in
+ * the units of the image. Unlike Phansalkar's rule, Sauvola's rule is
+ * scale-equivariant (scaling the image and {@code r} scales the threshold
+ * alike), so the image is not normalized; instead, {@code r} defaults to half
+ * the nominal range of the pixel type, which is the largest possible standard
+ * deviation of values in that range, and corresponds to the default
+ * {@code r = 0.5} of {@code threshold.localPhansalkar} on its [0, 1] scale:
+ * </p>
+ * <ul>
+ * <li>for {@link IntegerType} images, half the number of grey levels, e.g.
+ * 128 for 8-bit images (the value recommended by Sauvola and Pietik&auml;inen
+ * and used by Fiji) and 32768 for 16-bit images;</li>
+ * <li>for floating-point images, 0.5, i.e. the image is assumed to be
+ * normalized to [0, 1].</li>
+ * </ul>
+ * <p>
+ * Images that use only part of their type's range (e.g. 12-bit data in a
+ * 16-bit image) need an explicit {@code r}.
  * </p>
  * <p>
- * Sauvola J. and Pietaksinen M. (2000) "Adaptive Document Image Binarization"
- * Pattern Recognition, 33(2): 225-236.
- * <a href="http://www.ee.oulu.fi/mvg/publications/show_pdf.php?ID=24">PDF</a>
+ * Sauvola J. and Pietik&auml;inen M. (2000) "Adaptive Document Image
+ * Binarization", Pattern Recognition, 33(2): 225-236.
  * </p>
  * <p>
  * Original ImageJ implementation by Gabriel Landini.
@@ -61,51 +79,57 @@ public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 {
 
 	public static final double DEFAULT_K = 0.5;
-	public static final double DEFAULT_R = 0.5;
-
-	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<T>, DoubleType> meanOp;
-
-	@OpDependency(name = "stats.stdDev")
-	private Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp;
 
 	/**
-	 * TODO
+	 * Gets the default {@code r} of Sauvola's rule for images of a type: half
+	 * the number of grey levels for {@link IntegerType}s, and 0.5 for other
+	 * types.
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param k
-	 * @param r
-	 * @param output
+	 * @param type a pixel of the image
+	 * @return the default {@code r}
+	 */
+	public static double defaultR(final RealType<?> type) {
+		if (type instanceof IntegerType) {
+			return (type.getMaxValue() - type.getMinValue() + 1) / 2;
+		}
+		return 0.5;
+	}
+
+	/**
+	 * Applies Sauvola's rule to a pixel value.
+	 *
+	 * @param value the pixel value
+	 * @param mean the mean of its neighborhood
+	 * @param stdDev the population standard deviation of its neighborhood
+	 * @param k the k parameter
+	 * @param r the r parameter
+	 * @return whether the pixel is foreground, i.e. strictly above the threshold
+	 */
+	public static boolean isForeground(final double value, final double mean,
+		final double stdDev, final double k, final double r)
+	{
+		return value > mean * (1.0 + k * (stdDev / r - 1.0));
+	}
+
+	/**
+	 * Applies Sauvola's rule to one pixel.
+	 *
+	 * @param inputNeighborhood the neighborhood of the pixel
+	 * @param inputCenterPixel the pixel
+	 * @param k the k parameter (default: 0.5)
+	 * @param r the dynamic range of the standard deviation (default: half the
+	 *          nominal range of the pixel type, e.g. 128 for 8-bit images)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, @Nullable final Double k,
 		@Nullable final Double r, final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,
-			output);
-	}
-
-	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel, Double k,
-		Double r, final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
-		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
-		final BitType output)
-	{
-		if (k == null) k = DEFAULT_K;
-		if (r == null) r = DEFAULT_R;
-
-		final var meanValue = new DoubleType();
-		meanOp.compute(inputNeighborhood, meanValue);
-
-		final var stdDevValue = new DoubleType();
-		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
-
-		final var threshold = meanValue.get() * (1.0d + k * ((stdDevValue.get() /
-			r) - 1.0));
-
-		output.set(inputCenterPixel.getRealDouble() > threshold);
+		final var stats = Thresholds.meanAndPopulationStdDev(inputNeighborhood);
+		output.set(isForeground(inputCenterPixel.getRealDouble(), stats[0],
+			stats[1], k == null ? DEFAULT_K : k, r == null ? defaultR(
+				inputCenterPixel) : r));
 	}
 
 }

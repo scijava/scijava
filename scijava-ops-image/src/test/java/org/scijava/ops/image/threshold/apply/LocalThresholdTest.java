@@ -995,8 +995,23 @@ public class LocalThresholdTest extends AbstractOpTest {
 
 		opToTest.compute(in, new RectangleShape(2, false), out);
 
-		// Note: The first pixel is not above mean * (1 + k * (stdDev / r - 1)).
-		assertEquals(false, out.firstElement().get());
+		// Note: the defaults are k = 0.5 and r = 128 (half the range of ByteType),
+		// and the 5x5 neighborhood of the first pixel is extended at the border.
+		final var ra = Views.extendBorder(in).randomAccess();
+		var sum = 0.0;
+		var sum2 = 0.0;
+		for (var y = -2; y <= 2; y++) {
+			for (var x = -2; x <= 2; x++) {
+				final double v = ra.setPositionAndGet(x, y).get();
+				sum += v;
+				sum2 += v * v;
+			}
+		}
+		final var mean = sum / 25;
+		final var sd = Math.sqrt(sum2 / 25 - mean * mean);
+		final var expected = in.firstElement().get() > mean * (1 + 0.5 * (sd /
+			128 - 1));
+		assertEquals(expected, out.firstElement().get());
 	}
 
 	// /**

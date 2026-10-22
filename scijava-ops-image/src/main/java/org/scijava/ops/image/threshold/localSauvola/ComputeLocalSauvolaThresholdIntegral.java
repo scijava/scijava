@@ -31,20 +31,22 @@ package org.scijava.ops.image.threshold.localSauvola;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
-import net.imglib2.converter.Converter;
-import net.imglib2.converter.RealDoubleConverter;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.util.Intervals;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.threshold.Thresholds;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Nullable;
 
 /**
  * <p>
- * Local thresholding algorithm as proposed by Sauvola et al.
+ * Local thresholding algorithm as proposed by Sauvola et al., with the
+ * population standard deviation and the defaults of
+ * {@link ComputeLocalSauvolaThreshold}.
  * </p>
  * <p>
  * This implementation improves execution speed by using integral images for the
@@ -64,9 +66,6 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>
 {
 
-	public static final double DEFAULT_K = 0.5;
-	public static final double DEFAULT_R = 0.5;
-
 	@OpDependency(name = "stats.integralMean")
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralMeanOp;
 
@@ -74,41 +73,34 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralVarianceOp;
 
 	/**
-	 * TODO
+	 * Applies Sauvola's rule to one pixel.
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param k
-	 * @param r
-	 * @param output
+	 * @param inputNeighborhood the neighborhood of the pixel in the integral
+	 *          images of order 1 and 2
+	 * @param inputCenterPixel the pixel
+	 * @param k the k parameter (default: 0.5)
+	 * @param r the dynamic range of the standard deviation (default: half the
+	 *          nominal range of the pixel type, e.g. 128 for 8-bit images)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, @Nullable Double k, @Nullable Double r,
-		final BitType output)
+		final T inputCenterPixel, @Nullable final Double k,
+		@Nullable final Double r, final BitType output)
 	{
-		if (k == null) k = DEFAULT_K;
-		if (r == null) r = DEFAULT_R;
-
 		final var mean = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, mean);
-
 		final var variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
-
-		final var stdDev = new DoubleType(Math.sqrt(variance.get()));
-
-		final var threshold = new DoubleType(mean.getRealDouble() * (1.0d +
-			k * ((stdDev.getRealDouble() / r) - 1.0)));
-
-		// Set value
-		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
-		final var centerPixelAsDoubleType = variance; // NB: Reuse
-		// DoubleType
-		conv.convert(inputCenterPixel, centerPixelAsDoubleType);
-
-		output.set(centerPixelAsDoubleType.compareTo(threshold) > 0);
+		final var n = Intervals.numElements(Intervals.expand(inputNeighborhood,
+			-1));
+		final var stdDev = Math.sqrt(Thresholds.populationVariance(variance.get(),
+			n));
+		output.set(ComputeLocalSauvolaThreshold.isForeground(inputCenterPixel
+			.getRealDouble(), mean.get(), stdDev, k == null
+				? ComputeLocalSauvolaThreshold.DEFAULT_K : k, r == null
+					? ComputeLocalSauvolaThreshold.defaultR(inputCenterPixel) : r));
 	}
 
 }

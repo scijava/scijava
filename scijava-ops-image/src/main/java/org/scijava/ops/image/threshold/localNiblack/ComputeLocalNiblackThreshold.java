@@ -31,13 +31,19 @@ package org.scijava.ops.image.threshold.localNiblack;
 
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.image.threshold.Thresholds;
 
 /**
- * LocalThresholdMethod using Niblack's thresholding method.
+ * Niblack's local threshold: a pixel is foreground if it is strictly above
+ * {@code mean + k * sd - c}, with {@code mean} and {@code sd} the mean and the
+ * population standard deviation (as in Fiji's Auto_Local_Threshold plugin) of
+ * its neighborhood.
+ * <p>
+ * Niblack W. (1986) "An Introduction to Digital Image Processing",
+ * Prentice-Hall.
+ * </p>
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
@@ -47,45 +53,24 @@ public class ComputeLocalNiblackThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
 
-	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<T>, DoubleType> meanOp;
-
-	@OpDependency(name = "stats.stdDev")
-	private Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp;
-
 	/**
-	 * TODO
+	 * Applies Niblack's rule to one pixel.
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param c
-	 * @param k
-	 * @param output
+	 * @param inputNeighborhood the neighborhood of the pixel
+	 * @param inputCenterPixel the pixel
+	 * @param c the constant subtracted from the threshold (Fiji default: 0)
+	 * @param k the weight of the standard deviation (Fiji default: 0.2 for
+	 *          bright objects)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double c, final Double k,
 		final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, k, meanOp, stdDeviationOp,
-			output);
-	}
-
-	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double c, final Double k,
-		final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
-		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
-		final BitType output)
-	{
-		final var m = new DoubleType();
-		meanOp.compute(inputNeighborhood, m);
-
-		final var stdDev = new DoubleType();
-		stdDeviationOp.compute(inputNeighborhood, stdDev);
-
-		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() + k * stdDev
-			.getRealDouble() - c);
+		final var stats = Thresholds.meanAndPopulationStdDev(inputNeighborhood);
+		output.set(inputCenterPixel.getRealDouble() > stats[0] + k * stats[1] -
+			c);
 	}
 
 }

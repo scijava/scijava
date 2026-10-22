@@ -123,15 +123,15 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Niblack with Fiji parameters k = 0.2 and c = 0. A few pixels differ (7 and
-	 * 0 on blobs8, 6 and 1 on narrow8) because ops computes the sample standard
-	 * deviation, where ImageJ RankFilters computes the population standard
-	 * deviation. That Fiji truncates the threshold to an integer makes no
+	 * Niblack with Fiji parameters k = 0.2 and c = 0. Before the op used the
+	 * population standard deviation, as ImageJ RankFilters do, rather than the
+	 * sample standard deviation, a few pixels differed (7 and 0 on blobs8, 6 and
+	 * 1 on narrow8). That Fiji truncates the threshold to an integer makes no
 	 * difference, since pixels must be strictly above it.
 	 */
 	@Test
 	public void testNiblack() throws IOException {
-		assertFiji("Niblack", 10);
+		assertFiji("Niblack");
 	}
 
 	private void assertFiji(final String method) throws IOException {

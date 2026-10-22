@@ -39,6 +39,7 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.view.Views;
 import net.imglib2.util.IntervalIndexer;
 
 /**
@@ -58,8 +59,12 @@ public final class DefaultDistanceTransform {
 	 * Source: http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(
-		final RandomAccessibleInterval<B> in, final RandomAccessibleInterval<T> out)
+		final RandomAccessibleInterval<B> input, final RandomAccessibleInterval<T> output)
 	{
+		// Note: The scans below index pixels from zero, so both images are
+		// aligned at the origin. This keeps inputs with a non-zero min working.
+		final RandomAccessibleInterval<B> in = Views.zeroMin(input);
+		final RandomAccessibleInterval<T> out = Views.zeroMin(output);
 		// stores the size of each dimension
 		final var dimensSizes = new int[in.numDimensions()];
 

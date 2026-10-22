@@ -199,4 +199,32 @@ public class GeodesicDiametersTest extends AbstractOpTest {
 		assertTrue(ends.contains(new Point(14, 12)));
 		assertTrue(ends.contains(new Point(2, 1)));
 	}
+
+	/**
+	 * A square with a thin tail: the central pixel is the center of the
+	 * square, so the first extremity (farthest from it) is the tip of the tail,
+	 * and the second one is a corner of the square on the opposite side.
+	 */
+	@Test
+	public void testPathOrder() {
+		final var labeling = labeling( //
+			"000000000000000000000000", //
+			"011111110000000000000000", //
+			"011111110000000000000000", //
+			"011111110000000000000000", //
+			"011111111111111111111110", //
+			"011111110000000000000000", //
+			"011111110000000000000000", //
+			"011111110000000000000000", //
+			"000000000000000000000000");
+		final Map<Integer, List<Point>> paths = ops.op(
+			"labeling.geodesicDiameterPath").input(labeling, null, 1).outType(PATHS)
+			.apply();
+		final var path = paths.get(1);
+		assertEquals(new Point(22, 4), path.get(0));
+		final var last = path.get(path.size() - 1);
+		assertEquals(1, last.getLongPosition(0));
+		assertTrue(last.getLongPosition(1) == 1 || last.getLongPosition(1) == 7,
+			last.toString());
+	}
 }

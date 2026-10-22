@@ -31,6 +31,7 @@ package org.scijava.ops.image.morphology.geodesic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,8 @@ public final class GeodesicDiameters {
 					pos[d] += min[d];
 				path.add(new Point(pos));
 			}
+			// Note: The predecessors lead from the second extremity to the first.
+			Collections.reverse(path);
 			result.put(region.getLabel(), path);
 		}
 		return result;

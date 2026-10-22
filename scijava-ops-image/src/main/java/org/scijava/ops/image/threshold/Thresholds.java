@@ -141,6 +141,36 @@ public final class Thresholds {
 	public static <T extends RealType<T>> Histogram1d<T> histogram(
 		final Iterable<T> values, final Predicate<T> include)
 	{
+		return histogram(values, include, MAX_LEVEL_BINS);
+	}
+
+	/**
+	 * Maximum number of grey levels for which the local histogram-based
+	 * threshold methods use one histogram bin per grey level (see
+	 * {@link #histogram(Iterable, Predicate, long)}).
+	 */
+	public static final long MAX_LOCAL_LEVEL_BINS = 256;
+
+	/**
+	 * Creates the histogram used by the histogram-based threshold methods, with
+	 * a limit on the number of bins per grey level.
+	 * <p>
+	 * The histogram spans the range {@code [min, max]} of the included values.
+	 * For {@link IntegerType} data with at most {@code maxLevelBins} grey levels
+	 * in that range, it has exactly one bin per grey level, centered on that
+	 * grey level. Otherwise, it has {@link #DEFAULT_NUM_BINS} equally sized
+	 * bins.
+	 * </p>
+	 *
+	 * @param values the values to count
+	 * @param include which values to count, or {@code null} to count all values
+	 * @param maxLevelBins the maximum number of grey levels with one bin each
+	 * @return the histogram, or {@code null} if no value is included
+	 */
+	public static <T extends RealType<T>> Histogram1d<T> histogram(
+		final Iterable<T> values, final Predicate<T> include,
+		final long maxLevelBins)
+	{
 		var min = Double.POSITIVE_INFINITY;
 		var max = Double.NEGATIVE_INFINITY;
 		var integer = true;
@@ -154,7 +184,7 @@ public final class Thresholds {
 		if (min > max) return null;
 		final Real1dBinMapper<T> mapper;
 		final var levels = (long) (max - min) + 1;
-		if (min == max || integer && levels <= MAX_LEVEL_BINS) {
+		if (min == max || integer && levels <= maxLevelBins) {
 			mapper = new Real1dBinMapper<>(min - 0.5, max + 0.5, levels, false);
 		}
 		else {

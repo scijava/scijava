@@ -64,7 +64,7 @@ import org.scijava.concurrent.Parallelization;
  * @author Curtis Rueden
  * @author Claude Opus 5.5
  */
-final class TensorUtils {
+public final class TensorUtils {
 
 	private TensorUtils() {
 		// Prevent instantiation of static utility class.
@@ -360,5 +360,64 @@ final class TensorUtils {
 
 	private static int nTasks() {
 		return Runtime.getRuntime().availableProcessors();
+	}
+
+	/**
+	 * Computes the eigenvalues and eigenvectors (as columns of {@code vecs}) of
+	 * a symmetric matrix with the cyclic Jacobi method. The matrix is
+	 * overwritten. Unlike {@link TensorEigenValues}, this also yields the
+	 * eigenvectors; the eigenvalues are not sorted.
+	 *
+	 * @param a the symmetric matrix, overwritten in the process
+	 * @param vals the array to fill with the eigenvalues
+	 * @param vecs the matrix to fill with the eigenvectors, one per column
+	 */
+	public static void symmetricEigen(final double[][] a, final double[] vals,
+		final double[][] vecs)
+	{
+		final var n = a.length;
+		for (var r = 0; r < n; r++)
+			for (var s = 0; s < n; s++)
+				vecs[r][s] = r == s ? 1 : 0;
+		for (var sweep = 0; sweep < 50; sweep++) {
+			var off = 0.0;
+			var diag = 0.0;
+			for (var r = 0; r < n; r++) {
+				diag += a[r][r] * a[r][r];
+				for (var s = r + 1; s < n; s++)
+					off += a[r][s] * a[r][s];
+			}
+			if (off == 0 || off <= 1e-30 * diag) break;
+			for (var p = 0; p < n; p++) {
+				for (var q = p + 1; q < n; q++) {
+					if (a[p][q] == 0) continue;
+					final var theta = (a[q][q] - a[p][p]) / (2 * a[p][q]);
+					final var t = (theta >= 0 ? 1 : -1) / (Math.abs(theta) + Math.sqrt(
+						theta * theta + 1));
+					final var cos = 1 / Math.sqrt(t * t + 1);
+					final var sin = t * cos;
+					for (var k = 0; k < n; k++) {
+						final var akp = a[k][p];
+						final var akq = a[k][q];
+						a[k][p] = cos * akp - sin * akq;
+						a[k][q] = sin * akp + cos * akq;
+					}
+					for (var k = 0; k < n; k++) {
+						final var apk = a[p][k];
+						final var aqk = a[q][k];
+						a[p][k] = cos * apk - sin * aqk;
+						a[q][k] = sin * apk + cos * aqk;
+					}
+					for (var k = 0; k < n; k++) {
+						final var vkp = vecs[k][p];
+						final var vkq = vecs[k][q];
+						vecs[k][p] = cos * vkp - sin * vkq;
+						vecs[k][q] = sin * vkp + cos * vkq;
+					}
+				}
+			}
+		}
+		for (var r = 0; r < n; r++)
+			vals[r] = a[r][r];
 	}
 }

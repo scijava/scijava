@@ -41,6 +41,7 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.image.filter.FlatImage;
+import org.scijava.ops.image.filter.tensor.TensorUtils;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -179,7 +180,7 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 				for (var r = 0; r < n; r++)
 					for (var s = 0; s < n; s++)
 						mat[r][s] = diffusion[comp[r][s] * count + p];
-				eigen(mat, vals, vecs);
+				TensorUtils.symmetricEigen(mat, vals, vecs);
 				var max = 0;
 				var min = 0;
 				for (var k = 1; k < n; k++) {
@@ -242,59 +243,5 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 	{
 		final var q = pos[d] + dir;
 		return q < 0 || q >= dims[d] ? 0 : dir * strides[d];
-	}
-
-	/**
-	 * Computes the eigenvalues and eigenvectors (as columns of {@code vecs}) of
-	 * a symmetric matrix with the cyclic Jacobi method. The matrix is
-	 * overwritten.
-	 */
-	static void eigen(final double[][] a, final double[] vals,
-		final double[][] vecs)
-	{
-		final var n = a.length;
-		for (var r = 0; r < n; r++)
-			for (var s = 0; s < n; s++)
-				vecs[r][s] = r == s ? 1 : 0;
-		for (var sweep = 0; sweep < 50; sweep++) {
-			var off = 0.0;
-			var diag = 0.0;
-			for (var r = 0; r < n; r++) {
-				diag += a[r][r] * a[r][r];
-				for (var s = r + 1; s < n; s++)
-					off += a[r][s] * a[r][s];
-			}
-			if (off == 0 || off <= 1e-30 * diag) break;
-			for (var p = 0; p < n; p++) {
-				for (var q = p + 1; q < n; q++) {
-					if (a[p][q] == 0) continue;
-					final var theta = (a[q][q] - a[p][p]) / (2 * a[p][q]);
-					final var t = (theta >= 0 ? 1 : -1) / (Math.abs(theta) + Math.sqrt(
-						theta * theta + 1));
-					final var cos = 1 / Math.sqrt(t * t + 1);
-					final var sin = t * cos;
-					for (var k = 0; k < n; k++) {
-						final var akp = a[k][p];
-						final var akq = a[k][q];
-						a[k][p] = cos * akp - sin * akq;
-						a[k][q] = sin * akp + cos * akq;
-					}
-					for (var k = 0; k < n; k++) {
-						final var apk = a[p][k];
-						final var aqk = a[q][k];
-						a[p][k] = cos * apk - sin * aqk;
-						a[q][k] = sin * apk + cos * aqk;
-					}
-					for (var k = 0; k < n; k++) {
-						final var vkp = vecs[k][p];
-						final var vkq = vecs[k][q];
-						vecs[k][p] = cos * vkp - sin * vkq;
-						vecs[k][q] = sin * vkp + cos * vkq;
-					}
-				}
-			}
-		}
-		for (var r = 0; r < n; r++)
-			vals[r] = a[r][r];
 	}
 }

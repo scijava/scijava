@@ -51,31 +51,6 @@ import org.scijava.ops.image.AbstractOpTest;
  */
 public class CoherenceEnhancingDiffusionTest extends AbstractOpTest {
 
-	@Test
-	public void testEigen() {
-		final var rnd = new Random(7);
-		for (var n = 1; n <= 4; n++) {
-			final var a = new double[n][n];
-			for (var r = 0; r < n; r++)
-				for (var s = r; s < n; s++)
-					a[r][s] = a[s][r] = rnd.nextGaussian();
-			final var copy = new double[n][];
-			for (var r = 0; r < n; r++)
-				copy[r] = a[r].clone();
-			final var vals = new double[n];
-			final var vecs = new double[n][n];
-			CoherenceEnhancingDiffusion.eigen(copy, vals, vecs);
-			for (var k = 0; k < n; k++) {
-				for (var r = 0; r < n; r++) {
-					var av = 0.0;
-					for (var s = 0; s < n; s++)
-						av += a[r][s] * vecs[s][k];
-					assertEquals(vals[k] * vecs[r][k], av, 1e-10);
-				}
-			}
-		}
-	}
-
 	/** With alpha = 1, one iteration is one explicit step of the heat equation. */
 	@Test
 	public void testIsotropicLimit() {

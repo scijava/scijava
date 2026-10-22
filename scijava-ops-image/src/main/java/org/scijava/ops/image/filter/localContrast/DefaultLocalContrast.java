@@ -37,7 +37,9 @@ import net.imglib2.converter.Converter;
 import net.imglib2.converter.Converters;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
@@ -49,7 +51,9 @@ import org.scijava.ops.spi.OpDependency;
  * Gaussian-weighted local mean,
  * {@code C = sqrt(G * I² - (G * I)²) / (G * I)}, where {@code G} is a
  * Gaussian kernel with standard deviation {@code sigma}. Pixels whose local
- * mean is not positive are set to 0.
+ * mean is not positive are set to 0. The local moments are computed in double
+ * precision, relative to the global mean, so that the result is accurate for
+ * inputs with a large intensity offset, such as 16-bit images.
  * <p>
  * In phase contrast microscopy, cells appear as textured regions with high
  * local contrast against a smooth background; thresholding this image is the
@@ -124,7 +128,10 @@ public class DefaultLocalContrast<T extends RealType<T>> implements
 {
 
 	@OpDependency(name = "filter.gauss")
-	private Computers.Arity2<RandomAccessibleInterval<FloatType>, Double, RandomAccessibleInterval<FloatType>> gaussOp;
+	private Computers.Arity2<RandomAccessibleInterval<DoubleType>, Double, RandomAccessibleInterval<DoubleType>> gaussOp;
+
+	@OpDependency(name = "create.img")
+	private BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> createDoubleOp;
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, FloatType, RandomAccessibleInterval<FloatType>> createOp;
@@ -146,24 +153,34 @@ public class DefaultLocalContrast<T extends RealType<T>> implements
 			throw new IllegalArgumentException("sigma must be positive");
 		}
 		final var zeroMin = Views.zeroMin(input);
+
+		// Note: The variance E[I²] - E[I]² cancels catastrophically for inputs
+		// with a large offset, such as 16-bit data, so the intensities are
+		// shifted by their global mean and blurred in double precision.
+		var sum = 0.0;
+		for (final var t : Views.iterable(zeroMin))
+			sum += t.getRealDouble();
+		final var offset = sum / Intervals.numElements(zeroMin);
+		final var shifted = Converters.convert(zeroMin,
+			(Converter<T, DoubleType>) (in, out) -> out.set(in.getRealDouble() -
+				offset), new DoubleType());
 		final var squared = Converters.convert(zeroMin,
-			(Converter<T, FloatType>) (in, out) -> {
-				final var v = in.getRealDouble();
-				out.setReal(v * v);
-			}, new FloatType());
-		final var floatInput = Converters.convert(zeroMin,
-			(Converter<T, FloatType>) (in, out) -> out.setReal(in.getRealDouble()),
-			new FloatType());
+			(Converter<T, DoubleType>) (in, out) -> {
+				final var v = in.getRealDouble() - offset;
+				out.set(v * v);
+			}, new DoubleType());
 
-		final var mean = createOp.apply(zeroMin, new FloatType());
-		gaussOp.compute(floatInput, sigma, mean);
+		final var mean = createDoubleOp.apply(zeroMin, new DoubleType());
+		gaussOp.compute(shifted, sigma, mean);
+		final var meanSquare = createDoubleOp.apply(zeroMin, new DoubleType());
+		gaussOp.compute(squared, sigma, meanSquare);
+
 		final var output = createOp.apply(zeroMin, new FloatType());
-		gaussOp.compute(squared, sigma, output);
-
-		LoopBuilder.setImages(mean, output).forEachPixel((m, out) -> {
-			final var mu = m.getRealDouble();
+		LoopBuilder.setImages(mean, meanSquare, output).forEachPixel((m, m2,
+			out) -> {
+			final var mu = m.get() + offset;
 			if (mu > 0) {
-				final var variance = Math.max(0, out.getRealDouble() - mu * mu);
+				final var variance = Math.max(0, m2.get() - m.get() * m.get());
 				out.setReal(Math.sqrt(variance) / mu);
 			}
 			else out.setZero();

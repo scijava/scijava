@@ -132,20 +132,6 @@ public final class ColourDeconvolution {
 	}
 
 	/**
-	 * Finds the default channel dimension: the last dimension of size 3.
-	 *
-	 * @param input the image
-	 * @return the index of the channel dimension
-	 */
-	public static int defaultChannelDim(final RandomAccessibleInterval<?> input) {
-		for (var d = input.numDimensions() - 1; d >= 0; d--) {
-			if (input.dimension(d) == 3) return d;
-		}
-		throw new IllegalArgumentException(
-			"Input image has no dimension of size 3 to use as RGB channels");
-	}
-
-	/**
 	 * Computes the default incident light intensity: the maximum value of the
 	 * pixel type for integer types, and the maximum intensity of the image
 	 * otherwise.

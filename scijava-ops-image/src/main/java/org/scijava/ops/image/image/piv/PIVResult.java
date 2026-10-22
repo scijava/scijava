@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.transform.piv;
+package org.scijava.ops.image.image.piv;
 
 import java.util.Arrays;
 
@@ -37,7 +37,7 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 /**
- * The result of {@code transform.piv}: a vector field of displacements on a
+ * The result of {@code image.piv}: a vector field of displacements on a
  * regular grid of interrogation windows.
  * <p>
  * Grid point {@code g} (a position in the grid, of the same dimensionality as

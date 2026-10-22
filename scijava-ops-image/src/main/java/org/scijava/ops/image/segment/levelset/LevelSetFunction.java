@@ -110,9 +110,9 @@ import org.scijava.ops.spi.OpDependency;
  * @see <a href="https://doi.org/10.1109/83.902291">Chan and Vese 2001</a>
  * @see <a href="https://doi.org/10.1023/A:1007979827043">Caselles, Kimmel and
  *      Sapiro 1997</a>
- * @implNote op names='image.levelSet'
+ * @implNote op names='image.levelSetFunction'
  */
-public class DefaultLevelSet<T extends RealType<T>, B extends BooleanType<B>>
+public class LevelSetFunction<T extends RealType<T>, B extends BooleanType<B>>
 	implements
 	Functions.Arity10<RandomAccessibleInterval<T>, RandomAccessibleInterval<B>, String, Double, Double, Double, Double, Integer, Double, double[], RandomAccessibleInterval<FloatType>>
 {

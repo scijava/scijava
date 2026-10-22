@@ -47,8 +47,8 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Level-set active contour segmentation: evolves an initial contour on an
- * image and returns the final segmentation mask (see {@code image.levelSet}
- * for the level-set function).
+ * image and returns the final segmentation mask (see
+ * {@code image.levelSetFunction} for the level-set function).
  * <p>
  * Two models are available, selected by {@code method}:
  * </p>

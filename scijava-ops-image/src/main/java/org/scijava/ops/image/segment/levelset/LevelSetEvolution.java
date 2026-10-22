@@ -39,7 +39,7 @@ import java.util.function.UnaryOperator;
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
- * @see DefaultLevelSet
+ * @see LevelSetFunction
  */
 final class LevelSetEvolution {
 

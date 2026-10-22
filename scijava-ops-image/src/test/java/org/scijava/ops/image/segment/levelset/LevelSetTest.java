@@ -50,7 +50,7 @@ import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@code segment.levelSet} and {@code image.levelSet}.
+ * Tests {@code segment.levelSet} and {@code image.levelSetFunction}.
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -208,10 +208,10 @@ public class LevelSetTest extends AbstractOpTest {
 		final var truth = mask(p -> r2(p, 16, 14) <= 64, 32, 30);
 		final var image = noisy(truth, 0.3, 4);
 		final var init = mask(p -> r2(p, 12, 12) <= 9, 32, 30);
-		final RandomAccessibleInterval<FloatType> phi = ops.op("image.levelSet")
-			.input(image, init).outType(PHI).apply();
+		final RandomAccessibleInterval<FloatType> phi = ops.op(
+			"image.levelSetFunction").input(image, init).outType(PHI).apply();
 		final RandomAccessibleInterval<FloatType> again = ops.op(
-			"image.levelSet").input(image, init).outType(PHI).apply();
+			"image.levelSetFunction").input(image, init).outType(PHI).apply();
 		final RandomAccessibleInterval<BitType> result = ops.op(
 			"segment.levelSet").input(image, init).outType(MASK).apply();
 		final var ac = Views.flatIterable(again).cursor();

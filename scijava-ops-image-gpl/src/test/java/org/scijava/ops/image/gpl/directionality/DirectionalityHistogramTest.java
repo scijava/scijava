@@ -41,12 +41,12 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.gpl.AbstractOpTest;
 
 /**
- * Tests {@link DefaultDirectionality}.
+ * Tests {@link DefaultDirectionalityHistogram}.
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
  */
-public class DirectionalityTest extends AbstractOpTest {
+public class DirectionalityHistogramTest extends AbstractOpTest {
 
 	/**
 	 * Synthetic test images; must match the harness that produced
@@ -103,7 +103,7 @@ public class DirectionalityTest extends AbstractOpTest {
 		final DirectionalityMethod method, final int nBins, final double start,
 		final double end)
 	{
-		return ops.op("features.directionality").input(img, method, nBins, start,
+		return ops.op("features.directionalityHistogram").input(img, method, nBins, start,
 			end).outType(Directionality.class).apply();
 	}
 
@@ -240,7 +240,7 @@ public class DirectionalityTest extends AbstractOpTest {
 	@Test
 	public void testDefaults() {
 		final Img<FloatType> img = grating(30, 32, 4);
-		final Directionality d = ops.op("features.directionality").input(img)
+		final Directionality d = ops.op("features.directionalityHistogram").input(img)
 			.outType(Directionality.class).apply();
 		assertEquals(90, d.binCount());
 		assertEquals(-90, d.binCenters()[0], 1e-12);
@@ -255,7 +255,7 @@ public class DirectionalityTest extends AbstractOpTest {
 	public void testInvalidInput() {
 		final Img<FloatType> img3D = ArrayImgs.floats(8, 8, 2);
 		assertThrows(IllegalArgumentException.class, () -> ops.op(
-			"features.directionality").input(img3D).outType(Directionality.class)
+			"features.directionalityHistogram").input(img3D).outType(Directionality.class)
 			.apply());
 	}
 }

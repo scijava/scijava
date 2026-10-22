@@ -75,6 +75,11 @@ import org.scijava.ops.spi.Nullable;
  * and last bins thus cover only half a bin width each.
  * </p>
  * <p>
+ * Note: this is unrelated to the Tamura texture feature
+ * {@code features.tamura.directionality}, which summarizes directionality as
+ * a single number.
+ * </p>
+ * <p>
  * Reference: Z.-Q. Liu, "Scale space approach to directional analysis of
  * images", Applied Optics 30(11):1369-1373, 1991.
  * </p>
@@ -83,9 +88,9 @@ import org.scijava.ops.spi.Nullable;
  * @author Claude Opus 5.5
  * @author Jean-Yves Tinevez
  * @param <T> type of the input image
- * @implNote op names='features.directionality'
+ * @implNote op names='features.directionalityHistogram'
  */
-public class DefaultDirectionality<T extends RealType<T>> implements
+public class DefaultDirectionalityHistogram<T extends RealType<T>> implements
 	Functions.Arity5<RandomAccessibleInterval<T>, DirectionalityMethod, Integer, Double, Double, Directionality>
 {
 

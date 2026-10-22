@@ -83,7 +83,7 @@ public class DefaultSkeletonGraph<B extends BooleanType<B>, T extends RealType<T
 	 * Builds the skeleton graphs.
 	 *
 	 * @param skeleton the 2D or 3D skeleton image, e.g. the output of
-	 *          {@code morphology.skeletonize3D}
+	 *          {@code morphology.skeletonize}
 	 * @param calibration the element spacing along each dimension (defaults to 1
 	 *          for every dimension); lengths are reported in these units
 	 * @param cyclePruning how to break the cycles of the skeleton (defaults to

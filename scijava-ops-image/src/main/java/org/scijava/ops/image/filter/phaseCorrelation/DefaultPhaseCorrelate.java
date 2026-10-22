@@ -30,7 +30,9 @@
 package org.scijava.ops.image.filter.phaseCorrelation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 
@@ -76,7 +78,8 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  * <p>
  * Since the peak of the phase correlation matrix can be off by a pixel or
- * two, each candidate shift is first moved to the nearest integer shift
+ * two, the two candidate shifts with the highest
+ * correlation are first moved to the nearest integer shift
  * (within a few pixels) at which the correlation is locally maximal. With
  * subpixel localization, the winning shift is then refined in each dimension
  * by fitting a parabola to the correlation at that shift and its two
@@ -102,6 +105,9 @@ public class DefaultPhaseCorrelate<T extends RealType<T>, U extends RealType<U>>
 	 * is added to the magnitude of each frequency before normalizing it.
 	 */
 	public static final double REGULARIZATION = 0.01;
+
+	/** The number of verified candidate shifts refined by hill climbing. */
+	private static final int CLIMB_CANDIDATES = 2;
 
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<Iterable<T>, DoubleType> mean1Op;
@@ -216,9 +222,7 @@ public class DefaultPhaseCorrelate<T extends RealType<T>, U extends RealType<U>>
 
 		// Verify each possible shift of each peak by cross-correlation.
 		final var verifier = new Verifier(zero1, zero2, minOverlap);
-		var bestR = Double.NaN;
-		var bestPeak = Double.NaN;
-		long[] best = null;
+		final var candidates = new ArrayList<Candidate>();
 		for (final var peak : peaks) {
 			for (var variant = 0; variant < 1 << n; variant++) {
 				final var shift = new long[n];
@@ -226,12 +230,26 @@ public class DefaultPhaseCorrelate<T extends RealType<T>, U extends RealType<U>>
 					shift[d] = (variant >> d & 1) == 0 ? peak.position[d] : //
 						peak.position[d] - padded[d];
 				}
-				final var r = verifier.climb(shift);
-				if (r > bestR || best == null && !Double.isNaN(r)) {
-					bestR = r;
-					bestPeak = peak.value;
-					best = shift;
-				}
+				final var r = verifier.correlation(shift);
+				if (!Double.isNaN(r)) candidates.add(new Candidate(shift, r,
+					peak.value));
+			}
+		}
+
+		// Note: Hill climbing costs up to 1 + MAX_STEPS * 2n correlations per
+		// candidate, so only the best few verified candidates are refined.
+		candidates.sort((a, b) -> Double.compare(b.r, a.r));
+		var bestR = Double.NaN;
+		var bestPeak = Double.NaN;
+		long[] best = null;
+		for (final var c : candidates.subList(0, Math.min(CLIMB_CANDIDATES,
+			candidates.size())))
+		{
+			final var r = verifier.climb(c.shift);
+			if (best == null || r > bestR) {
+				bestR = r;
+				bestPeak = c.peak;
+				best = c.shift;
 			}
 		}
 		if (best == null) {
@@ -287,6 +305,19 @@ public class DefaultPhaseCorrelate<T extends RealType<T>, U extends RealType<U>>
 		return fft;
 	}
 
+	private static class Candidate {
+
+		private final long[] shift;
+		private final double r;
+		private final double peak;
+
+		private Candidate(final long[] shift, final double r, final double peak) {
+			this.shift = shift;
+			this.r = r;
+			this.peak = peak;
+		}
+	}
+
 	private static class Peak {
 
 		private final long[] position;
@@ -306,6 +337,7 @@ public class DefaultPhaseCorrelate<T extends RealType<T>, U extends RealType<U>>
 		private final RandomAccessibleInterval<T> image1;
 		private final RandomAccessibleInterval<U> image2;
 		private final long minOverlap;
+		private final Map<List<Long>, Double> cache = new HashMap<>();
 
 		private Verifier(final RandomAccessibleInterval<T> image1,
 			final RandomAccessibleInterval<U> image2, final long minOverlap)
@@ -372,6 +404,13 @@ public class DefaultPhaseCorrelate<T extends RealType<T>, U extends RealType<U>>
 		 * overlap is too small or constant.
 		 */
 		private double correlation(final long[] shift) {
+			final var key = new ArrayList<Long>(shift.length);
+			for (final var v : shift)
+				key.add(v);
+			return cache.computeIfAbsent(key, k -> computeCorrelation(shift));
+		}
+
+		private double computeCorrelation(final long[] shift) {
 			for (var d = 0; d < shift.length; d++)
 				if (shift[d] >= image2.dimension(d) || //
 					shift[d] <= -image1.dimension(d)) return Double.NaN;

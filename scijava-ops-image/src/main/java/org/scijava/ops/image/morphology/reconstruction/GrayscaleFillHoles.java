@@ -49,6 +49,10 @@ import org.scijava.ops.spi.Nullable;
  * See P. Soille, <em>Morphological Image Analysis</em>, 2nd ed., Springer,
  * 2003, section 6.3.7.
  * </p>
+ * <p>
+ * NaN input values are not supported and cause an
+ * {@link IllegalArgumentException}.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

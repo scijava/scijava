@@ -43,31 +43,38 @@ import org.scijava.ops.spi.Nullable;
  * Kalman stack filter: recursive per-pixel denoising of a time-lapse (or z)
  * series along one dimension.
  * <p>
- * Each pixel is modelled as a constant state {@code x} observed through noisy
- * measurements {@code z_t} (the successive frames). The scalar Kalman
- * estimator starts from {@code x_0 = z_0} with error variance {@code P_0 = 1}
- * and, for each later frame, predicts {@code x_t^- = x_(t-1)} and computes the
- * Kalman gain {@code K_t = P_(t-1) / (P_(t-1) + R)}, where {@code R} is the
- * measurement noise variance relative to the initial error variance; then
- * {@code P_t = (1 - K_t) P_(t-1)}, so that {@code K_t = 1 / (t + R)}. The
- * prediction bias {@code g} blends the Kalman estimate with the new frame:
+ * This op follows the algorithm documented for the Kalman stack filter for
+ * ImageJ by C. P. Mauer (<a href=
+ * "https://imagej.net/ij/plugins/kalman.html">imagej.net/ij/plugins/kalman</a>).
+ * Each pixel is modelled as a constant state observed through noisy
+ * measurements {@code z_t} (the successive frames). The estimate is seeded
+ * with the first frame, {@code x_0 = z_0}, and the error variance with the
+ * noise variance, {@code P_0 = R}. For each later frame, the previous estimate
+ * {@code x_(t-1)} is the prediction, and
  * </p>
  * <pre>
- * x_t = g (x_t^- + K_t (z_t - x_t^-)) + (1 - g) z_t
+ * K_t = P_(t-1) / (P_(t-1) + R)
+ * x_t = g x_(t-1) + (1 - g) z_t + K_t (z_t - x_(t-1))
+ * P_t = (1 - K_t) P_(t-1)
  * </pre>
  * <p>
- * With {@code g = 1}, this is the optimal estimate of a constant (with
- * {@code R = 1}, the running mean of all frames so far); smaller values of
- * {@code g} let the estimate follow changes, converging to an exponential
- * moving average with weight {@code 1 - g} on the newest frame. The output
- * frame {@code t} is the estimate {@code x_t}.
+ * where {@code g} is the filter gain. The output frame {@code t} is the
+ * estimate {@code x_t}. Since {@code P_0 = R}, the Kalman gain is
+ * {@code K_t = 1 / (t + 1)} whatever the value of {@code R} (with
+ * {@code R = 0} taken as the limit), so the noise variance does not affect
+ * the result. With {@code g = 1}, the estimate is the running mean of all
+ * frames so far. For smaller {@code g}, the Kalman term vanishes over time and
+ * the estimate converges to an exponential moving average with weight
+ * {@code 1 - g} on the newest frame. Each update moves the estimate by the
+ * fraction {@code 1 - g + K_t} of the residual {@code z_t - x_(t-1)}; this
+ * fraction exceeds 1, so that the estimate overshoots, if {@code g < K_t}.
+ * Results are clamped to the range of the output type.
  * </p>
  * <p>
- * Implemented from the standard recursive (Kalman) estimator, e.g. R. E.
- * Kalman, "A new approach to linear filtering and prediction problems", J.
- * Basic Eng. 82(1):35-45, 1960; and G. Welch and G. Bishop, "An introduction
- * to the Kalman filter", UNC-Chapel Hill TR 95-041. The parameters follow the
- * Kalman stack filter for ImageJ (C. P. Mauer), whose code was not consulted.
+ * Implemented from the documented algorithm, whose code was not consulted;
+ * see also R. E. Kalman, "A new approach to linear filtering and prediction
+ * problems", J. Basic Eng. 82(1):35-45, 1960; and G. Welch and G. Bishop, "An
+ * introduction to the Kalman filter", UNC-Chapel Hill TR 95-041.
  * </p>
  *
  * @author Curtis Rueden
@@ -87,10 +94,11 @@ public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 	 * @param input the image series
 	 * @param dim the dimension along which to filter, e.g. time or z (default:
 	 *          the last dimension)
-	 * @param gain the prediction bias g within [0, 1]: the weight of the Kalman
-	 *          estimate against the newest frame (default: 0.8)
-	 * @param noiseVariance the measurement noise variance R, relative to the
-	 *          error variance of the initial estimate (default: 0.05)
+	 * @param gain the filter gain g within [0, 1]: the weight of the prediction
+	 *          against the newest frame (default: 0.8)
+	 * @param noiseVariance the estimate of the noise variance R, which also
+	 *          seeds the error variance; it cancels out of the Kalman gain
+	 *          (default: 0.05)
 	 * @param output the filtered series, with the same dimensions as the input
 	 */
 	@Override
@@ -119,7 +127,7 @@ public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 
 		final var first = Views.hyperSlice(input, d, input.min(d));
 		final var estimate = ArrayImgs.doubles(first.dimensionsAsLongArray());
-		var p = 1.0;
+		var p = r;
 		final var frames = input.dimension(d);
 		for (long t = 0; t < frames; t++) {
 			final var z = Views.hyperSlice(input, d, input.min(d) + t);
@@ -129,15 +137,16 @@ public class DefaultKalmanFilter<T extends RealType<T>, V extends RealType<V>>
 				a = 1;
 			}
 			else {
-				final var k = p + r == 0 ? 1 : p / (p + r);
+				final var k = p + r == 0 ? 1.0 / (t + 1) : p / (p + r);
 				p = (1 - k) * p;
-				a = g * k + 1 - g;
+				// x_t = g x + (1 - g) z + K (z - x) = x + (1 - g + K) (z - x)
+				a = 1 - g + k;
 			}
 			LoopBuilder.setImages(z, estimate, out).multiThreaded().forEachPixel((
 				zi, x, o) -> {
 				final var v = x.get() + a * (zi.getRealDouble() - x.get());
 				x.set(v);
-				o.setReal(v);
+				o.setReal(Math.max(o.getMinValue(), Math.min(o.getMaxValue(), v)));
 			});
 		}
 	}

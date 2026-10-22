@@ -44,6 +44,16 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Ops which compute and apply a local threshold to an image.
+ * <p>
+ * Each pixel is compared to the threshold of the histogram of its
+ * neighborhood. The histogram spans the range of the neighborhood. If the
+ * image has an integer type and the neighborhood spans at most 256 grey
+ * levels (as on any 8-bit image), the histogram has one bin per grey level,
+ * as the global threshold methods do; otherwise, it has 256 equally sized
+ * bins, so the threshold is only resolved to 1/256 of the local range. A
+ * histogram per grey level would cost time and memory proportional to the
+ * local range for every pixel (up to 65536 bins per pixel on 16-bit images).
+ * </p>
  *
  * @author Stefan Helfrich (University of Konstanz)
  */
@@ -401,8 +411,10 @@ public final class ApplyThresholdMethodLocal {
 				public void compute(final Iterable<T> inputNeighborhood,
 					final T inputCenterPixel, final BitType output)
 				{
+					// Note: one bin per grey level, as for global thresholds, would
+					// cost up to 65536 bins per pixel on 16-bit images.
 					final var histogram = Thresholds.histogram(inputNeighborhood,
-						null);
+						null, Thresholds.MAX_LOCAL_LEVEL_BINS);
 					final var threshold = inputNeighborhood.iterator().next()
 						.createVariable();
 					if (histogram.getBinCount() < 2) histogram.getCenterValue(0,

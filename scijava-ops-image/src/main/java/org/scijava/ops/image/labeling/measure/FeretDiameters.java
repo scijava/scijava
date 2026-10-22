@@ -71,20 +71,20 @@ public final class FeretDiameters {
 	/**
 	 * Computes the maximum Feret diameter of each label, in the units of the
 	 * pixel spacing. A single pixel has the length of its diagonal (&radic;2 in
-	 * 2D with unit spacing).
+	 * 2D with unit calibration).
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a map from each label to its maximum Feret diameter
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @implNote op names='labeling.maximumFeretDiameter', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> diameters(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration)
 	{
 		final var result = new LinkedHashMap<L, Double>();
-		for (final var entry : ferets(labeling, spacing).entrySet()) {
+		for (final var entry : ferets(labeling, calibration).entrySet()) {
 			final var p = entry.getValue();
 			double d2 = 0;
 			for (var d = 0; d < p.getA().numDimensions(); d++) {
@@ -100,11 +100,11 @@ public final class FeretDiameters {
 	/**
 	 * Finds the endpoints of the maximum Feret diameter of each label: two
 	 * pixel corners at the largest distance from each other, in calibrated
-	 * coordinates (the pixel position times the spacing, with pixel centers at
-	 * integer positions, so corners lie half a pixel away from them).
+	 * coordinates (the pixel position times the calibration, with pixel centers
+	 * at integer positions, so corners lie half a pixel away from them).
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a map from each label to the two endpoints of its maximum Feret
 	 *         diameter
 	 * @param <L> label type
@@ -113,10 +113,10 @@ public final class FeretDiameters {
 	 */
 	public static <L, I extends IntegerType<I>>
 		Map<L, Pair<RealLocalizable, RealLocalizable>> ferets(
-			final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
+			final ImgLabeling<L, I> labeling, @Nullable double[] calibration)
 	{
 		final var n = labeling.numDimensions();
-		final var s = Calibrations.spacing(spacing, n, "spacing");
+		final var s = Calibrations.spacing(calibration, n, "calibration");
 		final var result =
 			new LinkedHashMap<L, Pair<RealLocalizable, RealLocalizable>>();
 		for (final var region : new LabelRegions<>(labeling)) {

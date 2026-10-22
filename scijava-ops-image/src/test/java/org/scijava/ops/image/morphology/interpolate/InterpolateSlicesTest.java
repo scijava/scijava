@@ -31,6 +31,7 @@ package org.scijava.ops.image.morphology.interpolate;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -133,6 +134,38 @@ public class InterpolateSlicesTest extends AbstractOpTest {
 					", " + y);
 			}
 		}
+	}
+
+	/**
+	 * The calibration has one value per dimension of the mask; the value along
+	 * the interpolation dimension does not matter, and a uniform scaling within
+	 * the slices does not change the result.
+	 */
+	@Test
+	public void testCalibration() {
+		final var mask = ArrayImgs.bits(5, 10, 10);
+		final var ra = mask.randomAccess();
+		for (var y = 0; y < 10; y++) {
+			for (var x = 0; x < 10; x++) {
+				ra.setPositionAndGet(0, x, y).set(x >= 4 && x <= 5 && y >= 4 &&
+					y <= 5);
+				ra.setPositionAndGet(4, x, y).set(x >= 2 && x <= 7 && y >= 2 &&
+					y <= 7);
+			}
+		}
+		final RandomAccessibleInterval<BitType> plain = ops.op(
+			"morphology.interpolateSlices").input(mask, 0).outType(OUT).apply();
+		for (final var calibration : new double[][] { { 7, 1, 1 }, { 1, 2, 2 } }) {
+			final RandomAccessibleInterval<BitType> calibrated = ops.op(
+				"morphology.interpolateSlices").input(mask, 0, calibration).outType(
+					OUT).apply();
+			final var c = Views.flatIterable(calibrated).cursor();
+			for (final var p : Views.flatIterable(plain))
+				assertEquals(p.get(), c.next().get());
+		}
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"morphology.interpolateSlices").input(mask, 0, new double[] { 1, 1 })
+			.outType(OUT).apply());
 	}
 
 	@Test

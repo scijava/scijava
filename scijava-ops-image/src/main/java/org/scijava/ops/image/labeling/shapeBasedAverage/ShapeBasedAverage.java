@@ -33,7 +33,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
@@ -44,6 +43,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -68,7 +68,7 @@ import org.scijava.ops.spi.OpDependency;
  * is absent from an input (or covers all of it), its distance in that input
  * is taken to be (minus) the length of the image diagonal, less half a pixel.
  * Ties are resolved in favor of the smallest label value. Distances are
- * measured in pixels.
+ * measured in calibrated units (pixels by default).
  * </p>
  * <p>
  * Note: Before the half-pixel offset was introduced (to share
@@ -90,7 +90,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='labeling.shapeBasedAverage'
  */
 public class ShapeBasedAverage<I extends IntegerType<I>> implements
-	Function<List<RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>>
+	BiFunction<List<RandomAccessibleInterval<I>>, double[], RandomAccessibleInterval<I>>
 {
 
 	@OpDependency(name = "create.img")
@@ -103,11 +103,13 @@ public class ShapeBasedAverage<I extends IntegerType<I>> implements
 	 * Computes the shape-based average.
 	 *
 	 * @param inputs the label images, all with the same dimensions
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return the averaged label image
 	 */
 	@Override
 	public RandomAccessibleInterval<I> apply(
-		final List<RandomAccessibleInterval<I>> inputs)
+		final List<RandomAccessibleInterval<I>> inputs,
+		@Nullable final double[] calibration)
 	{
 		if (inputs.isEmpty()) {
 			throw new IllegalArgumentException("No label images given");
@@ -140,7 +142,7 @@ public class ShapeBasedAverage<I extends IntegerType<I>> implements
 				final RandomAccessibleInterval<BitType> mask = Converters.convert(in, (
 					a, b) -> b.set(a.getIntegerLong() == label), new BitType());
 				var p = 0;
-				for (final var t : Views.flatIterable(sdtOp.apply(mask, null)))
+				for (final var t : Views.flatIterable(sdtOp.apply(mask, calibration)))
 					sum[p++] -= t.getRealDouble();
 			}
 			// Note: The sum orders labels like the mean, as K is constant.

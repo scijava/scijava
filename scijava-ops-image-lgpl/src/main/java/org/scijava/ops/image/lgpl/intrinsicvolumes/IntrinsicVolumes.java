@@ -69,7 +69,7 @@ import org.scijava.ops.spi.Nullable;
  * objects touching the border are measured as if the image were padded with
  * background. Density measures instead use only the configurations fully
  * contained in the image, normalized by the area or volume of the sampling
- * window {@code (size - 1) * spacing} along each dimension, which gives
+ * window {@code (size - 1) * calibration} along each dimension, which gives
  * unbiased estimates for a stationary random set observed through the image
  * window (Ohser and M&uuml;cklich 2000).
  * </p>
@@ -127,14 +127,14 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> pixel type
 	 * @param image the 2D binary image
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return the area
 	 * @implNote op names='features.intrinsicVolumes.area', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double area(
-		final RandomAccessibleInterval<B> image, @Nullable double[] spacing)
+		final RandomAccessibleInterval<B> image, @Nullable double[] calibration)
 	{
-		final var s = spacing(image, spacing, 2);
+		final var s = spacing(image, calibration, 2);
 		return measure(image, IntrinsicVolumesLuts.areaLut(s));
 	}
 
@@ -144,14 +144,14 @@ public final class IntrinsicVolumes {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the 2D labeling
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return the area of each label
 	 * @implNote op names='features.intrinsicVolumes.area', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> area(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration)
 	{
-		final var s = spacing(labeling, spacing, 2);
+		final var s = spacing(labeling, calibration, 2);
 		return measure(labeling, IntrinsicVolumesLuts.areaLut(s));
 	}
 
@@ -162,16 +162,16 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> pixel type
 	 * @param image the 2D binary image
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 2 or 4 (default 4)
 	 * @return the perimeter
 	 * @implNote op names='features.intrinsicVolumes.perimeter', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double perimeter(
-		final RandomAccessibleInterval<B> image, @Nullable double[] spacing,
+		final RandomAccessibleInterval<B> image, @Nullable double[] calibration,
 		@Nullable Integer directions)
 	{
-		final var s = spacing(image, spacing, 2);
+		final var s = spacing(image, calibration, 2);
 		return measure(image, IntrinsicVolumesLuts.perimeterLut(s, or(directions,
 			4)));
 	}
@@ -184,16 +184,16 @@ public final class IntrinsicVolumes {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the 2D labeling
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 2 or 4 (default 4)
 	 * @return the perimeter of each label
 	 * @implNote op names='features.intrinsicVolumes.perimeter', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> perimeter(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration,
 		@Nullable Integer directions)
 	{
-		final var s = spacing(labeling, spacing, 2);
+		final var s = spacing(labeling, calibration, 2);
 		return measure(labeling, IntrinsicVolumesLuts.perimeterLut(s, or(
 			directions, 4)));
 	}
@@ -205,14 +205,14 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> voxel type
 	 * @param image the 3D binary image
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @return the volume
 	 * @implNote op names='features.intrinsicVolumes.volume', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double volume(
-		final RandomAccessibleInterval<B> image, @Nullable double[] spacing)
+		final RandomAccessibleInterval<B> image, @Nullable double[] calibration)
 	{
-		final var s = spacing(image, spacing, 3);
+		final var s = spacing(image, calibration, 3);
 		return measure(image, IntrinsicVolumesLuts.volumeLut(s));
 	}
 
@@ -222,14 +222,14 @@ public final class IntrinsicVolumes {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the 3D labeling
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @return the volume of each label
 	 * @implNote op names='features.intrinsicVolumes.volume', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> volume(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration)
 	{
-		final var s = spacing(labeling, spacing, 3);
+		final var s = spacing(labeling, calibration, 3);
 		return measure(labeling, IntrinsicVolumesLuts.volumeLut(s));
 	}
 
@@ -240,16 +240,16 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> voxel type
 	 * @param image the 3D binary image
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
 	 * @return the surface area
 	 * @implNote op names='features.intrinsicVolumes.surfaceArea', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double surfaceArea(
-		final RandomAccessibleInterval<B> image, @Nullable double[] spacing,
+		final RandomAccessibleInterval<B> image, @Nullable double[] calibration,
 		@Nullable Integer directions)
 	{
-		final var s = spacing(image, spacing, 3);
+		final var s = spacing(image, calibration, 3);
 		return measure(image, IntrinsicVolumesLuts.surfaceAreaLut(s, or(
 			directions, 13)));
 	}
@@ -262,16 +262,16 @@ public final class IntrinsicVolumes {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the 3D labeling
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
 	 * @return the surface area of each label
 	 * @implNote op names='features.intrinsicVolumes.surfaceArea', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> surfaceArea(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration,
 		@Nullable Integer directions)
 	{
-		final var s = spacing(labeling, spacing, 3);
+		final var s = spacing(labeling, calibration, 3);
 		return measure(labeling, IntrinsicVolumesLuts.surfaceAreaLut(s, or(
 			directions, 13)));
 	}
@@ -285,7 +285,7 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> voxel type
 	 * @param image the 3D binary image
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
 	 * @param connectivity the connectivity used to compute the Euler numbers of
 	 *          planar sections: face connectivity (a {@code DiamondShape} of
@@ -296,10 +296,10 @@ public final class IntrinsicVolumes {
 	 * @implNote op names='features.intrinsicVolumes.meanBreadth', type=Function
 	 */
 	public static <B extends BooleanType<B>> Double meanBreadth(
-		final RandomAccessibleInterval<B> image, @Nullable double[] spacing,
+		final RandomAccessibleInterval<B> image, @Nullable double[] calibration,
 		@Nullable Integer directions, @Nullable Shape connectivity)
 	{
-		final var s = spacing(image, spacing, 3);
+		final var s = spacing(image, calibration, 3);
 		return measure(image, IntrinsicVolumesLuts.meanBreadthLut(s, or(
 			directions, 13), isFace(connectivity, 3) ? 4 : 8));
 	}
@@ -312,7 +312,7 @@ public final class IntrinsicVolumes {
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @param labeling the 3D labeling
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
 	 * @param connectivity the connectivity used to compute the Euler numbers of
 	 *          planar sections: face connectivity (a {@code DiamondShape} of
@@ -323,10 +323,10 @@ public final class IntrinsicVolumes {
 	 * @implNote op names='features.intrinsicVolumes.meanBreadth', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> meanBreadth(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration,
 		@Nullable Integer directions, @Nullable Shape connectivity)
 	{
-		final var s = spacing(labeling, spacing, 3);
+		final var s = spacing(labeling, calibration, 3);
 		return measure(labeling, IntrinsicVolumesLuts.meanBreadthLut(s, or(
 			directions, 13), isFace(connectivity, 3) ? 4 : 8));
 	}
@@ -347,16 +347,16 @@ public final class IntrinsicVolumes {
 	 * @param labeling the 3D labeling
 	 * @param label1 the first label
 	 * @param label2 the second label
-	 * @param spacing the voxel spacing along each dimension (default 1)
+	 * @param calibration the voxel spacing along each dimension (default 1)
 	 * @param directions the number of directions, 3 or 13 (default 13)
 	 * @return the interface area
 	 * @implNote op names='features.intrinsicVolumes.interfaceArea', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Double interfaceArea(
 		final ImgLabeling<L, I> labeling, final L label1, final L label2,
-		@Nullable double[] spacing, @Nullable Integer directions)
+		@Nullable double[] calibration, @Nullable Integer directions)
 	{
-		final var s = spacing(labeling, spacing, 3);
+		final var s = spacing(labeling, calibration, 3);
 		final var contribs = IntrinsicVolumesLuts.interfaceContributions(s, or(
 			directions, 13));
 		return ConfigurationHistograms.interfaceSum(labeling, label1, label2,
@@ -422,7 +422,7 @@ public final class IntrinsicVolumes {
 	 *
 	 * @param <B> pixel type
 	 * @param image the 2D or 3D binary image
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param directions the number of directions of the Crofton formula: 2 or 4
 	 *          in 2D (default 4), 3 or 13 in 3D (default 13)
 	 * @param connectivity the connectivity of the foreground for the Euler
@@ -440,7 +440,7 @@ public final class IntrinsicVolumes {
 	 * @implNote op names='features.intrinsicVolumes.densities', type=Function
 	 */
 	public static <B extends BooleanType<B>> Map<String, Double> densities(
-		final RandomAccessibleInterval<B> image, @Nullable double[] spacing,
+		final RandomAccessibleInterval<B> image, @Nullable double[] calibration,
 		@Nullable Integer directions, @Nullable Shape connectivity)
 	{
 		final var nd = image.numDimensions();
@@ -452,7 +452,7 @@ public final class IntrinsicVolumes {
 						1) + "D image");
 			}
 		}
-		final var s = spacing(image, spacing, nd);
+		final var s = spacing(image, calibration, nd);
 		final var hist = ConfigurationHistograms.histogram(image, true);
 		var window = 1.0;
 		for (var d = 0; d < nd; d++)
@@ -514,22 +514,22 @@ public final class IntrinsicVolumes {
 	}
 
 	private static double[] spacing(final Interval interval,
-		final double[] spacing, final int nd)
+		final double[] calibration, final int nd)
 	{
 		if (interval.numDimensions() != nd) {
 			throw new IllegalArgumentException("Expected a " + nd +
 				"D image, not " + interval.numDimensions() + "D");
 		}
-		if (spacing == null) {
+		if (calibration == null) {
 			final var ones = new double[nd];
 			Arrays.fill(ones, 1);
 			return ones;
 		}
-		if (spacing.length != nd) {
+		if (calibration.length != nd) {
 			throw new IllegalArgumentException("Expected " + nd +
-				" spacing values, not " + spacing.length);
+				" calibration values, not " + calibration.length);
 		}
-		return spacing;
+		return calibration;
 	}
 
 	/**

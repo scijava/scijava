@@ -117,6 +117,13 @@ public class NearestNeighborsTest extends AbstractOpTest {
 		assertEquals(5, distances.get(1), 1e-12);
 		assertEquals(5, distances.get(2), 1e-12);
 		assertEquals(17, distances.get(3), 1e-12);
+
+		// With a calibration, centroids are compared in calibrated units.
+		final var calibrated = ops.op("labeling.nearestNeighborDistances").input(
+			labeling(index, 3), new double[] { 2, 0.5 }).outType(DISTANCES).apply();
+		assertEquals(Math.sqrt(40), calibrated.get(1), 1e-12);
+		assertEquals(Math.sqrt(40), calibrated.get(2), 1e-12);
+		assertEquals(34, calibrated.get(3), 1e-12);
 	}
 
 	@Test
@@ -144,6 +151,17 @@ public class NearestNeighborsTest extends AbstractOpTest {
 		assertEquals(1, stats.get("R"), 1e-12);
 		assertEquals(0, stats.get("z"), 1e-12);
 		assertEquals(1, stats.get("p"), 1e-12);
+	}
+
+	@Test
+	public void testCalibration() {
+		// Doubling the spacing doubles all distances, and the default volume is
+		// calibrated too, so R is unchanged.
+		final var stats = ops.op("labeling.clarkEvans").input(grid(10, 10), null,
+			new double[] { 2, 2 }).outType(STATS).apply();
+		assertEquals(20, stats.get("observedMeanDistance"), 1e-12);
+		assertEquals(10, stats.get("expectedMeanDistance"), 1e-12);
+		assertEquals(2, stats.get("R"), 1e-12);
 	}
 
 	@Test

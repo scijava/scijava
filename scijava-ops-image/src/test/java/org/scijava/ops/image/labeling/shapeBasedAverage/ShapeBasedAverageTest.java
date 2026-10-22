@@ -117,6 +117,25 @@ public class ShapeBasedAverageTest extends AbstractOpTest {
 		}
 	}
 
+	/**
+	 * The distances to a boundary across dimension 0 scale with the spacing
+	 * along dimension 0 only, and equally for all labels, so a calibration does
+	 * not move the mean boundary of two half planes.
+	 */
+	@Test
+	public void testCalibration() {
+		final var a = halves(10);
+		final var b = halves(14);
+		final var out = ops.op("labeling.shapeBasedAverage").inType(IN, Nil.of(
+			double[].class)).outType(OUT).function().apply(List.of(a, b),
+				new double[] { 2, 0.5 });
+		final var c = out.localizingCursor();
+		while (c.hasNext()) {
+			c.fwd();
+			assertEquals(c.getIntPosition(0) < 12 ? 1 : 2, c.get().get());
+		}
+	}
+
 	/** Translated inputs give the translated result. */
 	@Test
 	public void testNonZeroMin() {

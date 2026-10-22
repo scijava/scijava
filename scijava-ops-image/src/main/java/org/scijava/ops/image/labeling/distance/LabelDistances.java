@@ -96,18 +96,20 @@ public final class LabelDistances {
 	 * distance.
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return the distance map, with the interval of the labeling
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
 	 * @implNote op names='labeling.distanceMap', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> RandomAccessibleInterval<DoubleType>
-		distanceMap(final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
+		distanceMap(final ImgLabeling<L, I> labeling,
+			@Nullable double[] calibration)
 	{
 		final var regions = Regions.of(labeling);
 		final var d = squaredDistances(regions.ids, regions.empty, regions.dims,
-			Calibrations.spacing(spacing, regions.dims.length, "spacing"));
+			Calibrations.spacing(calibration, regions.dims.length,
+				"calibration"));
 		for (var i = 0; i < d.length; i++)
 			d[i] = Math.sqrt(d[i]);
 		final RandomAccessibleInterval<DoubleType> img = ArrayImgs.doubles(d,
@@ -122,8 +124,8 @@ public final class LabelDistances {
 	 * other, they meet halfway (ties are broken arbitrarily).
 	 *
 	 * @param labeling the labeled objects
-	 * @param radius the dilation radius, in the units of the spacing
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param radius the dilation radius, in calibrated units
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a new labeling with the labels dilated
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
@@ -131,11 +133,11 @@ public final class LabelDistances {
 	 */
 	public static <L, I extends IntegerType<I>> ImgLabeling<L, I> dilate(
 		final ImgLabeling<L, I> labeling, final Double radius,
-		@Nullable double[] spacing)
+		@Nullable double[] calibration)
 	{
 		final var regions = Regions.of(labeling);
 		final var r2 = radius * radius;
-		final var d = propagate(regions, spacing);
+		final var d = propagate(regions, calibration);
 		for (var i = 0; i < d.length; i++)
 			if (d[i] > r2) regions.ids[i] = regions.empty;
 		return regions.toLabeling(labeling);
@@ -148,8 +150,8 @@ public final class LabelDistances {
 	 * regions, so touching labels separate.
 	 *
 	 * @param labeling the labeled objects
-	 * @param radius the erosion radius, in the units of the spacing
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param radius the erosion radius, in calibrated units
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param backgroundOnly if true, erode only from the unlabeled pixels,
 	 *          leaving the borders between touching regions in place (default
 	 *          false)
@@ -160,10 +162,11 @@ public final class LabelDistances {
 	 */
 	public static <L, I extends IntegerType<I>> ImgLabeling<L, I> erode(
 		final ImgLabeling<L, I> labeling, final Double radius,
-		@Nullable double[] spacing, @Nullable Boolean backgroundOnly)
+		@Nullable double[] calibration, @Nullable Boolean backgroundOnly)
 	{
 		final var regions = Regions.of(labeling);
-		erode(regions, radius, spacing, Boolean.TRUE.equals(backgroundOnly));
+		erode(regions, radius, calibration, Boolean.TRUE.equals(
+			backgroundOnly));
 		return regions.toLabeling(labeling);
 	}
 
@@ -174,8 +177,8 @@ public final class LabelDistances {
 	 * ball.
 	 *
 	 * @param labeling the labeled objects
-	 * @param radius the radius of the ball, in the units of the spacing
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param radius the radius of the ball, in calibrated units
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a new labeling with the labels opened
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
@@ -183,11 +186,11 @@ public final class LabelDistances {
 	 */
 	public static <L, I extends IntegerType<I>> ImgLabeling<L, I> open(
 		final ImgLabeling<L, I> labeling, final Double radius,
-		@Nullable double[] spacing)
+		@Nullable double[] calibration)
 	{
 		final var regions = Regions.of(labeling);
-		erode(regions, radius, spacing, false);
-		final var d = propagate(regions, spacing);
+		erode(regions, radius, calibration, false);
+		final var d = propagate(regions, calibration);
 		final var r2 = radius * radius;
 		for (var i = 0; i < d.length; i++)
 			if (d[i] > r2) regions.ids[i] = regions.empty;
@@ -202,8 +205,8 @@ public final class LabelDistances {
 	 * Labeled pixels of the input keep their labels.
 	 *
 	 * @param labeling the labeled objects
-	 * @param radius the radius of the ball, in the units of the spacing
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param radius the radius of the ball, in calibrated units
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a new labeling with the labels closed
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
@@ -211,14 +214,14 @@ public final class LabelDistances {
 	 */
 	public static <L, I extends IntegerType<I>> ImgLabeling<L, I> close(
 		final ImgLabeling<L, I> labeling, final Double radius,
-		@Nullable double[] spacing)
+		@Nullable double[] calibration)
 	{
 		final var regions = Regions.of(labeling);
-		final var d = propagate(regions, spacing);
+		final var d = propagate(regions, calibration);
 		final var r2 = radius * radius;
 		for (var i = 0; i < d.length; i++)
 			if (d[i] > r2) regions.ids[i] = regions.empty;
-		erode(regions, radius, spacing, true);
+		erode(regions, radius, calibration, true);
 		return regions.toLabeling(labeling);
 	}
 
@@ -228,7 +231,7 @@ public final class LabelDistances {
 	 * (ties are broken arbitrarily). Labeled pixels keep their labels.
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param mask a mask restricting the influence zones: pixels where it is
 	 *          false are left unlabeled (default: no restriction). Note that
 	 *          distances are still Euclidean, not geodesic within the mask.
@@ -240,10 +243,11 @@ public final class LabelDistances {
 	 */
 	public static <L, I extends IntegerType<I>, B extends BooleanType<B>>
 		ImgLabeling<L, I> influenceZones(final ImgLabeling<L, I> labeling,
-			@Nullable double[] spacing, @Nullable RandomAccessibleInterval<B> mask)
+			@Nullable double[] calibration,
+			@Nullable RandomAccessibleInterval<B> mask)
 	{
 		final var regions = Regions.of(labeling);
-		propagate(regions, spacing);
+		propagate(regions, calibration);
 		if (mask != null) {
 			if (!Intervals.equalDimensions(mask, labeling)) {
 				throw new IllegalArgumentException(
@@ -261,7 +265,7 @@ public final class LabelDistances {
 	// -- Helper methods --
 
 	private static void erode(final Regions regions, final double radius,
-		final double[] spacing, final boolean backgroundOnly)
+		final double[] calibration, final boolean backgroundOnly)
 	{
 		final var ids = regions.ids;
 		final int[] areas;
@@ -273,7 +277,8 @@ public final class LabelDistances {
 		else areas = ids;
 		final var empty = backgroundOnly ? 0 : regions.empty;
 		final var d = squaredDistances(areas, empty, regions.dims,
-			Calibrations.spacing(spacing, regions.dims.length, "spacing"));
+			Calibrations.spacing(calibration, regions.dims.length,
+				"calibration"));
 		final var r2 = radius * radius;
 		for (var i = 0; i < d.length; i++)
 			if (d[i] <= r2) ids[i] = regions.empty;
@@ -284,10 +289,10 @@ public final class LabelDistances {
 	 * pixel, and returns the squared distances to it.
 	 */
 	private static double[] propagate(final Regions regions,
-		final double[] spacing)
+		final double[] calibration)
 	{
 		final var n = regions.dims.length;
-		final var s = Calibrations.spacing(spacing, n, "spacing");
+		final var s = Calibrations.spacing(calibration, n, "calibration");
 		final var weights = new double[n];
 		for (var d = 0; d < n; d++)
 			weights[d] = s[d] * s[d];
@@ -311,7 +316,7 @@ public final class LabelDistances {
 	 * pixel's partial distance from the previous passes.
 	 */
 	static double[] squaredDistances(final int[] ids, final int empty,
-		final long[] dims, final double[] spacing)
+		final long[] dims, final double[] calibration)
 	{
 		final var total = ids.length;
 		final var f = new double[total];
@@ -326,7 +331,7 @@ public final class LabelDistances {
 		final var z = new double[maxLength + 3];
 		for (var d = 0; d < dims.length; d++) {
 			final var length = (int) dims[d];
-			final var w = spacing[d] * spacing[d];
+			final var w = calibration[d] * calibration[d];
 			final var block = stride * length;
 			for (var outer = 0; outer < total; outer += block) {
 				for (var inner = 0; inner < stride; inner++) {

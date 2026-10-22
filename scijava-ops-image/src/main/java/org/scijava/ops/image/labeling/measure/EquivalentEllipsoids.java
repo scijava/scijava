@@ -71,14 +71,14 @@ public final class EquivalentEllipsoids {
 
 	/**
 	 * Computes the equivalent ellipsoid of each label. Centers are in
-	 * calibrated coordinates (the pixel position times the spacing, measured
-	 * between pixel centers), radii in the units of the spacing, in decreasing
-	 * order. Each axis direction is a unit vector whose first non-zero
+	 * calibrated coordinates (the pixel position times the calibration,
+	 * measured between pixel centers), radii in calibrated units, in
+	 * decreasing order. Each axis direction is a unit vector whose first non-zero
 	 * component is positive; in 2D, the major axis direction is thus
 	 * {@code (cos θ, sin θ)} with the angle {@code θ} in (-90°, 90°].
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @return a map from each label to its equivalent ellipsoid
 	 * @param <L> label type
 	 * @param <I> index type of the labeling
@@ -86,10 +86,10 @@ public final class EquivalentEllipsoids {
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, EquivalentEllipsoid>
 		equivalentEllipsoids(final ImgLabeling<L, I> labeling,
-			@Nullable double[] spacing)
+			@Nullable double[] calibration)
 	{
 		final var n = labeling.numDimensions();
-		final var s = Calibrations.spacing(spacing, n, "spacing");
+		final var s = Calibrations.spacing(calibration, n, "calibration");
 		final var result = new LinkedHashMap<L, EquivalentEllipsoid>();
 		final var pos = new double[n];
 		for (final var region : new LabelRegions<>(labeling)) {

@@ -88,7 +88,7 @@ public final class GeodesicDiameters {
 	 * to the steps of the neighborhood) has an infinite diameter.
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param radius the radius of the neighborhood of path steps, 1 (adjacent
 	 *          pixels) or 2 (also knight moves and their n-D analogs; default)
 	 * @return a map from each label to its geodesic diameter
@@ -97,11 +97,11 @@ public final class GeodesicDiameters {
 	 * @implNote op names='labeling.geodesicDiameter', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, Double> diameters(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration,
 		@Nullable Integer radius)
 	{
-		final var s = Calibrations.spacing(spacing, labeling
-			.numDimensions(), "spacing");
+		final var s = Calibrations.spacing(calibration, labeling
+			.numDimensions(), "calibration");
 		double diagonal = 0;
 		for (final var si : s)
 			diagonal += si * si;
@@ -125,7 +125,7 @@ public final class GeodesicDiameters {
 	 * connected, the path lies in the part containing its most central pixel.
 	 *
 	 * @param labeling the labeled objects
-	 * @param spacing the pixel spacing along each dimension (default 1)
+	 * @param calibration the pixel spacing along each dimension (default 1)
 	 * @param radius the radius of the neighborhood of path steps, 1 (adjacent
 	 *          pixels) or 2 (also knight moves and their n-D analogs; default)
 	 * @return a map from each label to its path, as pixel positions
@@ -134,11 +134,11 @@ public final class GeodesicDiameters {
 	 * @implNote op names='labeling.geodesicDiameterPath', type=Function
 	 */
 	public static <L, I extends IntegerType<I>> Map<L, List<Point>> paths(
-		final ImgLabeling<L, I> labeling, @Nullable double[] spacing,
+		final ImgLabeling<L, I> labeling, @Nullable double[] calibration,
 		@Nullable Integer radius)
 	{
-		final var s = Calibrations.spacing(spacing, labeling
-			.numDimensions(), "spacing");
+		final var s = Calibrations.spacing(calibration, labeling
+			.numDimensions(), "calibration");
 		final var result = new LinkedHashMap<L, List<Point>>();
 		for (final var region : new LabelRegions<>(labeling)) {
 			if (region.inside().size() == 0) continue;
@@ -168,8 +168,8 @@ public final class GeodesicDiameters {
 		double length;
 		boolean connected;
 
-		static Diameter of(final LabelRegion<?> region, final double[] spacing,
-			final Integer radius)
+		static Diameter of(final LabelRegion<?> region,
+			final double[] calibration, final Integer radius)
 		{
 			final var dims = region.dimensionsAsLongArray();
 			final var min = region.minAsLongArray();
@@ -195,8 +195,8 @@ public final class GeodesicDiameters {
 				ids[(int) index] = 0;
 				count++;
 			}
-			final var graph = new GeodesicGraph(dims, ids, spacing, radius == null
-				? 2 : radius);
+			final var graph = new GeodesicGraph(dims, ids, calibration,
+				radius == null ? 2 : radius);
 
 			// Find a central pixel: one farthest from the region boundary.
 			final var seeds = new int[count];

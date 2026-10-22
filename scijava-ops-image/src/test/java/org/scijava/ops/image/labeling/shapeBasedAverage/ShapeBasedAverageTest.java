@@ -29,6 +29,7 @@
 
 package org.scijava.ops.image.labeling.shapeBasedAverage;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -37,6 +38,7 @@ import java.util.Random;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
@@ -113,6 +115,20 @@ public class ShapeBasedAverageTest extends AbstractOpTest {
 					32 - y).get(), x + "," + y);
 			}
 		}
+	}
+
+	/** Translated inputs give the translated result. */
+	@Test
+	public void testNonZeroMin() {
+		final var a = disk(12, 16, 6);
+		final var b = disk(20, 16, 6);
+		final var expected = average(List.of(a, b));
+		final var actual = average(List.of(Views.translate(a, 7, -5), Views
+			.translate(b, 7, -5)));
+		assertArrayEquals(new long[] { 7, -5 }, actual.minAsLongArray());
+		final var e = Views.flatIterable(expected).cursor();
+		for (final var t : Views.flatIterable(actual))
+			assertEquals(e.next().get(), t.get());
 	}
 
 	private RandomAccessibleInterval<UnsignedByteType> average(

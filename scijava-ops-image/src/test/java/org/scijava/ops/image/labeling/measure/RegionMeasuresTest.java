@@ -216,8 +216,8 @@ public class RegionMeasuresTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void testMaximumFeretDiameter() {
-		final Map<Integer, Double> d = ops.op("labeling.maximumFeretDiameter")
+	public void testMaximumFeretsDiameter() {
+		final Map<Integer, Double> d = ops.op("labeling.maximumFeretsDiameter")
 			.input(shapes3D()).outType(DIAMETERS).apply();
 		assertEquals(8.602325267042627, d.get(1), 1e-9);
 		assertEquals(9.1104335791443, d.get(2), 1e-9);
@@ -232,7 +232,7 @@ public class RegionMeasuresTest extends AbstractOpTest {
 		assertArrayEquals(new double[] { 15, 4.5, 3.5 }, b, 1e-12);
 
 		// 2D, analytic: the diagonal of the rectangle and of a pixel.
-		final Map<Integer, Double> d2 = ops.op("labeling.maximumFeretDiameter")
+		final Map<Integer, Double> d2 = ops.op("labeling.maximumFeretsDiameter")
 			.input(shapes2D()).outType(DIAMETERS).apply();
 		assertEquals(Math.hypot(6, 3), d2.get(2), 1e-12);
 		assertEquals(Math.sqrt(2), d2.get(4), 1e-12);

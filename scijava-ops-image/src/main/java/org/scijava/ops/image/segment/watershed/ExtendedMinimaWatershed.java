@@ -70,7 +70,7 @@ import org.scijava.ops.spi.OpDependency;
  * @author Claude Opus 5.5
  * @param <T> element type of the input image
  * @param <B> element type of the mask
- * @implNote op names='segment.watershedExtendedMinima'
+ * @implNote op names='segment.extendedMinimaWatershed'
  */
 public class ExtendedMinimaWatershed<T extends RealType<T>, B extends BooleanType<B>>
 	implements

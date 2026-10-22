@@ -84,10 +84,10 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 	public void testDynamicControlsSplitting() {
 		final var img = twoBasins();
 		// The saddle between the cones is at height 5 (x = 10, y = 5).
-		final var split = ops.op("segment.watershedExtendedMinima").input(img, 1.0)
+		final var split = ops.op("segment.extendedMinimaWatershed").input(img, 1.0)
 			.outType(LABELING).apply();
 		assertEquals(2, labels(split).size());
-		final var merged = ops.op("segment.watershedExtendedMinima").input(img,
+		final var merged = ops.op("segment.extendedMinimaWatershed").input(img,
 			6.0).outType(LABELING).apply();
 		assertEquals(1, labels(merged).size());
 	}
@@ -95,9 +95,9 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 	@Test
 	public void testWatershedLines() {
 		final var img = twoBasins();
-		final var lines = ops.op("segment.watershedExtendedMinima").input(img, 1.0,
+		final var lines = ops.op("segment.extendedMinimaWatershed").input(img, 1.0,
 			new DiamondShape(1), true).outType(LABELING).apply();
-		final var noLines = ops.op("segment.watershedExtendedMinima").input(img,
+		final var noLines = ops.op("segment.extendedMinimaWatershed").input(img,
 			1.0, new DiamondShape(1), false).outType(LABELING).apply();
 		final var ra = lines.randomAccess();
 		final var raNo = noLines.randomAccess();
@@ -126,9 +126,9 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 		final var all = ArrayImgs.bits(21, 11);
 		for (final var t : all)
 			t.set(true);
-		final var lines = ops.op("segment.watershedExtendedMinima").input(img, 1.0,
+		final var lines = ops.op("segment.extendedMinimaWatershed").input(img, 1.0,
 			shape, true).outType(LABELING).apply();
-		final var labeled = ops.op("segment.watershedExtendedMinima").input(img,
+		final var labeled = ops.op("segment.extendedMinimaWatershed").input(img,
 			1.0, shape, true, all, 0.0, -1).outType(LABELING).apply();
 		final var ra = lines.randomAccess();
 		var lineCount = 0;
@@ -145,13 +145,13 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 		assertEquals(11, lineCount);
 
 		// Without watershed lines, the watershed label is not used.
-		final var noLines = ops.op("segment.watershedExtendedMinima").input(img,
+		final var noLines = ops.op("segment.extendedMinimaWatershed").input(img,
 			1.0, shape, false, all, 0.0, -1).outType(LABELING).apply();
 		assertEquals(Set.of(1, 2), labels(noLines));
 
 		// A watershed label which is also a region label is rejected.
 		assertThrows(IllegalArgumentException.class, () -> ops.op(
-			"segment.watershedExtendedMinima").input(img, 1.0, shape, true, all, 0.0,
+			"segment.extendedMinimaWatershed").input(img, 1.0, shape, true, all, 0.0,
 				2).outType(LABELING).apply());
 	}
 
@@ -161,7 +161,7 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 		final var img = twoBasins();
 		img.firstElement().set(Double.NaN);
 		assertThrows(IllegalArgumentException.class, () -> ops.op(
-			"segment.watershedExtendedMinima").input(img, 1.0).outType(LABELING)
+			"segment.extendedMinimaWatershed").input(img, 1.0).outType(LABELING)
 			.apply());
 	}
 
@@ -172,7 +172,7 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 		for (final var c = Views.interval(mask, new long[] { 0, 0 }, new long[] {
 			12, 10 }).cursor(); c.hasNext();)
 			c.next().set(true);
-		final var out = ops.op("segment.watershedExtendedMinima").input(img, 3.0,
+		final var out = ops.op("segment.extendedMinimaWatershed").input(img, 3.0,
 			null, false, mask).outType(LABELING).apply();
 		final var ra = out.randomAccess();
 		for (var y = 0; y < 11; y++) {
@@ -215,7 +215,7 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 	private void check(final Img<UnsignedByteType> img, final double h,
 		final Shape shape, final boolean lines, final int[] expected)
 	{
-		final var out = ops.op("segment.watershedExtendedMinima").input(img, h,
+		final var out = ops.op("segment.extendedMinimaWatershed").input(img, h,
 			shape, lines).outType(LABELING).apply();
 		final var actual = toArray(out);
 		if (lines) assertArrayEquals(expected, actual);

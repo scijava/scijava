@@ -49,7 +49,7 @@ import org.scijava.ops.spi.OpDependency;
  * The exact Euclidean distance transform of the foreground (see
  * {@code image.distanceTransform}) is negated, so that the centers of the
  * objects become basins, and segmented by an extended-minima watershed (see
- * {@code segment.watershedExtendedMinima}) restricted to the foreground. Two
+ * {@code segment.extendedMinimaWatershed}) restricted to the foreground. Two
  * touching objects are separated if the distance at the neck between them is
  * lower than the distance at the center of the smaller object by more than
  * {@code dynamic}.
@@ -80,7 +80,7 @@ public class DistanceTransformWatershed<B extends BooleanType<B>> implements
 	@OpDependency(name = "image.distanceTransform")
 	private Computers.Arity2<RandomAccessibleInterval<B>, double[], RandomAccessibleInterval<FloatType>> calibratedDistanceTransform;
 
-	@OpDependency(name = "segment.watershedExtendedMinima")
+	@OpDependency(name = "segment.extendedMinimaWatershed")
 	private Functions.Arity7<RandomAccessibleInterval<FloatType>, Double, Shape, Boolean, RandomAccessibleInterval<B>, Double, Integer, ImgLabeling<Integer, IntType>> watershed;
 
 	/**

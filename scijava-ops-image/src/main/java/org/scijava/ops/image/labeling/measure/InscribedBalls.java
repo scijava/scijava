@@ -42,6 +42,7 @@ import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
+import org.scijava.ops.image.util.Calibrations;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -91,7 +92,7 @@ public final class InscribedBalls {
 		final ImgLabeling<L, I> labeling, @Nullable double[] spacing)
 	{
 		final var n = labeling.numDimensions();
-		final var s = spacing == null ? ones(n) : spacing;
+		final var s = Calibrations.spacing(spacing, n, "spacing");
 		final var map = distanceMap.apply(labeling, s);
 		final var mapping = labeling.getMapping();
 		final var best = new double[mapping.numSets()];
@@ -143,9 +144,4 @@ public final class InscribedBalls {
 		return false;
 	}
 
-	static double[] ones(final int n) {
-		final var ones = new double[n];
-		Arrays.fill(ones, 1);
-		return ones;
-	}
 }

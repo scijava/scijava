@@ -141,6 +141,9 @@ final class StatisticalRegionMerging {
 		final var c = Views.flatIterable(input).cursor();
 		for (var i = 0; i < pixelCount; i++) {
 			final var v = c.next().getRealDouble();
+			if (Double.isNaN(v)) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
 			values[i] = v;
 			if (v < min) min = v;
 			if (v > max) max = v;

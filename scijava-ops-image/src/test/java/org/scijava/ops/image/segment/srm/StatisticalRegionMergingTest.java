@@ -302,4 +302,14 @@ public class StatisticalRegionMergingTest extends AbstractOpTest {
 		return d == 1 ? ArrayImgs.unsignedBytes(p, w, h) : ArrayImgs
 			.unsignedBytes(p, w, h, d);
 	}
+
+	/** NaN has no order, so images containing NaN are rejected. */
+	@Test
+	public void testNaN() {
+		final var img = ArrayImgs.floats(8, 8);
+		img.firstElement().set(Float.NaN);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(OP).input(img)
+			.outType(new Nil<ImgLabeling<Integer, IntType>>()
+			{}).apply());
+	}
 }

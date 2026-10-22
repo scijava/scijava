@@ -92,7 +92,7 @@ public class SioxChannelsMasks<T extends RealType<T>, B extends BooleanType<B>> 
 	 * Segments the input image using SIOX.
 	 *
 	 * @param image the color image to segment, with three channels along its
-	 *          last axis
+	 *          last axis, without NaN
 	 * @param foreground mask of the known foreground samples, with the spatial
 	 *          dimensions of the image
 	 * @param background mask of the known background samples, with the spatial

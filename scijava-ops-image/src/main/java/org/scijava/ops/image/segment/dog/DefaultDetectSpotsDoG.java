@@ -92,7 +92,7 @@ public class DefaultDetectSpotsDoG<T extends RealType<T> & NativeType<T>>
 	/**
 	 * Detects spots.
 	 *
-	 * @param input the image in which to detect spots
+	 * @param input the image in which to detect spots, without NaN
 	 * @param sigma the scale of the spots to detect: the standard deviation of
 	 *          the smaller Gaussian, in calibrated units
 	 * @param calibration the physical size of a pixel along each dimension;
@@ -114,6 +114,11 @@ public class DefaultDetectSpotsDoG<T extends RealType<T> & NativeType<T>>
 		@Nullable Double threshold, @Nullable Boolean brightSpots,
 		@Nullable Boolean subpixel)
 	{
+		for (final var t : Views.iterable(input)) {
+			if (Double.isNaN(t.getRealDouble())) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
+		}
 		final var n = input.numDimensions();
 		if (sigma == null || !(sigma > 0)) throw new IllegalArgumentException(
 			"sigma must be positive");

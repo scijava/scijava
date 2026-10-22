@@ -30,6 +30,7 @@
 package org.scijava.ops.image.segment.dog;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -165,5 +166,14 @@ public class DetectSpotsDoGTest extends AbstractOpTest {
 			SPOT_SIGMA).outType(new Nil<List<RealPoint>>()
 		{}).apply();
 		assertEquals(0, spots.size());
+	}
+
+	/** NaN would spread through the Gaussian filters, so it is rejected. */
+	@Test
+	public void testNaN() {
+		final var img = ArrayImgs.floats(20, 20);
+		img.firstElement().set(Float.NaN);
+		assertThrows(IllegalArgumentException.class, () -> detect(img, null, null,
+			null));
 	}
 }

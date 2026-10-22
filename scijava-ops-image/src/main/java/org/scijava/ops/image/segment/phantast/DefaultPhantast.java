@@ -165,7 +165,7 @@ public class DefaultPhantast<T extends RealType<T>> implements
 	/**
 	 * Segments cells in a phase contrast image.
 	 *
-	 * @param input the phase contrast image
+	 * @param input the phase contrast image, without NaN
 	 * @param sigma the standard deviation, in pixels, of the Gaussian window of
 	 *          the local contrast filter (PHANTAST default: 1.2)
 	 * @param epsilon the local contrast threshold above which pixels are
@@ -197,6 +197,11 @@ public class DefaultPhantast<T extends RealType<T>> implements
 		if (minObjectSize == null) minObjectSize = 100L;
 		if (minHoleSize == null) minHoleSize = 25L;
 
+		for (final var t : Views.iterable(input)) {
+			if (Double.isNaN(t.getRealDouble())) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
+		}
 		final var zeroMin = Views.zeroMin(input);
 		final var contrast = localContrastOp.apply(zeroMin, sigma);
 		final var mask = createOp.apply(zeroMin, new BitType());

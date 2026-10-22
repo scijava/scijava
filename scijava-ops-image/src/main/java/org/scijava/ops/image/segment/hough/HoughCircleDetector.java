@@ -88,7 +88,7 @@ public class HoughCircleDetector<T extends RealType<T>> implements
 	 * Detects circles in a Hough vote image.
 	 *
 	 * @param votes the (n+1)-dimensional vote image, whose last dimension indexes
-	 *          the tested radii
+	 *          the tested radii; NaN votes are ignored
 	 * @param minRadius the radius corresponding to the first index of the last
 	 *          dimension of the vote image
 	 * @param stepRadius the radius increment between successive indices of the
@@ -124,7 +124,8 @@ public class HoughCircleDetector<T extends RealType<T>> implements
 		final var cursor = Views.iterable(votes).localizingCursor();
 		CANDIDATE: while (cursor.hasNext()) {
 			final var value = cursor.next().getRealDouble();
-			if (value < threshold) continue;
+			// Note: NaN votes are never circles.
+			if (!(value >= threshold)) continue;
 			neighborhoods.setPosition(cursor);
 			for (final var neighbor : neighborhoods.get()) {
 				if (neighbor.getRealDouble() > value) continue CANDIDATE;

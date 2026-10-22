@@ -79,7 +79,7 @@ public class StatisticalRegionMergingMeans<T extends RealType<T>, O extends Real
 	 * Segments the input image using Statistical Region Merging, writing the
 	 * mean intensity of the region of each sample into the output.
 	 *
-	 * @param input the image to segment
+	 * @param input the image to segment, without NaN
 	 * @param q the complexity parameter Q, which must be positive (default 25);
 	 *          larger values yield more, smaller regions
 	 * @param g the number of intensity levels g onto which the input

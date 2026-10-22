@@ -195,4 +195,13 @@ public class PhantastTest extends AbstractOpTest {
 		}
 		assertEquals(String.join("\n", expected), String.join("\n", actual));
 	}
+
+	/** NaN would spread through the local contrast filter, so it is rejected. */
+	@Test
+	public void testNaN() {
+		final var img = synth();
+		img.firstElement().set(Float.NaN);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.phantast").input(img, 1.2, 0.03).outType(MASK).apply());
+	}
 }

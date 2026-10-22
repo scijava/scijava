@@ -73,6 +73,10 @@ import org.scijava.progress.Progress;
  * constant image equal to the mean of the input.
  * </p>
  * <p>
+ * The iteration is computed in double precision for any output type; the
+ * result is then clamped to the range of the output type.
+ * </p>
+ * <p>
  * References:
  * </p>
  * <ul>
@@ -105,6 +109,9 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, Img<O>> createImg;
 
+	@OpDependency(name = "create.img")
+	private BiFunction<Dimensions, DoubleType, Img<DoubleType>> createDoubleImg;
+
 	@OpDependency(name = "filter.padInputFFTMethods")
 	private Functions.Arity4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
 
@@ -118,16 +125,10 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 	private Computers.Arity1<RandomAccessibleInterval<K>, RandomAccessibleInterval<C>> fftKernelOp;
 
 	@OpDependency(name = "filter.linearFilter")
-	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, Boolean, Boolean, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> linearFilter;
+	private Computers.Arity7<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<K>, Boolean, Boolean, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<DoubleType>> linearFilter;
 
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<Iterable<I>, DoubleType> meanOp;
-
-	@OpDependency(name = "copy.rai")
-	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> copyInputOp;
-
-	@OpDependency(name = "copy.rai")
-	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copyOp;
 
 	/**
 	 * Deconvolves an image with the (projected) Landweber iteration.
@@ -222,9 +223,12 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 		final double tau = stepSize == null ? 1 / maxPower : stepSize;
 
 		// Measured data on the padded domain, and the first estimate.
-		final var y = createImg.apply(paddedDims, outType);
-		copyInputOp.compute(Views.zeroMin(paddedInput), y);
-		final var x = createImg.apply(paddedDims, outType);
+		// Note: The iterate and the (signed) residual are kept in double
+		// precision whatever the output type, which is only used for the result.
+		final var y = createDoubleImg.apply(paddedDims, new DoubleType());
+		LoopBuilder.setImages(Views.zeroMin(paddedInput), y).forEachPixel((in,
+			out) -> out.set(in.getRealDouble()));
+		final var x = createDoubleImg.apply(paddedDims, new DoubleType());
 		if (nonCirculant) {
 			final var mean = new DoubleType();
 			meanOp.compute(Views.iterable(input), mean);
@@ -232,7 +236,7 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 			for (final var v : x)
 				v.setReal(m);
 		}
-		else copyOp.compute(y, x);
+		else LoopBuilder.setImages(y, x).forEachPixel((in, out) -> out.set(in));
 		if (nonNegative) clampNonNegative(x);
 
 		final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> convolve =
@@ -240,9 +244,9 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 		final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> correlate =
 			(fx, fh, out) -> multiply(fx, fh, out, true);
 
-		final var residual = createImg.apply(paddedDims, outType);
+		final var residual = createDoubleImg.apply(paddedDims, new DoubleType());
 		final var reblurred = nonCirculant ? //
-			createImg.apply(paddedDims, outType) : residual;
+			createDoubleImg.apply(paddedDims, new DoubleType()) : residual;
 		final boolean project = nonNegative;
 
 		Progress.defineTotal(maxIterations);
@@ -272,13 +276,15 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 			Progress.update();
 		}
 
-		// Crop the measured window.
+		// Crop the measured window, clamping to the range of the output type.
 		final var output = createImg.apply(input, outType);
-		copyOp.compute(Views.zeroMin(Views.interval(x, window)), output);
+		LoopBuilder.setImages(Views.zeroMin(Views.interval(x, window)), output)
+			.forEachPixel((in, out) -> out.setReal(Math.max(out.getMinValue(), Math
+				.min(out.getMaxValue(), in.get()))));
 		return output;
 	}
 
-	private void clampNonNegative(final Img<O> img) {
+	private void clampNonNegative(final Img<DoubleType> img) {
 		for (final var v : img) {
 			if (v.getRealDouble() < 0) v.setZero();
 		}

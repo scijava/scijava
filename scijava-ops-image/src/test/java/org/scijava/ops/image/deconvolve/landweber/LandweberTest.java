@@ -45,6 +45,7 @@ import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsPeriodicFactory;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
+import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
@@ -195,6 +196,35 @@ public class LandweberTest extends AbstractOpTest {
 		assertTrue(zero100 > zero30, "zero-padded: " + zero100 + " vs " + zero30);
 		assertTrue(nc100 < 0.5 * zero100, "non-circulant: " + nc100 +
 			" vs zero-padded: " + zero100);
+	}
+
+	/**
+	 * With an integer output type, the residual {@code y - h * x} is negative
+	 * in places, so it must not be stored in the output type. The result must
+	 * match the floating-point result, rounded.
+	 */
+	@Test
+	public void testUnsignedShortOutput() {
+		final var object = phantom3D();
+		for (final var v : object)
+			v.mul(1000);
+		final var kernel = gaussKernel(1.5, 3);
+		final var blurred = blur(object, kernel);
+		final var in = ArrayImgs.unsignedShorts(blurred.dimensionsAsLongArray());
+		final var bc = Views.flatIterable(blurred).cursor();
+		for (final var v : in)
+			v.setReal(Math.round(bc.next().get()));
+
+		final var expected = ops.op("deconvolve.landweber").input(in, kernel,
+			new FloatType(), new ComplexFloatType(), 10, null, true, false, null,
+			null).outType(FLOAT_RAI).apply();
+		final var actual = ops.op("deconvolve.landweber").input(in, kernel,
+			new UnsignedShortType(), new ComplexFloatType(), 10, null, true, false,
+			null, null).outType(new Nil<RandomAccessibleInterval<UnsignedShortType>>()
+			{}).apply();
+		final var ec = Views.flatIterable(expected).cursor();
+		for (final var v : Views.flatIterable(actual))
+			assertEquals(Math.min(65535, ec.next().get()), v.get(), 0.5 + 1e-3);
 	}
 
 	@Test

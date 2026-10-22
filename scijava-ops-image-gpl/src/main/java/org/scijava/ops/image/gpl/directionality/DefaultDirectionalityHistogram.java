@@ -72,7 +72,10 @@ import org.scijava.ops.spi.Nullable;
  * instead, so its bins collect the orientations in
  * {@code [center, center + width)} and its histogram and fitted direction are
  * offset by half a bin (about 1 degree with the default 90 bins). The first
- * and last bins thus cover only half a bin width each.
+ * and last bins thus cover only half a bin width each. Quirks kept for parity
+ * with the plugin: the bin centers include both ends of the analyzed range,
+ * and the Blackman window has a constant third term (the plugin omits the
+ * position from its cosine).
  * </p>
  * <p>
  * Note: this is unrelated to the Tamura texture feature

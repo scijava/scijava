@@ -66,6 +66,11 @@ import org.scijava.ops.spi.OpDependency;
  * fit. For other data terms, pass cost images to the
  * {@code segment.graphCut} op which takes them.
  * </p>
+ * <p>
+ * Implemented from the papers; the code of the Fiji Graph_Cut plugin was not
+ * consulted. The graph is held in flat arrays, so the image is limited to
+ * about 2<sup>31</sup> / (number of neighbors) pixels.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

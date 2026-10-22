@@ -58,6 +58,11 @@ import org.scijava.ops.spi.OpDependency;
  * a pixel is foreground if and only if its foreground cost is lower than its
  * background cost.
  * </p>
+ * <p>
+ * Implemented from the papers; the code of the Fiji Graph_Cut plugin was not
+ * consulted. The graph is held in flat arrays, so the image is limited to
+ * about 2<sup>31</sup> / (number of neighbors) pixels.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

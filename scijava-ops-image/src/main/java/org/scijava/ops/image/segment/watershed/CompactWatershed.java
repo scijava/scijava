@@ -62,7 +62,12 @@ import org.scijava.ops.spi.OpDependency;
  * Unlike {@code image.watershed}, which decides the label of a pixel only when
  * it is flooded, each queued pixel here carries the label (and marker pixel) of
  * the region which reached it, which is what makes a distance-dependent
- * priority possible.
+ * priority possible. Also unlike {@code image.watershed}, which labels its
+ * watershed lines -1 when drawing them and otherwise merges them into a
+ * neighboring region, the lines are left unlabeled unless a
+ * {@code watershedLabel} is given; the same holds for
+ * {@code segment.extendedMinimaWatershed} and
+ * {@code segment.distanceTransformWatershed}.
  * </p>
  *
  * @author Curtis Rueden

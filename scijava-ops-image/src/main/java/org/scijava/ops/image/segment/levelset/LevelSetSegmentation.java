@@ -71,8 +71,8 @@ import org.scijava.ops.spi.OpDependency;
  * {@code phi_t = g (alpha kappa + c) |grad phi| + beta grad g . grad phi}. The
  * edge stopping function is {@code g = 1 / (1 + (|grad u_sigma| /
  * lambda)^2)}, where {@code u_sigma} is the image rescaled to [0, 1] and
- * smoothed by a
- * Gaussian of standard deviation {@code sigma} and {@code lambda} is a tenth
+ * smoothed by a Gaussian of standard deviation {@code sigma} and
+ * {@code lambda} is a tenth
  * of the largest gradient magnitude, so that {@code g} is close to 0 on the
  * strongest edges and to 1 in flat regions. The contour expands ({@code c >
  * 0}) or shrinks ({@code c < 0}) until it is stopped and attracted by
@@ -88,16 +88,19 @@ import org.scijava.ops.spi.OpDependency;
  * of the unit normals between adjacent pixels for the curvature (which thus
  * also removes isolated pixels). The time step is chosen for stability and,
  * for Chan-Vese, so that the contour moves by at most half a pixel per
- * iteration. Every five iterations, the level-set function is reinitialized to a signed distance function: pixels next
- * to the zero level set keep their sub-pixel distance estimate {@code phi /
- * |grad phi|}, and all others get the signed distance of the current mask.
+ * iteration. Every five iterations, the level-set function is reinitialized
+ * to a signed distance function: pixels next to the zero level set keep
+ * their sub-pixel distance estimate {@code phi / |grad phi|}, and all others
+ * get the signed distance of the current mask.
  * The evolution stops after {@code maxIterations} iterations, or earlier when,
  * between two reinitializations, at most {@code tolerance} times the number of
  * inside pixels have changed sides. The computation works in any number of
  * dimensions, with anisotropic calibration.
  * </p>
  * <p>
- * Both models are implemented from the cited papers. The level-set framework
+ * Both models are implemented from the cited papers; the code of the Fiji
+ * Level Sets plugin was not consulted, and its parameters do not carry over.
+ * The level-set framework
  * is that of S. Osher and J. A. Sethian ("Fronts propagating with
  * curvature-dependent speed", <i>J. Comput. Phys.</i> 79(1): 12&ndash;49,
  * 1988).

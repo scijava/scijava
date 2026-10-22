@@ -90,7 +90,9 @@ import org.scijava.ops.spi.OpDependency;
  * at least {@code hMin} seed their own segment; lower peaks are merged into the
  * segment of their higher neighbor. Pixels below {@code threshold} are
  * background, and each segment can be restricted to the top
- * {@code peakFlooding} percent of its height above the threshold.
+ * {@code peakFlooding} percent of its height above the threshold. Touching
+ * segments are not separated by watershed lines (there is no option for
+ * them, unlike in {@code segment.compactWatershed}).
  * </p>
  * <p>
  * To segment dark objects, invert the image first.

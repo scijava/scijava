@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.threshold.hysteresis;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.function.BiFunction;
 
@@ -39,11 +38,11 @@ import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.ConstantUtils;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.image.util.Neighborhoods;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -54,9 +53,10 @@ import org.scijava.ops.spi.OpDependency;
  * if its value is at least {@code low} and it is connected to such a pixel by
  * a path of pixels whose values are all at least {@code low}. Connectivity is
  * given by a {@link Shape}: the neighbors of a pixel are the pixels of the
- * shape's neighborhood around it. The result therefore keeps every connected
- * component of {@code input >= low} that contains at least one pixel with
- * {@code input >= high}, and removes all others. NaN pixels are never
+ * shape's neighborhood around it (made symmetric, so that connectivity is
+ * symmetric even for an asymmetric shape). The result therefore keeps every
+ * connected component of {@code input >= low} that contains at least one
+ * pixel with {@code input >= high}, and removes all others. NaN pixels are never
  * foreground, and do not connect their neighbors.
  * </p>
  * <p>
@@ -114,7 +114,7 @@ public class DefaultHysteresisThreshold<T extends RealType<T>> implements
 		final var strides = new long[n];
 		for (var d = 0; d < n; d++)
 			strides[d] = d == 0 ? 1 : strides[d - 1] * dims[d - 1];
-		final var offsets = offsets(shape, n);
+		final var offsets = Neighborhoods.neighborOffsets(shape, n);
 
 		final var weak = new BitSet(count);
 		final var strong = new BitSet(count);
@@ -166,23 +166,5 @@ public class DefaultHysteresisThreshold<T extends RealType<T>> implements
 		for (final var t : Views.flatIterable(output))
 			t.set(result.get(i++));
 		return output;
-	}
-
-	/** Lists the nonzero offsets of a shape's neighborhood. */
-	private static long[][] offsets(final Shape shape, final int n) {
-		final var origin = shape.neighborhoodsRandomAccessible(ConstantUtils
-			.constantRandomAccessible(new BitType(), n)).randomAccess();
-		origin.setPosition(new long[n]);
-		final var list = new ArrayList<long[]>();
-		final var c = origin.get().localizingCursor();
-		while (c.hasNext()) {
-			c.fwd();
-			final var offset = c.positionAsLongArray();
-			var zero = true;
-			for (final var o : offset)
-				zero &= o == 0;
-			if (!zero) list.add(offset);
-		}
-		return list.toArray(long[][]::new);
 	}
 }

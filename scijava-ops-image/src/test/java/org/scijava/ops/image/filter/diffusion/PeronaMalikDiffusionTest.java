@@ -63,7 +63,7 @@ public class PeronaMalikDiffusionTest extends AbstractOpTest {
 		in.forEach(t -> t.set(10 * rnd.nextDouble()));
 		final var out = ArrayImgs.doubles(5, 4, 3);
 		final var dt = 0.1;
-		ops.op("filter.anisotropicDiffusion").input(in, 1e9, 1, dt).output(out)
+		ops.op("filter.peronaMalik").input(in, 1e9, 1, dt).output(out)
 			.compute();
 
 		final var ra = in.randomAccess();
@@ -93,7 +93,7 @@ public class PeronaMalikDiffusionTest extends AbstractOpTest {
 		in.forEach(t -> t.set(100 * rnd.nextFloat()));
 		for (final var g : new String[] { "exponential", "quadratic" }) {
 			final var out = ArrayImgs.floats(9, 8);
-			ops.op("filter.anisotropicDiffusion").input(in, 20.0, 15, 0.25, g)
+			ops.op("filter.peronaMalik").input(in, 20.0, 15, 0.25, g)
 				.output(out).compute();
 			assertEquals(sum(in), sum(out), 1e-2);
 		}
@@ -114,7 +114,7 @@ public class PeronaMalikDiffusionTest extends AbstractOpTest {
 		final var noise = stdDev(Views.interval(in, flat));
 		for (final var g : new String[] { "exponential", "quadratic" }) {
 			final var out = ArrayImgs.floats(w, h);
-			ops.op("filter.anisotropicDiffusion").input(in, 15.0, 30, null, g).output(
+			ops.op("filter.peronaMalik").input(in, 15.0, 30, null, g).output(
 				out).compute();
 			assertTrue(stdDev(Views.interval(out, flat)) < noise / 3, g);
 			final var ra = out.randomAccess();
@@ -131,10 +131,10 @@ public class PeronaMalikDiffusionTest extends AbstractOpTest {
 		final var img = ArrayImgs.floats(5, 5);
 		final var out = ArrayImgs.floats(5, 5);
 		assertThrows(RuntimeException.class, () -> ops.op(
-			"filter.anisotropicDiffusion").input(img, 5.0, 1, 0.3).output(out)
+			"filter.peronaMalik").input(img, 5.0, 1, 0.3).output(out)
 			.compute());
 		assertThrows(RuntimeException.class, () -> ops.op(
-			"filter.anisotropicDiffusion").input(img, 5.0, 1, 0.1, "linear").output(
+			"filter.peronaMalik").input(img, 5.0, 1, 0.1, "linear").output(
 				out).compute());
 	}
 
@@ -175,9 +175,9 @@ public class PeronaMalikDiffusionTest extends AbstractOpTest {
 				.nextDouble());
 		}
 		final var expected = ArrayImgs.floats(16, 16);
-		ops.op("filter.anisotropicDiffusion").input(in, 10.0).output(expected).compute();
+		ops.op("filter.peronaMalik").input(in, 10.0).output(expected).compute();
 		final var actual = ArrayImgs.unsignedBytes(16, 16);
-		ops.op("filter.anisotropicDiffusion").input(in, 10.0).output(actual).compute();
+		ops.op("filter.peronaMalik").input(in, 10.0).output(actual).compute();
 		final var ec = expected.cursor();
 		var saturated = 0;
 		for (final var t : actual) {

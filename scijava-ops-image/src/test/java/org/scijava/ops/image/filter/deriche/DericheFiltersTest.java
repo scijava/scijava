@@ -168,7 +168,7 @@ public class DericheFiltersTest extends AbstractOpTest {
 			c.get().setReal(inside ? 100 : 10);
 		}
 		final RandomAccessibleInterval<DoubleType> magnitude = ops.op(
-			"filter.cannyDeriche").input(img, 1.0).outType(DOUBLES).apply();
+			"filter.dericheGradientMagnitude").input(img, 1.0).outType(DOUBLES).apply();
 		// Along the middle line x, the magnitude peaks at the two faces.
 		final RandomAccess<DoubleType> ma = magnitude.randomAccess();
 		double best = 0;

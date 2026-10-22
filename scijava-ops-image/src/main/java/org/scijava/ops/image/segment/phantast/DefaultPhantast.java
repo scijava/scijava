@@ -58,7 +58,7 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  * <ol>
  * <li>Compute the local contrast image, i.e. the Gaussian-weighted local
- * coefficient of variation (see {@code filter.localContrast}).</li>
+ * coefficient of variation (see {@code filter.localCoefficientOfVariation}).</li>
  * <li>Threshold it: pixels with local contrast greater than {@code epsilon}
  * are foreground.</li>
  * <li>Remove foreground objects smaller than {@code minObjectSize} pixels,
@@ -153,8 +153,8 @@ public class DefaultPhantast<T extends RealType<T>> implements
 	Functions.Arity6<RandomAccessibleInterval<T>, Double, Double, Boolean, Long, Long, RandomAccessibleInterval<BitType>>
 {
 
-	@OpDependency(name = "filter.localContrast")
-	private BiFunction<RandomAccessibleInterval<T>, Double, RandomAccessibleInterval<FloatType>> localContrastOp;
+	@OpDependency(name = "filter.localCoefficientOfVariation")
+	private BiFunction<RandomAccessibleInterval<T>, Double, RandomAccessibleInterval<FloatType>> localCoefficientOfVariationOp;
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, BitType, RandomAccessibleInterval<BitType>> createOp;
@@ -203,7 +203,7 @@ public class DefaultPhantast<T extends RealType<T>> implements
 			}
 		}
 		final var zeroMin = Views.zeroMin(input);
-		final var contrast = localContrastOp.apply(zeroMin, sigma);
+		final var contrast = localCoefficientOfVariationOp.apply(zeroMin, sigma);
 		final var mask = createOp.apply(zeroMin, new BitType());
 		final double eps = epsilon;
 		LoopBuilder.setImages(contrast, mask).forEachPixel((c, m) -> m.set(c

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.filter.localContrast;
+package org.scijava.ops.image.filter.localCoefficientOfVariation;
 
 import java.util.function.BiFunction;
 
@@ -121,9 +121,9 @@ import org.scijava.ops.spi.OpDependency;
  * @author Claude Opus 5.5
  * @author Nicolas Jaccard
  * @param <T> the input type
- * @implNote op names='filter.localContrast'
+ * @implNote op names='filter.localCoefficientOfVariation'
  */
-public class DefaultLocalContrast<T extends RealType<T>> implements
+public class DefaultLocalCoefficientOfVariation<T extends RealType<T>> implements
 	BiFunction<RandomAccessibleInterval<T>, Double, RandomAccessibleInterval<FloatType>>
 {
 

@@ -66,7 +66,7 @@ import org.scijava.ops.spi.Nullable;
  * Note: unlike {@code filter.hessian}, which applies a Sobel operator twice
  * without explicit smoothing and returns the full n&times;n matrix, the Hessian
  * here is computed at a chosen Gaussian scale, which is what scale-space
- * measures like eigenvalues, shape index and surfaceness require, similar to
+ * measures like eigenvalues, shape index and sheetness require, similar to
  * {@code filter.tubeness}.
  * </p>
  *
@@ -248,7 +248,7 @@ public final class TensorFilters {
 	}
 
 	/**
-	 * Computes a surfaceness (bright sheet / plate) measure of a 3D image from
+	 * Computes a sheetness (bright sheet / plate) measure of a 3D image from
 	 * the eigenvalues of its Hessian matrix, following the sheet filter of
 	 * Sato et al. (2000), "Tissue classification based on 3D local intensity
 	 * structures for volume rendering", IEEE TVCG 6(2).
@@ -273,7 +273,7 @@ public final class TensorFilters {
 	 * {@code sqrt(|λ3/λ2|) - 1} when both {@code λ2, λ3 < 0} (sorted by
 	 * magnitude). That ratio is unbounded and vanishes at the center of an
 	 * ideal plate (where {@code λ2 = 0}), so this op uses Sato's measure
-	 * instead.
+	 * instead, under a different name.
 	 * </p>
 	 *
 	 * @param <T> the input type
@@ -283,17 +283,17 @@ public final class TensorFilters {
 	 *          positive (dark-side) curvature; defaults to 0.25
 	 * @param calibration the pixel spacing per dimension; defaults to 1 in every
 	 *          dimension
-	 * @return the surfaceness image
-	 * @implNote op names='filter.surfaceness'
+	 * @return the sheetness image
+	 * @implNote op names='filter.sheetness'
 	 */
 	public static <T extends RealType<T>> RandomAccessibleInterval<DoubleType>
-		surfaceness( //
+		sheetness( //
 			final RandomAccessibleInterval<T> input, //
 			final Double sigma, //
 			@Nullable Double alpha, //
 			@Nullable final double[] calibration //
 	) {
-		TensorUtils.checkDimensions(input, 3, "filter.surfaceness");
+		TensorUtils.checkDimensions(input, 3, "filter.sheetness");
 		if (alpha == null) alpha = 0.25;
 		final double a = alpha;
 		final var hessian = TensorUtils.hessian(input, sigma, calibration, true);

@@ -113,6 +113,8 @@ public final class DericheFilters {
 	/**
 	 * Computes the magnitude of the Deriche gradient of an image: the Euclidean
 	 * norm of its {@code filter.derichePartialDerivative} along all dimensions.
+	 * This is not an edge map: for Canny edges on the same gradient, see
+	 * {@code segment.cannyDericheEdges}.
 	 *
 	 * @param input the image
 	 * @param alpha the (positive) scale parameter of the filters, in inverse
@@ -120,7 +122,7 @@ public final class DericheFilters {
 	 * @param calibration the pixel spacing along each dimension (default: 1 for
 	 *          every dimension)
 	 * @return the gradient magnitude, in intensity per physical unit
-	 * @implNote op names='filter.cannyDeriche'
+	 * @implNote op names='filter.dericheGradientMagnitude'
 	 */
 	public static <T extends RealType<T>> RandomAccessibleInterval<DoubleType>
 		gradientMagnitude( //

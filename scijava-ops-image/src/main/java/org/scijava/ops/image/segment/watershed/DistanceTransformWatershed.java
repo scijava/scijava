@@ -35,6 +35,7 @@ import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
@@ -118,10 +119,13 @@ public class DistanceTransformWatershed<B extends BooleanType<B>> implements
 		@Nullable final double[] calibration, //
 		@Nullable final Integer watershedLabel //
 	) {
-		final var distances = ArrayImgs.floats(input.dimensionsAsLongArray());
+		// Note: The distances share the input's interval, so that the watershed
+		// output does too.
+		final RandomAccessibleInterval<FloatType> distances = Views.translate(
+			ArrayImgs.floats(input.dimensionsAsLongArray()), input.minAsLongArray());
 		if (calibration == null) distanceTransform.compute(input, distances);
 		else calibratedDistanceTransform.compute(input, calibration, distances);
-		for (final var t : distances)
+		for (final var t : Views.iterable(distances))
 			t.set(-t.get());
 		return watershed.apply(distances, dynamic == null ? 1.0 : dynamic,
 			connectivity, drawWatersheds, input, 0.0, watershedLabel);

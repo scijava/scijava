@@ -211,7 +211,10 @@ public class Landweber<I extends RealType<I> & NativeType<I>, O extends RealType
 		fftKernelOp.compute(paddedKernel, fftKernel);
 		var maxPower = 0.0;
 		for (final var h : Views.iterable(fftKernel)) {
-			maxPower = Math.max(maxPower, h.getPowerDouble());
+			// Note: ImgLib2's getPowerDouble() is the magnitude |H|, not |H|^2.
+			final var re = h.getRealDouble();
+			final var im = h.getImaginaryDouble();
+			maxPower = Math.max(maxPower, re * re + im * im);
 		}
 		if (!(maxPower > 0)) {
 			throw new IllegalArgumentException("Kernel has no nonzero frequencies");

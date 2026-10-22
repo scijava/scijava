@@ -111,6 +111,29 @@ public class LandweberTest extends AbstractOpTest {
 		assertTrue(diverged > 100 * initialError, "diverged: " + diverged);
 	}
 
+	/**
+	 * The default step size must be stable for a kernel that does not sum to
+	 * one, where {@code max|H|} and {@code max|H|^2} differ.
+	 */
+	@Test
+	public void testDefaultStepUnnormalizedKernel() {
+		final var size = fastSize(40, 36);
+		final var object = randomImage(size, 5);
+		final var kernel = gaussKernel(1.5, 2);
+		for (final var v : Views.iterable(kernel))
+			v.mul(3);
+		final var blurred = blurCirculant(object, kernel);
+
+		var previousResidual = Double.POSITIVE_INFINITY;
+		for (var k = 0; k <= 8; k++) {
+			final var x = landweberCirculant(blurred, kernel, k, null, false);
+			final var residual = mse(blurCirculant(x, kernel), blurred);
+			assertTrue(residual < previousResidual, "residual at iteration " + k +
+				": " + residual + " >= " + previousResidual);
+			previousResidual = residual;
+		}
+	}
+
 	/** Restoration of a noisy, blurred 3-D phantom must reduce the error. */
 	@Test
 	public void testNoisy3D() {

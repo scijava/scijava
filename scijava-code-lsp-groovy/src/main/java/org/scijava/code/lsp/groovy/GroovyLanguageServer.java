@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -50,7 +51,9 @@ import javax.script.SimpleBindings;
 
 import groovy.lang.GroovySystem;
 import groovy.lang.MetaMethod;
+import groovyjarjarantlr4.v4.runtime.Vocabulary;
 
+import org.apache.groovy.parser.antlr4.GroovyLexer;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.ConstructorNode;
 import org.codehaus.groovy.ast.FieldNode;
@@ -90,14 +93,7 @@ import org.scijava.util.Types;
  */
 public class GroovyLanguageServer extends AbstractLanguageServer {
 
-	private static final List<String> KEYWORDS = Arrays.asList("as", "assert",
-		"boolean", "break", "byte", "case", "catch", "char", "class", "continue",
-		"def", "default", "do", "double", "else", "enum", "extends", "false",
-		"final", "finally", "float", "for", "if", "implements", "import", "in",
-		"instanceof", "int", "interface", "long", "new", "null", "private",
-		"protected", "public", "return", "short", "static", "super", "switch",
-		"this", "throw", "throws", "trait", "true", "try", "var", "void",
-		"while");
+	private static final Set<String> KEYWORDS = keywords();
 
 	/** Packages Groovy imports by default. */
 	private static final List<String> DEFAULT_IMPORTS = Arrays.asList(
@@ -474,6 +470,26 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 			final ClassNode type = vars.get(name);
 			out.add(variable(name, type != null ? type.toString(false)
 				: typeName(predefined.get(name))));
+		}
+		return out;
+	}
+
+	/** Groovy's keywords */
+	private static Set<String> keywords() {
+		// NB: The lexer literals don't contain primitives - we add those ourselves
+		final Set<String> out = new TreeSet<>(Arrays.asList("true", "false",
+			"boolean", "byte", "char", "short", "int", "long", "float", "double"));
+		final Vocabulary v = GroovyLexer.VOCABULARY;
+		for (int i = 0; i <= v.getMaxTokenType(); i++) {
+			// NB: The vocabulary has every kind of token: keywords, operators and
+			// punctuation, which have fixed text (their literal name, quoted, e.g.
+			// "'class'"), plus identifiers, strings and numbers, which don't
+			// (null). We want just the literals that are words, i.e. keywords
+			// (with hyphens, as in "non-sealed").
+			final String literal = v.getLiteralName(i);
+			if (literal == null) continue;
+			final String word = literal.substring(1, literal.length() - 1);
+			if (word.matches("[a-z][a-z-]*")) out.add(word);
 		}
 		return out;
 	}

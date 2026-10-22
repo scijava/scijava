@@ -248,8 +248,13 @@ public class GroovyLanguageServerTest {
 
 	@Test
 	public void testKeywords() {
+		// keywords get completed
 		assertTrue(complete("ret").contains("return"));
+		// keywords shouldn't be offered in member accesses
 		assertFalse(complete("def x = 1.").contains("return"));
+		// primitives get completed
+		assertTrue(complete("tr").contains("true"));
+		assertTrue(complete("do").contains("double"));
 	}
 
 	@Test

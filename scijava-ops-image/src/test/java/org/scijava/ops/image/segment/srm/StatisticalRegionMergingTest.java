@@ -236,13 +236,19 @@ public class StatisticalRegionMergingTest extends AbstractOpTest {
 			{}).apply();
 	}
 
-	/** Extracts the single label of each sample, in flat iteration order. */
+	/**
+	 * Extracts the single label of each sample, in flat iteration order, minus
+	 * one: the op labels regions from 1, while the region index image of the
+	 * original plugin (from which the regression values come) counts from 0.
+	 */
 	private static int[] labels(final ImgLabeling<Integer, IntType> labeling) {
 		final var labels = new int[(int) Views.iterable(labeling).size()];
 		var i = 0;
 		for (final var set : Views.flatIterable(labeling)) {
 			assertEquals(1, set.size());
-			labels[i++] = set.iterator().next();
+			final int label = set.iterator().next();
+			assertTrue(label >= 1, "label " + label);
+			labels[i++] = label - 1;
 		}
 		return labels;
 	}

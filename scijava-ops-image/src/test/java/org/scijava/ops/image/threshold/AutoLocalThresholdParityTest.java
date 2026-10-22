@@ -113,13 +113,13 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 	 * Bernsen with Fiji parameters (contrast threshold 15, and 128 as the mid
 	 * grey of low-contrast regions). Fiji rounds the local mid grey
 	 * {@code (min + max) / 2} down to an integer before comparing pixels to it
-	 * with {@code >=}, so it also marks pixels half a grey level below it as
-	 * foreground (47 and 15 pixels on blobs8, 86 and 46 on narrow8). Rounding
-	 * the mid grey down in the op gives identical masks.
+	 * with {@code >=}. Before the op did so too, it missed the pixels half a
+	 * grey level below the mid grey (47 and 15 pixels on blobs8, 86 and 46 on
+	 * narrow8).
 	 */
 	@Test
 	public void testBernsen() throws IOException {
-		assertFiji("Bernsen", 90);
+		assertFiji("Bernsen");
 	}
 
 	/**

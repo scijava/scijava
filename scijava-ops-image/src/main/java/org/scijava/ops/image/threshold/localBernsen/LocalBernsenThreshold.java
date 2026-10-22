@@ -41,6 +41,18 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Nullable;
 
 /**
+ * Bernsen's local threshold: a pixel is foreground if it is at least the mid
+ * grey {@code (min + max) / 2} of its neighborhood (rounded down to an integer
+ * for {@link net.imglib2.type.numeric.IntegerType} images, as in Fiji's
+ * Auto_Local_Threshold plugin), or, in neighborhoods with a contrast
+ * {@code max - min} below the contrast threshold, if that mid grey is at least
+ * {@code halfMaxValue}.
+ * <p>
+ * Bernsen J. (1986) "Dynamic Thresholding of Grey-Level Images", Proc. of the
+ * 8th Int. Conf. on Pattern Recognition, pp. 1251-1255.
+ * </p>
+ *
+ * @see ComputeLocalBernsenThreshold
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T> input type
@@ -57,14 +69,16 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
 
 	/**
-	 * TODO
+	 * Computes Bernsen's local threshold of an image.
 	 *
-	 * @param input
-	 * @param inputNeighborhoodShape
-	 * @param contrastThreshold
-	 * @param halfMaxValue
-	 * @param outOfBoundsFactory
-	 * @param output
+	 * @param input the image to threshold
+	 * @param inputNeighborhoodShape the shape of the local neighborhood
+	 * @param contrastThreshold the local contrast below which a neighborhood
+	 *          counts as uniform (Fiji default: 15)
+	 * @param halfMaxValue the mid grey at or above which a uniform
+	 *          neighborhood is foreground (Fiji default: 128 for 8-bit images)
+	 * @param outOfBoundsFactory the out-of-bounds strategy (default border)
+	 * @param output the mask, true where a pixel is foreground
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,

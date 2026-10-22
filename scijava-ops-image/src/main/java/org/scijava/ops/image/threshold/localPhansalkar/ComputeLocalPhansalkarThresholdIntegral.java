@@ -34,15 +34,19 @@ import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.util.Intervals;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.threshold.Thresholds;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
  * <p>
- * Local thresholding algorithm as proposed by Phansalkar et al.
+ * Local thresholding algorithm as proposed by Phansalkar et al., for an image
+ * normalized to [0, 1], with the population standard deviation (see
+ * {@link ComputeLocalPhansalkarThreshold}).
  * </p>
  * <p>
  * This implementation improves execution speed by using integral images for the
@@ -62,9 +66,6 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>
 {
 
-	public static final double DEFAULT_K = 0.25;
-	public static final double DEFAULT_R = 0.5;
-
 	@OpDependency(name = "stats.integralMean")
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralMeanOp;
 
@@ -72,13 +73,14 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralVarianceOp;
 
 	/**
-	 * TODO
+	 * Applies Phansalkar's rule to one pixel of an image normalized to [0, 1].
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param k
-	 * @param r
-	 * @param output
+	 * @param inputNeighborhood the neighborhood of the pixel in the integral
+	 *          images of order 1 and 2
+	 * @param inputCenterPixel the pixel
+	 * @param k the k parameter (default: 0.25)
+	 * @param r the r parameter (default: 0.5)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(
@@ -86,17 +88,20 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 		final T inputCenterPixel, @Nullable Double k, @Nullable Double r,
 		final BitType output)
 	{
-		if (k == null) k = DEFAULT_K;
-		if (r == null) r = DEFAULT_R;
+		if (k == null) k = ComputeLocalPhansalkarThreshold.DEFAULT_K;
+		if (r == null) r = ComputeLocalPhansalkarThreshold.DEFAULT_R;
 
 		final var mean = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, mean);
 
 		final var variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
+		final var n = Intervals.numElements(Intervals.expand(inputNeighborhood,
+			-1));
 
 		output.set(ComputeLocalPhansalkarThreshold.isForeground(inputCenterPixel
-			.getRealDouble(), mean.get(), Math.sqrt(variance.get()), k, r));
+			.getRealDouble(), mean.get(), Math.sqrt(Thresholds.populationVariance(
+				variance.get(), n)), k, r));
 	}
 
 }

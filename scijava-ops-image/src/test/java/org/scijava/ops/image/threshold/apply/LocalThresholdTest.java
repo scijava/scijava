@@ -878,8 +878,10 @@ public class LocalThresholdTest extends AbstractOpTest {
 
 	/**
 	 * Tests that {@code threshold.localPhansalkar} stretches its input to [0, 1],
-	 * so that a raw image and its normalized copy give the same mask, with
-	 * neighborhoods computed directly or via integral images.
+	 * so that a raw image and its normalized copy (stretched to the 256 grey
+	 * levels of ByteType and rounded down, as ImageJ does) give the same mask,
+	 * with neighborhoods computed directly or via integral images; and that
+	 * {@code normalize = false} uses the values as they are.
 	 */
 	@Test
 	public void testLocalPhansalkarStretchesInput() {
@@ -890,10 +892,22 @@ public class LocalThresholdTest extends AbstractOpTest {
 		ops.op("threshold.localPhansalkar").input(in, shape, 0.25, 0.5, oob)
 			.output(out).compute();
 
-		final Img<BitType> expected = ArrayImgs.bits(in.dimensionsAsLongArray());
-		ops.op("threshold.localPhansalkar").input(normalizedIn, shape, 0.25, 0.5,
+		var min = Double.POSITIVE_INFINITY;
+		var max = Double.NEGATIVE_INFINITY;
+		for (final var t : in) {
+			min = Math.min(min, t.get());
+			max = Math.max(max, t.get());
+		}
+		final var quantized = ArrayImgs.doubles(in.dimensionsAsLongArray());
+		final var c = in.cursor();
+		for (final var t : quantized)
+			t.set(Math.floor((c.next().get() - min) / (max - min) * 255) / 255);
+		final var doubleOob =
 			new OutOfBoundsMirrorFactory<DoubleType, RandomAccessibleInterval<DoubleType>>(
-				Boundary.SINGLE)).output(expected).compute();
+				Boundary.SINGLE);
+		final Img<BitType> expected = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(quantized, shape, 0.25, 0.5,
+			doubleOob, false).output(expected).compute();
 		testRandomAccessibleInterval(expected, out);
 
 		// Note: A CenteredRectangleShape yields the same neighborhoods as the
@@ -903,6 +917,23 @@ public class LocalThresholdTest extends AbstractOpTest {
 			new int[] { 3, 3 }, false), 0.25, 0.5, oob).output(nonIntegral)
 			.compute();
 		testRandomAccessibleInterval(expected, nonIntegral);
+
+		// Floating-point images are stretched exactly.
+		final Img<BitType> stretched = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(normalizedIn, shape, 0.25, 0.5,
+			doubleOob).output(stretched).compute();
+		final var scaled = ArrayImgs.doubles(in.dimensionsAsLongArray());
+		final var nc = normalizedIn.cursor();
+		for (final var t : scaled)
+			t.set(nc.next().get() * 3 - 7);
+		final Img<BitType> scaledOut = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(scaled, shape, 0.25, 0.5,
+			doubleOob).output(scaledOut).compute();
+		testRandomAccessibleInterval(stretched, scaledOut);
+		final Img<BitType> raw = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(normalizedIn, shape, 0.25, 0.5,
+			doubleOob, false).output(raw).compute();
+		testRandomAccessibleInterval(stretched, raw);
 	}
 
 	// /**

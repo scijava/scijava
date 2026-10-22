@@ -38,6 +38,7 @@ import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
@@ -105,5 +106,40 @@ public class WeightedMedianTest extends AbstractOpTest {
 		final var out = ArrayImgs.doubles(5, 5);
 		assertThrows(IllegalArgumentException.class, () -> ops.op(
 			"filter.weightedMedian").input(in, kernel).output(out).compute());
+	}
+
+	/**
+	 * The input and output may have different minima: each output pixel is
+	 * computed from the input pixel at the same offset from the input's
+	 * minimum, as for {@code filter.kuwahara}.
+	 */
+	@Test
+	public void testNonZeroMinInput() {
+		final var random = new Random(7);
+		final var img = ArrayImgs.floats(30, 30);
+		img.forEach(t -> t.set(random.nextInt(1000)));
+		final var kernel = ArrayImgs.doubles(new double[] { 1, 2, 1, 2, 4, 2, 1,
+			2, 1 }, 3, 3);
+		final var crop = Views.interval(img, new long[] { 10, 10 }, new long[] {
+			19, 19 });
+
+		// Reference: the same crop, copied into a zero-min image.
+		final var cropCopy = ArrayImgs.floats(10, 10);
+		LoopBuilder.setImages(crop, cropCopy).forEachPixel((c, o) -> o.set(c));
+		final var expected = ArrayImgs.floats(10, 10);
+		ops.op("filter.weightedMedian").input(cropCopy, kernel).output(expected)
+			.compute();
+
+		final var zeroMinOut = ArrayImgs.floats(10, 10);
+		ops.op("filter.weightedMedian").input(crop, kernel).output(zeroMinOut)
+			.compute();
+		final var shiftedOut = Views.translate(ArrayImgs.floats(10, 10), -3, 5);
+		ops.op("filter.weightedMedian").input(crop, kernel).output(shiftedOut)
+			.compute();
+		LoopBuilder.setImages(expected, zeroMinOut, shiftedOut).forEachPixel((e,
+			a, b) -> {
+			assertEquals(e.get(), a.get(), 0);
+			assertEquals(e.get(), b.get(), 0);
+		});
 	}
 }

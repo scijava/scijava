@@ -54,7 +54,10 @@ import org.scijava.ops.spi.Nullable;
  * <p>
  * This is a translation of the {@code Speckle_Inspector} plugin of the
  * <a href="https://github.com/biovoxxel/BioVoxxel-Toolbox">BioVoxxel
- * Toolbox</a> by Jan Brocher (GPL v3+), generalized to n-D. The plugin
+ * Toolbox</a> by Jan Brocher, generalized to n-D. The toolbox is licensed
+ * under the BSD 3-Clause license, but the {@code Speckle_Inspector.java} file
+ * also carries a GPL-3 (or later) header, so this port lives in the GPL
+ * module. The plugin
  * filters the primary objects by size and circularity and excludes edge
  * objects; with these ops, build and filter the primary labeling beforehand
  * (e.g. with {@code labeling.cca}, {@code labeling.filterBySize},
@@ -64,6 +67,40 @@ import org.scijava.ops.spi.Nullable;
  * labeling first ({@code labeling.fillHoles}). The circularity limits of the
  * secondary objects are not supported.
  * </p>
+ * <p>
+ * The BSD-3 license notice of the BioVoxxel Toolbox, which the original file
+ * also carries, follows.
+ * </p>
+ *
+ * <pre>
+ * Copyright (c) 2015, BioVoxxel / Jan Brocher
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * * Neither the name of BioVoxxel nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * </pre>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

@@ -21,7 +21,8 @@
  */
 
 /**
- * Ops translated from the GPL-licensed plugins of the BioVoxxel Toolbox by Jan
- * Brocher.
+ * Ops translated from plugins of the BioVoxxel Toolbox by Jan Brocher whose
+ * source files carry a GPL-3 (or later) header in addition to the BSD 3-Clause
+ * license of the toolbox.
  */
 package org.scijava.ops.image.gpl.biovoxxel;

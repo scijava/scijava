@@ -54,9 +54,9 @@ import org.scijava.ops.spi.OpDependency;
  * Inspired by the {@code Gaussian_Weighted_Median} plugin of the BioVoxxel
  * Toolbox by Jan Brocher / BioVoxxel. That plugin carries a GPL-3 license
  * header, so this op was implemented independently from the general
- * definition of a Gaussian-weighted median, not from its source code. The
- * kernel construction (real-valued weights, user-defined sigma and radius,
- * n-D) therefore differs from the plugin.
+ * definition of a Gaussian-weighted median (real-valued Gaussian weights with
+ * a user-defined sigma and radius, in n dimensions), not from its source code,
+ * so its results need not match those of the plugin.
  * </p>
  *
  * @author Curtis Rueden

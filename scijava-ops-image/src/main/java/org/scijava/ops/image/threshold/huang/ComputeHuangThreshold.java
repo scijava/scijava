@@ -50,7 +50,9 @@ import org.scijava.ops.image.threshold.AbstractComputeThresholdHistogram;
  * <p>
  * This corresponds to the "Huang" method of ImageJ Auto_Threshold. Its cost is
  * quadratic in the number of grey levels; {@code threshold.huang2} is a faster
- * variant.
+ * variant. It was implemented from the paper below, not translated from
+ * Auto_Threshold; that plugin was only run to confirm the results, including
+ * the tie behavior.
  * </p>
  * <p>
  * L.-K. Huang and M.-J. J. Wang, "Image thresholding by minimizing the

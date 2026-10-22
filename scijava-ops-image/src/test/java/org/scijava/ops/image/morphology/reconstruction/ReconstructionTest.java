@@ -547,4 +547,64 @@ public class ReconstructionTest extends AbstractOpTest {
 			if (b) n++;
 		return n;
 	}
+
+	// -- NaN handling --
+
+	/**
+	 * A single NaN would otherwise spread through the raster scans and turn the
+	 * whole output into NaN, or flag every NaN pixel as both a regional maximum
+	 * and minimum; like the attribute filters, these ops reject NaN.
+	 */
+	@Test
+	public void testNaNRejected() {
+		final var f = ArrayImgs.floats(new float[] { Float.NaN, 1, 2, 1, 0, 1, 3, 1,
+			0 }, 3, 3);
+		final var g = ArrayImgs.floats(new float[] { 5, 5, 5, 5, 5, 5, 5, 5, 5 }, 3,
+			3);
+		final var out = ArrayImgs.floats(3, 3);
+		final var bits = ArrayImgs.bits(3, 3);
+		final var marks = ArrayImgs.bits(3, 3);
+		marks.firstElement().set(true);
+		final var shape = new RectangleShape(1, false);
+		// NaN in the marker or in the mask.
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"morphology.reconstructByDilation").input(f, g, shape).output(out)
+			.compute());
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"morphology.reconstructByDilation").input(ArrayImgs.floats(3, 3), f,
+				shape).output(out).compute());
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"morphology.reconstructByErosion").input(g, f, shape).output(out)
+			.compute());
+		for (final var name : new String[] { "morphology.hMaxima",
+			"morphology.hMinima" })
+		{
+			assertThrows(IllegalArgumentException.class, () -> ops.op(name).input(f,
+				1.0, shape).output(out).compute(), name);
+		}
+		for (final var name : new String[] { "morphology.extendedMaxima",
+			"morphology.extendedMinima" })
+		{
+			assertThrows(IllegalArgumentException.class, () -> ops.op(name).input(f,
+				1.0, shape).output(bits).compute(), name);
+		}
+		for (final var name : new String[] { "morphology.imposeMaxima",
+			"morphology.imposeMinima" })
+		{
+			assertThrows(IllegalArgumentException.class, () -> ops.op(name).input(f,
+				marks, shape).output(out).compute(), name);
+		}
+		for (final var name : new String[] { "morphology.killBorders",
+			"morphology.fillHoles" })
+		{
+			assertThrows(IllegalArgumentException.class, () -> ops.op(name).input(f,
+				null).output(out).compute(), name);
+		}
+		for (final var name : new String[] { "morphology.regionalMaxima",
+			"morphology.regionalMinima" })
+		{
+			assertThrows(IllegalArgumentException.class, () -> ops.op(name).input(f,
+				shape).output(bits).compute(), name);
+		}
+	}
 }

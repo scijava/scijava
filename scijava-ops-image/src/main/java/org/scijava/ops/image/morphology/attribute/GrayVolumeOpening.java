@@ -73,6 +73,10 @@ import org.scijava.ops.spi.Nullable;
  * Morphology and its Applications to Image and Signal Processing</em>, Kluwer,
  * 1998, pp. 191-198.
  * </p>
+ * <p>
+ * NaN input values are not supported and cause an
+ * {@link IllegalArgumentException}.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

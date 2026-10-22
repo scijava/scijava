@@ -62,6 +62,10 @@ import org.scijava.ops.spi.Nullable;
  * thinnings, and granulometries", <em>Computer Vision and Image
  * Understanding</em> 64(3):377-389, 1996.
  * </p>
+ * <p>
+ * NaN input values are not supported and cause an
+ * {@link IllegalArgumentException}.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

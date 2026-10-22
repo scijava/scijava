@@ -192,13 +192,21 @@ final class PixelGrid {
 	 *
 	 * @param image the image to copy
 	 * @return the values of the image
+	 * @throws IllegalArgumentException if the image contains NaN, which the
+	 *           raster scans would otherwise spread over the whole output (as
+	 *           in {@code ComponentTree})
 	 */
 	double[] values(final RandomAccessibleInterval<? extends RealType<?>> image) {
 		checkDimensions(image);
 		final var values = new double[size];
 		var i = 0;
-		for (final var t : Views.flatIterable(image))
-			values[i++] = t.getRealDouble();
+		for (final var t : Views.flatIterable(image)) {
+			final var v = t.getRealDouble();
+			if (Double.isNaN(v)) {
+				throw new IllegalArgumentException("NaN values are not supported");
+			}
+			values[i++] = v;
+		}
 		return values;
 	}
 

@@ -34,7 +34,6 @@ import java.util.Random;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
-import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.RealType;
@@ -58,7 +57,13 @@ import org.scijava.ops.spi.OpDependency;
  * center (in Euclidean distance) and moving each center to the mean of its
  * pixels, until no assignment changes or the iteration limit is reached. A
  * cluster that becomes empty is moved to the pixel farthest from its center.
- * The result depends only on the input and the random seed.
+ * The iterations always end with an assignment step, so every pixel belongs
+ * to the nearest of the centers by which the clusters are numbered. The
+ * result depends only on the input and the random seed.
+ * </p>
+ * <p>
+ * Pixels with a NaN value (in any channel) are not clustered and are left
+ * unlabeled.
  * </p>
  * <p>
  * The clusters are numbered {@code 0, ..., k-1} in lexicographic order of
@@ -95,10 +100,12 @@ public class KMeans<T extends RealType<T>> implements
 	 * @param channelAxis the axis holding the features, or null (the default)
 	 *          to cluster scalar intensities
 	 * @param seed the seed of the random k-means++ initialization (default: 0)
-	 * @param maxIterations the maximum number of Lloyd iterations (default:
-	 *          100)
-	 * @return a labeling of the pixels (over all axes except the channel axis)
-	 *         with cluster labels {@code 0, ..., k-1}
+	 * @param maxIterations the maximum number of Lloyd iterations, i.e. of
+	 *          updates of the centers (default: 100); with 0, the pixels are
+	 *          assigned to the nearest k-means++ seeds
+	 * @return a labeling of the pixels (over all axes except the channel axis,
+	 *         with the same interval as the input) with cluster labels
+	 *         {@code 0, ..., k-1}
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply(
@@ -118,29 +125,50 @@ public class KMeans<T extends RealType<T>> implements
 			throw new IllegalArgumentException("Image is too large: " + size +
 				" pixels");
 		}
-		final var count = (int) size;
-		if (k == null || k < 1 || k > count) {
-			throw new IllegalArgumentException("k must be in [1, " + count + "]: " +
-				k);
-		}
+		final var total = (int) size;
 		final var f = channelAxis == null ? 1 : (int) input.dimension(channelAxis);
-		final var features = new double[count * f];
+		final var all = new double[total * f];
 		for (var c = 0; c < f; c++) {
 			final RandomAccessibleInterval<T> slice = channelAxis == null ? input
 				: Views.hyperSlice(input, channelAxis, input.min(channelAxis) + c);
 			var i = 0;
 			for (final var t : Views.flatIterable(slice))
-				features[i++ * f + c] = t.getRealDouble();
+				all[i++ * f + c] = t.getRealDouble();
+		}
+		// Note: pixels with a NaN feature are not clustered.
+		final var valid = new boolean[total];
+		var count = 0;
+		for (var p = 0; p < total; p++) {
+			valid[p] = true;
+			for (var c = 0; c < f; c++)
+				if (Double.isNaN(all[p * f + c])) valid[p] = false;
+			if (valid[p]) count++;
+		}
+		if (k == null || k < 1 || k > count) {
+			throw new IllegalArgumentException("k must be in [1, " + count +
+				"] (the number of pixels without NaN): " + k);
+		}
+		final int maxIter = maxIterations == null ? 100 : maxIterations;
+		if (maxIter < 0) {
+			throw new IllegalArgumentException("Invalid maximum number of " +
+				"iterations: " + maxIter);
+		}
+		final double[] features;
+		if (count == total) features = all;
+		else {
+			features = new double[count * f];
+			var q = 0;
+			for (var p = 0; p < total; p++)
+				if (valid[p]) System.arraycopy(all, p * f, features, q++ * f, f);
 		}
 
 		final var centers = seedCenters(features, count, f, k, new Random(
 			seed == null ? 0 : seed));
 		final var assignment = new int[count];
 		Arrays.fill(assignment, -1);
-		final int maxIter = maxIterations == null ? 100 : maxIterations;
 		final var sums = new double[k * f];
 		final var sizes = new int[k];
-		for (var it = 0; it < maxIter; it++) {
+		for (var it = 0;; it++) {
 			var changed = false;
 			for (var p = 0; p < count; p++) {
 				final var nearest = nearest(features, p, centers, k, f);
@@ -149,7 +177,9 @@ public class KMeans<T extends RealType<T>> implements
 					changed = true;
 				}
 			}
-			if (!changed) break;
+			// Note: stopping right after an assignment step keeps the labels
+			// consistent with the centers by which they are numbered.
+			if (!changed || it >= maxIter) break;
 			Arrays.fill(sums, 0);
 			Arrays.fill(sizes, 0);
 			for (var p = 0; p < count; p++) {
@@ -195,11 +225,11 @@ public class KMeans<T extends RealType<T>> implements
 		for (var j = 0; j < k; j++)
 			rank[order[j]] = j;
 
-		final var output = labelingCreator.apply(new FinalDimensions(first
-			.dimensionsAsLongArray()), new IntType());
+		final var output = labelingCreator.apply(first, new IntType());
 		var p = 0;
+		var q = 0;
 		for (final var label : Views.flatIterable(output))
-			label.add(rank[assignment[p++]]);
+			if (valid[p++]) label.add(rank[assignment[q++]]);
 		return output;
 	}
 

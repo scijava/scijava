@@ -33,6 +33,7 @@ import java.util.function.Function;
 
 import org.scijava.ops.image.threshold.localMidGrey.ComputeLocalMidGreyThreshold;
 import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
@@ -45,10 +46,12 @@ import org.scijava.ops.spi.OpDependency;
  * the value of the input pixel when the contrast in the neighborhood of that
  * pixel is too small.
  * <p>
- * A pixel is foreground if it is at least the local mid grey
- * {@code (min + max) / 2}. Fiji's Auto_Local_Threshold rounds the mid grey
- * down to an integer first, so on integer images it also marks pixels half a
- * grey level below it as foreground.
+ * The local mid grey is {@code (min + max) / 2} of the neighborhood; for
+ * {@link IntegerType} images, it is rounded down to an integer grey level, as
+ * in Fiji's Auto_Local_Threshold plugin. If the local contrast
+ * {@code max - min} is below the contrast threshold, a pixel is foreground if
+ * the mid grey is at least {@code halfMaxValue}; otherwise, it is foreground
+ * if it is at least the mid grey.
  * </p>
  *
  * @author Jonathan Hale
@@ -64,13 +67,15 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
 	/**
-	 * TODO
+	 * Applies Bernsen's rule to one pixel.
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param contrastThreshold
-	 * @param halfMaxValue
-	 * @param output
+	 * @param inputNeighborhood the neighborhood of the pixel
+	 * @param inputCenterPixel the pixel
+	 * @param contrastThreshold the local contrast below which a neighborhood
+	 *          counts as uniform (Fiji default: 15)
+	 * @param halfMaxValue the mid grey at or above which a uniform
+	 *          neighborhood is foreground (Fiji default: 128 for 8-bit images)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
@@ -89,7 +94,9 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 		final var outputs = minMaxOp.apply(inputNeighborhood);
 		final var minValue = outputs.getA().getRealDouble();
 		final var maxValue = outputs.getB().getRealDouble();
-		final var midGrey = (maxValue + minValue) / 2.0;
+		final var mid = (maxValue + minValue) / 2.0;
+		final var midGrey = inputCenterPixel instanceof IntegerType ? Math.floor(
+			mid) : mid;
 
 		if ((maxValue - minValue) < contrastThreshold) {
 			output.set(midGrey >= halfMaxValue);

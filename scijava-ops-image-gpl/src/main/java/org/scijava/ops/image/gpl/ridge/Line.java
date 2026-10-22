@@ -50,10 +50,10 @@ class Line {
 	float[] response;
 
 	/** Width to the left of the line. */
-	float[] width_l;
+	float[] widthL;
 
 	/** Width to the right of the line. */
-	float[] width_r;
+	float[] widthR;
 
 	/** Asymmetry of the line point. */
 	float[] asymmetry;
@@ -61,7 +61,7 @@ class Line {
 	/** Intensity of the line point. */
 	float[] intensity;
 
-	private ContourClass cont_class;
+	private ContourClass contClass;
 
 	private final int id;
 
@@ -75,11 +75,11 @@ class Line {
 	}
 
 	ContourClass getContourClass() {
-		return cont_class;
+		return contClass;
 	}
 
-	void setContourClass(final ContourClass cont_class) {
-		this.cont_class = cont_class;
+	void setContourClass(final ContourClass contClass) {
+		this.contClass = contClass;
 	}
 
 	float[] getXCoordinates() {

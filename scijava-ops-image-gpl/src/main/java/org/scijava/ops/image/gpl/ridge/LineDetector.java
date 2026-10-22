@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 package org.scijava.ops.image.gpl.ridge;
 
 import java.awt.geom.Point2D;
@@ -32,11 +33,10 @@ import java.util.Set;
 import org.scijava.ops.image.gpl.ridge.LinesUtil.MutableInt;
 
 /**
- * Driver of the line detection, from the ij-ridgedetection
- * {@code LineDetector} class: extracts the lines and junctions with Steger's
- * algorithm, then reconstructs the junctions and contour classes, splits lines
- * at junctions, optionally resolves overlapping lines, and prunes lines by
- * length.
+ * Driver of the line detection, from the ij-ridgedetection {@code LineDetector}
+ * class: extracts the lines and junctions with Steger's algorithm, then
+ * reconstructs the junctions and contour classes, splits lines at junctions,
+ * optionally resolves overlapping lines, and prunes lines by length.
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -79,8 +79,8 @@ class LineDetector {
 		final double minLength, final double maxLength, final boolean isDarkLine,
 		final boolean doExtendLine, final OverlapResolution overlap)
 	{
-		check_sigma(sigma, width, height);
-		return get_lines(image, width, height, sigma, upperThresh, lowerThresh,
+		checkSigma(sigma, width, height);
+		return getLines(image, width, height, sigma, upperThresh, lowerThresh,
 			minLength, maxLength, isDarkLine ? LinesUtil.MODE_DARK
 				: LinesUtil.MODE_LIGHT, doExtendLine, overlap);
 	}
@@ -97,12 +97,12 @@ class LineDetector {
 		}
 	}
 
-	private void addAdditionalJunctionPointsAndLines(Lines lines, List<Junction> junctions) {
+	private void addAdditionalJunctionPointsAndLines(Lines lines,
+		List<Junction> junctions)
+	{
 
 		for (int i = 0; i < junctions.size(); i++) {
-			Junction splitPoint = junctions.get(i); // Split point!
-
-			// splitPoint.pos!=0&&splitPoint.pos!=(splitPoint.getLine1().num-1)
+			Junction splitPoint = junctions.get(i);
 			if (!alreadyProcessedJunctionPoints.contains(i)) {
 
 				/*
@@ -114,7 +114,9 @@ class LineDetector {
 				for (int j = i + 1; j < junctions.size(); j++) {
 					if (!alreadyProcessedJunctionPoints.contains(j)) {
 						Junction junc2 = junctions.get(j);
-						if (Math.abs(junc2.x - splitPoint.x) < 0.01 && Math.abs(junc2.y - splitPoint.y) < 0.01) {
+						if (Math.abs(junc2.x - splitPoint.x) < 0.01 && Math.abs(junc2.y -
+							splitPoint.y) < 0.01)
+						{
 							alreadyProcessedJunctionPoints.add(j);
 							junctionsWithTheSamePosition.add(junc2);
 						}
@@ -122,12 +124,13 @@ class LineDetector {
 				}
 
 				/*
-				 * Connect all lines which are connected with the processed line also with each
-				 * other (new junctions point)
+				 * Connect all lines which are connected with the processed line also
+				 * with each other (new junctions point)
 				 */
 
 				ArrayList<Line> connectedWithProcessedLine = new ArrayList<Line>();
-				ArrayList<Integer> connectedWithProcessedIndex = new ArrayList<Integer>();
+				ArrayList<Integer> connectedWithProcessedIndex =
+					new ArrayList<Integer>();
 				for (Junction junc : junctionsWithTheSamePosition) {
 					connectedWithProcessedLine.add(junc.getLine2());
 					connectedWithProcessedIndex.add(junc.cont2);
@@ -145,57 +148,52 @@ class LineDetector {
 						junc.cont2 = connectedWithProcessedIndex.get(k);
 						junc.pos = l1.getStartOrdEndPosition(junc.x, junc.y);
 						junctions.add(junc);
-						// l1.setContourClass(reconstructContourClass(l1,
-						// l1.getStartOrdEndPosition(junc.x, junc.y)));
-						// l2.setContourClass(reconstructContourClass(l2,
-						// l2.getStartOrdEndPosition(junc.x, junc.y)));
 						alreadyProcessedJunctionPoints.add(junctions.size() - 1);
 					}
 				}
 
 				/*
-				 * Split the line in two line at the split point if it is not at the end or
-				 * beginning of the line
+				 * Split the line in two line at the split point if it is not at the end
+				 * or beginning of the line
 				 */
 				Line l1 = splitPoint.getLine1();
 				int pos = splitPoint.pos;
-				boolean isClosedContour = l1.col[0] == l1.col[l1.num - 1] && l1.row[0] == l1.row[l1.num - 1];
+				boolean isClosedContour = l1.col[0] == l1.col[l1.num - 1] &&
+					l1.row[0] == l1.row[l1.num - 1];
 
 				if (isClosedContour) {
 					l1.setContourClass(ContourClass.CLOSED);
-					l1.setContourClass(
-							reconstructContourClass(l1, l1.getStartOrdEndPosition(splitPoint.x, splitPoint.y)));
+					l1.setContourClass(reconstructContourClass(l1, l1
+						.getStartOrdEndPosition(splitPoint.x, splitPoint.y)));
 				}
 				if (pos != 0 && pos != (l1.num - 1) && !isClosedContour) {
-					// All data up to pos (included)
+					// Split the line at pos, which belongs to both parts.
 					int keepLength = pos + 1;
 
 					float[] keepAsymmetry = new float[keepLength];
 					float[] keepIntensity = new float[keepLength];
 
 					float[] keepAngle = new float[keepLength];
-					float[] keepWidth_l = new float[keepLength];
-					float[] keepWidth_r = new float[keepLength];
+					float[] keepWidthL = new float[keepLength];
+					float[] keepWidthR = new float[keepLength];
 
 					float[] keepCol = new float[keepLength];
 					float[] keepRow = new float[keepLength];
 					float[] keepResponse = new float[keepLength];
 
-					// All data from pos (included)
 					int splitSize = (int) (l1.num - pos);
 
 					float[] splitAsymmetry = new float[splitSize];
 					float[] splitIntensity = new float[splitSize];
 
 					float[] splitAngle = new float[splitSize];
-					float[] splitWidth_l = new float[splitSize];
-					float[] splitWidth_r = new float[splitSize];
+					float[] splitWidthL = new float[splitSize];
+					float[] splitWidthR = new float[splitSize];
 
 					float[] splitCol = new float[splitSize];
 					float[] splitRow = new float[splitSize];
 					float[] splitResponse = new float[splitSize];
 
-					// Copy data
 					if (doEstimateWidth) {
 						if (doCorrectPosition) {
 							System.arraycopy(l1.asymmetry, 0, keepAsymmetry, 0, keepLength);
@@ -208,11 +206,11 @@ class LineDetector {
 						System.arraycopy(l1.angle, 0, keepAngle, 0, keepLength);
 						System.arraycopy(l1.angle, pos, splitAngle, 0, splitSize);
 
-						System.arraycopy(l1.width_l, 0, keepWidth_l, 0, keepLength);
-						System.arraycopy(l1.width_l, pos, splitWidth_l, 0, splitSize);
+						System.arraycopy(l1.widthL, 0, keepWidthL, 0, keepLength);
+						System.arraycopy(l1.widthL, pos, splitWidthL, 0, splitSize);
 
-						System.arraycopy(l1.width_r, 0, keepWidth_r, 0, keepLength);
-						System.arraycopy(l1.width_r, pos, splitWidth_r, 0, splitSize);
+						System.arraycopy(l1.widthR, 0, keepWidthR, 0, keepLength);
+						System.arraycopy(l1.widthR, pos, splitWidthR, 0, splitSize);
 					}
 
 					System.arraycopy(l1.col, 0, keepCol, 0, keepLength);
@@ -224,7 +222,6 @@ class LineDetector {
 					System.arraycopy(l1.response, 0, keepResponse, 0, keepLength);
 					System.arraycopy(l1.response, pos, splitResponse, 0, splitSize);
 
-					// Generate new line
 					Line lNew = new Line(lines);
 					lNew.angle = splitAngle;
 					lNew.asymmetry = splitAsymmetry;
@@ -232,17 +229,15 @@ class LineDetector {
 					lNew.row = splitRow;
 					lNew.response = splitResponse;
 					lNew.intensity = splitIntensity;
-					lNew.width_l = splitWidth_l;
-					lNew.width_r = splitWidth_r;
+					lNew.widthL = splitWidthL;
+					lNew.widthR = splitWidthR;
 					lNew.num = splitSize;
 					lNew.setContourClass(l1.getContourClass());
 					lines.add(lNew);
 					int newID = lNew.getID();
 
-					// Update junctions
-
-					// Add additional junction points for the split point
-					Set<Integer> lineIds = new HashSet<Integer>(); // All IDs which are connected at this junction point
+					// The IDs of all lines connected at this junction point.
+					Set<Integer> lineIds = new HashSet<Integer>();
 					for (Junction junc : junctionsWithTheSamePosition) {
 						lineIds.add(junc.getLine1().getID());
 						lineIds.add(junc.getLine2().getID());
@@ -260,14 +255,10 @@ class LineDetector {
 						j.x = splitPoint.x;
 						j.y = splitPoint.y;
 						j.pos = lNew.getStartOrdEndPosition(splitPoint.x, splitPoint.y);
-						// lNew.setContourClass(reconstructContourClass(lNew, j.pos));
-						// connectWith.setContourClass(reconstructContourClass(connectWith,
-						// connectWith.getStartOrdEndPosition(splitPoint.x, splitPoint.y)));
 						junctions.add(j);
 						alreadyProcessedJunctionPoints.add(junctions.size() - 1);
 					}
 
-					// Update following junctions point
 					for (int j = 0; j < junctions.size(); j++) {
 						Junction junc2 = junctions.get(j);
 						if (junc2.cont1 == splitPoint.cont1 && junc2.pos > splitPoint.pos) {
@@ -278,27 +269,27 @@ class LineDetector {
 
 						double[] min = minDistance(junc2.getLine2(), junc2.x, junc2.y);
 
-						if (junc2.cont2 == splitPoint.cont1 && ((int) min[1]) > splitPoint.pos) {
+						if (junc2.cont2 == splitPoint.cont1 &&
+							((int) min[1]) > splitPoint.pos)
+						{
 							junc2.cont2 = lines.getIndexByID(newID);
 							junc2.lineCont2 = lNew;
 						}
 
 					}
 
-					// Update Line 1
-					// Overwrite line data
 					l1.angle = keepAngle;
 					l1.asymmetry = keepAsymmetry;
 					l1.col = keepCol;
 					l1.row = keepRow;
 					l1.response = keepResponse;
 					l1.intensity = keepIntensity;
-					l1.width_l = keepWidth_l;
-					l1.width_r = keepWidth_r;
+					l1.widthL = keepWidthL;
+					l1.widthR = keepWidthR;
 					l1.num = keepLength;
 
-					// Update position of splitpoint
-					splitPoint.pos = l1.getStartOrdEndPosition(splitPoint.x, splitPoint.y);
+					splitPoint.pos = l1.getStartOrdEndPosition(splitPoint.x,
+						splitPoint.y);
 					lines.set(splitPoint.cont1, l1);
 
 				}
@@ -318,7 +309,8 @@ class LineDetector {
 		}
 
 		List<Junction> newJunctions = new ArrayList<>();
-		ArrayList<Point2D.Float> processedJunctions = new ArrayList<Point2D.Float>();
+		ArrayList<Point2D.Float> processedJunctions =
+			new ArrayList<Point2D.Float>();
 		for (int i = 0; i < junctions.size(); i++) {
 			Junction junc = junctions.get(i);
 			Line mainLine = null;
@@ -328,27 +320,25 @@ class LineDetector {
 			ArrayList<Integer> secondaryLineIndex = new ArrayList<Integer>();
 			ArrayList<Integer> secondaryLinePos = new ArrayList<Integer>();
 
-			// Verarbeite jede Junction-Position nur einmal.
-			if (!processedJunctions.contains(new Point2D.Float(junc.x, junc.y))) { // processed[(int)junc.x][(int)junc.y]==0
+			// Process each junction position only once.
+			if (!processedJunctions.contains(new Point2D.Float(junc.x, junc.y))) {
 
 				processedJunctions.add(new Point2D.Float(junc.x, junc.y));
 
-				/*
-				 * Finde die Sekundärlinien und Hauptlinien
-				 */
+				// Find the main line and the secondary lines.
 				for (int j = 0; j < lines.size(); j++) {
 					Line l = lines.get(j);
 
 					double[] mindist = minDistance(l, junc.x, junc.y);
-					if (mindist[0] < 0.1) { // Wenn der Punkt auf der Linie liegt, analysiere genauer
-
-						if (mindist[1] == 0 || mindist[1] == (l.num - 1)) { // Wenn der Junction-Point am Ende oder am
-																			// Anfang liegt, ist es sekundäre Linie.
+					if (mindist[0] < 0.1) {
+						// The junction lies on the line: on a secondary line if it is at
+						// its start or end, else on the main line.
+						if (mindist[1] == 0 || mindist[1] == (l.num - 1)) {
 							secondaryLines.add(l);
 							secondaryLineIndex.add(j);
 							secondaryLinePos.add((int) mindist[1]);
-						} else { // Wenn er innerhalb der Linie liegt, ist dies die Hauptlinie.
-
+						}
+						else {
 							if (mainLine != null) {
 								if (mainLine.getID() == l.getID()) {
 									continue;
@@ -369,16 +359,13 @@ class LineDetector {
 						newJunc.x = junc.x;
 						newJunc.y = junc.y;
 						newJunc.pos = mainLinePos;
-						// lines.get(newJunc.cont1).setContourClass(reconstructContourClass(lines.get(newJunc.cont1),
-						// mainLinePos));
-						// lines.get(newJunc.cont2).setContourClass(reconstructContourClass(lines.get(newJunc.cont2),
-						// secondaryLinePos.get(j)));
 						newJunctions.add(newJunc);
 
 					}
-				} else {
-					// In manchen Fällen gibt es keine Hauptlinie... (bug im Algorithmus, ich bin
-					// aber nicht fähig ihn zu finden=.
+				}
+				else {
+					// Note: In some cases there is no main line, due to an upstream bug
+					// its author could not find; all secondary lines are then paired.
 					HashSet<Integer> uniqueIDs = new HashSet<Integer>();
 					ArrayList<Line> uniqueLines = new ArrayList<Line>();
 					ArrayList<Integer> uniqueLineIndex = new ArrayList<Integer>();
@@ -402,11 +389,6 @@ class LineDetector {
 							newJunc.y = junc.y;
 							newJunc.pos = uniqueLinePos.get(j);
 							newJunctions.add(newJunc);
-
-							// lines.get(newJunc.cont1).setContourClass(reconstructContourClass(lines.get(newJunc.cont1),
-							// uniqueLinePos.get(j)));
-							// lines.get(newJunc.cont2).setContourClass(reconstructContourClass(lines.get(newJunc.cont2),
-							// uniqueLinePos.get(k)));
 							alreadyProcessedJunctionPoints.add(newJunctions.size() - 1);
 
 						}
@@ -441,7 +423,9 @@ class LineDetector {
 			return ContourClass.BOTH_JUNCTIONS;
 		}
 
-		if (currentClass == ContourClass.CLOSED && (hasJunctionAtEndpoint || hasJunctionAtStartpoint)) {
+		if (currentClass == ContourClass.CLOSED && (hasJunctionAtEndpoint ||
+			hasJunctionAtStartpoint))
+		{
 			return ContourClass.BOTH_JUNCTIONS;
 		}
 
@@ -453,7 +437,8 @@ class LineDetector {
 		double min = Double.MAX_VALUE;
 		double index = -1;
 		for (int i = 0; i < l.num; i++) {
-			double d = Math.sqrt(Math.pow(l.col[i] - x, 2) + Math.pow(l.row[i] - y, 2));
+			double d = Math.sqrt(Math.pow(l.col[i] - x, 2) + Math.pow(l.row[i] - y,
+				2));
 			if (d < min) {
 				min = d;
 				index = i;
@@ -463,39 +448,29 @@ class LineDetector {
 		return ret;
 	}
 
-	/*
-	 * private void deleteContour(Lines contours, List<Junction> junctions, Line c) {
-	 * 
-	 * ArrayList<Junction> remove = new ArrayList<Junction>(); for (Junction
-	 * junction : junctions) {
-	 * 
-	 * if (contours.get((int) junction.cont1).getID() == c.getID() ||
-	 * contours.get((int) junction.cont2).getID() == c.getID()) {
-	 * remove.add(junction); }
-	 * 
-	 * } for (Junction junction : remove) { junctions.remove(junction); }
-	 * 
-	 * contours.remove(c); }
-	 */
-
-	// To be removed once the problem with junctions.cont1 & .cont2 is solved.
-	private void deleteJunctions(Lines contours, List<Junction> junctions, Line c) {
+	private void deleteJunctions(Lines contours, List<Junction> junctions,
+		Line c)
+	{
 		deleteJunctions(contours, junctions, c, OverlapResolution.NONE);
 	}
 
-	private void deleteJunctions(Lines contours, List<Junction> junctions, Line c, OverlapResolution overlapOption) {
+	private void deleteJunctions(Lines contours, List<Junction> junctions, Line c,
+		OverlapResolution overlapOption)
+	{
 
 		ArrayList<Junction> remove = new ArrayList<Junction>();
 		for (Junction junction : junctions) {
-			// This if() should be removed once cont1 and 2 contain the same info whatever
-			// OverlapResolution
+			// Note: With the slope overlap resolution, cont1 and cont2 hold line IDs
+			// rather than indices.
 			if (overlapOption == OverlapResolution.SLOPE) {
 				if (junction.cont1 == c.getID() || junction.cont2 == c.getID()) {
 					remove.add(junction);
 				}
-			} else {
-				if (contours.get((int) junction.cont1).getID() == c.getID()
-						|| contours.get((int) junction.cont2).getID() == c.getID()) {
+			}
+			else {
+				if (contours.get((int) junction.cont1).getID() == c.getID() || contours
+					.get((int) junction.cont2).getID() == c.getID())
+				{
 					remove.add(junction);
 				}
 			}
@@ -508,14 +483,13 @@ class LineDetector {
 	private void fixContours(Lines contours, List<Junction> junctions) {
 
 		ArrayList<Line> remove = new ArrayList<Line>();
-		// Contours with only a single position cant be valid.
+		// Contours with only a single position cannot be valid.
 		for (Line contour : contours) {
 			if (contour.num == 1) {
 				deleteJunctions(contours, junctions, contour);
 				remove.add(contour);
 			}
-			// If the results are corrupted, this informationen has to be reconstructed in
-			// fixJunctions
+			// Note: The contour class is reconstructed from the junctions later.
 			contour.setContourClass(ContourClass.NO_JUNCTION);
 		}
 
@@ -523,25 +497,27 @@ class LineDetector {
 			contours.remove(c);
 		}
 
-		// For some reason the first and the last element are the same. Delete
-		// it!
-
+		// Note: For some reason, the first and the last contours can be the same.
 		if (contours.size() >= 2) {
-			if (contours.get(0).getID() == contours.get(contours.size() - 1).getID()) {
+			if (contours.get(0).getID() == contours.get(contours.size() - 1)
+				.getID())
+			{
 				contours.remove(contours.size() - 1);
 			}
 		}
 	}
 
-	private void pruneContours(Lines contours, List<Junction> junctions, double minLength, double maxLength,
-			OverlapResolution overlapOption) {
+	private void pruneContours(Lines contours, List<Junction> junctions,
+		double minLength, double maxLength, OverlapResolution overlapOption)
+	{
 		ArrayList<Line> remove = new ArrayList<Line>();
 
 		for (Line c : contours) {
-			if ((c.estimateLength() < minLength) || (maxLength > 0 && c.estimateLength() > maxLength)) {
+			if ((c.estimateLength() < minLength) || (maxLength > 0 && c
+				.estimateLength() > maxLength))
+			{
 				deleteJunctions(contours, junctions, c, overlapOption);
 				remove.add(c);
-			} else {
 			}
 		}
 		for (Line c : remove) {
@@ -550,26 +526,23 @@ class LineDetector {
 		}
 	}
 
-	private Lines get_lines(final float[] image, final int cols, final int rows,
+	private Lines getLines(final float[] image, final int cols, final int rows,
 		final double sigma, final double high, final double low,
 		final double minLength, final double maxLength, final int mode,
 		final boolean doExtendLine, final OverlapResolution overlapOption)
 	{
 		Lines contours = new Lines();
 		List<Junction> resultJunction = new ArrayList<>();
-		final MutableInt hnum_cont = new MutableInt(0);
+		final MutableInt hnumCont = new MutableInt(0);
 		final Position p = new Position();
-		p.detect_lines(image, cols, rows, contours, hnum_cont, sigma, low, high,
-			mode, doEstimateWidth, doCorrectPosition, doExtendLine, resultJunction);
+		p.findLines(image, cols, rows, contours, hnumCont, sigma, low, high, mode,
+			doEstimateWidth, doCorrectPosition, doExtendLine, resultJunction);
 
 		fixContours(contours, resultJunction);
 		alreadyProcessedJunctionPoints = new HashSet<Integer>();
-		// Reconstruct solution from junction points. This have to be done, because in
-		// raw cases
-		// the algorithm corrupts the results. However, I was not able to find that bug
-		// so I decided
-		// to reconstruct the solution from the information which were not be corrupted.
-
+		// Note: In rare cases, the upstream algorithm corrupts the results (its
+		// author could not find the bug), so the solution is reconstructed from
+		// the junction points, which are not corrupted.
 		resultJunction = fixJunctions(contours, resultJunction);
 
 		assignLinesToJunctions(contours, resultJunction);
@@ -578,31 +551,28 @@ class LineDetector {
 		Collections.sort(resultJunction);
 		junctions = resultJunction;
 
-		/*
-		 * RECONSTRUCTION OF CONTOUR CLASS
-		 */
-		// Reset contour class
+		// Reconstruct the contour classes.
 		for (int i = 0; i < contours.size(); i++) {
 			contours.get(i).setContourClass(ContourClass.NO_JUNCTION);
 		}
 
-		// Find closed lines
 		for (int i = 0; i < contours.size(); i++) {
-			boolean isClosedContour = contours.get(i).col[0] == contours.get(i).col[contours.get(i).num - 1]
-					&& contours.get(i).row[0] == contours.get(i).row[contours.get(i).num - 1];
+			boolean isClosedContour = contours.get(i).col[0] == contours.get(
+				i).col[contours.get(i).num - 1] && contours.get(i).row[0] == contours
+					.get(i).row[contours.get(i).num - 1];
 			if (isClosedContour) {
 				contours.get(i).setContourClass(ContourClass.CLOSED);
 			}
 		}
 
-		// Reconstruction contour class
 		for (int i = 0; i < junctions.size(); i++) {
 			Junction j = junctions.get(i);
-			j.getLine1().setContourClass(reconstructContourClass(j.getLine1(), j.pos));
+			j.getLine1().setContourClass(reconstructContourClass(j.getLine1(),
+				j.pos));
 			float x = j.getLine1().getXCoordinates()[j.pos];
 			float y = j.getLine1().getYCoordinates()[j.pos];
-			j.getLine2()
-					.setContourClass(reconstructContourClass(j.getLine2(), j.getLine2().getStartOrdEndPosition(x, y)));
+			j.getLine2().setContourClass(reconstructContourClass(j.getLine2(), j
+				.getLine2().getStartOrdEndPosition(x, y)));
 		}
 
 		if (overlapOption == OverlapResolution.SLOPE) contours =
@@ -616,12 +586,12 @@ class LineDetector {
 
 	}
 
-	private void check_sigma(double sigma, int width, int height) {
-		int min_dim;
-		min_dim = width < height ? width : height;
+	private void checkSigma(double sigma, int width, int height) {
+		int minDim;
+		minDim = width < height ? width : height;
 		if (sigma < 0.4) throw new IllegalArgumentException("Sigma out of range: " +
 			sigma + " < 0.4");
-		if (LinesUtil.MASK_SIZE(LinesUtil.MAX_SIZE_MASK_2, sigma) >= min_dim)
+		if (LinesUtil.maskSize(LinesUtil.MAX_SIZE_MASK_2, sigma) >= minDim)
 			throw new IllegalArgumentException("Sigma out of range: " + sigma +
 				" is too large for the image size");
 	}

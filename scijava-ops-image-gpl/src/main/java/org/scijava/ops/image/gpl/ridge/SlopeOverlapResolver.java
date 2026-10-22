@@ -33,12 +33,18 @@ import java.util.Set;
 /**
  * Resolve overlap between lines by selecting the fragment with the closest
  * matching slope (which is really just trying to preserve straightness -
- * implying that a straight passover is more likely than two overlapping
- * turns), from the ij-ridgedetection {@code SlopeOverlapResolver} class.
+ * implying that a straight passover is more likely than two overlapping turns),
+ * from the ij-ridgedetection {@code SlopeOverlapResolver} class.
  * <p>
  * Note: unlike the plugin, which uses hash sets and maps of lines (iterated in
- * identity hash order), this uses linked sets and maps, so that the result
- * does not change from one run to the next.
+ * identity hash order), this uses linked sets and maps, so that the result does
+ * not change from one run to the next.
+ * </p>
+ * <p>
+ * Note: As in the plugin, the lines meeting at a junction are paired greedily,
+ * each line with the one giving the straightest merge, rather than by
+ * minimizing the total error; a line left without a partner is kept as a
+ * singleton.
  * </p>
  *
  * @author Curtis Rueden
@@ -47,17 +53,20 @@ import java.util.Set;
  */
 class SlopeOverlapResolver {
 
-	// Sigma for deciding if two floats are "close enough"
+	/** Distance below which two coordinates are considered equal. */
 	private static final float SIGMA = 2.0f;
 
-	// Length from junction point to use in line segment calculation.
-	// Smaller distances are more subject to variance, while larger distances
-	// could introduce error due to actual curvature of line segments
+	/**
+	 * Length from the junction point used to compute the slope of a line segment.
+	 * Smaller distances are more subject to variance, while larger distances
+	 * could introduce error due to the curvature of the segments.
+	 */
 	private static final int SLOPE_DIST = 5;
 
-	// When considering the portion of a line segment to use in straightness
-	// comparisons, we take the longest segment possible within the following
-	// tolerance. A value of "1" would require perfect straightness.
+	/**
+	 * Straightness comparisons use the longest segment within this tolerance; a
+	 * value of 1 would require perfect straightness.
+	 */
 	private static final float STRAIGHT_TOLERANCE = 1.02f;
 
 	/**
@@ -70,15 +79,19 @@ class SlopeOverlapResolver {
 		final List<List<Line>> nWayIntersections = new ArrayList<List<Line>>();
 		findOverlap(enclosedLines, nWayIntersections, junctions);
 
-		final Map<Line, List<Line>> startIntersections = new LinkedHashMap<Line, List<Line>>();
-		final Map<Line, List<Line>> endIntersections = new LinkedHashMap<Line, List<Line>>();
+		final Map<Line, List<Line>> startIntersections =
+			new LinkedHashMap<Line, List<Line>>();
+		final Map<Line, List<Line>> endIntersections =
+			new LinkedHashMap<Line, List<Line>>();
 
-		buildIntersectionMaps(originalLines, enclosedLines, startIntersections, endIntersections);
+		buildIntersectionMaps(originalLines, enclosedLines, startIntersections,
+			endIntersections);
 
 		final List<List<Line>> lineMerges = new ArrayList<List<Line>>();
 
 		// find enclosed merges
-		buildMergeList(lineMerges, enclosedLines, startIntersections, endIntersections);
+		buildMergeList(lineMerges, enclosedLines, startIntersections,
+			endIntersections);
 
 		// find n-way intersections
 		buildMergeList(lineMerges, nWayIntersections);
@@ -86,7 +99,8 @@ class SlopeOverlapResolver {
 		// perform the actual merges. This will also populate the lineMap
 		// with mappings from original to merged lines.
 		final Map<Line, Line> lineMap = new LinkedHashMap<Line, Line>();
-		final Lines resolvedLines = buildResolvedList(originalLines, lineMerges, lineMap);
+		final Lines resolvedLines = buildResolvedList(originalLines, lineMerges,
+			lineMap);
 
 		// use lineMap to update references in original junction points
 		// the updatedJunctions list will be populated so we can further process
@@ -96,8 +110,7 @@ class SlopeOverlapResolver {
 		// Remove any Junctions that are no longer valid
 		pruneJunctions(junctions, updatedJunctions);
 
-		// update the intersection points of each surviving Junction in
-		// UpdatedJunctions..
+		// Update the intersection points of each surviving junction.
 		updateContourClasses(updatedJunctions);
 
 		return resolvedLines;
@@ -107,7 +120,9 @@ class SlopeOverlapResolver {
 	 * Step 1: find enclosed lines (lines with a junction at both start and end
 	 * point).
 	 */
-	private void findOverlap(final Set<Line> enclosed, final List<List<Line>> nWay, final List<Junction> junctions) {
+	private void findOverlap(final Set<Line> enclosed,
+		final List<List<Line>> nWay, final List<Junction> junctions)
+	{
 		// Remember if a Junction is located at the start or end point of a Line
 		Map<Line, Junction> startMatches = new LinkedHashMap<Line, Junction>();
 		Map<Line, Junction> endMatches = new LinkedHashMap<Line, Junction>();
@@ -115,24 +130,18 @@ class SlopeOverlapResolver {
 		// These enclosed lines will be treated as areas of overlap
 		for (final Junction j : junctions) {
 			// check if this junction sits on the start or end of either of its lines
-			if (matchesStart(j, j.getLine1()))
-				startMatches.put(j.getLine1(), j);
-			if (matchesEnd(j, j.getLine1()))
-				endMatches.put(j.getLine1(), j);
+			if (matchesStart(j, j.getLine1())) startMatches.put(j.getLine1(), j);
+			if (matchesEnd(j, j.getLine1())) endMatches.put(j.getLine1(), j);
 
-			if (matchesStart(j, j.getLine2()))
-				startMatches.put(j.getLine2(), j);
-			if (matchesEnd(j, j.getLine2()))
-				endMatches.put(j.getLine2(), j);
+			if (matchesStart(j, j.getLine2())) startMatches.put(j.getLine2(), j);
+			if (matchesEnd(j, j.getLine2())) endMatches.put(j.getLine2(), j);
 		}
-
 
 		enclosed.addAll(startMatches.keySet());
 		enclosed.retainAll(endMatches.keySet());
 
-		// tSections will contain lines that intersect at the same point as 2+ other
-		// lines
-		// none of which are enclosed
+		// The lines that intersect at the same point as two or more other lines,
+		// none of which are enclosed.
 		final Set<Line> tSections = new LinkedHashSet<Line>(startMatches.keySet());
 		tSections.addAll(endMatches.keySet());
 		tSections.removeAll(enclosed);
@@ -150,13 +159,9 @@ class SlopeOverlapResolver {
 				for (int j = 0; j < intersects.size() && !found; j++) {
 					final Line l2 = intersects.get(j);
 
-					// NB: we do not need to take the extra step of ensuring all
-					// lines intersect at the same point (instead of some intersecting at
-					// the start
-					// and some at the end, creating chains) because we have already
-					// filtered out
-					// the "enclosed" segments that would have arisen from that style of
-					// overlap.
+					// Note: There is no need to check that all lines intersect at the
+					// same point (rather than forming chains), because the enclosed
+					// segments that such chains would create were filtered out above.
 					if (intersects(l1, l2, SIGMA)) {
 						found = true;
 						intersects.add(l1);
@@ -174,10 +179,8 @@ class SlopeOverlapResolver {
 
 		// populate nWay intersection list
 		for (final List<Line> intersects : lineSets) {
-			if (intersects.size() >= 3)
-				nWay.add(intersects);
+			if (intersects.size() >= 3) nWay.add(intersects);
 		}
-
 
 		// clean up enclosed lines.. any enclosed line that intersects with another
 		// enclosed line at BOTH ends should be removed.
@@ -193,15 +196,11 @@ class SlopeOverlapResolver {
 				boolean foundEndMatch = false;
 
 				for (final Line l2 : enclosed) {
-					if (l2 == l1)
-						continue;
-					else if (intersectsStart(l1, l2, SIGMA))
-						foundStartMatch = true;
-					else if (intersectsEnd(l1, l2, SIGMA))
-						foundEndMatch = true;
+					if (l2 == l1) continue;
+					else if (intersectsStart(l1, l2, SIGMA)) foundStartMatch = true;
+					else if (intersectsEnd(l1, l2, SIGMA)) foundEndMatch = true;
 
-					if (foundStartMatch && foundEndMatch)
-						break;
+					if (foundStartMatch && foundEndMatch) break;
 				}
 
 				// found a line to prune
@@ -212,29 +211,28 @@ class SlopeOverlapResolver {
 				}
 			}
 
-			if (toRemove != null)
-				enclosed.remove(toRemove);
+			if (toRemove != null) enclosed.remove(toRemove);
 		}
 
 	}
 
 	/**
-	 * Step 2: for each enclosed line, we want to map to the sets of all other lines
-	 * with one intersection at the start, and all lines with one intersection at
-	 * the end.
+	 * Step 2: for each enclosed line, we want to map to the sets of all other
+	 * lines with one intersection at the start, and all lines with one
+	 * intersection at the end.
 	 */
-	private void buildIntersectionMaps(final Lines lines, final Set<Line> enclosedLines,
-			final Map<Line, List<Line>> startIntersections, final Map<Line, List<Line>> endIntersections) {
+	private void buildIntersectionMaps(final Lines lines,
+		final Set<Line> enclosedLines,
+		final Map<Line, List<Line>> startIntersections,
+		final Map<Line, List<Line>> endIntersections)
+	{
 		for (final Line l1 : enclosedLines) {
 			final List<Line> startIsect = new ArrayList<Line>();
 			final List<Line> endIsect = new ArrayList<Line>();
 			for (final Line l2 : lines) {
-				if (l2 == l1)
-					continue;
-				else if (intersectsStart(l1, l2, SIGMA))
-					startIsect.add(l2);
-				else if (intersectsEnd(l1, l2, SIGMA))
-					endIsect.add(l2);
+				if (l2 == l1) continue;
+				else if (intersectsStart(l1, l2, SIGMA)) startIsect.add(l2);
+				else if (intersectsEnd(l1, l2, SIGMA)) endIsect.add(l2);
 			}
 			startIntersections.put(l1, startIsect);
 			endIntersections.put(l1, endIsect);
@@ -246,8 +244,11 @@ class SlopeOverlapResolver {
 	 * Step 3a: With all mapped combinations determined, we determine the
 	 * combinations that best preserve slope/straightness.
 	 */
-	private void buildMergeList(final List<List<Line>> lineMerges, final Set<Line> enclosedLines,
-			final Map<Line, List<Line>> startIntersections, final Map<Line, List<Line>> endIntersections) {
+	private void buildMergeList(final List<List<Line>> lineMerges,
+		final Set<Line> enclosedLines,
+		final Map<Line, List<Line>> startIntersections,
+		final Map<Line, List<Line>> endIntersections)
+	{
 		for (final Line enclosed : enclosedLines) {
 
 			// 1. first compute points of interest. We separate them by
@@ -258,10 +259,12 @@ class SlopeOverlapResolver {
 			final List<Line> startLines = startIntersections.get(enclosed);
 			final List<Line> endLines = endIntersections.get(enclosed);
 
-			final float[] enclosedStart = new float[] { enclosed.getXCoordinates()[0], enclosed.getYCoordinates()[0] };
+			final float[] enclosedStart = new float[] { enclosed.getXCoordinates()[0],
+				enclosed.getYCoordinates()[0] };
 
-			final float[] enclosedEnd = new float[] { enclosed.getXCoordinates()[enclosed.getNumber() - 1],
-					enclosed.getYCoordinates()[enclosed.getNumber() - 1] };
+			final float[] enclosedEnd = new float[] { enclosed
+				.getXCoordinates()[enclosed.getNumber() - 1], enclosed
+					.getYCoordinates()[enclosed.getNumber() - 1] };
 
 			for (final Line l : startLines) {
 				startPoints.add(getInterceptPoint(enclosedStart, l));
@@ -271,8 +274,7 @@ class SlopeOverlapResolver {
 				endPoints.add(getInterceptPoint(enclosedEnd, l));
 			}
 
-			// TODO minimize global error instead of greedily taking least error
-			// 2. for each line in the small set, find the line in the large set
+			// 2. For each line in the small set, find the line in the large set
 			// that would create the straightest merge.
 			while (startLines.size() > 0 && endLines.size() > 0) {
 				int startIndex = 0;
@@ -282,8 +284,8 @@ class SlopeOverlapResolver {
 
 				for (int i = 0; i < startLines.size(); i++) {
 					for (int j = 0; j < endLines.size(); j++) {
-						final float straightness = straightCalc(startPoints.get(i), enclosedStart, enclosedEnd,
-								endPoints.get(j));
+						final float straightness = straightCalc(startPoints.get(i),
+							enclosedStart, enclosedEnd, endPoints.get(j));
 
 						if (straightness < minStraightness) {
 							startIndex = i;
@@ -306,10 +308,9 @@ class SlopeOverlapResolver {
 				endPoints.remove(endIndex);
 			}
 
-			// TODO this is an opportunity for configuration (could merge unmatched
-			// lines with enclosed)
-			// 3. Unmatched lines are treated as singletons
-			final List<Line> unmatched = startLines.size() > 0 ? startLines : endLines;
+			// 3. Unmatched lines are treated as singletons.
+			final List<Line> unmatched = startLines.size() > 0 ? startLines
+				: endLines;
 			for (final Line line : unmatched) {
 				final List<Line> toMerge = new ArrayList<Line>();
 				toMerge.add(line);
@@ -317,9 +318,7 @@ class SlopeOverlapResolver {
 			}
 		}
 
-		// Clean up the merges
-		// If the end of one merge == the start of another, those merges are joined
-		// together
+		// Join the merges where the end of one is the start of another.
 		int i = 0, j = 1;
 		while (j < lineMerges.size()) {
 			final List<Line> list1 = lineMerges.get(i);
@@ -331,13 +330,15 @@ class SlopeOverlapResolver {
 				list2.addAll(list1);
 				i = 0;
 				j = 1;
-			} else if (list2.get(0) == list1.get(list1.size() - 1)) {
+			}
+			else if (list2.get(0) == list1.get(list1.size() - 1)) {
 				lineMerges.remove(j);
 				list2.remove(0);
 				list1.addAll(list2);
 				i = 0;
 				j = 1;
-			} else {
+			}
+			else {
 				j++;
 				if (j == lineMerges.size()) {
 					i++;
@@ -349,26 +350,27 @@ class SlopeOverlapResolver {
 	}
 
 	/**
-	 * Step 3b: The process for determining merges from N-way merges is to find the
-	 * point where each line intersects, then compute the straightness of each
+	 * Step 3b: The process for determining merges from N-way merges is to find
+	 * the point where each line intersects, then compute the straightness of each
 	 * potential merge and take the straightest.
 	 */
-	private void buildMergeList(List<List<Line>> lineMerges, List<List<Line>> nWayIntersections) {
+	private void buildMergeList(List<List<Line>> lineMerges,
+		List<List<Line>> nWayIntersections)
+	{
 		for (final List<Line> iSection : nWayIntersections) {
 			// 1. Check the first two lines to determine the junction
 			final float[] junction = new float[2];
 
 			final Line testLine = iSection.get(0);
 			int index = 0;
-			if (intersectsEnd(testLine, iSection.get(1), SIGMA))
-				index = testLine.getNumber() - 1;
+			if (intersectsEnd(testLine, iSection.get(1), SIGMA)) index = testLine
+				.getNumber() - 1;
 
 			junction[0] = testLine.getXCoordinates()[index];
 			junction[1] = testLine.getYCoordinates()[index];
 
-			// TODO use global error minimization instead of being greedy
-			// 2. Pair lines based on their straightness
-			// Merge sets are added as pairs or unpaired singleton lines.
+			// 2. Pair lines based on their straightness; merge sets are added as
+			// pairs or unpaired singleton lines.
 			while (iSection.size() > 1) {
 				final List<Line> merge = new ArrayList<Line>();
 				int idx1 = 0;
@@ -394,9 +396,7 @@ class SlopeOverlapResolver {
 				merge.add(iSection.get(idx1));
 				merge.add(iSection.get(idx2));
 				iSection.remove(idx1);
-				// since we're removing from the same list, we need to decrement idx2 to
-				// account
-				// for removal of idx1
+				// Note: idx2 shifts down after removing idx1 from the same list.
 				idx2--;
 				iSection.remove(idx2);
 
@@ -409,8 +409,9 @@ class SlopeOverlapResolver {
 		}
 	}
 
-	private Lines buildResolvedList(final Lines originalLines, final List<List<Line>> lineMerges,
-			final Map<Line, Line> lineMap) {
+	private Lines buildResolvedList(final Lines originalLines,
+		final List<List<Line>> lineMerges, final Map<Line, Line> lineMap)
+	{
 		final Set<Line> finalLines = new LinkedHashSet<Line>(originalLines);
 
 		for (final List<Line> toMerge : lineMerges) {
@@ -426,7 +427,8 @@ class SlopeOverlapResolver {
 			Line merged = null;
 			if (toMerge.size() == 1) {
 				merged = toMerge.get(0);
-			} else {
+			}
+			else {
 				merged = new Line(originalLines);
 				merged.angle = new float[newSize];
 				merged.asymmetry = new float[newSize];
@@ -434,8 +436,8 @@ class SlopeOverlapResolver {
 				merged.row = new float[newSize];
 				merged.response = new float[newSize];
 				merged.intensity = new float[newSize];
-				merged.width_l = new float[newSize];
-				merged.width_r = new float[newSize];
+				merged.widthL = new float[newSize];
+				merged.widthR = new float[newSize];
 				merged.num = newSize;
 				// Assume the lines are now standing alone or no longer
 				// intersect on terminal ends and thus are "no_junc" class.
@@ -450,20 +452,23 @@ class SlopeOverlapResolver {
 					final Line line = toMerge.get(i);
 					Line adjacent = null;
 
-					if (i == 0)
-						adjacent = toMerge.get(i + 1);
-					else
-						adjacent = toMerge.get(i - 1);
+					if (i == 0) adjacent = toMerge.get(i + 1);
+					else adjacent = toMerge.get(i - 1);
 
 					int num = line.getNumber();
 					fillArray(line, adjacent, i == 0, merged.angle, pos, line.angle, num);
-					fillArray(line, adjacent, i == 0, merged.asymmetry, pos, line.asymmetry, num);
+					fillArray(line, adjacent, i == 0, merged.asymmetry, pos,
+						line.asymmetry, num);
 					fillArray(line, adjacent, i == 0, merged.col, pos, line.col, num);
 					fillArray(line, adjacent, i == 0, merged.row, pos, line.row, num);
-					fillArray(line, adjacent, i == 0, merged.response, pos, line.response, num);
-					fillArray(line, adjacent, i == 0, merged.intensity, pos, line.intensity, num);
-					fillArray(line, adjacent, i == 0, merged.width_l, pos, line.width_l, num);
-					fillArray(line, adjacent, i == 0, merged.width_r, pos, line.width_r, num);
+					fillArray(line, adjacent, i == 0, merged.response, pos, line.response,
+						num);
+					fillArray(line, adjacent, i == 0, merged.intensity, pos,
+						line.intensity, num);
+					fillArray(line, adjacent, i == 0, merged.widthL, pos, line.widthL,
+						num);
+					fillArray(line, adjacent, i == 0, merged.widthR, pos, line.widthR,
+						num);
 					pos += num;
 
 					// map the original line to the merged
@@ -482,10 +487,12 @@ class SlopeOverlapResolver {
 
 	/**
 	 * Look through all {@link Junction}s. If either of the lines has been merged,
-	 * the Junction is updated to reference the merged line. Returns the set of all
-	 * such modified Junctions.
+	 * the Junction is updated to reference the merged line. Returns the set of
+	 * all such modified Junctions.
 	 */
-	private Set<Junction> updateJunctions(final List<Junction> junctions, final Map<Line, Line> lineMap) {
+	private Set<Junction> updateJunctions(final List<Junction> junctions,
+		final Map<Line, Line> lineMap)
+	{
 		final Set<Junction> updated = new LinkedHashSet<Junction>();
 
 		for (final Junction junction : junctions) {
@@ -507,21 +514,21 @@ class SlopeOverlapResolver {
 	}
 
 	/**
-	 * Remove all redundant {@link Junction}s from the list. This includes Junctions
-	 * with two references to the same line (because their lines were merged) and
-	 * cases where multiple Junctions refer to the same lines as each other and
-	 * occupy the same physical position.
+	 * Remove all redundant {@link Junction}s from the list. This includes
+	 * Junctions with two references to the same line (because their lines were
+	 * merged) and cases where multiple Junctions refer to the same lines as each
+	 * other and occupy the same physical position.
 	 */
-	private void pruneJunctions(final List<Junction> junctions, final Set<Junction> updatedJunctions) {
+	private void pruneJunctions(final List<Junction> junctions,
+		final Set<Junction> updatedJunctions)
+	{
 		final Map<String, Junction> jMap = new LinkedHashMap<String, Junction>();
 		for (final Junction j : updatedJunctions) {
 			String key = null;
 			// Remove Junctions with references to the same Line
-			if (j.cont1 == j.cont2)
-				junctions.remove(j);
+			if (j.cont1 == j.cont2) junctions.remove(j);
 			// Remove Junctions of the same two lines at the same x,y point
-			else if (jMap.containsKey((key = getKey(j))))
-				junctions.remove(j);
+			else if (jMap.containsKey((key = getKey(j)))) junctions.remove(j);
 			else {
 				// Keep the junction and register it as "the" definitive junction
 				// for its two lines at this point.
@@ -553,28 +560,28 @@ class SlopeOverlapResolver {
 	/**
 	 * Iterate over the points of the line and find the pos of the junction If pos
 	 * is 0 or line.length, update the line's contour class If this is the first
-	 * line, set the Junction's pos to match If this junction doesn't sit on either
-	 * line's terminals, set the Junction's isNonTerminal to true
+	 * line, set the Junction's pos to match If this junction doesn't sit on
+	 * either line's terminals, set the Junction's isNonTerminal to true
 	 *
-	 * @param updatePos
-	 *            - if true, update the pos of the given Junction
+	 * @param updatePos - if true, update the pos of the given Junction
 	 * @return True if the junction point was NOT on the start or end terminal of
 	 *         the given line.
 	 */
-	private boolean processLine(final Junction j, final Line line, final boolean updatePos) {
+	private boolean processLine(final Junction j, final Line line,
+		final boolean updatePos)
+	{
 		int pos = -1;
 		final float[] x = line.getXCoordinates();
 		final float[] y = line.getYCoordinates();
 		// loop over all points of the line, or until we find the
 		// point of intersection with the junction.
 		for (int i = 0; i < line.num && pos < 0; i++) {
-			if (Float.compare(x[i], j.x) == 0 && Float.compare(y[i], j.y) == 0)
-				pos = i;
+			if (Float.compare(x[i], j.x) == 0 && Float.compare(y[i], j.y) == 0) pos =
+				i;
 		}
 
 		// update the Junction position if requested
-		if (updatePos)
-			j.pos = pos;
+		if (updatePos) j.pos = pos;
 
 		// update contour class if appropriate
 		// Nothing can supersede "cont_both_junc"
@@ -588,7 +595,8 @@ class SlopeOverlapResolver {
 				else {
 					line.setContourClass(ContourClass.START_JUNCTION);
 				}
-			} else if (pos == line.num - 1) {
+			}
+			else if (pos == line.num - 1) {
 				// If this line is already a "start_junc", upgrade it to a "both"
 				if (line.getContourClass().equals(ContourClass.START_JUNCTION)) {
 					line.setContourClass(ContourClass.BOTH_JUNCTIONS);
@@ -619,40 +627,36 @@ class SlopeOverlapResolver {
 	}
 
 	private float dist(final float[] p1, final float[] p2) {
-		return (float) Math.sqrt(Math.pow((p2[0] - p1[0]), 2) + Math.pow((p2[1] - p1[1]), 2));
+		return (float) Math.sqrt(Math.pow((p2[0] - p1[0]), 2) + Math.pow((p2[1] -
+			p1[1]), 2));
 	}
 
 	/**
 	 * Copy to the target at the given position. Use the source array if it is
 	 * non-null. Otherwise fill with 0's
 	 */
-	private void fillArray(final Line line, final Line adjacent, final boolean adjacentIsNext, final float[] target,
-			int pos, final float[] source, final int length) {
-		if (source == null)
-			Arrays.fill(target, pos, pos + length, 0f);
+	private void fillArray(final Line line, final Line adjacent,
+		final boolean adjacentIsNext, final float[] target, int pos,
+		final float[] source, final int length)
+	{
+		if (source == null) Arrays.fill(target, pos, pos + length, 0f);
 		else {
-			// If the adjacent (reference) line is the next line in the sequence, then
-			// we reverse the array if our current line's head is its intersection
-			// point.
-			// If the reference line is the previous line in the sequence, we reverse
-			// the
-			// array if our current line's tail is its intersection point.
-			if ((adjacentIsNext && intersectsStart(line, adjacent, SIGMA))
-					|| (!adjacentIsNext && intersectsEnd(line, adjacent, SIGMA))) {
-				// Reverse the source array
+			// Reverse the source if the line meets the next line at its start, or
+			// the previous line at its end.
+			if ((adjacentIsNext && intersectsStart(line, adjacent, SIGMA)) ||
+				(!adjacentIsNext && intersectsEnd(line, adjacent, SIGMA)))
+			{
 				for (int i = source.length - 1; i >= 0; i--) {
 					target[pos++] = source[i];
 				}
 			}
-			// oriented appropriately
-			else
-				System.arraycopy(source, 0, target, pos, length);
+			else System.arraycopy(source, 0, target, pos, length);
 		}
 	}
 
 	/**
-	 * Helper method to get the point at {@code SLOPE_DIST} positions away from the
-	 * intercept point between the query line and given point.
+	 * Helper method to get the point at {@code SLOPE_DIST} positions away from
+	 * the intercept point between the query line and given point.
 	 */
 	private float[] getInterceptPoint(final float[] p1, final Line query) {
 		int dist = 0;
@@ -663,26 +667,27 @@ class SlopeOverlapResolver {
 	}
 
 	/**
-	 * Recursive helper method. Iteratively searches to the next {@link #SLOPE_DIST}
-	 * position in the query line. As long as this point maintains straightness
-	 * within {@link #STRAIGHT_TOLERANCE}, and we haven't gone past the query line
-	 * boundaries, recursion continues.
+	 * Recursive helper method. Iteratively searches to the next
+	 * {@link #SLOPE_DIST} position in the query line. As long as this point
+	 * maintains straightness within {@link #STRAIGHT_TOLERANCE}, and we haven't
+	 * gone past the query line boundaries, recursion continues.
 	 */
-	private float[] findLongestPath(final Line query, int dist, final List<float[]> points) {
-		// p1 is the original point to test
+	private float[] findLongestPath(final Line query, int dist,
+		final List<float[]> points)
+	{
 		final float[] p1 = points.get(0);
-		// Incrementally check the next position
 		dist += SLOPE_DIST;
 
-		// pos is is the position in the query line to check
 		int pos = 0;
 
-		// Determine the position to check based on whether the query line intersects
-		// with p1 at its start or end
-		if (Math.abs(p1[0] - query.getXCoordinates()[0]) < SIGMA
-				&& Math.abs(p1[1] - query.getYCoordinates()[0]) < SIGMA) {
+		// The position to check depends on whether the query line meets the
+		// original point at its start or its end.
+		if (Math.abs(p1[0] - query.getXCoordinates()[0]) < SIGMA && Math.abs(p1[1] -
+			query.getYCoordinates()[0]) < SIGMA)
+		{
 			pos = Math.min(dist, query.getNumber() - 1);
-		} else {
+		}
+		else {
 			pos = Math.max(0, query.getNumber() - 1 - dist);
 		}
 
@@ -699,7 +704,9 @@ class SlopeOverlapResolver {
 
 		// If we still have a straight enough line, recurse to the next position
 		points.add(p2);
-		if (straightCalc(points.toArray(new float[points.size()][])) <= STRAIGHT_TOLERANCE) {
+		if (straightCalc(points.toArray(new float[points
+			.size()][])) <= STRAIGHT_TOLERANCE)
+		{
 			return findLongestPath(query, dist, points);
 		}
 
@@ -707,34 +714,46 @@ class SlopeOverlapResolver {
 		return points.get(points.size() - 2);
 	}
 
-	private boolean intersects(final Line l1, final Line l2, final float threshold) {
-		return intersectsStart(l1, l2, threshold) || intersectsEnd(l1, l2, threshold);
+	private boolean intersects(final Line l1, final Line l2,
+		final float threshold)
+	{
+		return intersectsStart(l1, l2, threshold) || intersectsEnd(l1, l2,
+			threshold);
 	}
 
 	/**
 	 * Helper method to determine if the query line intersects with the target at
 	 * its start terminal.
 	 */
-	private boolean intersectsStart(final Line target, final Line query, final float threshold) {
+	private boolean intersectsStart(final Line target, final Line query,
+		final float threshold)
+	{
 		final float[] tStart = getPoint(target, 0);
 		final float[] qStart = getPoint(query, 0);
 		final float[] qEnd = getPoint(query, query.getNumber() - 1);
-		return intersects(tStart, qStart, threshold) || intersects(tStart, qEnd, threshold);
+		return intersects(tStart, qStart, threshold) || intersects(tStart, qEnd,
+			threshold);
 	}
 
 	/**
 	 * Helper method to determine if the query line intersects with the target at
 	 * its end terminal.
 	 */
-	private boolean intersectsEnd(final Line target, final Line query, final float threshold) {
+	private boolean intersectsEnd(final Line target, final Line query,
+		final float threshold)
+	{
 		final float[] tEnd = getPoint(target, target.getNumber() - 1);
 		final float[] qStart = getPoint(query, 0);
 		final float[] qEnd = getPoint(query, query.getNumber() - 1);
-		return intersects(tEnd, qStart, threshold) || intersects(tEnd, qEnd, threshold);
+		return intersects(tEnd, qStart, threshold) || intersects(tEnd, qEnd,
+			threshold);
 	}
 
-	private boolean intersects(final float[] tEnd, final float[] qEnd, final float threshold) {
-		return Math.abs(qEnd[0] - tEnd[0]) < threshold && Math.abs(qEnd[1] - tEnd[1]) < threshold;
+	private boolean intersects(final float[] tEnd, final float[] qEnd,
+		final float threshold)
+	{
+		return Math.abs(qEnd[0] - tEnd[0]) < threshold && Math.abs(qEnd[1] -
+			tEnd[1]) < threshold;
 	}
 
 	/**
@@ -753,8 +772,8 @@ class SlopeOverlapResolver {
 	}
 
 	/**
-	 * Helper method to return the x and y coordinates of the point at the specified
-	 * index of a given line.
+	 * Helper method to return the x and y coordinates of the point at the
+	 * specified index of a given line.
 	 */
 	private float[] getPoint(final Line target, final int i) {
 		float[] coords = new float[2];
@@ -767,7 +786,8 @@ class SlopeOverlapResolver {
 	 * Helper method to determine if a junction sits on the start point of a line.
 	 */
 	private boolean matchesStart(final Junction junction, final Line line) {
-		return line.getXCoordinates()[0] == junction.getX() && line.getYCoordinates()[0] == junction.getY();
+		return line.getXCoordinates()[0] == junction.getX() && line
+			.getYCoordinates()[0] == junction.getY();
 	}
 
 	/**
@@ -775,6 +795,7 @@ class SlopeOverlapResolver {
 	 */
 	private boolean matchesEnd(final Junction junction, final Line line) {
 		int count = line.getNumber() - 1;
-		return line.getXCoordinates()[count] == junction.getX() && line.getYCoordinates()[count] == junction.getY();
+		return line.getXCoordinates()[count] == junction.getX() && line
+			.getYCoordinates()[count] == junction.getY();
 	}
 }

@@ -65,9 +65,9 @@ import net.imglib2.view.Views;
  * @author Claude Opus 5.5
  * @author Ignacio Arganda-Carreras
  * @param <B> type of the binary input
- * @implNote op names='morphology.skeletonize3D'
+ * @implNote op names='morphology.skeletonize'
  */
-public class Skeletonize3D<B extends BooleanType<B>> implements
+public class Skeletonize<B extends BooleanType<B>> implements
 	Function<RandomAccessibleInterval<B>, RandomAccessibleInterval<BitType>>
 {
 

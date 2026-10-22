@@ -43,7 +43,7 @@ import org.scijava.ops.image.gpl.AbstractOpTest;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link Skeletonize3D}.
+ * Tests {@link Skeletonize}.
  * <p>
  * Expected skeletons were produced by running the original Fiji Skeletonize3D
  * plugin (source of version 2.1.2-SNAPSHOT, with ImageJ 1.54p) on the same
@@ -53,7 +53,7 @@ import org.scijava.types.Nil;
  * @author Curtis Rueden
  * @author Claude Opus 5.5
  */
-public class Skeletonize3DTest extends AbstractOpTest {
+public class SkeletonizeTest extends AbstractOpTest {
 
 	/** A cross of two 25x5x5 bars, centered at (15, 15, 5). */
 	static Img<BitType> bars() {
@@ -86,7 +86,7 @@ public class Skeletonize3DTest extends AbstractOpTest {
 	private RandomAccessibleInterval<BitType> skeletonize(
 		final RandomAccessibleInterval<BitType> in)
 	{
-		return ops.op("morphology.skeletonize3D").input(in).outType(
+		return ops.op("morphology.skeletonize").input(in).outType(
 			new Nil<RandomAccessibleInterval<BitType>>()
 			{}).apply();
 	}

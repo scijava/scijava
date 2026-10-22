@@ -54,6 +54,11 @@ import org.scijava.ops.spi.Nullable;
  * aligned with the output pixel. Weights must be non-negative; pixels with
  * zero weight are ignored.
  * </p>
+ * <p>
+ * The input and output must have the same dimensions, but may have different
+ * minima: output pixels correspond to input pixels at the same offset from
+ * the respective minimum. Results are clamped to the range of the output type.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -82,6 +87,10 @@ public class DefaultWeightedMedian<T extends RealType<T>, K extends RealType<K>,
 		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds,
 		final RandomAccessibleInterval<V> output)
 	{
+		if (!Intervals.equalDimensions(input, output)) {
+			throw new IllegalArgumentException(
+				"Input and output must have the same dimensions");
+		}
 		final var n = input.numDimensions();
 		if (kernel.numDimensions() != n) {
 			throw new IllegalArgumentException("Kernel must have " + n +
@@ -124,6 +133,11 @@ public class DefaultWeightedMedian<T extends RealType<T>, K extends RealType<K>,
 			totalWeight += w;
 		final var halfWeight = totalWeight / 2;
 
+		// Note: Output pixel p reads the input around p + (inMin - outMin), so
+		// that the input and output may have different minima.
+		final var shift = new long[n];
+		for (var d = 0; d < n; d++)
+			shift[d] = input.min(d) - output.min(d);
 		final var extended = Views.extend(input, outOfBounds);
 		LoopBuilder.setImages(Intervals.positions(output), output).multiThreaded()
 			.forEachChunk(chunk -> {
@@ -135,12 +149,13 @@ public class DefaultWeightedMedian<T extends RealType<T>, K extends RealType<K>,
 					p.localize(pos);
 					for (var i = 0; i < count; i++) {
 						for (var d = 0; d < n; d++) {
-							ra.setPosition(pos[d] + offsets[i][d], d);
+							ra.setPosition(pos[d] + shift[d] + offsets[i][d], d);
 						}
 						values[i] = ra.get().getRealDouble();
 						w[i] = weights[i];
 					}
-					o.setReal(weightedMedian(values, w, count, halfWeight));
+					final var v = weightedMedian(values, w, count, halfWeight);
+					o.setReal(Math.max(o.getMinValue(), Math.min(o.getMaxValue(), v)));
 				});
 				return null;
 			});

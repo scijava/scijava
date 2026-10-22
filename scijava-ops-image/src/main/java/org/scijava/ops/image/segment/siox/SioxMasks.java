@@ -52,8 +52,8 @@ import org.scijava.ops.spi.OpDependency;
  * with confidence 1 for foreground, 0 for background and 0.5 for unknown
  * samples. Unknown samples are classified by comparing their CIELAB color
  * to color signatures of the known background and foreground, followed by
- * smoothing and connected component filtering. The image may have any number of dimensions; the original
- * algorithm is 2D.
+ * smoothing and connected component filtering. The image may have any number
+ * of dimensions; the original algorithm is 2D.
  * </p>
  * <p>
  * SIOX is described in G. Friedland, K. Jantz and R. Rojas, "SIOX: Simple

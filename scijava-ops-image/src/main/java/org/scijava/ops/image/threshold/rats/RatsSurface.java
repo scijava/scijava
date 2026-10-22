@@ -103,7 +103,8 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  * <p>
  * NaN pixels are ignored: they contribute no edges and no noise samples, and
- * are never foreground.
+ * are never foreground. The image is processed single-threaded in flat
+ * arrays, so it is limited to 2<sup>31</sup> pixels.
  * </p>
  * <p>
  * This implementation was written from the general description of the

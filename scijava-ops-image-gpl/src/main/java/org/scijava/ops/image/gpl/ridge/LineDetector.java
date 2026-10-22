@@ -22,7 +22,6 @@
 
 package org.scijava.ops.image.gpl.ridge;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -309,8 +308,7 @@ class LineDetector {
 		}
 
 		List<Junction> newJunctions = new ArrayList<>();
-		ArrayList<Point2D.Float> processedJunctions =
-			new ArrayList<Point2D.Float>();
+		Set<Long> processedJunctions = new HashSet<>();
 		for (int i = 0; i < junctions.size(); i++) {
 			Junction junc = junctions.get(i);
 			Line mainLine = null;
@@ -321,9 +319,7 @@ class LineDetector {
 			ArrayList<Integer> secondaryLinePos = new ArrayList<Integer>();
 
 			// Process each junction position only once.
-			if (!processedJunctions.contains(new Point2D.Float(junc.x, junc.y))) {
-
-				processedJunctions.add(new Point2D.Float(junc.x, junc.y));
+			if (isNewPosition(processedJunctions, junc.x, junc.y)) {
 
 				// Find the main line and the secondary lines.
 				for (int j = 0; j < lines.size(); j++) {
@@ -431,6 +427,22 @@ class LineDetector {
 
 		return currentClass;
 
+	}
+
+	/**
+	 * Records a position in a set of packed coordinates, returning true if it
+	 * was not there yet. Coordinates compare with {@code ==}, like the
+	 * {@code Point2D.Float} list of the original: {@code -0} equals {@code 0},
+	 * and a NaN position is never considered seen.
+	 */
+	private static boolean isNewPosition(final Set<Long> seen, final float x,
+		final float y)
+	{
+		if (Float.isNaN(x) || Float.isNaN(y)) return true;
+		// Note: Adding 0 maps -0 to +0, so that both pack to the same bits.
+		final long key = ((long) Float.floatToIntBits(x + 0f) << 32) | (Float
+			.floatToIntBits(y + 0f) & 0xffffffffL);
+		return seen.add(key);
 	}
 
 	private double[] minDistance(Line l, float x, float y) {

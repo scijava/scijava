@@ -82,6 +82,10 @@ import org.scijava.ops.spi.OpDependency;
  * <p>
  * Implemented from the papers.
  * </p>
+ * <p>
+ * Results are clamped to the range of the output type, so an integer output
+ * saturates rather than wrapping around.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5
@@ -237,7 +241,8 @@ public class CoherenceEnhancingDiffusion<T extends RealType<T>, V extends RealTy
 
 		i = 0;
 		for (final var t : Views.flatIterable(output))
-			t.setReal(u[i++]);
+			t.setReal(Math.max(t.getMinValue(), Math.min(t.getMaxValue(),
+				u[i++])));
 	}
 
 	/**

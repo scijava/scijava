@@ -152,4 +152,32 @@ public class DefaultTVDenoiseTest extends AbstractOpTest {
 		}
 		return sum;
 	}
+
+	/**
+	 * An 8-bit output saturates rather than wrapping around: the result must be
+	 * the floating-point result clamped to [0, 255].
+	 */
+	@Test
+	public void testUnsignedByteOutputIsClamped() {
+		final var in = ArrayImgs.floats(16, 16);
+		final var rnd = new Random(3);
+		final var c = in.localizingCursor();
+		while (c.hasNext()) {
+			c.fwd();
+			c.get().setReal((c.getIntPosition(0) < 8 ? 300 : -20) + rnd
+				.nextDouble());
+		}
+		final var expected = ArrayImgs.floats(16, 16);
+		ops.op("filter.tvDenoise").input(in, 10.0).output(expected).compute();
+		final var actual = ArrayImgs.unsignedBytes(16, 16);
+		ops.op("filter.tvDenoise").input(in, 10.0).output(actual).compute();
+		final var ec = expected.cursor();
+		var saturated = 0;
+		for (final var t : actual) {
+			final var e = Math.max(0, Math.min(255, ec.next().get()));
+			assertEquals(e, t.get(), 0.5 + 1e-4);
+			if (t.get() == 0 || t.get() == 255) saturated++;
+		}
+		assertTrue(saturated > 100, "saturated pixels: " + saturated);
+	}
 }

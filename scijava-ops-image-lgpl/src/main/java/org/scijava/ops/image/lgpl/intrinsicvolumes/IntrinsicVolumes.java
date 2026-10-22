@@ -392,7 +392,10 @@ public final class IntrinsicVolumes {
 	 * or 3D binary image, considered as a sample of a stationary random set
 	 * (microstructure analysis), i.e. the measures per unit area or volume of
 	 * the sampling window. Only the configurations fully contained in the image
-	 * are considered, which avoids edge effects.
+	 * are considered, which avoids edge effects. The image must therefore have
+	 * a size of at least 2 along each dimension; an image with a dimension of
+	 * size 1 (e.g. a one-slice 3D stack) is rejected with an
+	 * {@link IllegalArgumentException}.
 	 *
 	 * @param <B> pixel type
 	 * @param image the 2D or 3D binary image
@@ -414,6 +417,14 @@ public final class IntrinsicVolumes {
 		@Nullable Integer directions, @Nullable Integer connectivity)
 	{
 		final var nd = image.numDimensions();
+		for (var d = 0; d < nd; d++) {
+			if (image.dimension(d) < 2) {
+				throw new IllegalArgumentException("Dimension " + d +
+					" has size 1, so no configuration lies inside the image; drop it" +
+					" (e.g. with Views.dropSingletonDimensions) to measure a " + (nd -
+						1) + "D image");
+			}
+		}
 		final var s = spacing(image, spacing, nd);
 		final var hist = ConfigurationHistograms.histogram(image, true);
 		var window = 1.0;

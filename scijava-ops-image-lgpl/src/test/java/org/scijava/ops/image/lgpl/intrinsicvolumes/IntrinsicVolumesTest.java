@@ -372,6 +372,13 @@ public class IntrinsicVolumesTest extends AbstractOpTest {
 		final var d2 = densities(stripes, null, 2, null);
 		assertEquals(0.5, d2.get("areaDensity"), EPS);
 		assertEquals(Math.PI / 4 * 0.5, d2.get("perimeterDensity"), EPS);
+
+		// A dimension of size 1 leaves no configuration inside the image, so the
+		// densities are undefined and the image is rejected.
+		assertThrows(IllegalArgumentException.class, () -> densities(ArrayImgs
+			.bits(8, 8, 1), null, null, null));
+		assertThrows(IllegalArgumentException.class, () -> densities(ArrayImgs
+			.bits(1, 8), null, null, null));
 	}
 
 	@Test

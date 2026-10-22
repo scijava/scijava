@@ -30,6 +30,7 @@
 package org.scijava.ops.image.filter.tubeness;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
@@ -39,6 +40,7 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.view.Views;
 
 /**
  * Tests {@link DefaultTubeness}.
@@ -102,6 +104,38 @@ public class TubenessTest extends AbstractOpTest {
 			final double expected = sigma * sigma * 100 * s * s / (ss * ss);
 			assertEquals(expected, v, 0.1 * expected);
 		}
+	}
+
+	/**
+	 * A crop view with a non-zero minimum must be filtered over its own
+	 * window, giving the same result as a zero-min copy of the crop.
+	 */
+	@Test
+	public void testNonZeroMinInput() {
+		Img<UnsignedByteType> input = openRelativeUnsignedByteImg(
+			DefaultTubeness.class, "TubesInput.png");
+		final long[] min = { 20, 15 };
+		final long[] max = { 59, 49 };
+		final var crop = Views.interval(input, min, max);
+		final var copy = ArrayImgs.unsignedBytes(40, 35);
+		final var cc = copy.cursor();
+		for (final var t : Views.flatIterable(crop))
+			cc.next().set(t);
+
+		final var expected = ArrayImgs.doubles(40, 35);
+		ops.op("filter.tubeness").input(copy, 2.0).output(expected).compute();
+		final var actual = ArrayImgs.doubles(40, 35);
+		ops.op("filter.tubeness").input(crop, 2.0).output(actual).compute();
+		ImgLib2Assert.assertImageEquals(expected, actual);
+	}
+
+	/** Only 2D and 3D images are supported. */
+	@Test
+	public void testUnsupportedDimensionality() {
+		final var input = ArrayImgs.doubles(5, 5, 5, 5);
+		final var output = ArrayImgs.doubles(5, 5, 5, 5);
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"filter.tubeness").input(input, 1.0).output(output).compute());
 	}
 
 }

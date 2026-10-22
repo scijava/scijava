@@ -68,65 +68,70 @@ public class KalmanFilterTest extends AbstractOpTest {
 
 	@Test
 	public void testRunningMean() {
-		// With g = 1 and R = 1, the estimate is the mean of all frames so far.
+		// With g = 1, the update is x += K (z - x) with K_t = 1 / (t + 1), so the
+		// estimate is the mean of all frames so far, whatever the variance.
 		final var rnd = new Random(8);
 		final var img = ArrayImgs.unsignedShorts(3, 2, 20);
 		for (final var t : img)
 			t.set(rnd.nextInt(1000));
-		final var out = ArrayImgs.doubles(3, 2, 20);
-		ops.op("filter.kalman").input(img, 2, 1.0, 1.0).output(out).compute();
-		final var ia = img.randomAccess();
-		final var oa = out.randomAccess();
-		for (var x = 0; x < 3; x++) {
-			for (var y = 0; y < 2; y++) {
-				var sum = 0.0;
-				for (var t = 0; t < 20; t++) {
-					sum += ia.setPositionAndGet(x, y, t).get();
-					assertEquals(sum / (t + 1), oa.setPositionAndGet(x, y, t).get(),
-						1e-9);
+		for (final double r : new double[] { 0.05, 1, 30 }) {
+			final var out = ArrayImgs.doubles(3, 2, 20);
+			ops.op("filter.kalman").input(img, 2, 1.0, r).output(out).compute();
+			final var ia = img.randomAccess();
+			final var oa = out.randomAccess();
+			for (var x = 0; x < 3; x++) {
+				for (var y = 0; y < 2; y++) {
+					var sum = 0.0;
+					for (var t = 0; t < 20; t++) {
+						sum += ia.setPositionAndGet(x, y, t).get();
+						assertEquals(sum / (t + 1), oa.setPositionAndGet(x, y, t).get(),
+							1e-9);
+					}
 				}
 			}
 		}
 	}
 
+	/**
+	 * A step from 0 to 100 at frame 1, filtered along dimension 0 with the
+	 * default parameters (g = 0.8, R = 0.05). By the documented update of the
+	 * Kalman stack filter, seeded with {@code x_0 = z_0} and {@code P_0 = R}:
+	 * <ul>
+	 * <li>t = 1: K = 1/2, x = 0.8·0 + 0.2·100 + 0.5·(100 - 0) = 70;</li>
+	 * <li>t = 2: K = 1/3, x = 0.8·70 + 0.2·100 + (100 - 70)/3 = 86;</li>
+	 * <li>t = 3: K = 1/4, x = 0.8·86 + 0.2·100 + (100 - 86)/4 = 92.3;</li>
+	 * <li>t = 4: K = 1/5, x = 0.8·92.3 + 0.2·100 + (100 - 92.3)/5 = 95.38.</li>
+	 * </ul>
+	 */
 	@Test
 	public void testStepResponse() {
-		// A step from 0 to 100 at frame 10, filtered along dimension 0; each
-		// update moves the estimate by a = g / (t + R) + 1 - g of the residual.
-		final double g = 0.8, r = 0.05;
-		final int frames = 30, step = 10;
-		final var img = ArrayImgs.doubles(frames, 2);
-		final var ia = img.randomAccess();
-		for (var t = step; t < frames; t++)
-			for (var y = 0; y < 2; y++)
-				ia.setPositionAndGet(t, y).set(100);
-		final var out = ArrayImgs.doubles(frames, 2);
-		ops.op("filter.kalman").input(img, 0, g, r).output(out).compute();
+		final var img = ArrayImgs.doubles(new double[] { 0, 100, 100, 100, 100, 0,
+			100, 100, 100, 100 }, 5, 2);
+		final var out = ArrayImgs.doubles(5, 2);
+		ops.op("filter.kalman").input(img, 0).output(out).compute();
+		final double[] expected = { 0, 70, 86, 92.3, 95.38 };
 		final var oa = out.randomAccess();
-		var expected = 0.0;
-		for (var t = 0; t < frames; t++) {
-			final var z = t < step ? 0 : 100;
-			final var a = t == 0 ? 1 : g / (t + r) + 1 - g;
-			expected += a * (z - expected);
-			assertEquals(expected, oa.setPositionAndGet(t, 1).get(), 1e-9);
-		}
-		// The lag after the step is governed by the gain.
-		assertTrue(oa.setPositionAndGet(step, 0).get() < 30);
-		assertTrue(oa.setPositionAndGet(frames - 1, 0).get() > 95);
+		for (var y = 0; y < 2; y++)
+			for (var t = 0; t < 5; t++)
+				assertEquals(expected[t], oa.setPositionAndGet(t, y).get(), 1e-9);
 	}
 
+	/**
+	 * With {@code g = 0}, the Kalman term is not scaled down, so the estimate
+	 * overshoots: for frames (0, 200), {@code x_1 = 200 + (200 - 0) / 2 = 300}.
+	 * An 8-bit output saturates at 255.
+	 */
 	@Test
-	public void testNoGain() {
-		// With g = 0, the output is the input.
-		final var rnd = new Random(1);
-		final var img = ArrayImgs.doubles(4, 5, 6);
-		for (final var t : img)
-			t.set(rnd.nextDouble());
-		final var out = ArrayImgs.doubles(4, 5, 6);
+	public void testNoGainOvershoots() {
+		final var img = ArrayImgs.doubles(new double[] { 0, 200 }, 1, 2);
+		final var out = ArrayImgs.doubles(1, 2);
 		ops.op("filter.kalman").input(img, 1, 0.0).output(out).compute();
-		final var oc = out.cursor();
-		for (final var t : img)
-			assertEquals(t.get(), oc.next().get(), 0);
+		assertEquals(0, out.getAt(0, 0).get(), 0);
+		assertEquals(300, out.getAt(0, 1).get(), 1e-9);
+
+		final var outByte = ArrayImgs.unsignedBytes(1, 2);
+		ops.op("filter.kalman").input(img, 1, 0.0).output(outByte).compute();
+		assertEquals(255, outByte.getAt(0, 1).get());
 	}
 
 	@Test

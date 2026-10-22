@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.labeling.shapeBasedAverage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
@@ -38,10 +37,10 @@ import java.util.function.Function;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.morphology.distance.DistanceTransform;
-import net.imglib2.algorithm.morphology.distance.DistanceTransform.DISTANCE_TYPE;
-import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.converter.Converters;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.IntegerType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
@@ -52,9 +51,13 @@ import org.scijava.ops.spi.OpDependency;
  * averaging (Rohlfing &amp; Maurer 2007), e.g. for atlas-based label fusion.
  * <p>
  * For each input {@code k} and label {@code l}, the signed Euclidean
- * distance map {@code d_kl} is computed: at a pixel outside the region of
- * {@code l}, the distance to the nearest pixel of {@code l}; at a pixel
- * inside it, minus the distance to the nearest pixel with another label.
+ * distance map {@code d_kl} to the boundary of the region of {@code l} is
+ * computed, positive outside the region and negative inside it: this is the
+ * negated {@code image.signedDistanceTransform} of the region. At a pixel
+ * outside the region, it is the distance to the nearest pixel of {@code l}
+ * minus half a pixel; at a pixel inside it, minus the distance to the nearest
+ * pixel with another label, plus half a pixel. The boundary thus lies halfway
+ * between pixel centers, and pixels next to it get {@code ±0.5}.
  * Every output pixel is assigned the label with the smallest mean signed
  * distance {@code (1/K) Σ_k d_kl}, i.e. the label whose averaged shape it
  * lies deepest inside. Unlike voting, this yields smooth, averaged shapes:
@@ -62,10 +65,17 @@ import org.scijava.ops.spi.OpDependency;
  * </p>
  * <p>
  * Every pixel value is a label, including 0 (the background). Where a label
- * is absent from an input, its distance in that input is taken to be the
- * length of the image diagonal. Ties are resolved in favor of the smallest
- * label value. Distances are measured in pixels with the exact Euclidean
- * distance transform of imglib2.
+ * is absent from an input (or covers all of it), its distance in that input
+ * is taken to be (minus) the length of the image diagonal, less half a pixel.
+ * Ties are resolved in favor of the smallest label value. Distances are
+ * measured in pixels.
+ * </p>
+ * <p>
+ * Note: Before the half-pixel offset was introduced (to share
+ * {@code image.signedDistanceTransform}), distances were measured between
+ * pixel centers, i.e. {@code d_kl} was {@code ±0.5} larger in magnitude. The
+ * two conventions can disagree only where the mean signed distances of two
+ * labels differ by less than a pixel.
  * </p>
  * <p>
  * Implemented from the paper.
@@ -85,6 +95,9 @@ public class ShapeBasedAverage<I extends IntegerType<I>> implements
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, I, RandomAccessibleInterval<I>> createOp;
+
+	@OpDependency(name = "image.signedDistanceTransform")
+	private BiFunction<RandomAccessibleInterval<BitType>, double[], RandomAccessibleInterval<FloatType>> sdtOp;
 
 	/**
 	 * Computes the shape-based average.
@@ -112,56 +125,28 @@ public class ShapeBasedAverage<I extends IntegerType<I>> implements
 				" pixels");
 		}
 		final var count = (int) size;
-		final var dims = first.dimensionsAsLongArray();
-		var diag = 0.0;
-		for (final var d : dims)
-			diag += (double) d * d;
-		diag = Math.sqrt(diag);
-
-		final var labels = new ArrayList<long[]>();
 		final var all = new TreeSet<Long>();
-		for (final var in : inputs) {
-			final var values = new long[count];
-			var p = 0;
-			for (final var t : Views.flatIterable(in)) {
-				values[p] = t.getIntegerLong();
-				all.add(values[p++]);
-			}
-			labels.add(values);
-		}
+		for (final var in : inputs)
+			for (final var t : Views.flatIterable(in))
+				all.add(t.getIntegerLong());
 
 		final var best = new long[count];
 		final var bestDist = new double[count];
 		Arrays.fill(bestDist, Double.POSITIVE_INFINITY);
-		final var mean = new double[count];
-		final var inside = new boolean[count];
+		final var sum = new double[count];
 		for (final long label : all) {
-			Arrays.fill(mean, 0);
-			for (final var values : labels) {
-				var any = false;
-				var allInside = true;
-				for (var p = 0; p < count; p++) {
-					inside[p] = values[p] == label;
-					any |= inside[p];
-					allInside &= inside[p];
-				}
-				if (!any) {
-					for (var p = 0; p < count; p++)
-						mean[p] += diag;
-					continue;
-				}
-				final var toInside = distances(inside, true, dims);
-				final var toOutside = allInside ? null : distances(inside, false,
-					dims);
-				for (var p = 0; p < count; p++) {
-					mean[p] += inside[p] ? (toOutside == null ? -diag : -toOutside[p])
-						: toInside[p];
-				}
+			Arrays.fill(sum, 0);
+			for (final var in : inputs) {
+				final RandomAccessibleInterval<BitType> mask = Converters.convert(in, (
+					a, b) -> b.set(a.getIntegerLong() == label), new BitType());
+				var p = 0;
+				for (final var t : Views.flatIterable(sdtOp.apply(mask, null)))
+					sum[p++] -= t.getRealDouble();
 			}
 			// Note: The sum orders labels like the mean, as K is constant.
 			for (var p = 0; p < count; p++) {
-				if (mean[p] < bestDist[p]) {
-					bestDist[p] = mean[p];
+				if (sum[p] < bestDist[p]) {
+					bestDist[p] = sum[p];
 					best[p] = label;
 				}
 			}
@@ -173,22 +158,5 @@ public class ShapeBasedAverage<I extends IntegerType<I>> implements
 		for (final var t : Views.flatIterable(output))
 			t.setInteger(best[p++]);
 		return output;
-	}
-
-	/**
-	 * Computes the Euclidean distance of each pixel to the nearest pixel whose
-	 * mask value equals {@code target}.
-	 */
-	private static double[] distances(final boolean[] mask,
-		final boolean target, final long[] dims)
-	{
-		final var d = new double[mask.length];
-		for (var p = 0; p < mask.length; p++)
-			d[p] = mask[p] == target ? 0 : 1e20;
-		DistanceTransform.transform(ArrayImgs.doubles(d, dims),
-			DISTANCE_TYPE.EUCLIDIAN);
-		for (var p = 0; p < d.length; p++)
-			d[p] = Math.sqrt(d[p]);
-		return d;
 	}
 }

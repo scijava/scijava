@@ -50,7 +50,9 @@ import org.scijava.ops.spi.Nullable;
  * {@code out = in / flat × mean(flat)}. Pixels where
  * {@code flat - dark == 0} are set to {@code in - dark}. The input, flat and
  * dark images must have the same dimensions; they may have any number of
- * dimensions. The computation is done in double precision.
+ * dimensions. The computation is done in double precision, and results are
+ * clamped to the range of the output type (so with an integer output,
+ * {@code in < dark} gives 0 and overly bright pixels saturate).
  * </p>
  * <p>
  * Based on the "Flat-field correction" macro of the BioVoxxel Toolbox by Jan
@@ -117,16 +119,21 @@ public class FlatFieldCorrect<T extends RealType<T>, U extends RealType<U>, D ex
 
 		if (dark == null) {
 			LoopBuilder.setImages(input, flat, output).forEachPixel((i, f, o) -> o
-				.setReal(correct(i.getRealDouble(), f.getRealDouble(), mean)));
+				.setReal(clamp(o, correct(i.getRealDouble(), f.getRealDouble(),
+					mean))));
 		}
 		else {
 			LoopBuilder.setImages(input, flat, dark, output).forEachPixel((i, f, d,
 				o) -> {
 				final var dv = d.getRealDouble();
-				o.setReal(correct(i.getRealDouble() - dv, f.getRealDouble() - dv,
-					mean));
+				o.setReal(clamp(o, correct(i.getRealDouble() - dv, f.getRealDouble() -
+					dv, mean)));
 			});
 		}
+	}
+
+	private static double clamp(final RealType<?> o, final double v) {
+		return Math.max(o.getMinValue(), Math.min(o.getMaxValue(), v));
 	}
 
 	private static double correct(final double signal, final double flat,

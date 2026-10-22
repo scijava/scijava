@@ -166,6 +166,29 @@ public class LocalThicknessTest extends AbstractOpTest {
 	}
 
 	/**
+	 * Without any background element, every element would be a ridge point
+	 * painting a ball over the whole image, which takes quadratic time and
+	 * yields a meaningless map; the op rejects such input instead.
+	 */
+	@Test
+	public void testAllForeground() {
+		final Img<BitType> in = image(new long[] { 6, 5, 4 }, p -> true);
+		final var e = assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"morphology.localThickness").input(in).outType(OUT).apply());
+		assertTrue(e.getMessage().contains("background"), e.getMessage());
+	}
+
+	/** Without any foreground, the thickness is 0 everywhere. */
+	@Test
+	public void testAllBackground() {
+		final Img<BitType> in = image(new long[] { 6, 5 }, p -> false);
+		final RandomAccessibleInterval<FloatType> out = ops.op(
+			"morphology.localThickness").input(in, null, false).outType(OUT).apply();
+		for (final FloatType t : Views.iterable(out))
+			assertEquals(0, t.get(), 0);
+	}
+
+	/**
 	 * Compares against the original Fiji LocalThickness plugins (EDT_S1D,
 	 * Distance_Ridge, Local_Thickness_Parallel, Clean_Up_Local_Thickness, from
 	 * sc.fiji:LocalThickness_:5.0.0) run on the same synthetic image without

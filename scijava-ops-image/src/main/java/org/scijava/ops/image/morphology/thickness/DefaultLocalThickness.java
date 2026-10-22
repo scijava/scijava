@@ -123,8 +123,10 @@ import net.imglib2.view.Views;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * </pre>
  * <p>
- * The input must contain at least one background element, and must have fewer
- * than 2<sup>31</sup> elements.
+ * The input must contain at least one background element (an
+ * {@link IllegalArgumentException} is thrown otherwise), and must have fewer
+ * than 2<sup>31</sup> elements. An input without foreground yields 0
+ * everywhere.
  * </p>
  *
  * @author Curtis Rueden
@@ -143,7 +145,9 @@ public class DefaultLocalThickness<B extends BooleanType<B>> implements
 	/**
 	 * Computes the local thickness map of a binary image.
 	 *
-	 * @param input the binary image; {@code true} elements are foreground
+	 * @param input the binary image; {@code true} elements are foreground. It
+	 *          must contain at least one background element, otherwise an
+	 *          {@link IllegalArgumentException} is thrown.
 	 * @param calibration the element spacing along each dimension (defaults to 1
 	 *          for every dimension). Thickness values are reported in these
 	 *          units.
@@ -199,10 +203,18 @@ public class DefaultLocalThickness<B extends BooleanType<B>> implements
 		for (int d = 0; d < n; d++)
 			big += cal2[d] * dims[d] * dims[d];
 		int i = 0;
+		boolean hasBackground = false;
 		for (final B b : Views.flatIterable(Views.zeroMin(input))) {
 			fg[i] = b.get();
 			sq[i] = fg[i] ? big : 0;
+			if (!fg[i]) hasBackground = true;
 			i++;
+		}
+		// Note: Without background, every element would be a ridge point whose
+		// ball covers the whole image, which takes quadratic time.
+		if (!hasBackground) {
+			throw new IllegalArgumentException(
+				"The input must contain at least one background element");
 		}
 		edtOp.mutate(sqImg, DISTANCE_TYPE.EUCLIDIAN, cal2);
 

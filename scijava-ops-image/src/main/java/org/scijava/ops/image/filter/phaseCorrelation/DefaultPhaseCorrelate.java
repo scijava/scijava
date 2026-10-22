@@ -88,6 +88,13 @@ import org.scijava.ops.spi.OpDependency;
  * normalization of the cross-power spectrum amplifies the noise of the
  * frequencies where the images have little signal.
  * </p>
+ * <p>
+ * Implemented from the papers. Unlike the Fiji stitching plugins, no window
+ * function is applied before the FFT (a cosine taper degraded the estimates
+ * in testing), the cross-power spectrum is regularized as described above
+ * rather than purely normalized, and subpixel shifts come from the Pearson
+ * correlation instead of a quadratic fit of the phase correlation matrix.
+ * </p>
  *
  * @author Curtis Rueden
  * @author Claude Opus 5.5

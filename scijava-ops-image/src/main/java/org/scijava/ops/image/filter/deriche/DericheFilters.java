@@ -67,8 +67,18 @@ import org.scijava.ops.spi.OpDependency;
  * unit response to a unit ramp, so derivatives are in intensity per physical
  * unit. With a {@code calibration} (pixel spacing per dimension, default 1),
  * the filters along dimension {@code d} use {@code alpha * calibration[d]} per
- * pixel. The image is extended by border replication. Outputs have
- * zero-based coordinates.
+ * pixel; it must have one value per dimension. The image is extended by
+ * border replication. Outputs have zero-based coordinates. The computation is
+ * single-threaded on flat arrays, so images are limited to 2<sup>31</sup>
+ * pixels.
+ * </p>
+ * <p>
+ * Implemented from the papers. The Canny edge filter of the 3D ImageJ Suite
+ * (mcib3d) was run only as a black box for comparison: it applies the 1D
+ * derivative filter along each axis without smoothing along the others, does
+ * not normalize the kernel, and does no non-maximum suppression. Its
+ * gradients therefore differ from {@code filter.dericheGradientMagnitude} by
+ * more than a constant factor, except for 1D signals.
  * </p>
  *
  * @author Curtis Rueden

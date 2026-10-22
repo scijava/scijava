@@ -79,10 +79,16 @@ import org.scijava.ops.spi.OpDependency;
  * diagonal entries of {@code D} and central differences of central
  * differences for the mixed entries, with the border pixels repeated outside
  * the image. The scheme is not guaranteed to satisfy a maximum principle, but
- * it is stable for time steps up to about {@code 1 / (2n)}.
+ * it is stable for time steps up to about {@code 1 / (2n)}, and larger time
+ * steps are rejected. Scales are in pixels, with no spatial calibration. The
+ * computation is single-threaded on double-precision flat arrays holding the
+ * n(n+1)/2 tensor components of every pixel, so the image is limited to
+ * 2<sup>31</sup> / (n(n+1)/2) pixels.
  * </p>
  * <p>
- * Implemented from the papers.
+ * Implemented from the papers. The related tensor-driven diffusion of
+ * Tschumperl&eacute; and Deriche (Fiji's "Anisotropic Diffusion 2D") is not
+ * implemented.
  * </p>
  * <p>
  * Results are clamped to the range of the output type, so an integer output

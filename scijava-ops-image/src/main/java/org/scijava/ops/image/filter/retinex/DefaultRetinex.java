@@ -46,7 +46,10 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * Multi-scale retinex (MSR) of a single-channel image, for dynamic range
  * compression and removal of smooth illumination variations. All dimensions
- * are smoothed. See {@link Retinex} for details.
+ * are smoothed, so a multichannel image passed without a channel dimension is
+ * treated as a single channel, with the surrounds mixing the channels; use the
+ * {@code filter.retinex} variant with {@code channelDim} for colour images.
+ * See {@link Retinex} for details.
  * <p>
  * Implemented from D. J. Jobson, Z. Rahman and G. A. Woodell, "A multiscale
  * retinex for bridging the gap between color images and the human observation

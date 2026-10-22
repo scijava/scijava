@@ -45,7 +45,8 @@ import org.scijava.ops.spi.Nullable;
  * are Gaussian standard deviations in physical units, i.e. they are divided by
  * the optional per-dimension {@code calibration} (pixel spacing, default 1) to
  * obtain pixel sigmas, and derivatives are likewise expressed in physical
- * units. Derivatives are central finite differences of the Gaussian-smoothed
+ * units. Unlike most ops, a calibration with fewer values than dimensions is
+ * accepted, and the missing values default to 1. Derivatives are central finite differences of the Gaussian-smoothed
  * image ({@code [-1, 0, 1] / 2} for gradients, {@code [1, -2, 1]} and the
  * 3&times;3 cross stencil for second derivatives); a scale of 0 disables
  * smoothing. Eigenvalues are computed with {@code TensorEigenValues} of
@@ -67,7 +68,14 @@ import org.scijava.ops.spi.Nullable;
  * without explicit smoothing and returns the full n&times;n matrix, the Hessian
  * here is computed at a chosen Gaussian scale, which is what scale-space
  * measures like eigenvalues, shape index and sheetness require, similar to
- * {@code filter.tubeness}.
+ * {@code filter.tubeness}. However, {@code filter.tubeness} uses the
+ * {@code HessianMatrix} of imglib2-algorithm, whose diagonal stencil has a
+ * step of 2 pixels, so its eigenvalues differ slightly from those of
+ * {@code filter.hessianEigenvalues} at the same scale. Eigenvalue orders also
+ * differ: {@code filter.hessianEigenvalues} sorts by ascending absolute value
+ * (as in Frangi et al.), {@code filter.structureTensorEigenvalues} by
+ * descending value, and {@code filter.tubeness} keeps the order of
+ * {@code TensorEigenValues}.
  * </p>
  *
  * @author Curtis Rueden

@@ -56,7 +56,11 @@ import org.scijava.ops.image.color.ColorUtils;
  * </p>
  * <p>
  * Implemented from the paper; see {@link StainVectors} for published stain
- * vectors.
+ * vectors. Differences from G. Landini's Colour Deconvolution plugin for
+ * ImageJ: the result is the stain amounts in OD units, not 8-bit
+ * transmittance images; a missing third vector is the cross product of the
+ * other two, where the plugin uses its own complement heuristic; and no
+ * 8-bit rescaling of the optical densities takes place.
  * </p>
  *
  * @author Curtis Rueden

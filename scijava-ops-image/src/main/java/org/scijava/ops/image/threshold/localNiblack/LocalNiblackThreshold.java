@@ -48,6 +48,12 @@ import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
+ * Niblack's local threshold: a pixel is foreground if it is strictly above
+ * {@code mean + k * sd - c}, with {@code mean} and {@code sd} the mean and the
+ * population standard deviation (as in Fiji's Auto_Local_Threshold plugin) of
+ * its neighborhood.
+ *
+ * @see ComputeLocalNiblackThreshold
  * @implNote op names='threshold.localNiblack', priority='-100.'
  */
 public class LocalNiblackThreshold<T extends RealType<T>> extends
@@ -68,14 +74,15 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
 
 	/**
-	 * TODO
+	 * Computes Niblack's local threshold of an image.
 	 *
-	 * @param input
-	 * @param inputNeighborhoodShape
-	 * @param c
-	 * @param k
-	 * @param outOfBoundsFactory
-	 * @param output
+	 * @param input the image to threshold
+	 * @param inputNeighborhoodShape the shape of the local neighborhood
+	 * @param c the constant subtracted from the threshold (Fiji default: 0)
+	 * @param k the weight of the standard deviation (Fiji default: 0.2 for
+	 *          bright objects)
+	 * @param outOfBoundsFactory the out-of-bounds strategy (default border)
+	 * @param output the mask, true where a pixel is above its local threshold
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,

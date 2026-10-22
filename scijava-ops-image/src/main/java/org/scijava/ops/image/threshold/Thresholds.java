@@ -186,4 +186,45 @@ public final class Thresholds {
 		}
 		return nonEmpty == 2 ? upper - 1 : -1;
 	}
+
+	/**
+	 * Computes the mean and the population standard deviation (normalized by
+	 * the number of values {@code n}, not {@code n - 1}) of some values, as
+	 * ImageJ's {@code RankFilters} do for the local thresholds of Fiji's
+	 * Auto_Local_Threshold plugin.
+	 *
+	 * @param values the values
+	 * @return the mean and the population standard deviation
+	 */
+	public static double[] meanAndPopulationStdDev(
+		final Iterable<? extends RealType<?>> values)
+	{
+		var n = 0L;
+		var sum = 0.0;
+		for (final var v : values) {
+			sum += v.getRealDouble();
+			n++;
+		}
+		final var mean = sum / n;
+		var sum2 = 0.0;
+		for (final var v : values) {
+			final var d = v.getRealDouble() - mean;
+			sum2 += d * d;
+		}
+		return new double[] { mean, Math.sqrt(sum2 / n) };
+	}
+
+	/**
+	 * Converts the sample variance of {@code n} values, as computed by
+	 * {@code stats.integralVariance}, to their population variance.
+	 *
+	 * @param sampleVariance the sample variance
+	 * @param n the number of values
+	 * @return the population variance
+	 */
+	public static double populationVariance(final double sampleVariance,
+		final long n)
+	{
+		return n > 1 ? Math.max(0, sampleVariance) * (n - 1) / n : 0;
+	}
 }

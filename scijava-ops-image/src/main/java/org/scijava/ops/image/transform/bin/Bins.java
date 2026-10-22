@@ -31,6 +31,7 @@ package org.scijava.ops.image.transform.bin;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import net.imglib2.Dimensions;
@@ -64,7 +65,7 @@ final class Bins {
 	 */
 	static Method method(final String name) {
 		if (name == null) return Method.MEAN;
-		switch (name.trim().toLowerCase()) {
+		switch (name.trim().toLowerCase(Locale.ROOT)) {
 			case "mean":
 			case "average":
 				return Method.MEAN;

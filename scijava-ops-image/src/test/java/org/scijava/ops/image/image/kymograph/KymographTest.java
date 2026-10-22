@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.RealPoint;
@@ -100,6 +101,26 @@ public class KymographTest extends AbstractOpTest {
 		for (var t = 0; t < 6; t++)
 			for (var x = 0; x < 20; x++)
 				assertEquals(x == 2 + 3 * t ? 100 : 0, get(kymo, x, t), 0);
+	}
+
+	/** Under a Turkish locale, "LINEAR".toLowerCase() is "l\u0131near". */
+	@Test
+	public void testOptionsIgnoreDefaultLocale() {
+		final var img = movingDot(4);
+		final var expected = kymograph(img, line(0, 4, 19, 4), null, null, null,
+			null);
+		final var saved = Locale.getDefault();
+		try {
+			Locale.setDefault(Locale.forLanguageTag("tr-TR"));
+			final var kymo = kymograph(img, line(0, 4, 19, 4), null, null, "MAX",
+				"LINEAR");
+			for (var t = 0; t < 6; t++)
+				for (var x = 0; x < 20; x++)
+					assertEquals(get(expected, x, t), get(kymo, x, t), 0);
+		}
+		finally {
+			Locale.setDefault(saved);
+		}
 	}
 
 	@Test

@@ -30,6 +30,7 @@
 package org.scijava.ops.image.segment.levelset;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
@@ -132,7 +133,7 @@ final class LevelSets {
 
 	private static boolean isGeodesic(final String method) {
 		if (method == null) return false;
-		switch (method.toLowerCase()) {
+		switch (method.toLowerCase(Locale.ROOT)) {
 			case "chanvese":
 			case "chan-vese":
 			case "cv":

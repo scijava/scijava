@@ -30,6 +30,7 @@
 package org.scijava.ops.image.filter.convolvedBackground;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
@@ -124,7 +125,8 @@ public class ConvolvedBackgroundSubtraction<T extends RealType<T>, V extends Rea
 			throw new IllegalArgumentException("Radius must be non-negative");
 		}
 		final var background = createOp.apply(input, new FloatType());
-		final var method = filter == null ? "gaussian" : filter.toLowerCase();
+		final var method = filter == null ? "gaussian" : filter.toLowerCase(
+			Locale.ROOT);
 		final var rankShape = new HyperSphereShape((long) Math.floor(radius));
 		switch (method) {
 			case "gaussian":

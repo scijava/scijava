@@ -11,6 +11,14 @@ them apart from [SciJava Ops Image GPL](../scijava-ops-image-gpl) lets
 downstream projects depend on them without GPL obligations. Each op credits
 the original authors, project and license in its javadoc.
 
+## Contents
+
+| Ops | Derived from |
+|---|---|
+| `features.intrinsicVolumes.*` (area, perimeter, volume, surface area, mean breadth, Euler number, densities, interface area) | MorphoLibJ |
+
+## License
+
 This component is licensed under the GNU Lesser General Public License v3 or
 later; see [LICENSE.txt](LICENSE.txt).
 

@@ -35,10 +35,9 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
-import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.image.filter.FlatImage;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -198,28 +197,19 @@ public final class DericheFilters {
 				throw new IllegalArgumentException("Expected " + n +
 					" calibration values");
 			}
-			if (Intervals.numElements(input) > Integer.MAX_VALUE) {
-				throw new IllegalArgumentException("Image too large");
-			}
+			data = FlatImage.read(input);
 			dims = new int[n];
-			strides = new int[n];
+			strides = FlatImage.strides(input.dimensionsAsLongArray());
 			alphas = new double[n];
 			spacing = new double[n];
-			int stride = 1;
 			for (int d = 0; d < n; d++) {
 				dims[d] = (int) input.dimension(d);
-				strides[d] = stride;
-				stride *= dims[d];
 				spacing[d] = calibration == null ? 1 : calibration[d];
 				if (!(spacing[d] > 0)) {
 					throw new IllegalArgumentException("Calibration must be positive");
 				}
 				alphas[d] = alpha * spacing[d];
 			}
-			data = new double[stride];
-			int i = 0;
-			for (final RealType<?> t : Views.flatIterable(input))
-				data[i++] = t.getRealDouble();
 		}
 
 		double[] derivative(final int dimension) {

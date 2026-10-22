@@ -31,6 +31,7 @@ package org.scijava.ops.image.image.kymograph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
@@ -132,7 +133,7 @@ public class DefaultKymograph<T extends RealType<T> & NativeType<T>>
 		if (lineWidth < 1) throw new IllegalArgumentException(
 			"Line width must be positive");
 		if (reduce == null) reduce = "max";
-		reduce = reduce.trim().toLowerCase();
+		reduce = reduce.trim().toLowerCase(Locale.ROOT);
 		if (!reduce.equals("max") && !reduce.equals("mean") && !reduce.equals(
 			"none"))
 		{
@@ -141,7 +142,7 @@ public class DefaultKymograph<T extends RealType<T> & NativeType<T>>
 		}
 		if (interpolation == null) interpolation = "linear";
 		final InterpolatorFactory<DoubleType, RandomAccessible<DoubleType>> interp;
-		switch (interpolation.trim().toLowerCase()) {
+		switch (interpolation.trim().toLowerCase(Locale.ROOT)) {
 			case "linear":
 				interp = new NLinearInterpolatorFactory<>();
 				break;

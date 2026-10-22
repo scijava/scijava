@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -262,8 +263,8 @@ public class AttributeFilterTest extends AbstractOpTest {
 	private void check(final RandomAccessibleInterval<DoubleType> img,
 		final String attribute, final double[] thresholds, final Shape shape)
 	{
-		final var name = attribute.substring(0, 1).toUpperCase() + attribute
-			.substring(1);
+		final var name = attribute.substring(0, 1).toUpperCase(Locale.ROOT) +
+			attribute.substring(1);
 		for (final var closing : new boolean[] { false, true }) {
 			final var op = "morphology." + attribute + (closing ? "Closing"
 				: "Opening");

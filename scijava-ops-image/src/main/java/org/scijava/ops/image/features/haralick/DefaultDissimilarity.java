@@ -78,7 +78,6 @@ public class DefaultDissimilarity<T extends RealType<T>> extends
 	{
 		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
-		final double ng = matrix.length;
 		double res = 0;
 		for (var i = 0; i < matrix.length; i++) {
 			for (var j = 0; j < matrix.length; j++) {

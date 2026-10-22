@@ -88,7 +88,6 @@ public class DefaultClusterTendency<T extends RealType<T>> extends
 	{
 		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
-		final double ng = matrix.length;
 		final var mux = coocMeanXFunc.apply(matrix).getRealDouble();
 		final var muy = coocMeanYFunc.apply(matrix).getRealDouble();
 		double res = 0;

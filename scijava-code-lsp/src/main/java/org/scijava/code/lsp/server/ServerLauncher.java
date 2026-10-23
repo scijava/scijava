@@ -1,0 +1,83 @@
+/*-
+ * #%L
+ * Language Server Protocol bridge for SciJava code intelligence.
+ * %%
+ * Copyright (C) 2026 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+package org.scijava.code.lsp.server;
+
+import java.io.IOException;
+
+import org.scijava.code.lsp.Environment;
+
+/**
+ * How to start a language server that runs as a process (e.g.
+ * jedi-language-server), for scripts running in a given environment. Its
+ * {@link ServerProcesses} start it when first needed, one per environment,
+ * restart it if it stops, and stop it when idle.
+ *
+ * @author Gabriel Selzer
+ */
+public interface ServerLauncher {
+
+	/** The LSP language identifier of the documents, e.g. {@code python}. */
+	String languageId();
+
+	/**
+	 * Starts a server, which speaks LSP over its standard input and output. (Its
+	 * standard error must be redirected, lest it block once the pipe fills.)
+	 * Called on a background thread; may be slow (e.g. build the environment
+	 * the server runs in).
+	 *
+	 * @param env Where the scripts the server will analyze run.
+	 */
+	Process start(Environment env) throws IOException;
+
+	/**
+	 * The {@code initializationOptions} to send the server in its LSP
+	 * <a href=
+	 * "https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification/#initialize">{@code initialize}</a>
+	 * request, e.g. the interpreter and extra paths of {@code env}; or null for
+	 * none. Must serialize to JSON (e.g. maps, lists, strings, numbers,
+	 * booleans). NB: LSP leaves what they are to each server, which documents
+	 * its own (e.g. <a href=
+	 * "https://github.com/pappasam/jedi-language-server#configuration">jedi-language-server's</a>).
+	 */
+	default Object initializationOptions(final Environment env) {
+		return null;
+	}
+
+	/**
+	 * The URI of the workspace root, or null for none: sent in the
+	 * {@code initialize} request (see {@link #initializationOptions}) as its
+	 * {@code rootUri}, and as its only workspace folder. (Some servers, e.g.
+	 * jedi-language-server, apply their initialization options only with a
+	 * root.)
+	 */
+	default String rootUri(final Environment env) {
+		return null;
+	}
+}

@@ -39,7 +39,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,6 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.python.jsr223.PyScriptEngineFactory;
 import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
@@ -194,25 +192,10 @@ public class JythonLanguageServerTest {
 	}
 
 	@Test
-	public void testInterpreterBindings() throws Exception {
-		// Code typed into a running interpreter: its variables.
-		final ScriptEngine engine = new PyScriptEngineFactory().getScriptEngine();
-		engine.put("injected", new java.util.ArrayList<String>());
-		engine.eval("from java.util import Collections, HashMap\n" +
-			"m = HashMap()\n" +
-			"def helper(): pass\n");
-		final Environment env = new Environment().withLive(engine.getContext());
-		final Supplier<ScriptSession> live = () -> session(env);
-
-		assertTrue(labels(items(live.get(), "m.putIfAb")).contains(
-			"putIfAbsent"));
-		assertTrue(labels(items(live.get(), "injected.si")).contains("size"));
-		assertTrue(labels(items(live.get(), "x = hel")).contains("helper"));
-		// An imported Java class offers its static members.
-		assertTrue(labels(items(live.get(), "Collections.emptyL")).contains(
-			"emptyList"));
+	public void testDunders() {
 		// Names like __name__: Jython's, not Python 3's.
-		final List<String> dunders = labels(items(live.get(), "x = __"));
+		final List<String> dunders = labels(items(session(new Environment()),
+			"x = __"));
 		assertTrue(dunders.contains("__name__"), dunders.toString());
 		assertFalse(dunders.contains("__build_class__"), dunders.toString());
 	}
@@ -256,7 +239,7 @@ public class JythonLanguageServerTest {
 		}
 
 		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
+		public Header header(final Map<String, Variable> variables) {
 			return new Header("", Collections.emptySet());
 		}
 	}

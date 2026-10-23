@@ -187,7 +187,7 @@ public class PythonLanguageServerIntegrationTest {
 		}
 
 		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
+		public Header header(final Map<String, Variable> variables) {
 			return new Header("", Collections.emptySet());
 		}
 	}

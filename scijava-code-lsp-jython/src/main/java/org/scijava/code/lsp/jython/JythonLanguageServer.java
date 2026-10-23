@@ -28,10 +28,6 @@
  */
 package org.scijava.code.lsp.jython;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,17 +36,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.script.Bindings;
 import javax.script.ScriptContext;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -64,9 +56,6 @@ import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializedParams;
-import org.eclipse.lsp4j.InsertReplaceEdit;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
@@ -75,9 +64,6 @@ import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
-import org.python.core.PyJavaType;
-import org.python.core.PyModule;
-import org.python.core.PyObject;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.jvm.AbstractLanguageServer;
@@ -114,9 +100,6 @@ class JythonLanguageServer extends AbstractLanguageServer {
 	/** Marks the completions made here, rather than by the Python server. */
 	private static final String OWN = "jython-class-name";
 
-	/** Numbers the modules declaring live interpreters' variables. */
-	private static final AtomicInteger LIVE = new AtomicInteger();
-
 	private static final Pattern //
 	fromImport = Pattern.compile(
 		"^((from|import)[ \\t]+)([a-zA-Z_][a-zA-Z0-9._]*)$"), //
@@ -125,14 +108,6 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		importStatement = Pattern.compile(
 			"^((from[ \\t]+([a-zA-Z0-9._]+)[ \\t]+|[ \\t]*)import[ \\t]+)([a-zA-Z0-9_., \\t]*)$"), //
 		simpleClassName = Pattern.compile("^(.*[ \\t]+|)([A-Z_][a-zA-Z0-9_]+)$");
-
-	/** Names Python reserves, which cannot be declared. */
-	private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(
-		"False", "None", "True", "and", "as", "assert", "async", "await", "break",
-		"class", "continue", "def", "del", "elif", "else", "except", "exec",
-		"finally", "for", "from", "global", "if", "import", "in", "is", "lambda",
-		"nonlocal", "not", "or", "pass", "print", "raise", "return", "try",
-		"while", "with", "yield"));
 
 	/**
 	 * The names like {@code __name__} that Jython 2.7 has, unqualified: its
@@ -150,12 +125,6 @@ class JythonLanguageServer extends AbstractLanguageServer {
 	private final LanguageServer python;
 	private final JavaStubs stubs;
 
-	/**
-	 * The module declaring the live interpreter's variables, if any (see
-	 * {@link Environment#live()}).
-	 */
-	private final File live;
-
 	/** The scripts' texts, by URI: to know the names they mention. */
 	private final Map<String, String> texts = new ConcurrentHashMap<>();
 
@@ -170,8 +139,6 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		super(environment);
 		this.python = python;
 		this.stubs = stubs;
-		live = environment.live().isPresent() ? new File(stubs.dir(),
-			"_scijava_live_" + LIVE.incrementAndGet() + ".pyi") : null;
 		python.initialize(new InitializeParams()).thenRun(() -> python
 			.initialized(new InitializedParams()));
 	}
@@ -224,13 +191,11 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		completion(final CompletionParams params)
 	{
 		final CompletionList own = super.completion(params).join().getRight();
-		final CompletionParams theirs = new CompletionParams(params
-			.getTextDocument(), toServer(params.getPosition()), params.getContext());
 		final Set<String> dunders = dunders(params);
 		// TODO: In a call's arguments, with nothing typed, offer the variables of
 		// the parameter's type first, as Jython's own analysis did.
-		return orNull(documents().completion(theirs)).thenApply(answer -> {
-			final CompletionList merged = merge(back(list(answer)), own);
+		return orNull(documents().completion(params)).thenApply(answer -> {
+			final CompletionList merged = merge(list(answer), own);
 			if (dunders != null) merged.getItems().removeIf(item -> DUNDER.matcher(
 				item.getLabel()).matches() && !dunders.contains(item.getLabel()));
 			return Either.forRight(merged);
@@ -245,7 +210,7 @@ class JythonLanguageServer extends AbstractLanguageServer {
 			return CompletableFuture.completedFuture(item);
 		}
 		return orNull(documents().resolveCompletionItem(item)).thenApply(
-			resolved -> resolved == null ? item : back(resolved));
+			resolved -> resolved == null ? item : resolved);
 	}
 
 	@Override
@@ -255,23 +220,16 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		// TODO: All of a Java method's overloads, rated against the arguments
 		// typed, as Jython's own analysis did: jedi-language-server offers only
 		// the last of a stub's typing.overloads.
-		return orNull(documents().signatureHelp(new SignatureHelpParams(params
-			.getTextDocument(), toServer(params.getPosition()), params
-				.getContext())));
+		return orNull(documents().signatureHelp(params));
 	}
 
 	@Override
 	public CompletableFuture<Hover> hover(final HoverParams params) {
-		return orNull(documents().hover(new HoverParams(params.getTextDocument(),
-			toServer(params.getPosition())))).thenApply(h -> {
-				if (h != null && h.getRange() != null) h.setRange(back(h.getRange()));
-				return h;
-			});
+		return orNull(documents().hover(params));
 	}
 
 	@Override
 	public CompletableFuture<Object> shutdown() {
-		if (live != null) live.delete();
 		return python.shutdown().thenCompose(done -> super.shutdown());
 	}
 
@@ -320,154 +278,13 @@ class JythonLanguageServer extends AbstractLanguageServer {
 
 	/**
 	 * Gets a script ready for the server: writes the stubs of the packages it
-	 * imports (in the background), and the declarations of the live
-	 * interpreter's variables, which it then imports first.
+	 * imports (in the background). (A live interpreter's variables are
+	 * declared, and their packages imported, in the script's header; see
+	 * {@code ScriptDialect#header}.)
 	 */
 	private String prepare(final String text) {
-		final Set<String> packages = new TreeSet<>(JavaStubs.imports(text));
-		if (live == null) {
-			stubs.ensure(packages);
-			return text;
-		}
-		final String declarations = declarations(packages);
-		stubs.ensure(packages);
-		try {
-			final byte[] bytes = declarations.getBytes(StandardCharsets.UTF_8);
-			// NB: Unchanged, so that the server need not reload it.
-			if (!live.isFile() || !Arrays.equals(Files.readAllBytes(live.toPath()),
-				bytes))
-			{
-				live.getParentFile().mkdirs();
-				Files.write(live.toPath(), bytes);
-			}
-		}
-		catch (final IOException exc) {
-			// NB: Then, the variables are not known.
-		}
-		return "from " + module() + " import *\n" + text;
-	}
-
-	/** The name of the module declaring the live interpreter's variables. */
-	private String module() {
-		final String name = live.getName();
-		return name.substring(0, name.length() - ".pyi".length());
-	}
-
-	/**
-	 * Declares the live interpreter's variables, as a stub: Java ones by their
-	 * classes' Python types (noting their packages), Python ones by their
-	 * builtin types.
-	 */
-	private String declarations(final Set<String> packages) {
-		final Map<String, String> declared = new TreeMap<>();
-		final Set<String> imports = new TreeSet<>();
-		final Bindings bindings = environment().live().map(l -> l.getBindings(
-			ScriptContext.ENGINE_SCOPE)).orElse(null);
-		if (bindings != null) {
-			for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
-				final String name = entry.getKey();
-				if (!name.matches("[A-Za-z_][A-Za-z0-9_]*") || name.startsWith("__") ||
-					KEYWORDS.contains(name)) continue;
-				declared.put(name, declaration(name, entry.getValue(), imports));
-			}
-		}
-		packages.addAll(imports);
-		final StringBuilder sb = new StringBuilder(
-			"# The variables of a running interpreter. Generated; do not edit.\n");
-		sb.append("import typing\n");
-		for (final String p : imports) sb.append("import ").append(p).append('\n');
-		sb.append("__all__ = [").append(declared.keySet().stream().map(n -> "'" +
-			n + "'").collect(Collectors.joining(", "))).append("]\n");
-		declared.values().forEach(d -> sb.append(d).append('\n'));
-		return sb.toString();
-	}
-
-	/** Declares a variable of the live interpreter, as a stub does. */
-	private String declaration(final String name, final Object value,
-		final Set<String> imports)
-	{
-		if (value instanceof PyJavaType && ((PyJavaType) value)
-			.getProxyType() != null)
-		{
-			return name + " = " + stubs.type(((PyJavaType) value).getProxyType(),
-				"", imports);
-		}
-		if (value instanceof Class) {
-			return name + " = " + stubs.type((Class<?>) value, "", imports);
-		}
-		if (value instanceof PyModule) {
-			final PyObject module = ((PyModule) value).__findattr__("__name__");
-			if (module != null && module.toString().matches("[\\w.]+")) {
-				return "import " + module + " as " + name;
-			}
-		}
-		if (value instanceof PyObject) {
-			return name + ": " + pythonType(((PyObject) value).getType().getName());
-		}
-		if (value == null) return name + ": typing.Any";
-		return name + ": " + stubs.type(value.getClass(), "", imports);
-	}
-
-	/** The Python 3 type of a Python 2 builtin one; or {@code typing.Any}. */
-	private static String pythonType(final String type) {
-		switch (type) {
-			case "int":
-			case "long":
-				return "int";
-			case "unicode":
-				return "str";
-			case "bool":
-			case "float":
-			case "str":
-			case "list":
-			case "dict":
-			case "tuple":
-			case "set":
-				return type;
-			default:
-				return "typing.Any";
-		}
-	}
-
-	/** Positions in the script, as the server sees it. */
-	private Position toServer(final Position p) {
-		return new Position(p.getLine() + headerLines(), p.getCharacter());
-	}
-
-	/** Ranges as the server sees the script, in the script. */
-	private Range back(final Range r) {
-		final int n = headerLines();
-		return new Range(new Position(r.getStart().getLine() - n, r.getStart()
-			.getCharacter()), new Position(r.getEnd().getLine() - n, r.getEnd()
-				.getCharacter()));
-	}
-
-	private int headerLines() {
-		return live == null ? 0 : 1;
-	}
-
-	/** Completions as the server sees the script, in the script. */
-	private CompletionList back(final CompletionList list) {
-		if (list == null || headerLines() == 0) return list;
-		for (final CompletionItem item : list.getItems()) back(item);
-		return list;
-	}
-
-	private CompletionItem back(final CompletionItem item) {
-		if (headerLines() == 0) return item;
-		final Either<TextEdit, InsertReplaceEdit> edit = item.getTextEdit();
-		if (edit != null && edit.isLeft()) {
-			edit.getLeft().setRange(back(edit.getLeft().getRange()));
-		}
-		else if (edit != null) {
-			edit.getRight().setInsert(back(edit.getRight().getInsert()));
-			edit.getRight().setReplace(back(edit.getRight().getReplace()));
-		}
-		if (item.getAdditionalTextEdits() != null) {
-			item.getAdditionalTextEdits().forEach(e -> e.setRange(back(e
-				.getRange())));
-		}
-		return item;
+		stubs.ensure(new TreeSet<>(JavaStubs.imports(text)));
+		return text;
 	}
 
 	/**

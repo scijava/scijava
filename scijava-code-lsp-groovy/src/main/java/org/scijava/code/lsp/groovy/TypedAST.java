@@ -75,7 +75,6 @@ import org.codehaus.groovy.syntax.SyntaxException;
 import org.codehaus.groovy.transform.stc.StaticTypeCheckingVisitor;
 import org.codehaus.groovy.transform.stc.StaticTypesMarker;
 import org.codehaus.groovy.transform.stc.TypeCheckingExtension;
-import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.util.Types;
 
 /**
@@ -137,15 +136,13 @@ final class TypedAST {
 	// -- Source preparation --
 
 	/**
-	 * Marks the caret: the script up to the caret as plain Groovy (its
-	 * predefined variables declared, see {@link ScriptDocument}), then
-	 * {@link #CARET}.
+	 * Marks the caret: the script up to the caret, then {@link #CARET}.
 	 *
-	 * @param doc The script up to the caret, without the partial token being
+	 * @param text The script up to the caret, without the partial token being
 	 *          completed.
 	 */
-	static String markCaret(final ScriptDocument doc) {
-		return doc.text() + CARET;
+	static String markCaret(final String text) {
+		return text + CARET;
 	}
 
 	/**

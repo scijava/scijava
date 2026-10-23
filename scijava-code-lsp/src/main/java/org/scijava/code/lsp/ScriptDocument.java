@@ -97,17 +97,17 @@ public final class ScriptDocument {
 	 * Transforms a script.
 	 *
 	 * @param script The script's source code.
-	 * @param parameters The variables defined before the script runs (e.g. its
-	 *          script parameters), by name, with their Java types.
+	 * @param variables The variables defined before the script runs (e.g. its
+	 *          script parameters), by name.
 	 * @param removedLines The lines (from 0) to blank: those SciJava removes
 	 *          before running the script (e.g. its {@code #@} lines).
 	 * @param dialect How the script's language declares them.
 	 */
 	public static ScriptDocument of(final String script,
-		final Map<String, Class<?>> parameters, final Set<Integer> removedLines,
-		final ScriptDialect dialect)
+		final Map<String, ScriptDialect.Variable> variables,
+		final Set<Integer> removedLines, final ScriptDialect dialect)
 	{
-		final ScriptDialect.Header h = dialect.header(parameters);
+		final ScriptDialect.Header h = dialect.header(variables);
 		final String header = h.code().isEmpty() ? "" : h.code() + "\n";
 		final Set<String> hidden = new LinkedHashSet<>();
 		for (final String name : h.hiddenNames()) {

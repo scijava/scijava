@@ -29,7 +29,9 @@
 
 package org.scijava.code.lsp.impl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
@@ -74,10 +76,17 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	@Override
 	public ScriptDocument document(final String script,
-		final ScriptDialect dialect)
+		final ScriptDialect dialect,
+		final Map<String, ScriptDialect.Variable> variables)
 	{
 		final ScriptProcessing.Processed p = processing.of(script);
-		return ScriptDocument.of(script, p.parameters, p.removedLines, dialect);
+		final Map<String, ScriptDialect.Variable> all = new LinkedHashMap<>(
+			variables);
+		// NB: Parameters win, declared last.
+		all.keySet().removeAll(p.parameters.keySet());
+		p.parameters.forEach((name, type) -> all.put(name, ScriptDialect.Variable
+			.ofType(type)));
+		return ScriptDocument.of(script, all, p.removedLines, dialect);
 	}
 
 	@Override

@@ -30,9 +30,12 @@
 package org.scijava.code.lsp;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -43,6 +46,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import javax.script.Bindings;
 import javax.script.ScriptContext;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -75,6 +79,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.scijava.code.lsp.ScriptDialect.Variable;
 import org.scijava.log.LogService;
 import org.scijava.log.Logger;
 import org.scijava.script.ScriptLanguage;
@@ -121,6 +126,8 @@ public final class ScriptSession implements AutoCloseable {
 
 	private final Function<Environment, LanguageServer> launch;
 	private final Function<String, ScriptDocument> transform;
+	/** Whether typed into a live interpreter, whose variables may change. */
+	private final boolean live;
 	private final String untitled;
 	private volatile Supplier<File> file = () -> null;
 	private final Logger log;
@@ -182,7 +189,8 @@ public final class ScriptSession implements AutoCloseable {
 		final ScriptLanguage language, final Optional<ScriptContext> live)
 	{
 		this.launch = launcher(servers, language, live);
-		this.transform = transformer(servers, language);
+		this.transform = transformer(servers, language, live);
+		this.live = live.isPresent();
 		untitled = "untitled:/script-" + UNTITLED.incrementAndGet();
 		log = servers.context().getService(LogService.class);
 	}
@@ -223,23 +231,31 @@ public final class ScriptSession implements AutoCloseable {
 			follow();
 			open();
 		}
-		else if (!newText.equals(text)) {
-			text = newText;
-			doc = transform.apply(text);
-			version++;
-			if (follow()) open();
-			else {
-				final VersionedTextDocumentIdentifier id =
-					new VersionedTextDocumentIdentifier(uri, version);
-				final String code = doc.text();
-				tell(s -> s.getTextDocumentService().didChange(
-					new DidChangeTextDocumentParams(id, Collections.singletonList(
-						new TextDocumentContentChangeEvent(code)))));
+		else {
+			final String sent = doc.text();
+			final boolean edited = !newText.equals(text);
+			// NB: The code may change without the text changing, as a live
+			// interpreter's variables do.
+			if (edited || live) {
+				text = newText;
+				doc = transform.apply(text);
 			}
+			if (edited || !doc.text().equals(sent)) {
+				version++;
+				if (follow()) open();
+				else {
+					final VersionedTextDocumentIdentifier id =
+						new VersionedTextDocumentIdentifier(uri, version);
+					final String code = doc.text();
+					tell(s -> s.getTextDocumentService().didChange(
+						new DidChangeTextDocumentParams(id, Collections.singletonList(
+							new TextDocumentContentChangeEvent(code)))));
+				}
+			}
+			// NB: Where it runs may change without its text changing, e.g. once
+			// its environment is built.
+			else if (follow()) open();
 		}
-		// NB: Where it runs may change without its text changing, e.g. once its
-		// environment is built.
-		else if (follow()) open();
 	}
 
 	// -- Requests: about the given text (sent first, if new), at an offset --
@@ -375,21 +391,70 @@ public final class ScriptSession implements AutoCloseable {
 
 	/**
 	 * Makes scripts of a language plain code of the LSP language its dialect
-	 * says, if served; otherwise, shows them as they are.
+	 * says, if served (declaring a live interpreter's variables too, as of each
+	 * transformation); otherwise, shows them as they are.
 	 */
 	private static Function<String, ScriptDocument> transformer(
-		final LanguageServerService servers, final ScriptLanguage language)
+		final LanguageServerService servers, final ScriptLanguage language,
+		final Optional<ScriptContext> live)
 	{
 		try {
 			final ScriptDialect dialect = servers.dialect(language);
 			if (servers.supports(dialect.languageId())) {
-				return text -> servers.document(text, dialect);
+				return text -> servers.document(text, dialect, live.map(
+					ScriptSession::variables).orElse(Collections.emptyMap()));
 			}
 		}
 		catch (final IllegalArgumentException exc) {
 			// NB: The language has no dialect.
 		}
 		return ScriptDocument::of;
+	}
+
+	/**
+	 * A live interpreter's variables (its bindings), by name: their values,
+	 * with the most specific public types of them, by which code can refer to
+	 * them.
+	 */
+	private static Map<String, Variable> variables(final ScriptContext live) {
+		final Map<String, Variable> vars = new LinkedHashMap<>();
+		final Bindings bindings = live.getBindings(ScriptContext.ENGINE_SCOPE);
+		if (bindings == null) return vars;
+		for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
+			final String name = entry.getKey();
+			if (!isIdentifier(name) || name.startsWith("__")) continue;
+			final Object value = entry.getValue();
+			vars.put(name, Variable.ofValue(value, value == null ? Object.class
+				: publicType(value.getClass())));
+		}
+		return vars;
+	}
+
+	private static boolean isIdentifier(final String name) {
+		if (name == null || name.isEmpty() || !Character.isJavaIdentifierStart(
+			name.charAt(0))) return false;
+		for (int i = 1; i < name.length(); i++) {
+			if (!Character.isJavaIdentifierPart(name.charAt(i))) return false;
+		}
+		return true;
+	}
+
+	/** The most specific public class or interface of {@code c}. */
+	private static Class<?> publicType(final Class<?> c) {
+		for (Class<?> t = c; t != null; t = t.getSuperclass()) {
+			if (isAccessible(t)) return t;
+		}
+		for (final Class<?> i : c.getInterfaces()) {
+			if (isAccessible(i)) return i;
+		}
+		return Object.class;
+	}
+
+	private static boolean isAccessible(final Class<?> c) {
+		for (Class<?> t = c; t != null; t = t.getEnclosingClass()) {
+			if (!Modifier.isPublic(t.getModifiers())) return false;
+		}
+		return !c.isAnonymousClass() && !c.isLocalClass();
 	}
 
 	/**

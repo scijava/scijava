@@ -29,7 +29,6 @@
 
 package org.scijava.code.lsp.groovy;
 
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,10 +43,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.SimpleBindings;
 
 import groovy.lang.GroovySystem;
 import groovy.lang.MetaMethod;
@@ -79,11 +74,8 @@ import org.scijava.code.lsp.jvm.ClassIndex;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.Members;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.ScriptDialect;
-import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.Signatures;
-import org.scijava.script.ScriptLanguage;
 import org.scijava.util.Types;
 
 /**
@@ -102,15 +94,6 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 
 	/** Upper bound on class-name suggestions, which can be very numerous. */
 	private static final int MAX_CLASSES = 500;
-
-	/**
-	 * How the code sees its predefined variables (an interpreter's bindings):
-	 * as declared Java objects.
-	 */
-	static final ScriptDialect DIALECT = new Declarations();
-
-	/** No lines to blank: the code is plain Groovy. */
-	private static final Set<Integer> NOTHING = Collections.emptySet();
 
 	/** An import statement being typed: "import a.b.C". */
 	private static final Pattern IMPORT = Pattern.compile(
@@ -168,18 +151,14 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 			return list(doc, caret, caret, none);
 		}
 
-		final Map<String, Class<?>> predefined = liveVariables();
-		final ScriptDocument sd = ScriptDocument.of(text.substring(0,
-			replaceStart), predefined, NOTHING, DIALECT);
-		final TypedAST ast = typedAST(sd, predefined, line.substring(0,
-			line.length() - prefix.length()));
+		final TypedAST ast = typedAST(text.substring(0, replaceStart), line
+			.substring(0, line.length() - prefix.length()));
 		if (ast == null) return list(doc, caret, caret, none); // string, comment
 
 		final List<CompletionItem> items = new ArrayList<>();
 		if (member) items.addAll(memberCompletions(ast, before, prefix));
 		else {
-			items.addAll(variableCompletions(ast.variablesAtCaret(), predefined,
-				prefix));
+			items.addAll(variableCompletions(ast.variablesAtCaret(), prefix));
 			items.addAll(keywordCompletions(prefix));
 			items.addAll(classCompletions(doc, prefix));
 		}
@@ -211,22 +190,16 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	/**
 	 * Finds the problems Groovy's compiler and type checker would report
 	 * that also trouble the script when it runs (see
-	 * {@link TypedAST#problems()}), in the script as written.
+	 * {@link TypedAST#problems()}).
 	 */
 	@Override
 	protected List<Diagnostic> diagnose(final Document doc) {
 		final String text = doc.text();
-		final ScriptDocument sd = ScriptDocument.of(text, liveVariables(),
-			NOTHING, DIALECT);
-		final TypedAST ast = TypedAST.of(sd.text(), loader());
+		final TypedAST ast = TypedAST.of(text, loader());
 		final List<Diagnostic> found = new ArrayList<>();
 		for (final TypedAST.Problem p : ast.problems()) {
-			final int start = sd.toOriginal(offset(sd.text(), p.line,
-				p.column));
-			// NB: Not in the declarations prepended.
-			if (start < 0) continue;
-			int end = sd.toOriginal(offset(sd.text(), p.endLine,
-				p.endColumn));
+			final int start = offset(text, p.line, p.column);
+			int end = offset(text, p.endLine, p.endColumn);
 			// NB: At least one character, on the line where it starts.
 			final int lineEnd = text.indexOf('\n', start);
 			if (end <= start) end = Math.min(start + 1, text.length());
@@ -264,10 +237,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		id.find();
 		final String prefix = id.group();
 		final int start = caret - prefix.length();
-		final Map<String, Class<?>> predefined = liveVariables();
-		final TypedAST ast = typedAST(ScriptDocument.of(text.substring(0,
-			start), predefined, NOTHING, DIALECT), predefined, line.substring(0,
-				line.length() - prefix.length()));
+		final TypedAST ast = typedAST(text.substring(0, start), line.substring(0,
+			line.length() - prefix.length()));
 		if (ast == null) return null; // string or comment
 		final TypedAST.Call call = ast.callAtCaret();
 		return call == null ? null : new CallContext(ast, call);
@@ -298,7 +269,6 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		for (final String name : order) {
 			vars.put(name, Types.box(call.ast.toClass(local.get(name))));
 		}
-		liveVariables().forEach(vars::putIfAbsent);
 		final List<CompletionItem> fitting = new ArrayList<>();
 		final List<CompletionItem> others = new ArrayList<>();
 		for (final Map.Entry<String, Class<?>> v : vars.entrySet()) {
@@ -324,17 +294,16 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	 *
 	 * @return The tree, or null if the caret is in a string or comment.
 	 */
-	private TypedAST typedAST(final ScriptDocument doc,
-		final Map<String, Class<?>> predefined, final String lineBefore)
+	private TypedAST typedAST(final String textBefore,
+		final String lineBefore)
 	{
 		final String code = TypedAST.closeBrackets(TypedAST.markCaret(
-			doc));
+			textBefore));
 		if (code == null) return null;
 		final TypedAST ast = TypedAST.of(code, loader());
 		if (ast.isParsed()) return ast;
-		final String lineCode = TypedAST.closeBrackets(TypedAST
-			.markCaret(ScriptDocument.of(lineBefore, predefined, NOTHING,
-				DIALECT)));
+		final String lineCode = TypedAST.closeBrackets(TypedAST.markCaret(
+			lineBefore));
 		return lineCode == null ? ast : TypedAST.of(lineCode, loader());
 	}
 
@@ -454,22 +423,16 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	}
 
 	private static List<CompletionItem> variableCompletions(
-		final Map<String, ClassNode> vars,
-		final Map<String, Class<?>> predefined, final String prefix)
+		final Map<String, ClassNode> vars, final String prefix)
 	{
-		final Set<String> names = new HashSet<>();
 		final List<CompletionItem> out = new ArrayList<>();
 		// Innermost (most recently declared) variables first.
 		final List<String> order = new ArrayList<>(vars.keySet());
 		Collections.reverse(order);
-		order.addAll(predefined.keySet());
 		for (final String name : order) {
-			if (!matches(name, prefix) || name.equals(prefix) || !names.add(name)) {
-				continue;
-			}
+			if (!matches(name, prefix) || name.equals(prefix)) continue;
 			final ClassNode type = vars.get(name);
-			out.add(variable(name, type != null ? type.toString(false)
-				: typeName(predefined.get(name))));
+			out.add(variable(name, type != null ? type.toString(false) : "Object"));
 		}
 		return out;
 	}
@@ -660,26 +623,6 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		return item;
 	}
 
-	/**
-	 * Gets the variables defined before the code runs, in a live interpreter:
-	 * its bindings. (A script's parameters are declared in its text.)
-	 *
-	 * @return Map of variable name to type.
-	 */
-	private Map<String, Class<?>> liveVariables() {
-		final Map<String, Class<?>> vars = new LinkedHashMap<>();
-		final Bindings bindings = environment().live().map(l -> l.getBindings(
-			ScriptContext.ENGINE_SCOPE)).orElseGet(SimpleBindings::new);
-		for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
-			final String name = entry.getKey();
-			if (!isIdentifier(name) || name.startsWith("__")) continue;
-			final Object value = entry.getValue();
-			vars.put(name, value == null ? Object.class : publicType(value
-				.getClass()));
-		}
-		return vars;
-	}
-
 	private static ClassLoader loader() {
 		final ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		return loader != null ? loader : GroovyLanguageServer.class
@@ -692,15 +635,6 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	{
 		return Positions.offset(text, new Position(Math.max(line - 1, 0), Math
 			.max(column - 1, 0)));
-	}
-
-	private static boolean isIdentifier(final String name) {
-		if (name == null || name.isEmpty() || !Character.isJavaIdentifierStart(
-			name.charAt(0))) return false;
-		for (int i = 1; i < name.length(); i++) {
-			if (!Character.isJavaIdentifierPart(name.charAt(i))) return false;
-		}
-		return !KEYWORDS.contains(name);
 	}
 
 	private static boolean matches(final String name, final String prefix) {
@@ -728,60 +662,9 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		return name == null ? "Object" : name;
 	}
 
-	/**
-	 * Gets the most specific public class or interface of {@code c}, by which
-	 * code can refer to its instances.
-	 */
-	private static Class<?> publicType(final Class<?> c) {
-		for (Class<?> t = c; t != null; t = t.getSuperclass()) {
-			if (isAccessible(t)) return t;
-		}
-		for (final Class<?> i : c.getInterfaces()) {
-			if (isAccessible(i)) return i;
-		}
-		return Object.class;
-	}
-
-	private static boolean isAccessible(final Class<?> c) {
-		for (Class<?> t = c; t != null; t = t.getEnclosingClass()) {
-			if (!Modifier.isPublic(t.getModifiers())) return false;
-		}
-		return !c.isAnonymousClass() && !c.isLocalClass();
-	}
-
 	/** An edit importing a class (for tests). */
 	static TextEdit importEdit(final Document doc, final String className) {
 		final int at = importOffset(doc.text(), className);
 		return at < 0 ? null : insert(doc, at, "import " + className + "\n");
-	}
-
-	/**
-	 * Declares predefined variables as Java objects, e.g.
-	 * {@code java.util.List items}. Not a plugin: SciJava scripts become Groovy
-	 * as their own dialect says (see scripting-groovy).
-	 */
-	// TODO: Consider having sessions declare an interpreter's bindings, as they
-	// do scripts' parameters: then servers need declare nothing themselves.
-	private static final class Declarations implements ScriptDialect {
-
-		@Override
-		public boolean supports(final ScriptLanguage language) {
-			return false;
-		}
-
-		@Override
-		public String languageId() {
-			return "groovy";
-		}
-
-		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
-			// NB: Full names need no imports.
-			final List<String> declarations = new ArrayList<>();
-			parameters.forEach((name, type) -> declarations.add(typeName(type) +
-				" " + name));
-			return new Header(String.join("; ", declarations), Collections
-				.emptySet());
-		}
 	}
 }

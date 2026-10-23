@@ -98,18 +98,56 @@ public interface ScriptDialect extends SciJavaPlugin {
 	}
 
 	/**
-	 * Gets the code declaring a script's parameters with the types they have
-	 * when it runs, for a {@link ScriptDocument} to prepend to the script: e.g.
-	 * {@code import numpy; image: numpy.ndarray} for an image in CPython. It
-	 * may also import what the declarations need, and declare other variables
-	 * scripts can use (e.g. Appose's {@code task}); parameters without a useful
-	 * type may be left out.
+	 * Gets the code declaring the variables a script has before it runs, with
+	 * the types they have then, for a {@link ScriptDocument} to prepend to the
+	 * script: e.g. {@code import numpy; image: numpy.ndarray} for an image in
+	 * CPython. It may also import what the declarations need, and declare other
+	 * variables scripts can use (e.g. Appose's {@code task}); variables without
+	 * a useful type may be left out.
 	 *
-	 * @param parameters The script's parameters (see
-	 *          {@link ScriptDocument}), by name, with
-	 *          their Java types, in order.
+	 * @param variables The script's variables, by name, in order: its
+	 *          parameters (see {@link ScriptDocument}), and, if typed into a
+	 *          live interpreter, the interpreter's (see {@link ScriptSession}).
 	 */
-	Header header(Map<String, Class<?>> parameters);
+	Header header(Map<String, Variable> variables);
+
+	/**
+	 * A variable a script has before it runs: its Java type, and its value, if
+	 * known (e.g. a live interpreter's, rather than a script parameter's).
+	 */
+	final class Variable {
+
+		private final Class<?> type;
+		private final Object value;
+
+		private Variable(final Class<?> type, final Object value) {
+			this.type = type;
+			this.value = value;
+		}
+
+		/** A variable of the given type, whose value is not known yet. */
+		public static Variable ofType(final Class<?> type) {
+			return new Variable(type, null);
+		}
+
+		/**
+		 * A variable with the given value (and type, by which code can refer to
+		 * it, e.g. a public one of the value's class).
+		 */
+		public static Variable ofValue(final Object value, final Class<?> type) {
+			return new Variable(type, value);
+		}
+
+		/** The variable's Java type. */
+		public Class<?> type() {
+			return type;
+		}
+
+		/** The variable's value, if known (and not null). */
+		public Optional<Object> value() {
+			return Optional.ofNullable(value);
+		}
+	}
 
 	/**
 	 * One line of code to prepend to a script (see {@link #header}), e.g.

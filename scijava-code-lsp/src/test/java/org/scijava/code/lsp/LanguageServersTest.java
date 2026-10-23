@@ -570,13 +570,13 @@ public class LanguageServersTest {
 		}
 
 		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
-			if (parameters.isEmpty()) {
+		public Header header(final Map<String, Variable> variables) {
+			if (variables.isEmpty()) {
 				return new Header("", Collections.emptySet());
 			}
 			final List<String> code = new ArrayList<>();
 			code.add("import mass");
-			parameters.forEach((name, type) -> code.add(name + ": " + type
+			variables.forEach((name, v) -> code.add(name + ": " + v.type()
 				.getSimpleName()));
 			return new Header(String.join("; ", code), Collections.singleton(
 				"mass"));

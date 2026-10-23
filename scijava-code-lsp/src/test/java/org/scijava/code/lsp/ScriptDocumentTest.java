@@ -46,6 +46,7 @@ import java.util.Set;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.junit.jupiter.api.Test;
+import org.scijava.code.lsp.ScriptDialect.Variable;
 import org.scijava.script.ScriptLanguage;
 
 /**
@@ -69,14 +70,14 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
+		public Header header(final Map<String, Variable> variables) {
 			final List<String> code = new ArrayList<>();
-			final boolean numpy = parameters.values().stream().anyMatch(
-				Class::isArray);
+			final boolean numpy = variables.values().stream().anyMatch(v -> v.type()
+				.isArray());
 			if (numpy) code.add("import numpy");
-			parameters.forEach((name, type) -> {
-				if (type.isArray()) code.add(name + ": numpy.ndarray");
-				else if (type == String.class) code.add(name + ": str");
+			variables.forEach((name, v) -> {
+				if (v.type().isArray()) code.add(name + ": numpy.ndarray");
+				else if (v.type() == String.class) code.add(name + ": str");
 			});
 			code.add("task: object");
 			return new Header(String.join("; ", code), numpy ? Collections
@@ -98,18 +99,19 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
+		public Header header(final Map<String, Variable> variables) {
 			final List<String> code = new ArrayList<>();
-			parameters.forEach((name, type) -> code.add(type.getName() + " " +
+			variables.forEach((name, v) -> code.add(v.type().getName() + " " +
 				name));
 			return new Header(String.join("; ", code), Collections.emptySet());
 		}
 	};
 
-	private static Map<String, Class<?>> params(final Object... namesAndTypes) {
-		final Map<String, Class<?>> params = new LinkedHashMap<>();
+	private static Map<String, Variable> params(final Object... namesAndTypes) {
+		final Map<String, Variable> params = new LinkedHashMap<>();
 		for (int i = 0; i < namesAndTypes.length; i += 2) {
-			params.put((String) namesAndTypes[i], (Class<?>) namesAndTypes[i + 1]);
+			params.put((String) namesAndTypes[i], Variable.ofType(
+				(Class<?>) namesAndTypes[i + 1]));
 		}
 		return params;
 	}

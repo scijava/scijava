@@ -290,7 +290,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testInterpreterBindings() {
+	public void testInterpreterBindings() throws Exception {
 		// Code typed into a running interpreter: its variables, by their values'
 		// types.
 		final ScriptContext live = new SimpleScriptContext();
@@ -299,6 +299,16 @@ public class GroovyLanguageServerTest {
 		final List<String> texts = labels(items(session(new Environment().withLive(
 			live)), "injected.si"));
 		assertTrue(texts.contains("size"), texts.toString());
+		// Variables it gains later, though the code is the same.
+		try (ScriptSession session = session(new Environment().withLive(live))) {
+			final String code = "later.si";
+			assertFalse(labels(session.completion(code, code.length()).get(30,
+				TimeUnit.SECONDS).getItems()).contains("size"));
+			live.setAttribute("later", new ArrayList<String>(),
+				ScriptContext.ENGINE_SCOPE);
+			assertTrue(labels(session.completion(code, code.length()).get(30,
+				TimeUnit.SECONDS).getItems()).contains("size"));
+		}
 	}
 
 	@Test
@@ -439,8 +449,13 @@ public class GroovyLanguageServerTest {
 		}
 
 		@Override
-		public Header header(final Map<String, Class<?>> parameters) {
-			return new Header("", Collections.emptySet());
+		public Header header(final Map<String, Variable> variables) {
+			// NB: As scripting-groovy's dialect does: full names need no imports.
+			final List<String> declarations = new ArrayList<>();
+			variables.forEach((name, v) -> declarations.add(GroovyLanguageServer
+				.typeName(v.type()) + " " + name));
+			return new Header(String.join("; ", declarations), Collections
+				.emptySet());
 		}
 	}
 

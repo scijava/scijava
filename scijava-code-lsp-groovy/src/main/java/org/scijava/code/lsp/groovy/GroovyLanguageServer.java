@@ -527,7 +527,9 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	 * Where to import the given class: after the script's last import (or at
 	 * the top); or -1 if no import is needed.
 	 */
-	static int importOffset(final String text, final String className) {
+	private static int importOffset(final String text,
+		final String className)
+	{
 		final String pkg = className.substring(0, Math.max(0, className
 			.lastIndexOf('.')));
 		// NB: Groovy also imports BigDecimal and BigInteger, by name.

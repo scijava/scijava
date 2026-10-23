@@ -49,6 +49,7 @@ import javax.script.SimpleScriptContext;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.junit.jupiter.api.AfterAll;
@@ -96,7 +97,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testMembersOfInferredTypes() {
+	public void testCompleteMembersOfInferredTypes() {
 		assertTrue(complete("def s = 'hello'\ns.toUpp").contains("toUpperCase"));
 		// Types flow through method calls...
 		assertTrue(complete("def x = new ArrayList()\n" +
@@ -111,7 +112,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testMembersOfDeclaredTypes() {
+	public void testCompleteMembersOfDeclaredTypes() {
 		// Variables' declared types, whatever they're assigned...
 		assertTrue(complete("List items = null\nitems.isEm").contains("isEmpty"));
 		assertTrue(complete("CharSequence cs = 'abc'\ncs.subSeq").contains(
@@ -127,7 +128,7 @@ public class GroovyLanguageServerTest {
 	 * dynamic (of unknown type) so {@link TypedAST} types them itself.
 	 */
 	@Test
-	public void testMembersOfBindings() {
+	public void testCompleteMembersOfBindings() {
 		// Variables assigned without a declaration are typed as assigned...
 		assertTrue(complete("z = \"abc\"\nz.toU").contains("toUpperCase"));
 		assertTrue(complete("z = new ArrayList()\ny = z.subList(0, 1)\ny.isEm")
@@ -145,7 +146,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testDiagnostics() throws Exception {
+	public void testDiagnoseProblems() throws Exception {
 		// Syntax errors, and unresolvable classes: errors, where they are.
 		assertEquals(Collections.singletonList("Error@1:11-12 Unexpected input: '+'"),
 			problems("sigma = 1.5\ndef x = (1 +\n"));
@@ -175,13 +176,20 @@ public class GroovyLanguageServerTest {
 		}
 	}
 
+	/**
+	 * Ensure callables identified by the language server are returned as
+	 * snippets, including parameters ({@code ${1:...}})
+	 */
 	@Test
-	public void testCallablesAreSnippets() {
+	public void testCompleteCallablesAsSnippets() {
+		// No parameters: the whole call is inserted, e.g. "toUpperCase()".
 		final CompletionItem upper = items("def s = 'x'\ns.toUpp").stream().filter(
 			c -> c.getLabelDetails() != null && "()".equals(c.getLabelDetails()
 				.getDetail())).findFirst().orElse(null);
 		assertTrue(upper != null);
 		assertEquals("toUpperCase()", upper.getTextEdit().getLeft().getNewText());
+		// A parameter: a tab stop for it, "toUpperCase(${1:...})", and the
+		// method's return type.
 		final CompletionItem locale = items("def s = 'x'\ns.toUpp").stream().filter(
 			c -> "(java.util.Locale arg0)".equals(c.getLabelDetails().getDetail()) ||
 				c.getLabelDetails().getDetail().startsWith("(java.util.Locale "))
@@ -194,17 +202,21 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testStaticMembers() {
+	public void testCompleteStaticMembers() {
 		final List<String> texts = complete("Math.ma");
 		assertTrue(texts.contains("max"));
 		// Only static members of a class.
-		assertFalse(complete("Integer.intV").contains("intValue"));
 		assertTrue(complete("Integer.parseI").contains("parseInt"));
+		// Integer.intValue is not static
+		assertFalse(complete("Integer.intV").contains("intValue"));
 	}
 
+	/**
+	 * The Groovy SDK adds some methods - ensure a small sampling show up in
+	 * autocomplete
+	 */
 	@Test
-	public void testGroovyMethods() {
-		// The GDK adds methods to Java classes.
+	public void testCompleteGdkMethods() {
 		assertTrue(complete("[1, 2, 3].coll").contains("collect"));
 		assertTrue(complete("def s = 'abc'\ns.rev").contains("reverse"));
 		assertTrue(complete("new File('x').eachL").contains("eachLine"));
@@ -214,7 +226,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testScriptClasses() {
+	public void testCompleteMembersOfScriptClasses() {
 		final List<String> texts = complete("class Foo {\n" + //
 			"  int bar\n" + //
 			"  String baz() { 'x' }\n" + //
@@ -226,7 +238,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testVariableScopes() {
+	public void testCompleteVariablesInScope() {
 		assertTrue(complete("def greeting = 'hi'\ndef x = gree").contains(
 			"greeting"));
 		// Closure parameters are visible inside the closure...
@@ -242,7 +254,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testIncompleteCode() {
+	public void testCompleteInIncompleteCode() {
 		// Unclosed brackets before the caret.
 		assertTrue(complete("def s = 'x'\nif (true) {\n  s.toUpp").contains(
 			"toUpperCase"));
@@ -256,7 +268,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testKeywords() {
+	public void testCompleteKeywords() {
 		// keywords get completed
 		assertTrue(complete("ret").contains("return"));
 		// primitives get completed
@@ -265,7 +277,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testNumbers() {
+	public void testCompleteAfterNumbers() {
 		// A decimal being typed is not completed.
 		assertTrue(complete("def x = 1.").isEmpty());
 		assertTrue(complete("def x = 1.5").isEmpty());
@@ -275,12 +287,10 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testClassNamesWithAutoImport() {
+	public void testCompleteClassNamesWithAutoImport() {
 		ClassIndex.ensureCache();
 		final CompletionItem atomic = items("def a = new AtomicInt").stream()
-			.filter(c -> c.getLabel().equals("AtomicInteger")).findFirst().orElse(
-				null);
-		assertTrue(atomic != null);
+			.filter(c -> c.getLabel().equals("AtomicInteger")).findFirst().orElseThrow();
 		assertEquals(1, atomic.getAdditionalTextEdits().size());
 		assertEquals("import java.util.concurrent.atomic.AtomicInteger\n", atomic
 			.getAdditionalTextEdits().get(0).getNewText());
@@ -288,26 +298,41 @@ public class GroovyLanguageServerTest {
 		final CompletionItem list = items("def a = new ArrayLis").stream().filter(
 			c -> c.getLabel().equals("ArrayList")).findFirst().orElse(null);
 		assertTrue(list != null && list.getAdditionalTextEdits() == null);
+		assertEquals(null, importAt("import java.util.concurrent.atomic.*\n" +
+			"def a = new AtomicInt"));
+		// Inserted after the last import, or else at the top (after a shebang).
+		assertEquals("1:0", importAt("import java.io.File\nx = 1\n" +
+			"def a = new AtomicInt"));
+		assertEquals("0:0", importAt("x = 1\ndef a = new AtomicInt"));
+		assertEquals("1:0", importAt("#!/usr/bin/env groovy\n" +
+			"def a = new AtomicInt"));
 	}
 
 	@Test
-	public void testImports() {
+	public void testCompleteImports() {
 		ClassIndex.ensureCache();
+		// The whole name is completed, as it's replaced.
 		assertTrue(complete("import java.util.concurrent.atomic.AtomicInt")
 			.contains("java.util.concurrent.atomic.AtomicInteger"));
+	}
+
+	@Test
+	public void testCompleteQualifiedClassNames() {
+		ClassIndex.ensureCache();
+		// In code: a package's classes, by their names in it.
 		assertTrue(complete("java.util.concurrent.atomic.AtomicInt").contains(
 			"AtomicInteger"));
 	}
 
 	@Test
-	public void testStringsAndComments() {
+	public void testCompleteNothingInStringsAndComments() {
 		assertTrue(complete("def s = 'a.b.").isEmpty());
 		assertTrue(complete("// s.toUpp").isEmpty());
 		assertTrue(complete("/* x.").isEmpty());
 	}
 
 	@Test
-	public void testInterpreterBindings() throws Exception {
+	public void testCompleteInterpreterBindings() throws Exception {
 		// Code typed into a running interpreter: its variables, by their values'
 		// types.
 		final ScriptContext live = new SimpleScriptContext();
@@ -329,7 +354,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testSignatureHelp() {
+	public void testSignatureHelpRanksOverloads() {
 		// A decimal (a BigDecimal) fits the floating-point overloads, which come
 		// first; the integral ones do not. The caret is in the second argument.
 		final SignatureHelp max = help("Math.max(1.5, ");
@@ -358,24 +383,14 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testArgumentChoices() {
+	public void testCompleteArguments() {
 		// In a call's arguments: the variables fitting the parameter first.
 		final List<CompletionItem> items = items(
 			"def a = new ArrayList()\ndef s = 'x'\nCollections.sort(");
 		assertEquals("a", items.get(0).getLabel());
 		assertEquals(Boolean.TRUE, items.get(0).getPreselect());
+		// Ensure variables that do not fit show up later
 		assertTrue(labels(items).contains("s"));
-	}
-
-	@Test
-	public void testImportOffset() {
-		// Already imported: no import needed.
-		assertEquals(-1, GroovyLanguageServer.importOffset(
-			"import java.util.concurrent.atomic.*\n",
-			"java.util.concurrent.atomic.AtomicInteger"));
-		// Inserted after the last import.
-		assertEquals(20, GroovyLanguageServer.importOffset("import java.io.File\n" +
-			"x = 1\n", "java.util.concurrent.atomic.AtomicInteger"));
 	}
 
 	// -- Helper methods --
@@ -402,6 +417,20 @@ public class GroovyLanguageServerTest {
 				.getLine() + ":" + d.getRange().getStart().getCharacter() + "-" + d
 					.getRange().getEnd().getCharacter() + " " + d.getMessage().getLeft())
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Where completing {@code AtomicInteger} at the end of the code imports it
+	 * ({@code line:character}), or null if it doesn't.
+	 */
+	private static String importAt(final String code) {
+		ClassIndex.ensureCache();
+		final CompletionItem atomic = items(code).stream().filter(c -> c
+			.getLabel().equals("AtomicInteger")).findFirst().orElseThrow();
+		if (atomic.getAdditionalTextEdits() == null) return null;
+		final Position at = atomic.getAdditionalTextEdits().get(0).getRange()
+			.getStart();
+		return at.getLine() + ":" + at.getCharacter();
 	}
 
 	private static SignatureHelp help(final String code) {

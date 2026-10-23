@@ -54,17 +54,22 @@ final class JediLauncher implements ServerLauncher {
 	static final String ENV = "code-lsp-jedi";
 
 	/**
-	 * Runs jedi-language-server, exiting once the given process (this JVM) is
-	 * gone, e.g. killed before it could stop the server. NB: The server does not
-	 * notice by itself; on Windows, it then even loops, failing to write to the
+	 * A Python script that runs jedi-language-server, and stops it if this JVM
+	 * dies without stopping it (e.g. when killed). NB: The server wouldn't
+	 * notice on its own; on Windows, it would even spin, failing to write to the
 	 * closed pipe.
 	 * <p>
-	 * A thread watches the parent: on Windows, by waiting on a handle to it
-	 * (none, if it is already gone); elsewhere, by checking every 2 seconds
-	 * whether this process's parent is still it (an orphan gets another). Once
-	 * the parent is gone, the thread ends the whole process, server and all,
-	 * with exit code 0.
+	 * The JVM's process ID is passed as the script's argument. A background
+	 * thread waits for that process to end, then exits the whole Python
+	 * process, server and all:
 	 * </p>
+	 * <ul>
+	 * <li>On Windows, it waits on a handle to the JVM's process (or not at all,
+	 * if the process is already gone).</li>
+	 * <li>Elsewhere, it checks every 2 seconds whether its parent is still the
+	 * JVM: once the JVM is gone, the operating system gives the server a new
+	 * parent.</li>
+	 * </ul>
 	 */
 	static final String LAUNCHER = String.join("\n", //
 		"import os, sys, threading, time", //

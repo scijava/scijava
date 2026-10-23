@@ -49,13 +49,7 @@ import javax.script.ScriptContext;
  */
 public final class Environment {
 
-	/** Path of the interpreter or executable running the script, if known. */
 	private final Optional<String> interpreter;
-	/**
-	 * Extra places imports are resolved from, in order: e.g. directories added
-	 * to Python's {@code sys.path}, or a JVM classpath. Each server reads them as
-	 * its language does. Never null.
-	 */
 	private final List<String> paths;
 	private final Optional<ScriptContext> live;
 
@@ -94,7 +88,13 @@ public final class Environment {
 		return paths;
 	}
 
-	/** The state of the interpreter the code is typed into, if any. */
+	/**
+	 * The state of the interpreter the code is typed into, if any. NB: This is
+	 * the interpreter's own context, not a copy: its bindings change as code
+	 * runs in it (possibly on another thread), so read them as they are when
+	 * needed rather than keeping them. (Environments are equal if they share
+	 * the same context, whatever its bindings.)
+	 */
 	public Optional<ScriptContext> live() {
 		return live;
 	}

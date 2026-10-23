@@ -177,7 +177,9 @@ public final class ScriptSession implements AutoCloseable {
 	 *
 	 * @param servers Where the dialect and servers come from.
 	 * @param language The interpreter's language.
-	 * @param live The interpreter's state.
+	 * @param live The interpreter's state: its own context, whose bindings
+	 *          change as code runs in it. They are read anew each time the
+	 *          code is sent, so later variables are declared too.
 	 */
 	public ScriptSession(final LanguageServerService servers,
 		final ScriptLanguage language, final ScriptContext live)

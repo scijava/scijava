@@ -57,16 +57,23 @@ public interface ServerLauncher {
 	Process start(Environment env) throws IOException;
 
 	/**
-	 * The {@code initializationOptions} to send the server, e.g. the
-	 * interpreter and extra paths of {@code env}; or null for none. Must
-	 * serialize to JSON (e.g. maps, lists, strings, numbers, booleans).
+	 * The {@code initializationOptions} to send the server in its LSP
+	 * <a href=
+	 * "https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification/#initialize">{@code initialize}</a>
+	 * request, e.g. the interpreter and extra paths of {@code env}; or null for
+	 * none. Must serialize to JSON (e.g. maps, lists, strings, numbers,
+	 * booleans). NB: LSP leaves what they are to each server, which documents
+	 * its own (e.g. <a href=
+	 * "https://github.com/pappasam/jedi-language-server#configuration">jedi-language-server's</a>).
 	 */
 	default Object initializationOptions(final Environment env) {
 		return null;
 	}
 
 	/**
-	 * The URI of the workspace root, or null for none. (Some servers, e.g.
+	 * The URI of the workspace root, or null for none: sent in the
+	 * {@code initialize} request (see {@link #initializationOptions}) as its
+	 * {@code rootUri}, and as its only workspace folder. (Some servers, e.g.
 	 * jedi-language-server, apply their initialization options only with a
 	 * root.)
 	 */

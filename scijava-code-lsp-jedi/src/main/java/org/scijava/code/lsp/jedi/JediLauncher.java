@@ -132,19 +132,25 @@ final class JediLauncher implements ServerLauncher {
 
 	@Override
 	public Object initializationOptions(final Environment env) {
-		final Map<String, Object> workspaceOptions = new LinkedHashMap<>();
+		// Workspace options: where the scripts run.
 		// NB: Without an environment, Jedi uses the server's own Python.
+		final Map<String, Object> workspaceOptions = new LinkedHashMap<>();
 		env.interpreter().ifPresent(p -> workspaceOptions.put("environmentPath",
 			p));
 		workspaceOptions.put("extraPaths", env.paths());
-		final Map<String, Object> options = new LinkedHashMap<>();
-		options.put("workspace", workspaceOptions);
-		// NB: Jedi's diagnostics are syntax errors, found as the script changes.
+
+		// Diagnostics options: Jedi's diagnostics are syntax errors, found as the
+		// script changes. NB: These are jedi-language-server's defaults (but for
+		// didSave, which is never sent), stated as what we rely on.
 		final Map<String, Object> diagnostics = new LinkedHashMap<>();
 		diagnostics.put("enable", true);
 		diagnostics.put("didOpen", true);
 		diagnostics.put("didChange", true);
 		diagnostics.put("didSave", false);
+
+		// Combine them all
+		final Map<String, Object> options = new LinkedHashMap<>();
+		options.put("workspace", workspaceOptions);
 		options.put("diagnostics", diagnostics);
 		return options;
 	}

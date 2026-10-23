@@ -105,11 +105,20 @@ public class GroovyLanguageServerTest {
 		// ...and through closures.
 		assertTrue(complete("[1, 2].collect { it * 2 }.isEm").contains(
 			"isEmpty"));
-		// Declared types count too.
-		assertTrue(complete("List items = null\nitems.isEm").contains("isEmpty"));
 		// Inherited members are included.
 		assertTrue(complete("def x = new ArrayList()\nx.containsA").contains(
 			"containsAll"));
+	}
+
+	@Test
+	public void testMembersOfDeclaredTypes() {
+		// Variables' declared types, whatever they're assigned...
+		assertTrue(complete("List items = null\nitems.isEm").contains("isEmpty"));
+		assertTrue(complete("CharSequence cs = 'abc'\ncs.subSeq").contains(
+			"subSequence"));
+		// ...and parameters' too.
+		assertTrue(complete("def shout(String s) {\n  s.toUpp").contains(
+			"toUpperCase"));
 	}
 
 	/**

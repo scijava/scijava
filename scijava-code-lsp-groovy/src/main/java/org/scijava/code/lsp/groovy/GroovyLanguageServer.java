@@ -132,6 +132,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		final String line = doc.lineTo(caret);
 		final List<CompletionItem> none = new ArrayList<>();
 
+		// An import being typed, e.g. "import java.ut": complete the package or
+		// class name, replacing all of it. (Static imports aren't completed.)
 		final Matcher imp = IMPORT.matcher(line);
 		if (imp.find()) {
 			if (imp.group(1) != null) return list(doc, caret, caret, none);
@@ -140,26 +142,40 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 				token));
 		}
 
+		// Otherwise, find the word/prefix being typed at the caret
 		final Matcher id = IDENTIFIER.matcher(line);
 		id.find();
 		final String prefix = id.group();
 		final int replaceStart = caret - prefix.length();
-		final String before = line.substring(0, line.length() - prefix.length());
+		final String before = line
+			.substring(0, line.length() - prefix.length());
+		// If a dot precedes the word, it's a member of what precedes it
+		// (e.g. "s.", "5.ti") OR it's a range ("1..") OR it's a decimal value
+		// ("1.", "1.5")
 		final boolean decimal = NUMBER_DOT.matcher(before).find() && (prefix
 			.isEmpty() || Character.isDigit(prefix.charAt(0)));
 		final boolean member = before.trim().endsWith(".") && !before.trim()
 			.endsWith("..") && !decimal;
+		// If it's not a member, there are two cases with less work to do:
 		if (!member && prefix.isEmpty()) {
+			// Nothing typed yet: only a call's arguments are worth offering, e.g.
+			// "max(" offers the variables in scope, those fitting the parameter
+			// first. (Elsewhere, including after "1." or "1..", nothing is.)
 			return list(doc, caret, caret, argumentChoices(doc, caret, line));
 		}
 		if (!member && Character.isDigit(prefix.charAt(0))) {
+			// Number or range - nothing to complete
 			return list(doc, caret, caret, none);
 		}
 
+		// Analyze the script up to the prefix, to know the types and variables
+		// there. NB: The prefix is left out, as it's incomplete code.
 		final TypedAST ast = typedAST(text.substring(0, replaceStart), line
 			.substring(0, line.length() - prefix.length()));
 		if (ast == null) return list(doc, caret, caret, none); // string, comment
 
+		// After a dot: the members of the type before it (e.g. String's for
+		// "s."). Otherwise: the names in scope, keywords, and class names.
 		final List<CompletionItem> items = new ArrayList<>();
 		if (member) items.addAll(memberCompletions(ast, before, prefix));
 		else {

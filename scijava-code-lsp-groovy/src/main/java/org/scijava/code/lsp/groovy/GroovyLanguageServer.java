@@ -102,7 +102,10 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	/** The identifier (possibly empty) being typed at the caret. */
 	private static final Pattern IDENTIFIER = Pattern.compile("[\\w$]*$");
 
-	/** A number literal followed by a dot, e.g. "1." (not a member access). */
+	/**
+	 * A number literal followed by a dot, e.g. "1."
+	 * (There's nothing to autocomplete when typing out a number)
+	 */
 	private static final Pattern NUMBER_DOT = Pattern.compile(
 		"(?<![\\w$])\\d+\\.\\s*$");
 
@@ -142,8 +145,10 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		final String prefix = id.group();
 		final int replaceStart = caret - prefix.length();
 		final String before = line.substring(0, line.length() - prefix.length());
+		final boolean decimal = NUMBER_DOT.matcher(before).find() && (prefix
+			.isEmpty() || Character.isDigit(prefix.charAt(0)));
 		final boolean member = before.trim().endsWith(".") && !before.trim()
-			.endsWith("..") && !NUMBER_DOT.matcher(before).find();
+			.endsWith("..") && !decimal;
 		if (!member && prefix.isEmpty()) {
 			return list(doc, caret, caret, argumentChoices(doc, caret, line));
 		}

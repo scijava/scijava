@@ -250,11 +250,19 @@ public class GroovyLanguageServerTest {
 	public void testKeywords() {
 		// keywords get completed
 		assertTrue(complete("ret").contains("return"));
-		// keywords shouldn't be offered in member accesses
-		assertFalse(complete("def x = 1.").contains("return"));
 		// primitives get completed
 		assertTrue(complete("tr").contains("true"));
 		assertTrue(complete("do").contains("double"));
+	}
+
+	@Test
+	public void testNumbers() {
+		// A decimal being typed is not completed.
+		assertTrue(complete("def x = 1.").isEmpty());
+		assertTrue(complete("def x = 1.5").isEmpty());
+		// But numbers are objects, whose members are.
+		assertTrue(complete("5.ti").contains("times"));
+		assertTrue(complete("def x = 1.5.ro").contains("round"));
 	}
 
 	@Test

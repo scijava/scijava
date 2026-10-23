@@ -190,19 +190,29 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	protected SignatureHelp signatureHelp(final Document doc, final int caret) {
 		final String line = doc.lineTo(caret);
 		final CallContext call = callContext(doc, caret, line);
-		if (call == null) return null;
+		if (call == null) {
+			// The caret isn't in a call (or is in a string or comment)
+			return null;
+		}
 		final List<Callable> callables = callables(call.ast, call.call);
-		if (callables.isEmpty()) return null;
-		// NB: Reflection lists methods in no particular order: sort them by
-		// their parameter types, so that equally good fits come out the same.
+		if (callables.isEmpty()) {
+			// Nothing the call could be calling is known, e.g. the receiver's
+			// type is unknown, or nothing of the method's name exists
+			return null;
+		}
+		// Sort callables by their parameter types, so that equally good fits
+		// are always in the same order.
 		callables.sort(Comparator.comparing(Callable::parameterTypes));
 
-		// The types of the arguments before the caret's (which is being typed).
+		// The types of the arguments typed so far (the one at the caret, being
+		// typed, isn't known yet)
 		final List<String> argTypes = new ArrayList<>();
 		for (int i = 0; i < call.call.arguments.size(); i++) {
 			argTypes.add(i == call.call.active ? null : call.ast.typeName(
 				call.call.arguments.get(i)));
 		}
+		// Return callables in order of best match to those arguments (the
+		// first is shown)
 		final ClassLoader loader = loader();
 		return new SignatureHelp(Signatures.rateAll(callables, argTypes, (a,
 			p) -> Signatures.fit(a, p, loader)), 0, call.call.active);

@@ -76,7 +76,7 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<!-- TEMP: Remove after pom-scijava bump. -->
+		<!-- TEMP: Remove once pom-scijava manages scijava-common 2.101.0. -->
 		<scijava-common.version>2.101.0</scijava-common.version>
 		<scijava-code-lsp.version>0.1.0-SNAPSHOT</scijava-code-lsp.version>
 	</properties>

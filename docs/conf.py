@@ -11,6 +11,18 @@ from multiproject.utils import get_project
 
 sys.path.insert(0, os.path.abspath('.'))
 
+# NB: sphinx_charts imports pkg_resources, which was removed in setuptools 81.
+# Provide a minimal stand-in for the one function it uses.
+try:
+    import pkg_resources
+except ImportError:
+    import types
+    from importlib.resources import files
+
+    pkg_resources = types.ModuleType("pkg_resources")
+    pkg_resources.resource_filename = lambda pkg, path: str(files(pkg) / path)
+    sys.modules["pkg_resources"] = pkg_resources
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.

@@ -24,7 +24,7 @@ To enable Op YAML generation in your build process, add the following to your `p
                     <path>
                         <groupId>org.scijava</groupId>
                         <artifactId>scijava-ops-indexer</artifactId>
-                        <version>${project.version}</version>
+                        <version>${scijava-ops-indexer.version}</version>
                     </path>
                 </annotationProcessorPaths>
                 <fork>true</fork>

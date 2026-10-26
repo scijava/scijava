@@ -1431,16 +1431,19 @@ design settled now, so that Phase 4 inherits decisions rather than a debate:
 
 ## Later, not now
 
-- **`scijava-persist`** (in the incubator): polymorphic serialization where
-  the implementations live in *other people's* repositories, resolved by
-  discovery — a real and recurring need, and the discovery half is exactly
-  SciJava-shaped. Worth rebuilding when a consumer appears, but not worth
-  lifting: it hard-wires Gson into its SPI (`IClassAdapter extends
-  JsonSerializer`), vendors a copy of Gson's `RuntimeTypeAdapterFactory`, and
-  is built on `Context` + `@Plugin`. A rewrite would be much smaller, since
-  Jackson has first-class polymorphic support and only the discovery-driven
-  subtype registration would be ours. Its author ended up inlining equivalent
-  logic downstream, and there is no concrete core consumer today.
+- **`scijava-persist`**: polymorphic serialization where the implementations
+  live in *other people's* repositories, resolved by discovery — a real and
+  recurring need, and the discovery half is exactly SciJava-shaped. Worth
+  rebuilding when a consumer appears, but not worth lifting: it hard-wires Gson
+  into its SPI (`IClassAdapter extends JsonSerializer`), vendors a copy of
+  Gson's `RuntimeTypeAdapterFactory`, and is built on `Context` + `@Plugin`. A
+  rewrite would be much smaller, since Jackson has first-class polymorphic
+  support and only the discovery-driven subtype registration would be ours.
+  Its author ended up inlining equivalent logic downstream, and there is no
+  concrete core consumer today. It was never released, and its code stays in
+  the archived incubator, at
+  [`99712e0`](https://github.com/scijava/incubator/tree/99712e0471d36339e84852871614a96380916364/scijava-persist),
+  as a reference for that rewrite.
 
 ## Open decisions
 

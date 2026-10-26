@@ -46,8 +46,7 @@ The deliverable is not a reimplementation of SJC. It is:
   workaround for a package collision; it is the component's *incarnation*.
   Breaking changes are made by forking to a new incarnation with a new
   artifactId and package prefix, so both incarnations can sit on one classpath
-  and downstream code keeps working. See the
-  [incubator README](https://github.com/scijava/incubator/blob/-/README.md).
+  and downstream code keeps working. See [versioning.md](versioning.md).
   - **A major version bump within one incarnation should never happen.** If
     compatibility must break, bump the incarnation digit — artifactId, package
     prefix and major version together — so the old one can stay loaded

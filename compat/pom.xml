@@ -11,7 +11,7 @@
 
 	<artifactId>scijava-compat</artifactId>
 	<!--
-	NB: the major version tracks the incarnation, per the incubator README.
+	NB: the major version tracks the incarnation; see docs/versioning.md.
 	The 1.x.y of the other components is a legacy of the first monoversioned
 	release, not the intended scheme.
 	-->

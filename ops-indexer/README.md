@@ -12,7 +12,7 @@ To enable Op YAML generation in your build process, add the following to your `p
 </properties>
 ```
 
-**NOTE**: Until this repository is moved out of the SciJava Incubator and the following is added to pom-scijava, the following must also be added to your POM:
+**NOTE**: Until the following is added to pom-scijava, the following must also be added to your POM:
 
 ```xml
 <build>

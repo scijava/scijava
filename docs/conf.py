@@ -68,6 +68,7 @@ exclude_patterns = [
     "examples/README.md",
     "migration.md",
     "migration-plan.md",
+    "versioning.md",
 ]
 
 # -- MyST-Parser/MyST-NB configuration ---------------------------------------

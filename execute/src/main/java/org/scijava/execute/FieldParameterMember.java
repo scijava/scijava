@@ -40,6 +40,7 @@ import org.scijava.struct.ItemIO;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.struct.ValueAccessibleMemberInstance;

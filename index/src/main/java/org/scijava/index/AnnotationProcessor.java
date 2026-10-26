@@ -81,8 +81,8 @@ import org.scijava.index.AbstractIndexWriter.StreamFactory;
  * classpath scan.
  * </p>
  * <p>
- * For example, SciJava Common's {@link org.scijava.plugin.Plugin} annotation
- * enables the {@link org.scijava.Context} application container to discover
+ * For example, SciJava Common's {@code org.scijava.plugin.Plugin} annotation
+ * enables the {@code org.scijava.Context} application container to discover
  * and prepare the application including all its plugins without needing to
  * load all of those plugins in advance. Rather, they can be loaded upon first
  * use in each appropriate context, greatly reducing application startup cost.

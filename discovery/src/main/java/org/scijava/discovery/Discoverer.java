@@ -117,7 +117,7 @@ public interface Discoverer {
 
 	/**
 	 * Creates a {@code Discoverer} from a function yielding already-constructed
-	 * objects. Such a source cannot be lazy; prefer {@link #serviceLoader()}
+	 * objects. Such a source cannot be lazy; prefer {@link ServiceLoader}
 	 * or an index-backed discoverer where laziness matters.
 	 *
 	 * @param func yields the implementations of a given type

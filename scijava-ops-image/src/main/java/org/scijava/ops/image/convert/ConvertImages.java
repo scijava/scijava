@@ -69,7 +69,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new BitType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -91,7 +91,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new Unsigned2BitType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -113,7 +113,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new Unsigned4BitType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -136,7 +136,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new ByteType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -158,7 +158,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new UnsignedByteType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -181,7 +181,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new Unsigned12BitType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -203,7 +203,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new ShortType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -226,7 +226,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new UnsignedShortType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -248,7 +248,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new IntType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -270,7 +270,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new UnsignedIntType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -292,7 +292,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new LongType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -314,7 +314,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new UnsignedLongType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -337,7 +337,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new Unsigned128BitType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -359,7 +359,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new FloatType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -382,7 +382,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new ComplexFloatType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -404,7 +404,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new DoubleType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 
@@ -427,7 +427,7 @@ public final class ConvertImages {
 	{
         var output = creator.apply(input,
 			new ComplexDoubleType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel(converter);
 		return output;
 	}
 

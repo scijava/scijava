@@ -174,8 +174,9 @@ public final class ReductionUtils {
 	 */
 	private static String getClassName(Class<?> clazz) {
         var className = clazz.getSimpleName();
-		if (className.chars().allMatch(c -> Character.isJavaIdentifierPart(c)))
+		if (className.chars().allMatch(Character::isJavaIdentifierPart))
 			return className;
+		// Recurse to handle ND arrays
 		if (clazz.isArray()) return getClassName(clazz.getComponentType()) +
 			"_Arr";
 		return className;

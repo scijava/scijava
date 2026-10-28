@@ -1,0 +1,12 @@
+# NB: for the classpath. The module path reads module-info's `provides`
+# instead, but a great deal of scientific Java still runs unmodularized.
+org.scijava.convert3.CastConverter
+org.scijava.convert3.NumberConverter
+org.scijava.convert3.StringConverter
+org.scijava.convert3.ToStringConverter
+org.scijava.convert3.ArrayConverter
+org.scijava.convert3.CollectionConverter
+org.scijava.convert3.PathConverters$FileToPath
+org.scijava.convert3.PathConverters$PathToFile
+org.scijava.convert3.PathConverters$StringToPath
+org.scijava.convert3.ConstructorConverter

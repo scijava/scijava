@@ -1,26 +1,12 @@
-# SciJava Ops Service Loader: A [`ServiceLoader`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html) extension of SciJava Discovery
-This module provides an implementation of `Discoverer` that is powered by the `ServiceLoader` from Java's Module System.
+# SciJava Discovery Test: Integration tests for SciJava Discovery
 
-## What can `ServiceLoaderDiscoverer` discover?
+This module exercises `Discoverer` against Java's [`ServiceLoader`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html) across real module boundaries. It is not intended to be used as a dependency.
 
-`ServiceLoaderDiscoverer` can discover implementations of *any* interface declared to be `use`d in its `module-info.java`. Although we limit the `use`d interfaces to those defined in SciJava Ops SPI (this is, after all, an Ops project), the process is the same for any other interface.
+Its `module-info.java` `provides` sample implementations of `org.scijava.ops.spi.Op` and `org.scijava.ops.spi.OpCollection`, and its tests check that a `Discoverer` built with `Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())` finds them.
 
-# I wrote an implementation, how can I make it discoverable via `ServiceLoaderDiscoverer`?
-
-Suppose your module `com.example.foo` contains an implementation `com.example.foo.FooOp` of `org.scijava.ops.spi.Op`, and you wise to make `FooOp` discoverable from `ServiceLoaderDiscoverer`. Make sure to:
-
-* Declare SciJava Ops Service Loader as a dependency; if using Maven, it looks like this:
-
-```xml
-<dependency>
-	<groupId>org.scijava</groupId>
-	<artifactId>scijava-ops-serviceLoader</artifactId>
-	<version>1.0.0</version>
-</dependency>
-```
-* Make sure that the interface being implemented is `use`d in SciJava Ops Service Loader's `module-info.java`
-* Declare in your project's `module-info.java`:
+Note that `ServiceLoader` can only discover implementations of interfaces that the calling module declares it `uses`. This module therefore declares:
 
 ```java
-provides org.scijava.ops.spi.Op with com.example.foo.FooOp;
+uses org.scijava.ops.spi.Op;
+uses org.scijava.ops.spi.OpCollection;
 ```

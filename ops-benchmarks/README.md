@@ -4,21 +4,21 @@ This module contains benchmark code used to assess the performance of the SciJav
 
 # Executing the Benchmarks
 
-The following lines can be used to build and execute the benchmarks from the base `scijava-ops-benchmarks` directory on the command line:
+The following lines can be used to build and execute the benchmarks from the base `ops-benchmarks` directory on the command line:
 
 ```bash
 # Build the benchmarks module
 cd ..
-mvn -P benchmarks clean install -pl scijava-ops-benchmarks -am
+mvn -P benchmarks clean install -pl ops-benchmarks -am
 
 # Copy dependencies into target folder
-cd scijava-ops-benchmarks
+cd ops-benchmarks
 mvn dependency:copy-dependencies
 
 # Execute the benchmarks
-java -cp "target/scijava-ops-benchmarks-1.0.0.jar:target/dependency/*" org.openjdk.jmh.Main
+java -cp "target/classes:target/dependency/*" org.openjdk.jmh.Main
 ```
 
 # Adding a new benchmark
 
-The best way to create a new benchmark is to create a new Java class within `src/main/java/org/scijava/benchmarks`. Within this new class, you can add new methods (annotated with `@Benchmark`) which will be automatically invoked when benchmarks are executed using the commands above.
+The best way to create a new benchmark is to create a new Java class within `src/main/java/org/scijava/ops/benchmarks`. Within this new class, you can add new methods (annotated with `@Benchmark`) which will be automatically invoked when benchmarks are executed using the commands above.

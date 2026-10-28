@@ -1,15 +1,19 @@
 # SciJava Discovery: A library for the abstraction of service discovery mechanisms
 
-This module provides the `Discoverer` interface, an abstraction for service discovery. `Discoverer`s are designed to return `Discovery` objects, which combine the discovered `Object` with a tag (explained below). `Discoverer`s should implement one (or both) of `Discoverer`'s methods:
+This module provides the `Discoverer` interface, an abstraction for service discovery: finding implementations of some type, by some mechanism - `ServiceLoader`, a generated annotation index, a YAML file, or a hand-curated list.
 
-## `List<Discovery<? extends Class<T>>> Discoverer.implsOfType(Class<T> c)`
+## `<T> List<Discovery<T>> Discoverer.discover(Class<T> c)`
 
-This method is designed to return a list of implementations of some `Class<?> c`. In other words, `c` is a superclass extended by/interface implemented by each of the returned `Class`es.
+The one method a `Discoverer` must implement. It returns a list of `Discovery` descriptors for implementations of `c`. Descriptors, rather than constructed objects, are returned so that mechanisms able to report what is available without loading classes can do so.
 
-## `List<Discovery<AnnotatedElement>> Discoverer.elementsTaggedWith(String tagType)`
+## `<T> List<T> Discoverer.instances(Class<T> c)`
 
-This method is designed to return a list of `AnnotatedElements` (`Class`es, `Method`s, or `Field`s) tagged with the given tag type.
+A convenience for callers that simply want the objects: it constructs an instance from each `Discovery` returned by `discover(c)`.
 
-## Tags
+## Creating `Discoverer`s
 
-** TODO**
+Static factory methods on `Discoverer` cover the common cases:
+
+* `Discoverer.usingProviders(...)` wraps a function yielding `ServiceLoader.Provider`s, e.g. `Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())`.
+* `Discoverer.using(...)` wraps a function yielding already-constructed objects.
+* `Discoverer.all()` returns every `Discoverer` provided via `ServiceLoader`.

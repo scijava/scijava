@@ -7,7 +7,7 @@ For example:
     ops.filter.addPoissonNoise(img)
 
 Variables:
-    ops - fully intialized OpGateway with all SciJava and ImageJ Ops available
+    ops - fully initialized OpGateway with all SciJava and ImageJ Ops available
     env - OpEnvironment for more traditional Java-style API
 '''
 

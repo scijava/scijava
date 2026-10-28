@@ -54,9 +54,10 @@ public class DatasetTypeExtractorTest {
 	@Test
 	public void testDatasetTypeExtractor() {
 		// Create a TypeReifier
-		// NB the use of Discoverer.all(Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())) finds no TypeExtractors
-		// because the scijava-legacy module does not use the TypeExtractor
-		// interface. Thus it cannot actually reify anything.
+		// NB the use of Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())
+		// finds no TypeExtractors because this module does not declare
+		// "uses org.scijava.types.extract.TypeExtractor", so ServiceLoader
+		// refuses the lookup. Thus the reifier cannot actually reify anything.
 		var reifier = new DefaultTypeReifier(Discoverer.all(Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())));
 		// Create a Dataset
 		var img = ArrayImgs.unsignedBytes(10, 10);

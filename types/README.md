@@ -2,9 +2,9 @@
 
 This library provides a suite of utilities for working with generic types in Java.
 
-## `TypeService` and `TypeExtractor`s: an extensible system for discovering generic types
+## `TypeReifier` and `TypeExtractor`s: an extensible system for discovering generic types
 
-`TypeService.reify()` offers provides a powerful, extensible way to determine the generic type for, or "reify", a given `Object`. Under the hood, it relies on `TypeExtractor` implementations, allowing the user to extend its capabilities by defining new implementations.
+`TypeReifier.reify()` provides a powerful, extensible way to determine the generic type for, or "reify", a given `Object`. Under the hood, it relies on `TypeExtractor` implementations, allowing the user to extend its capabilities by defining new implementations.
 
 Also of note is the interface `GenericTyped`, which can be implemented to quickly make any type reifiable.
 

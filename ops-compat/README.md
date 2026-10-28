@@ -1,21 +1,17 @@
-# SciJava Legacy: A backwards compatibility bridge with older SciJava code
+# SciJava Ops Compat: A backwards compatibility bridge with older SciJava code
 
-This library provides a bridge between current SciJava libraries
-and previous generations (Java 8 / pre-JPMS) of SciJava/ImageJ2 code.
+This library provides a bridge between SciJava Ops
+and previous generations (Java 8 / pre-JPMS) of SciJava code.
 
-Features include:
-
-* Integration of SciJava Ops into SciJava Common's application context
-  and module system, via an OpEnvironmentService and preprocessor plugin.
-
-* A SciJava Ops TypeExtractor for ImageJ2's Dataset image type.
+It integrates SciJava Ops into SciJava Common's application context
+and module system, via an OpEnvironmentService and preprocessor plugin.
 
 For Maven projects, this library can be used by adding to your `pom.xml`:
 
-```java
+```xml
 <dependency>
 	<groupId>org.scijava</groupId>
-	<artifactId>scijava-legacy</artifactId>
+	<artifactId>scijava-ops-compat</artifactId>
 	<version>1.0.0</version>
 </dependency>
 ```

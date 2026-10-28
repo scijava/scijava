@@ -31,7 +31,7 @@
  * This package is designed to house utility methods intended for use <b>only
  * within SciJava Ops</b>.
  * <p>
- * Utilities intended for use outside of this library sould be housed within
+ * Utilities intended for use outside of this library should be housed within
  * the {@code org.scijava.ops.engine.util} package.
  *
  * @author Gabriel Selzer

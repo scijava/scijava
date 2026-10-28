@@ -53,6 +53,9 @@ public class DiscoveryLazinessTest {
 	 */
 	@Test
 	public void testServiceLoaderDiscoveryIsLazy() {
+		// Note: Other tests in this JVM may already have constructed one.
+		ServiceBasedAdder.constructed = false;
+
 		final Discoverer d = Discoverer.usingProviders( //
 			c -> ServiceLoader.load(c).stream());
 

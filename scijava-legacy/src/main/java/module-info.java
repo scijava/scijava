@@ -29,7 +29,7 @@
 
 open module org.scijava.legacy {
 
-	requires net.imagej;
+	requires net.imagej.common;
 	requires org.scijava;
 	requires org.scijava.types;
 	requires org.scijava.priority;

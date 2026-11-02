@@ -59,7 +59,7 @@
 
 		<module>scijava-code-lsp</module>
 		<module>scijava-code-lsp-groovy</module>
-		<module>scijava-code-lsp-jedi</module>
+		<module>scijava-code-lsp-ty</module>
 		<module>scijava-code-lsp-jython</module>
 		<module>scijava-collections</module>
 		<module>scijava-common3</module>

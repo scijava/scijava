@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -178,8 +178,8 @@ public class PythonLanguageServerTest {
 		final PythonLanguageServer server = new PythonLanguageServer(jedi, 30);
 		open(server, "import json\njson.du");
 		List<CompletionItem> items = complete(server, "import json\njson.du");
-		// Asked about the word's first character.
-		assertEquals(new Position(1, 6), jedi.asked.get(0));
+		// Asked about the word typed so far.
+		assertEquals(new Position(1, 7), jedi.asked.get(0));
 		// The word's completions, without dunders.
 		assertEquals(Arrays.asList("dumps", "dump"), labels(items));
 		// Once a word is begun: callables, from the resolved signatures.

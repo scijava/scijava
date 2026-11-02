@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -67,11 +67,11 @@ import org.scijava.code.lsp.jvm.Callable;
 import org.scijava.code.lsp.Positions;
 
 /**
- * A {@link LanguageServer} wrapping jedi-language-server, with a few nice
+ * A {@link LanguageServer} wrapping ty's language server, with a few nice
  * additions:
  * <ul>
- * <li>Asks about a word's first character only, and reuses the answer
- * (filtered) as the word is typed on, for a while.</li>
+ * <li>Asks about a word once (usually at its first character), and reuses
+ * the answer (filtered) as the word is typed on, for a while.</li>
  * <li>Cancels a question still pending once another is asked about the same
  * document.</li>
  * <li>Once a word is begun, resolves the first completions, and makes those
@@ -220,8 +220,9 @@ class PythonLanguageServer implements LanguageServer,
 		while (start > 0 && Character.isJavaIdentifierPart(text.charAt(start -
 			1))) start--;
 		final String word = text.substring(start, caret);
-		// Ask about the first character typed, if any: later keystrokes of the
-		// same word then reuse the answer (filtered).
+		// Ask about the word typed so far (usually its first character): later
+		// keystrokes of the same word then reuse the answer (filtered).
+		// NB: Asked at the caret, as ty answers nothing in the middle of a word.
 		final int ask = start + Math.min(1, word.length());
 		final String line = text.substring(text.lastIndexOf('\n', start - 1) + 1,
 			start);
@@ -234,18 +235,20 @@ class PythonLanguageServer implements LanguageServer,
 			// NB: Not an empty answer either: the server may know more by now (e.g.
 			// once the script's packages are, or its environment is built).
 			if (answer != null && (now - answer.time > ANSWER_LIFETIME ||
-				answer.future.isCompletedExceptionally() || answer.isEmpty()))
+				answer.future.isCompletedExceptionally() || answer.isEmpty() ||
+				!word.startsWith(answer.word)))
 			{
 				answer = null;
 			}
 		}
 		if (answer == null) {
 			final CompletionParams p = new CompletionParams(params.getTextDocument(),
-				Positions.position(text, ask), params.getContext());
+				Positions.position(text, caret), params.getContext());
 			final CompletableFuture<Either<List<CompletionItem>, CompletionList>> raw =
 				inner.getTextDocumentService().completion(p);
 			final int n = word.isEmpty() || importing ? 0 : signatures;
-			answer = new Answer(raw, raw.thenCompose(list -> resolve(list, n)), now);
+			answer = new Answer(raw, raw.thenCompose(list -> resolve(list, n)), word,
+				now);
 			synchronized (answers) {
 				answers.put(key, answer);
 			}
@@ -377,13 +380,17 @@ class PythonLanguageServer implements LanguageServer,
 
 		private final CompletableFuture<?> raw;
 		private final CompletableFuture<CompletionList> future;
+		/** The word typed when asked. */
+		private final String word;
 		private final long time;
 
 		private Answer(final CompletableFuture<?> raw,
-			final CompletableFuture<CompletionList> future, final long time)
+			final CompletableFuture<CompletionList> future, final String word,
+			final long time)
 		{
 			this.raw = raw;
 			this.future = future;
+			this.word = word;
 			this.time = time;
 		}
 
@@ -395,7 +402,7 @@ class PythonLanguageServer implements LanguageServer,
 	}
 
 	/**
-	 * Parses a Python signature (as Jedi writes them): the parameters, with
+	 * Parses a Python signature (as ty writes them): the parameters, with
 	 * their annotations as types; and the return annotation. Returns null if it
 	 * is not a signature.
 	 */

@@ -223,7 +223,12 @@ class ProcessLanguageServer implements LanguageServer,
 	public void didChangeConfiguration(final DidChangeConfigurationParams p) {}
 
 	@Override
-	public void didChangeWatchedFiles(final DidChangeWatchedFilesParams p) {}
+	public void didChangeWatchedFiles(final DidChangeWatchedFilesParams p) {
+		// NB: Servers may cache files they read (e.g. ty), and so must be told
+		// when they change. A process started later reads them anew.
+		servers.forEach(s -> s.remote().getWorkspaceService()
+			.didChangeWatchedFiles(p));
+	}
 
 	// -- Helper methods --
 
@@ -247,7 +252,10 @@ class ProcessLanguageServer implements LanguageServer,
 			answer.whenComplete((r, error) -> {
 				if (answer.isCancelled()) raw.cancel(true);
 			});
-			raw.whenComplete((r, error) -> {
+			// NB: Async, off the thread reading the process's output: what's done
+			// with the answer may write to the process (e.g. to resolve it), which
+			// would wait forever on a process waiting to write more output.
+			raw.whenCompleteAsync((r, error) -> {
 				if (error != null) answer.completeExceptionally(error);
 				else answer.complete(r);
 			});

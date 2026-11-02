@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,10 +61,10 @@ import org.scijava.script.ScriptLanguage;
 
 /**
  * End-to-end tests of the {@code python} server (see
- * {@link PythonServerPlugin}), with a real jedi-language-server, on plain
+ * {@link PythonServerPlugin}), with a real ty server, on plain
  * Python, as editors use it.
  * <p>
- * The first request builds jedi-language-server's environment, which
+ * The first request builds ty's environment, which
  * requires network access.
  * </p>
  *
@@ -127,7 +127,8 @@ public class PythonLanguageServerIntegrationTest {
 			help = session.signatureHelp(code, code.length()).get(1,
 				TimeUnit.MINUTES);
 		}
-		assertTrue(help.getSignatures().get(0).getLabel().contains("dumps("));
+		// NB: ty labels a signature with its parameters only, without its name.
+		assertTrue(help.getSignatures().get(0).getLabel().startsWith("(obj"));
 		assertFalse(help.getSignatures().get(0).getParameters().isEmpty());
 		assertEquals(Integer.valueOf(1), help.getActiveParameter());
 	}

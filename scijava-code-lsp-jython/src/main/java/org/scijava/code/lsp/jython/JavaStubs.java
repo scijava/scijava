@@ -54,11 +54,15 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.eclipse.lsp4j.FileChangeType;
+import org.eclipse.lsp4j.FileEvent;
 import org.scijava.code.lsp.jvm.ClassIndex;
 
 /**
@@ -108,6 +112,10 @@ class JavaStubs {
 	/** The packages done (or being done). */
 	private final Set<String> done = ConcurrentHashMap.newKeySet();
 
+	/** Told of the files written. */
+	private final List<Consumer<List<FileEvent>>> listeners =
+		new CopyOnWriteArrayList<>();
+
 	private final ExecutorService writer = Executors.newSingleThreadExecutor(
 		r -> {
 			final Thread t = new Thread(r, "Jython-stubs");
@@ -140,6 +148,25 @@ class JavaStubs {
 	/** Where the stubs are written: a Python search path. */
 	public File dir() {
 		return dir;
+	}
+
+	/**
+	 * Tells {@code listener} of the files written from now on, e.g. so that a
+	 * server reads them anew (as written in the background, after it may have
+	 * looked for them).
+	 */
+	public void listen(final Consumer<List<FileEvent>> listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Stops telling {@code listener} of the files written, once those being
+	 * written are.
+	 */
+	public void unlisten(final Consumer<List<FileEvent>> listener) {
+		// NB: Not at once: a server may have looked for the stubs being written
+		// (e.g. a script's, closed as soon as it was asked about).
+		writer.execute(() -> listeners.remove(listener));
 	}
 
 	/**
@@ -212,22 +239,38 @@ class JavaStubs {
 
 	// -- Stub writing --
 
-	/** Writes a package's stub, and its parents' (empty, if missing). */
+	/**
+	 * Writes a package's stub, and its parents' (empty, if missing); then tells
+	 * the listeners which files it wrote.
+	 */
 	private void write(final String pkg, final String stub) throws IOException {
 		if (stub == null) return; // NB: Not a Java package.
+		final List<FileEvent> events = new ArrayList<>();
 		File d = dir;
 		for (final String part : pkg.split("\\.")) {
 			d = new File(d, part);
-			d.mkdirs();
+			// NB: New directories are told of too: ty finds the files in a new
+			// directory only then.
+			if (d.mkdirs()) events.add(event(d, FileChangeType.Created));
 			final File init = new File(d, "__init__.pyi");
-			if (!init.exists()) Files.write(init.toPath(), new byte[0]);
+			if (!init.exists()) {
+				Files.write(init.toPath(), new byte[0]);
+				events.add(event(init, FileChangeType.Created));
+			}
 		}
 		final File init = new File(d, "__init__.pyi");
 		final byte[] bytes = stub.getBytes(StandardCharsets.UTF_8);
 		// NB: Unchanged files stay as they are, so the server need not reload.
 		if (!Arrays.equals(Files.readAllBytes(init.toPath()), bytes)) {
 			Files.write(init.toPath(), bytes);
+			events.add(event(init, FileChangeType.Changed));
 		}
+		if (events.isEmpty()) return;
+		for (final Consumer<List<FileEvent>> l : listeners) l.accept(events);
+	}
+
+	private static FileEvent event(final File file, final FileChangeType type) {
+		return new FileEvent(file.toPath().toUri().toString(), type);
 	}
 
 	/**

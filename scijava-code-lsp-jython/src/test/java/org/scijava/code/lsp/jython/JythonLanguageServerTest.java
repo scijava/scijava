@@ -159,8 +159,16 @@ public class JythonLanguageServerTest {
 
 	@Test
 	public void testInheritedMembers() {
-		final List<String> texts = complete(
-				"from java.util import ArrayList\nlist = ArrayList()\nlist.");
+		// NB: The stubs of the packages java.util refers to (e.g. java.lang, of
+		// Object) are written in the background, after the script is opened: so
+		// ask until the server knows them, as an editor would as typing goes on.
+		// (The server keeps running, and must be told of the stubs written.)
+		final String code = "from java.util import ArrayList\nlist = ArrayList()\nlist.";
+		final long deadline = System.currentTimeMillis() + 30_000;
+		List<String> texts = complete(code);
+		while (!texts.contains("toString") && System.currentTimeMillis() < deadline) {
+			texts = complete(code);
+		}
 		// members come from superinterfaces
 		assertTrue(texts.contains("add"), "expected add among " + texts);
 		// members come from superclasses
@@ -207,9 +215,10 @@ public class JythonLanguageServerTest {
 			"Math.max(1.5, ");
 		assertFalse(max.getSignatures().isEmpty());
 		assertEquals(Integer.valueOf(1), max.getActiveParameter());
-		// Constructors.
-		assertTrue(help("from java.util import ArrayList\nArrayList(")
-			.getSignatures().get(0).getLabel().contains("Collection"));
+		// Constructors (one signature each).
+		final SignatureHelp list = help("from java.util import ArrayList\nArrayList(");
+		assertTrue(list.getSignatures().stream().anyMatch(s -> s.getLabel()
+			.contains("Collection")), list.toString());
 		// None outside calls.
 		final SignatureHelp none = help("x = 1");
 		assertTrue(none == null || none.getSignatures().isEmpty());

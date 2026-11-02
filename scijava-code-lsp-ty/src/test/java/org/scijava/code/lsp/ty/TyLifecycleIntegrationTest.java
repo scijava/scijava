@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,7 +53,7 @@ import org.scijava.code.lsp.Positions;
  *
  * @author Gabriel Selzer
  */
-public class JediLifecycleIntegrationTest {
+public class TyLifecycleIntegrationTest {
 
 	@Test
 	public void testLifecycle() throws Exception {

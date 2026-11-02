@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.Disposable;
@@ -40,7 +40,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
- * Serves {@code python}: jedi-language-server (see {@link JediLauncher}), one
+ * Serves {@code python}: ty's language server (see {@link TyLauncher}), one
  * process per environment, made to work well in an editor (see
  * {@link PythonLanguageServer}). A server analyzes scripts in exactly the
  * environment it is given. The processes stop when this is disposed.
@@ -56,7 +56,7 @@ public class PythonServerPlugin implements LanguageServerPlugin, Disposable {
 	@Parameter(required = false)
 	private LogService log;
 
-	private ServerProcesses jedi;
+	private ServerProcesses ty;
 
 	@Override
 	public boolean supports(final String languageId) {
@@ -67,25 +67,25 @@ public class PythonServerPlugin implements LanguageServerPlugin, Disposable {
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
-		return new PythonLanguageServer(jedi().server(environment), SIGNATURES);
+		return new PythonLanguageServer(ty().server(environment), SIGNATURES);
 	}
 
 	// -- Disposable methods --
 
 	@Override
 	public synchronized void dispose() {
-		if (jedi != null) jedi.shutdown();
-		jedi = null;
+		if (ty != null) ty.shutdown();
+		ty = null;
 	}
 
 	// -- Helper methods --
 
-	/** Gets the jedi-language-server processes, creating them on first use. */
-	private synchronized ServerProcesses jedi() {
-		if (jedi == null) {
-			jedi = new ServerProcesses(new JediLauncher(), log != null ? log
+	/** Gets the ty server processes, creating them on first use. */
+	private synchronized ServerProcesses ty() {
+		if (ty == null) {
+			ty = new ServerProcesses(new TyLauncher(), log != null ? log
 				: new StderrLogService());
 		}
-		return jedi;
+		return ty;
 	}
 }

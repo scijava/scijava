@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,18 +45,18 @@ import org.junit.jupiter.api.Test;
 import org.scijava.code.lsp.Environment;
 
 /**
- * Unit tests for {@link JediLauncher}.
+ * Unit tests for {@link TyLauncher}.
  *
  * @author Gabriel Selzer
  */
-public class JediLauncherTest {
+public class TyLauncherTest {
 
 	/**
 	 * Tests that the plugin offers servers for {@code python} documents
 	 */
 	@Test
 	public void testLanguageId() {
-		final JediLauncher plugin = new JediLauncher();
+		final TyLauncher plugin = new TyLauncher();
 		assertEquals("python", plugin.languageId());
 	}
 
@@ -69,28 +69,31 @@ public class JediLauncherTest {
 	 */
 	@Test
 	public void testLanguageInitializationOptions() {
-		final JediLauncher plugin = new JediLauncher();
-		// Whatever the environment, Jedi reports syntax errors as a script is
-		// opened and edited (rather than only when it is saved).
-		final Map<String, Object> diagnostics = Map.of("enable", true, //
-			"didOpen", true, "didChange", true, "didSave", false);
-
-		// For a script running in some environment, the options tell Jedi to
+		final TyLauncher plugin = new TyLauncher();
+		// For a script running in some environment, the options tell ty to
 		// analyze it with that environment's Python, also searching its extra
-		// paths (e.g. a dependency overlay)...
+		// paths (e.g. a dependency overlay); and to report the diagnostics (syntax
+		// errors included) of open scripts...
 		final Environment env = new Environment().withInterpreter("/env/bin/python")
 			.withPaths(List.of("/overlay"));
 		assertEquals(Map.of( //
-			"workspace", Map.of("environmentPath", "/env/bin/python", //
-				"extraPaths", List.of("/overlay")), //
-			"diagnostics", diagnostics), plugin.initializationOptions(env));
+			"configuration", Map.of("environment", Map.of( //
+				"python", "/env/bin/python", //
+				"extra-paths", List.of("/overlay"))), //
+			"diagnosticMode", "openFilesOnly", //
+			"showSyntaxErrors", true, //
+			"completions", Map.of("autoImport", false)), plugin
+				.initializationOptions(env));
 
 		// ...and for one in no particular environment, they name no Python, so
-		// Jedi uses the server's own.
+		// ty uses the server's own.
 		assertEquals(Map.of( //
-			"workspace", Map.of("extraPaths", List.of()), //
-			"diagnostics", diagnostics), plugin.initializationOptions(
-				new Environment()));
+			"configuration", Map.of("environment", Map.of( //
+				"extra-paths", List.of())), //
+			"diagnosticMode", "openFilesOnly", //
+			"showSyntaxErrors", true, //
+			"completions", Map.of("autoImport", false)), plugin
+				.initializationOptions(new Environment()));
 	}
 
 	/**
@@ -98,7 +101,7 @@ public class JediLauncherTest {
 	 */
 	@Test
 	public void testRootUri() {
-		final JediLauncher plugin = new JediLauncher();
+		final TyLauncher plugin = new TyLauncher();
 		final String root = plugin.rootUri(new Environment());
 		assertTrue(new File(URI.create(root)).isDirectory(), root);
 	}
@@ -106,8 +109,8 @@ public class JediLauncherTest {
 	/**
 	 * Ensures the server closes (eventually) when the parent is killed before
 	 * it can shut down the server (e.g. a crash): otherwise, each would leave a
-	 * Python process behind. The server runs under the
-	 * {@link JediLauncher#LAUNCHER}, which watches its parent.
+	 * server process behind. The server runs under the
+	 * {@link TyLauncher#LAUNCHER}, which watches its parent.
 	 * Skipped unless the server's environment is already built.
 	 * <p>
 	 * This JVM cannot be killed here, so the launcher is told to watch a
@@ -121,7 +124,7 @@ public class JediLauncherTest {
 		// NB: Only once the server's environment is built (e.g. by using it):
 		// building it here would need network access.
 		final String python = python(new File(Environments.apposeEnvsDir(),
-			JediLauncher.ENV));
+			TyLauncher.ENV));
 		assumeTrue(python != null, "The server's environment is not built");
 
 		// A "parent" that is already gone: a process that did nothing, and exited.
@@ -130,7 +133,7 @@ public class JediLauncherTest {
 
 		// The server, as the plugin starts it, but told to watch that process.
 		final Process process = new ProcessBuilder(python, "-c",
-			JediLauncher.LAUNCHER, String.valueOf(gone.pid()))
+			TyLauncher.LAUNCHER, String.valueOf(gone.pid()))
 				.redirectErrorStream(true).start();
 
 		// It must exit soon after, rather than run on.
@@ -139,9 +142,9 @@ public class JediLauncherTest {
 		assertTrue(exited);
 
 		// And it must be the watcher that ended it (with exit code 0), not a
-		// failure (e.g. to import jedi-language-server), whose output (e.g. a
+		// failure (e.g. to find ty), whose output (e.g. a
 		// traceback) then says why. NB: A failure slower than the watcher may
-		// still go unnoticed; JediLifecycleIntegrationTest uses the server.
+		// still go unnoticed; TyLifecycleIntegrationTest uses the server.
 		final String output = new String(process.getInputStream().readAllBytes());
 		assertEquals(0, process.exitValue(), output);
 	}

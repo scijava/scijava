@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -50,8 +51,10 @@ import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.DidChangeTextDocumentParams;
+import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
+import org.eclipse.lsp4j.FileEvent;
 import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.InitializeParams;
@@ -125,6 +128,9 @@ class JythonLanguageServer extends AbstractLanguageServer {
 	private final LanguageServer python;
 	private final JavaStubs stubs;
 
+	/** Tells the Python server of the stubs written, which it may have cached. */
+	private final Consumer<List<FileEvent>> written;
+
 	/** The scripts' texts, by URI: to know the names they mention. */
 	private final Map<String, String> texts = new ConcurrentHashMap<>();
 
@@ -139,6 +145,9 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		super(environment);
 		this.python = python;
 		this.stubs = stubs;
+		written = events -> python.getWorkspaceService().didChangeWatchedFiles(
+			new DidChangeWatchedFilesParams(events));
+		stubs.listen(written);
 		python.initialize(new InitializeParams()).thenRun(() -> python
 			.initialized(new InitializedParams()));
 	}
@@ -230,6 +239,7 @@ class JythonLanguageServer extends AbstractLanguageServer {
 
 	@Override
 	public CompletableFuture<Object> shutdown() {
+		stubs.unlisten(written);
 		return python.shutdown().thenCompose(done -> super.shutdown());
 	}
 

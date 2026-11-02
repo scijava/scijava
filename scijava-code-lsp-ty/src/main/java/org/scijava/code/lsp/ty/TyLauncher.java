@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.jedi;
+package org.scijava.code.lsp.ty;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.server.ServerLauncher;
 
 /**
- * Starts jedi-language-server: run in an environment of its own (built by
+ * Starts ty's language server: run in an environment of its own (built by
  * Appose the first time it is needed), to analyze scripts against their
  * environment's Python (if known) and extra search paths (e.g. stubs of Java
  * packages). {@link PythonServerPlugin} serves
@@ -48,20 +48,22 @@ import org.scijava.code.lsp.server.ServerLauncher;
  *
  * @author Gabriel Selzer
  */
-final class JediLauncher implements ServerLauncher {
+final class TyLauncher implements ServerLauncher {
 
 	/** Name of the environment in which the server runs. */
-	static final String ENV = "code-lsp-jedi";
+	static final String ENV = "code-lsp-ty";
 
 	/**
-	 * A Python script that runs jedi-language-server, and stops it if this JVM
-	 * dies without stopping it (e.g. when killed). NB: The server wouldn't
-	 * notice on its own; on Windows, it would even spin, failing to write to the
-	 * closed pipe.
+	 * A Python script that runs ty's language server, and stops it if this JVM
+	 * dies without stopping it (e.g. when killed).
+	 * <p>
+	 * The server is told that the environment is an active conda environment:
+	 * so, for scripts whose environment's Python is not known, it uses its own
+	 * environment's Python.
+	 * </p>
 	 * <p>
 	 * The JVM's process ID is passed as the script's argument. A background
-	 * thread waits for that process to end, then exits the whole Python
-	 * process, server and all:
+	 * thread waits for that process to end, then kills the server and exits:
 	 * </p>
 	 * <ul>
 	 * <li>On Windows, it waits on a handle to the JVM's process (or not at all,
@@ -72,8 +74,11 @@ final class JediLauncher implements ServerLauncher {
 	 * </ul>
 	 */
 	static final String LAUNCHER = String.join("\n", //
-		"import os, sys, threading, time", //
+		"import os, subprocess, sys, threading, time", //
+		"from ty import find_ty_bin", //
 		"parent = int(sys.argv.pop(1))", //
+		"server = subprocess.Popen([find_ty_bin(), 'server'],", //
+		"    env=dict(os.environ, CONDA_PREFIX=sys.prefix))", //
 		"def watch():", //
 		"    if os.name == 'nt':", //
 		"        import ctypes", //
@@ -82,10 +87,10 @@ final class JediLauncher implements ServerLauncher {
 		"        if h: k.WaitForSingleObject(h, 0xFFFFFFFF)", //
 		"    else:", //
 		"        while os.getppid() == parent: time.sleep(2)", //
+		"    server.kill()", //
 		"    os._exit(0)", //
 		"threading.Thread(target=watch, daemon=True).start()", //
-		"from jedi_language_server.cli import cli", //
-		"cli()");
+		"sys.exit(server.wait())");
 
 	/** How large the error log may grow before it is started anew, in bytes. */
 	private static final long MAX_LOG = 5 * 1024 * 1024;
@@ -99,7 +104,7 @@ final class JediLauncher implements ServerLauncher {
 	private final File log;
 
 	/** Runs the server in its own environment, building it if needed. */
-	JediLauncher() {
+	TyLauncher() {
 		final File envs = new File(Environments.apposeEnvsDir());
 		workspace = new File(envs, ENV + "-workspace");
 		log = new File(envs, ENV + "-server.log");
@@ -120,7 +125,7 @@ final class JediLauncher implements ServerLauncher {
 			throw exc;
 		}
 		catch (final Exception exc) {
-			throw new IOException("No Python for jedi-language-server", exc);
+			throw new IOException("No Python for ty", exc);
 		}
 		log.getParentFile().mkdirs();
 		if (log.length() > MAX_LOG) log.delete();
@@ -132,33 +137,28 @@ final class JediLauncher implements ServerLauncher {
 
 	@Override
 	public Object initializationOptions(final Environment env) {
-		// Workspace options: where the scripts run.
-		// NB: Without an environment, Jedi uses the server's own Python.
-		final Map<String, Object> workspaceOptions = new LinkedHashMap<>();
-		env.interpreter().ifPresent(p -> workspaceOptions.put("environmentPath",
-			p));
-		workspaceOptions.put("extraPaths", env.paths());
+		// Environment options: where the scripts run.
+		// NB: Without an interpreter, ty uses the server's own Python.
+		final Map<String, Object> environment = new LinkedHashMap<>();
+		env.interpreter().ifPresent(p -> environment.put("python", p));
+		environment.put("extra-paths", env.paths());
 
-		// Diagnostics options: Jedi's diagnostics are syntax errors, found as the
-		// script changes. NB: These are jedi-language-server's defaults (but for
-		// didSave, which is never sent), stated as what we rely on.
-		final Map<String, Object> diagnostics = new LinkedHashMap<>();
-		diagnostics.put("enable", true);
-		diagnostics.put("didOpen", true);
-		diagnostics.put("didChange", true);
-		diagnostics.put("didSave", false);
-
-		// Combine them all
+		// Combine them all. NB: ty reports the diagnostics (syntax errors
+		// included) of open scripts by default; stated as what we rely on.
 		final Map<String, Object> options = new LinkedHashMap<>();
-		options.put("workspace", workspaceOptions);
-		options.put("diagnostics", diagnostics);
+		options.put("configuration", Map.of("environment", environment));
+		options.put("diagnosticMode", "openFilesOnly");
+		options.put("showSyntaxErrors", true);
+		// NB: Completions of names the script has in scope only, not of names to
+		// import from elsewhere.
+		options.put("completions", Map.of("autoImport", false));
 		return options;
 	}
 
 	@Override
 	public String rootUri(final Environment env) {
-		// NB: jedi-language-server applies its workspace options only with a
-		// root. We give the server an empty one
+		// NB: ty needs a workspace root. We give the server an empty one, so it
+		// finds no project (or .venv) there
 		workspace.mkdirs();
 		return workspace.toURI().toString();
 	}
@@ -166,8 +166,8 @@ final class JediLauncher implements ServerLauncher {
 	// -- Helper methods --
 
 	/**
-	 * Gets the Python of the server's environment: Python, Jedi,
-	 * jedi-language-server and uv; built first if needed (once per session,
+	 * Gets the Python of the server's environment: Python, ty and NumPy; built
+	 * first if needed (once per session,
 	 * which is quick if nothing changed).
 	 */
 	static synchronized String python() throws Exception {
@@ -188,14 +188,13 @@ final class JediLauncher implements ServerLauncher {
 			"\n" + //
 			"[dependencies]\n" + //
 			"python = \"3.12.*\"\n" + //
-			"jedi = \">=0.19.2\"\n" + //
 			// NB: So that the types scientific scripts use most are known before
 			// their environment is (e.g. the NumPy arrays Appose scripts get images
 			// as).
 			"numpy = \"*\"\n" + //
 			"\n" + //
 			"[pypi-dependencies]\n" + //
-			"jedi-language-server = \">=0.47\"\n";
+			"ty = \">=0.0.10\"\n";
 	}
 
 	/** The conda platform (e.g. {@code linux-64}) of this machine. */

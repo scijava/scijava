@@ -9,11 +9,11 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-code-lsp-jedi</artifactId>
+	<artifactId>scijava-code-lsp-ty</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
-	<name>SciJava Code LSP Jedi</name>
-	<description>Python code intelligence for SciJava, via jedi-language-server.</description>
+	<name>SciJava Code LSP ty</name>
+	<description>Python code intelligence for SciJava, via ty.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2026</inceptionYear>
 	<organization>
@@ -72,7 +72,7 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.code.lsp.jedi</package-name>
+		<package-name>org.scijava.code.lsp.ty</package-name>
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 

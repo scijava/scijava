@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Python code intelligence for SciJava, via jedi-language-server.
+ * Python code intelligence for SciJava, via ty.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -29,7 +29,7 @@
 
 // NB: Open, so that SciJava Common can create its plugin reflectively. Exports
 // nothing: the plugin is found by SciJava Common, not used directly.
-open module org.scijava.code.lsp.jedi {
+open module org.scijava.code.lsp.ty {
 	requires org.scijava.code.lsp;
 	requires org.apposed.appose;
 	requires com.fasterxml.jackson.databind;

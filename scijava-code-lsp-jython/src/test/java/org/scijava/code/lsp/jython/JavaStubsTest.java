@@ -82,6 +82,11 @@ public class JavaStubsTest {
 			"list\\[float\\]: \\.\\.\\.\n");
 		// Getters as properties, as Jython offers them.
 		assertTrue(list.contains("\n    empty: bool\n"), list);
+		// Their names as Jython's: getURL() as URL, not uRL.
+		final String connection = section(stubs.stub("java.net", new TreeSet<>()),
+			"URLConnection");
+		assertTrue(connection.contains("\n    URL: URL\n"), connection);
+		assertFalse(connection.contains("uRL"), connection);
 		// Not Python (e.g. Outer$Inner): left out.
 		assertFalse(stub.contains("$"), stub);
 		// Other packages: imported, and noted.

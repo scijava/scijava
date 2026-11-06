@@ -454,8 +454,10 @@ class JavaStubs {
 		else if (name.startsWith("is") && name.length() > 2 && (m
 			.getReturnType() == boolean.class)) rest = name.substring(2);
 		if (rest == null || !Character.isUpperCase(rest.charAt(0))) return null;
-		final String property = Character.toLowerCase(rest.charAt(0)) + rest
-			.substring(1);
+		// NB: As Jython names them (like JavaBeans): getURL() as URL, not uRL.
+		final String property = rest.length() > 1 && Character.isUpperCase(rest
+			.charAt(1)) ? rest : Character.toLowerCase(rest.charAt(0)) + rest
+				.substring(1);
 		return valid(property) ? property : null;
 	}
 

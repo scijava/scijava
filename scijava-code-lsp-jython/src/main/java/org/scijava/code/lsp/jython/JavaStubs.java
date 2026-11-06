@@ -67,8 +67,7 @@ import org.scijava.code.lsp.jvm.ClassIndex;
 
 /**
  * Writes Python type stubs ({@code .pyi}) of Java packages, so that a Python
- * language server (e.g. jedi-language-server) knows the Java classes a Jython
- * script uses.
+ * language server knows the Java classes a Jython script uses.
  * <p>
  * For example, for {@code from ij import IJ}, the server finds
  * {@code ij/__init__.pyi}, with {@code IJ}'s methods, their parameters and
@@ -107,7 +106,6 @@ class JavaStubs {
 
 	private final File dir;
 	private final ClassLoader loader;
-	private final Function<String, List<String>> classNames;
 
 	/** The packages done (or being done). */
 	private final Set<String> done = ConcurrentHashMap.newKeySet();
@@ -128,21 +126,8 @@ class JavaStubs {
 	 * @param loader Loads the classes.
 	 */
 	public JavaStubs(final File dir, final ClassLoader loader) {
-		this(dir, loader, JavaStubs::indexedClassNames);
-	}
-
-	/**
-	 * @param dir Where to write the stubs.
-	 * @param loader Loads the classes.
-	 * @param classNames Lists the (fully qualified) names of the classes in a
-	 *          package.
-	 */
-	JavaStubs(final File dir, final ClassLoader loader,
-		final Function<String, List<String>> classNames)
-	{
 		this.dir = dir;
 		this.loader = loader;
-		this.classNames = classNames;
 	}
 
 	/** Where the stubs are written: a Python search path. */
@@ -279,7 +264,7 @@ class JavaStubs {
 	 */
 	String stub(final String pkg, final Set<String> refs) {
 		final List<Class<?>> classes = new ArrayList<>();
-		for (final String name : classNames.apply(pkg)) {
+		for (final String name : classNames(pkg)) {
 			if (name.indexOf('$') >= 0) continue; // NB: Nested ones, in their outer.
 			try {
 				final Class<?> c = Class.forName(name, false, loader);
@@ -503,7 +488,7 @@ class JavaStubs {
 	}
 
 	/** Lists a package's classes from the {@link ClassIndex}. */
-	private static List<String> indexedClassNames(final String pkg) {
+	private static List<String> classNames(final String pkg) {
 		final String prefix = pkg + ".";
 		return ClassIndex.findClassNamesForPackage(pkg).filter(n -> n.startsWith(
 			prefix) && n.indexOf('.', prefix.length()) < 0).collect(Collectors

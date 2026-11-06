@@ -44,8 +44,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -74,10 +76,9 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  * return types.
  * </p>
  * <p>
- * Stubs are written on demand, per package, from the classes themselves (as
- * the given class loader loads them), in the background; and so are the
- * stubs of the packages their signatures refer to, a few steps on, within a
- * limit. Java types become Python ones where Jython converts them (e.g.
+ * Stubs are written on demand, asynchronously, per package, recursively (as
+ * the given class loader loads them) within a limit. Java types become
+ * Python ones when Jython automatically converts them (e.g.
  * {@code String} becomes {@code str}); overloads become
  * {@code typing.overload}s; getters become properties too, as Jython offers
  * them.
@@ -160,7 +161,7 @@ class JavaStubs {
 	 *
 	 * @return Done once the given packages' stubs are written.
 	 */
-	public CompletableFuture<Void> ensure(final Collection<String> packages) {
+	CompletableFuture<Void> ensure(final Collection<String> packages) {
 		final List<String> todo = packages.stream().filter(p -> !done.contains(p))
 			.collect(Collectors.toList());
 		if (todo.isEmpty()) return CompletableFuture.completedFuture(null);
@@ -200,7 +201,7 @@ class JavaStubs {
 	 * {@code from ij import IJ}, and {@code java.util} for
 	 * {@code import java.util}.
 	 */
-	public static Set<String> imports(final String script) {
+	static Set<String> imports(final String script) {
 		final Set<String> packages = new TreeSet<>();
 		// NB: Statements on one line are separated by semicolons.
 		for (final String line : script.split("[\n;]")) {
@@ -361,13 +362,42 @@ class JavaStubs {
 			}
 		}
 
-		// Bean properties, as Jython offers them: getTitle() as title.
-		for (final List<Method> overloads : methods.values()) {
-			for (final Method m : overloads) {
-				final String property = property(m);
-				if (property == null || !names.add(property)) continue;
-				sb.append(in).append(property).append(": ").append(type(m
-					.getReturnType(), pkg, refs)).append('\n');
+		// Jython uses Bean properties. Without a setter, it is read-only; with a
+		// setter but no getter, write-only. The getter or setter may be inherited;
+		// the property is stubbed where either is declared.
+		final Map<String, Method> getters = new LinkedHashMap<>();
+		final Map<String, List<Method>> setters = new HashMap<>();
+		for (final Method m : sorted(c.getMethods(), JavaStubs::signatureKey)) {
+			if (m.isSynthetic() || m.isBridge()) continue;
+			final String g = property(m);
+			if (g != null) getters.putIfAbsent(g, m);
+			final String s = setProperty(m);
+			if (s != null) setters.computeIfAbsent(s, k -> new ArrayList<>()).add(m);
+		}
+		final Set<String> properties = new TreeSet<>(getters.keySet());
+		properties.addAll(setters.keySet());
+		for (final String property : properties) {
+			final Method getter = getters.get(property);
+			final List<Method> candidates = setters.getOrDefault(property,
+				Collections.emptyList());
+			// NB: Jython sets with the setter of the getter's type; with no getter,
+			// only with a lone setter.
+			final Method setter = getter != null ? candidates.stream().filter(
+				s -> s.getParameterTypes()[0] == getter.getReturnType()).findFirst()
+				.orElse(null) : candidates.size() == 1 ? candidates.get(0) : null;
+			if (getter == null && setter == null) continue;
+			if ((getter == null || getter.getDeclaringClass() != c) &&
+				(setter == null || setter.getDeclaringClass() != c)) continue;
+			if (!names.add(property)) continue;
+			if (setter == null) {
+				sb.append(in).append("@property\n").append(in).append("def ").append(
+					property).append("(self) -> ").append(type(getter.getReturnType(),
+						pkg, refs)).append(": ...\n");
+			}
+			else {
+				sb.append(in).append(property).append(": ").append(type(getter != null
+					? getter.getReturnType() : setter.getParameterTypes()[0], pkg, refs))
+					.append('\n');
 			}
 		}
 
@@ -453,6 +483,22 @@ class JavaStubs {
 		if (name.startsWith("get") && name.length() > 3) rest = name.substring(3);
 		else if (name.startsWith("is") && name.length() > 2 && (m
 			.getReturnType() == boolean.class)) rest = name.substring(2);
+		return propertyName(rest);
+	}
+
+	/** The property a setter sets (e.g. title for setTitle(t)), or null. */
+	private static String setProperty(final Method m) {
+		if (Modifier.isStatic(m.getModifiers()) || m.getParameterCount() != 1) {
+			return null;
+		}
+		// NB: Whatever it returns (e.g. this, to chain calls).
+		final String name = m.getName();
+		return name.startsWith("set") && name.length() > 3 ? propertyName(name
+			.substring(3)) : null;
+	}
+
+	/** A property's name, from its getter's or setter's (e.g. Title), or null. */
+	private static String propertyName(final String rest) {
 		if (rest == null || !Character.isUpperCase(rest.charAt(0))) return null;
 		// NB: As Jython names them (like JavaBeans): getURL() as URL, not uRL.
 		final String property = rest.length() > 1 && Character.isUpperCase(rest

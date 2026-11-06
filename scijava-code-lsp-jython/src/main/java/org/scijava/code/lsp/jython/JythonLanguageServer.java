@@ -154,6 +154,9 @@ class JythonLanguageServer extends AbstractLanguageServer {
 
 	/** Where the Python server runs: its own Python, searching the stubs. */
 	static Environment environment(final JavaStubs stubs) {
+		// NB: The server may refuse a search path that is not (yet) a directory,
+		// as before the first stubs are written.
+		stubs.dir().mkdirs();
 		return new Environment().withPaths(Collections.singletonList(stubs.dir()
 			.getAbsolutePath()));
 	}

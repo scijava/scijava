@@ -224,7 +224,7 @@ class ProcessLanguageServer implements LanguageServer,
 
 	@Override
 	public void didChangeWatchedFiles(final DidChangeWatchedFilesParams p) {
-		// NB: Servers may cache files they read (e.g. ty), and so must be told
+		// NB: Servers may cache files they read, and so must be told
 		// when they change. A process started later reads them anew.
 		servers.forEach(s -> s.remote().getWorkspaceService()
 			.didChangeWatchedFiles(p));

@@ -234,8 +234,8 @@ class JavaStubs {
 		File d = dir;
 		for (final String part : pkg.split("\\.")) {
 			d = new File(d, part);
-			// NB: New directories are told of too: ty finds the files in a new
-			// directory only then.
+			// NB: New directories are told of too: a server may find the files in
+			// a new directory only then.
 			if (d.mkdirs()) events.add(event(d, FileChangeType.Created));
 			final File init = new File(d, "__init__.pyi");
 			if (!init.exists()) {

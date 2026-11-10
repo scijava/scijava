@@ -84,6 +84,10 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  * them.
  * </p>
  * <p>
+ * All servers attached to the same JVM share one instance, obtainable with
+ * {@link #instance()}
+ * </p>
+ * <p>
  * TODO: Consider scyjava's stubs instead (see
  * <a href="https://github.com/scijava/scyjava/pull/86">scyjava.types</a>).
  * </p>
@@ -92,7 +96,7 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  */
 class JavaStubs {
 
-	/** How many packages to write stubs for, at most, per session. */
+	/** How many packages to write stubs for, at most. */
 	private static final int MAX_PACKAGES = 400;
 
 	/** How many steps to follow the packages signatures refer to. */
@@ -126,9 +130,32 @@ class JavaStubs {
 	 * @param dir Where to write the stubs.
 	 * @param loader Loads the classes.
 	 */
-	public JavaStubs(final File dir, final ClassLoader loader) {
+	private JavaStubs(final File dir, final ClassLoader loader) {
 		this.dir = dir;
 		this.loader = loader;
+	}
+
+	/**
+	 * Gets the stubs all servers share, as written to one directory: the
+	 * {@code scijava.jython.stubs} property, or else
+	 * {@code ~/.cache/scijava/jython-stubs}.
+	 */
+	static JavaStubs instance() {
+		return Holder.INSTANCE;
+	}
+
+	/** Creates the shared stubs on first use. */
+	private static final class Holder {
+
+		private static final JavaStubs INSTANCE = new JavaStubs(dir(), Thread
+			.currentThread().getContextClassLoader());
+
+		private static File dir() {
+			final String dir = System.getProperty("scijava.jython.stubs");
+			return dir != null ? new File(dir) : new File(System.getProperty(
+				"user.home"), ".cache" + File.separator + "scijava" + File.separator +
+					"jython-stubs");
+		}
 	}
 
 	/** Where the stubs are written: a Python search path. */

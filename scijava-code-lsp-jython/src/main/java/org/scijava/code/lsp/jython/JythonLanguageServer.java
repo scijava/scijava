@@ -68,6 +68,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.ClassIndex;
@@ -126,7 +127,7 @@ class JythonLanguageServer extends AbstractLanguageServer {
 
 	/** The Python server. */
 	private final LanguageServer python;
-	private final JavaStubs stubs;
+	private final JavaStubs stubs = JavaStubs.instance();
 
 	/** Tells the Python server of the stubs written, which it may have cached. */
 	private final Consumer<List<FileEvent>> written;
@@ -136,29 +137,22 @@ class JythonLanguageServer extends AbstractLanguageServer {
 
 	/**
 	 * @param environment Where the scripts run (e.g. a live interpreter).
-	 * @param python The Python server, e.g. of {@link #environment(JavaStubs)}.
-	 * @param stubs The stubs of Java packages, which the server searches.
+	 * @param servers Launches the Python server.
 	 */
 	JythonLanguageServer(final Environment environment,
-		final LanguageServer python, final JavaStubs stubs)
+		final LanguageServerService servers)
 	{
 		super(environment);
-		this.python = python;
-		this.stubs = stubs;
+		// NB: The server may refuse a search path that is not (yet) a directory,
+		// as before the first stubs are written.
+		stubs.dir().mkdirs();
+		python = servers.launch("python", new Environment().withPaths(Collections
+			.singletonList(stubs.dir().getAbsolutePath())));
 		written = events -> python.getWorkspaceService().didChangeWatchedFiles(
 			new DidChangeWatchedFilesParams(events));
 		stubs.listen(written);
 		python.initialize(new InitializeParams()).thenRun(() -> python
 			.initialized(new InitializedParams()));
-	}
-
-	/** Where the Python server runs: its own Python, searching the stubs. */
-	static Environment environment(final JavaStubs stubs) {
-		// NB: The server may refuse a search path that is not (yet) a directory,
-		// as before the first stubs are written.
-		stubs.dir().mkdirs();
-		return new Environment().withPaths(Collections.singletonList(stubs.dir()
-			.getAbsolutePath()));
 	}
 
 	// -- LanguageServer, with the Python server --

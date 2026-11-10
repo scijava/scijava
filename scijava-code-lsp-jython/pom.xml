@@ -140,6 +140,10 @@
 					Fiji, both are found.
 					-->
 					<useModulePath>false</useModulePath>
+					<systemPropertyVariables>
+						<!-- NB: Isolate tests' java stubs. -->
+						<scijava.jython.stubs>${project.build.directory}/jython-stubs</scijava.jython.stubs>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -28,8 +28,6 @@
  */
 package org.scijava.code.lsp.jython;
 
-import java.io.File;
-
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.Priority;
 import org.scijava.code.lsp.LanguageServerService;
@@ -51,8 +49,6 @@ public class JythonLanguageServerPlugin implements LanguageServerPlugin {
 	@Parameter
 	private LanguageServerService servers;
 
-	private JavaStubs stubs;
-
 	@Override
 	public boolean supports(final String languageId) {
 		// NB: Not "python", which this builds on (see JythonLanguageServer).
@@ -63,20 +59,7 @@ public class JythonLanguageServerPlugin implements LanguageServerPlugin {
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
-		final JavaStubs s = stubs();
-		return new JythonLanguageServer(environment, servers.launch("python",
-			JythonLanguageServer.environment(s)), s);
-	}
-
-	/** Gets the stubs of Java packages, creating them on first use. */
-	synchronized JavaStubs stubs() {
-		if (stubs != null) return stubs;
-		final String dir = System.getProperty("scijava.jython.stubs");
-		stubs = new JavaStubs(dir != null ? new File(dir) : new File(System
-			.getProperty("user.home"), ".cache" + File.separator + "scijava" +
-				File.separator + "jython-stubs"), Thread.currentThread()
-					.getContextClassLoader());
-		return stubs;
+		return new JythonLanguageServer(environment, servers);
 	}
 
 }

@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -83,11 +82,6 @@ public class JythonLanguageServerTest {
 	};
 
 	private static Context context;
-
-	/** The stubs of Java packages, written where the tests run. */
-	private static final JavaStubs STUBS = new JavaStubs(new File("target",
-		"jython-stubs").getAbsoluteFile(), JythonLanguageServerTest.class
-			.getClassLoader());
 
 	@BeforeAll
 	public static void startContext() {
@@ -268,8 +262,7 @@ public class JythonLanguageServerTest {
 		public LanguageServer create(final String languageId,
 			final Environment environment)
 		{
-			return new JythonLanguageServer(environment, servers.launch("python",
-				JythonLanguageServer.environment(STUBS)), STUBS);
+			return new JythonLanguageServer(environment, servers);
 		}
 	}
 

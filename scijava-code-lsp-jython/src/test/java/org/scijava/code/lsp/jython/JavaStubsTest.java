@@ -40,10 +40,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.lsp4j.FileChangeType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -54,8 +52,7 @@ import org.junit.jupiter.api.Test;
  */
 public class JavaStubsTest {
 
-	private static final JavaStubs STUBS = new JavaStubs(new File("unused"),
-		JavaStubsTest.class.getClassLoader());
+	private static final JavaStubs STUBS = JavaStubs.instance();
 
 	/** The packages java.util's stub refers to. */
 	private static final Set<String> UTIL_REFS = new TreeSet<>();
@@ -174,26 +171,30 @@ public class JavaStubsTest {
 
 	@Test
 	public void testEnsure() throws Exception {
-		// NB: Under target, not a temporary directory: the stubs of the packages
-		// referred to (and of theirs) go on being written after the test.
-		final File dir = new File("target", "java-stubs-test").getAbsoluteFile();
-		delete(dir);
-		final JavaStubs stubs = new JavaStubs(dir, getClass().getClassLoader());
-		final CompletableFuture<Void> util = new CompletableFuture<>();
-		stubs.listen(events -> {
-			if (events.stream().anyMatch(e -> e.getType() == FileChangeType.Changed &&
-				e.getUri().endsWith("/java/util/__init__.pyi"))) util.complete(null);
-		});
-		stubs.ensure(Collections.singleton("java.util.concurrent")).get(30,
+		// NB: The stubs may have been written already, by other tests sharing
+		// the instance: either way, they're there once ensured.
+		final File dir = STUBS.dir();
+		STUBS.ensure(Collections.singleton("java.util.concurrent")).get(30,
 			TimeUnit.SECONDS);
 		assertTrue(new File(dir, "java/util/concurrent/__init__.pyi").isFile());
 		// Parents are packages too.
 		assertTrue(new File(dir, "java/__init__.pyi").isFile());
-		// The packages referred to follow (e.g. java.util).
-		util.get(30, TimeUnit.SECONDS);
-		assertTrue(new String(Files.readAllBytes(new File(dir,
-			"java/util/__init__.pyi").toPath()), StandardCharsets.UTF_8).contains(
-				"\nclass ArrayList("));
+		// The packages referred to follow (e.g. java.util), in the background.
+		final File util = new File(dir, "java/util/__init__.pyi");
+		final long deadline = System.currentTimeMillis() + 30_000;
+		while (!contains(util, "\nclass ArrayList(") && System
+			.currentTimeMillis() < deadline)
+		{
+			Thread.sleep(100);
+		}
+		assertTrue(contains(util, "\nclass ArrayList("));
+	}
+
+	private static boolean contains(final File file, final String text)
+		throws java.io.IOException
+	{
+		return file.isFile() && new String(Files.readAllBytes(file.toPath()),
+			StandardCharsets.UTF_8).contains(text);
 	}
 
 	@Test
@@ -217,13 +218,4 @@ public class JavaStubsTest {
 		return stub.substring(start, end < 0 ? stub.length() : end);
 	}
 
-	private static void delete(final File dir) throws java.io.IOException {
-		if (!dir.exists()) return;
-		try (java.util.stream.Stream<java.nio.file.Path> paths = Files.walk(dir
-			.toPath()))
-		{
-			paths.sorted(java.util.Comparator.reverseOrder()).forEach(p -> p
-				.toFile().delete());
-		}
-	}
 }

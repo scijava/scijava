@@ -190,8 +190,8 @@ class TyLanguageServer implements LanguageServer,
 	}
 
 	/**
-	 * A completion as a callable, from its signature (its detail); or null if
-	 * it has none.
+	 * The completion as a snippet with its parameters, from its signature (see
+	 * {@link #parseCallable}); or null if it has none.
 	 * <p>
 	 * ty gives a function's signature only as text (e.g.
 	 * {@code def dumps(obj: Any, *, indent: int | None = None) -> str}), so an
@@ -210,7 +210,7 @@ class TyLanguageServer implements LanguageServer,
 		if (item.getDetail() == null) return null;
 		final String name = item.getInsertText() != null ? item.getInsertText()
 			: item.getLabel();
-		final Callable parsed = parse(name, item.getDetail());
+		final Callable parsed = parseCallable(name, item.getDetail());
 		if (parsed == null) return null;
 		final CompletionItem out = new Callable(name, parsed.params(), parsed
 			.returnType()).kind(CompletionItemKind.Method).detail(item.getDetail())
@@ -222,11 +222,19 @@ class TyLanguageServer implements LanguageServer,
 	}
 
 	/**
-	 * Parses a Python signature (as ty writes them): the parameters, with
-	 * their annotations as types; and the return annotation. Of overloads, the
-	 * first. Returns null if it is not a signature.
+	 * Parses a signature, as ty writes it in a completion's detail, into a
+	 * {@link Callable}: its parameters' names and types, and its return type.
+	 * E.g. {@code def dumps(obj: Any, *, indent: int | None = None) -> str}
+	 * becomes {@code dumps}, with parameters {@code Any obj} and
+	 * {@code int | None indent}, returning {@code str}. Also reads methods
+	 * ({@code bound method str.upper() -> str}) and overloads
+	 * ({@code Overload[(...) -> A, (...) -> B]}, as the first). Returns null if
+	 * it is not a signature (e.g. {@code <class 'Path'>}, or {@code str}).
+	 *
+	 * @param name The callable's name (the signature's may be qualified).
+	 * @param signature The signature, as ty writes it.
 	 */
-	static Callable parse(final String name, String signature) {
+	private static Callable parseCallable(final String name, String signature) {
 		if (signature.startsWith("Overload[")) signature = signature.substring(9);
 		final int open = signature.indexOf('(');
 		if (open < 0) return null;

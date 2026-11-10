@@ -32,6 +32,7 @@ package org.scijava.code.lsp.ty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.awaitility.Awaitility.await;
 
 import java.util.List;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
@@ -54,6 +56,17 @@ import org.scijava.code.lsp.Positions;
  * @author Gabriel Selzer
  */
 public class TyLifecycleIntegrationTest {
+
+	/** Skips the tests if ty's environment cannot be built (e.g. offline). */
+	@BeforeAll
+	public static void buildTy() {
+		try {
+			TyLauncher.python();
+		}
+		catch (final Exception exc) {
+			assumeTrue(false, "ty's environment could not be built: " + exc);
+		}
+	}
 
 	@Test
 	public void testLifecycle() throws Exception {

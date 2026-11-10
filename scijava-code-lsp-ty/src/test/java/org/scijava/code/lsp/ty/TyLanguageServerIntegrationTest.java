@@ -31,21 +31,25 @@ package org.scijava.code.lsp.ty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.script.ScriptEngine;
 
 import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Hover;
+import org.eclipse.lsp4j.InsertTextFormat;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -64,13 +68,13 @@ import org.scijava.script.ScriptLanguage;
  * {@link TyLanguageServerPlugin}), with a real ty server, on plain
  * Python, as editors use it.
  * <p>
- * The first request builds ty's environment, which
- * requires network access.
+ * ty's environment is built first, which requires network access (unless
+ * built already); if it cannot be, the tests are skipped.
  * </p>
  *
  * @author Gabriel Selzer
  */
-public class TyLanguageServerPluginIntegrationTest {
+public class TyLanguageServerIntegrationTest {
 
 	/** How long to wait for environments to build. */
 	private static final long BUILD_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
@@ -92,6 +96,14 @@ public class TyLanguageServerPluginIntegrationTest {
 
 	@BeforeAll
 	public static void setUp() {
+		// NB: Skipped if ty's environment cannot be built (e.g. offline), rather
+		// than waiting for servers that cannot start.
+		try {
+			TyLauncher.python();
+		}
+		catch (final Exception exc) {
+			assumeTrue(false, "ty's environment could not be built: " + exc);
+		}
 		context = new Context(LanguageServerService.class);
 		servers = context.service(LanguageServerService.class);
 		session = session();
@@ -113,9 +125,81 @@ public class TyLanguageServerPluginIntegrationTest {
 			.equals("dumps") && c.getLabelDetails() != null).findFirst().get();
 		assertTrue(dumps.getLabelDetails().getDetail().startsWith(
 			"(Any obj, bool skipkeys"), dumps.getLabelDetails().getDetail());
-		assertTrue(dumps.getDocumentation() != null || session.resolve(dumps).get(
-			1, TimeUnit.MINUTES).getDocumentation() != null);
-		report("import json\njson.l", "loads", "o");
+		assertNotNull(dumps.getDocumentation());
+	}
+
+	/**
+	 * ty returns some nonsensical completions. For example, completions include
+	 * everything that contains the typed letters; e.g. "False" and
+	 * "else", for "le". This test ensures such completions are filtered out.
+	 */
+	@Test
+	public void testCompletionFiltering() throws Exception {
+		// Completions not starting with the typed characters are not present.
+		final List<String> le = labels(completeUntil("x = le", "len"));
+		assertTrue(le.stream().allMatch(l -> l.toLowerCase().startsWith("le")));
+		// Underscore names are not returned unless asked for.
+		final List<String> du = labels(completeUntil("import json\njson.du",
+			"dumps"));
+		assertFalse(du.stream().anyMatch(l -> l.startsWith("_")));
+		completeUntil("import json\njson._", "__name__");
+	}
+
+	/**
+	 * ty returns functions' signatures only as text, in each completion's
+	 * detail; e.g. "def len(obj: Sized, /) -> int". This test ensures such
+	 * completions are converted to snippets, with their parameters and return
+	 * types parsed correctly from the many forms of signatures.
+	 */
+	@Test
+	public void testCallables() throws Exception {
+		// Brackets in types (their commas do not separate parameters).
+		final String dumps = detail("import json\njson.dum", "dumps");
+		assertTrue(dumps.contains(", tuple[str, str] | None separators, " +
+			"((Any, /) -> Any) | None default, "), dumps);
+		// Positional-only ones; and the return type.
+		final CompletionItem len = callable("x = le", "len");
+		assertEquals("(Sized obj)", len.getLabelDetails().getDetail());
+		assertEquals("int", len.getLabelDetails().getDescription());
+		// Methods.
+		assertEquals("()", detail("s = 'x'\ns.isu", "isupper"));
+		// Strings in types; keyword-only ones; and **kwargs.
+		assertEquals("(tuple[int, str] a, Literal[\"x\", \"y\"] b, kw)", detail(
+			"from typing import Literal\ndef func(a: tuple[int, str] = (1, \",\"), " +
+				"/, *, b: Literal['x', 'y'] = 'x', **kw):\n    pass\nfu", "func"));
+		// Not classes, which ty gives no signatures of.
+		assertNotEquals(InsertTextFormat.Snippet, item("import json\njson.JSONDec",
+			"JSONDecoder").getInsertTextFormat());
+	}
+
+	/**
+	 * ty returns overloaded functions' signatures all together; e.g.
+	 * "Overload[(path: LiteralString, ...) -> LiteralString, ...]", for
+	 * os.path.join. This test ensures such completions are returned as
+	 * snippets, with the first overload's parameters.
+	 */
+	@Test
+	public void testOverloads() throws Exception {
+		// The first overload's signature.
+		final CompletionItem join = completeUntil("import os\nos.path.jo", "join")
+			.stream().filter(c -> c.getLabel().equals("join")).findFirst().get();
+		assertEquals(InsertTextFormat.Snippet, join.getInsertTextFormat());
+		assertTrue(join.getLabelDetails().getDetail().startsWith(
+			"(LiteralString path"), join.getLabelDetails().getDetail());
+	}
+
+	/**
+	 * ty returns the same completions in imports as elsewhere, signatures
+	 * included; e.g. "dumps", for "from json import du". This test ensures
+	 * such completions are not returned as snippets: an import names things,
+	 * rather than calling them.
+	 */
+	@Test
+	public void testImportsAreNames() throws Exception {
+		// An import names things, rather than calling them.
+		final CompletionItem dumps = completeUntil("from json import du", "dumps")
+			.stream().filter(c -> c.getLabel().equals("dumps")).findFirst().get();
+		assertNotEquals(InsertTextFormat.Snippet, dumps.getInsertTextFormat());
 	}
 
 	@Test
@@ -236,24 +320,32 @@ public class TyLanguageServerPluginIntegrationTest {
 			.getItems();
 	}
 
-	/**
-	 * Prints how long completions take, once warm: for another keystroke of a
-	 * word the server has answered (cached); and for a new word.
-	 */
-	private static void report(final String code, final String expected,
-		final String more) throws Exception
+	/** The completion of the given name, once it appears. */
+	private static CompletionItem item(final String code, final String name)
+		throws Exception
 	{
-		completeUntil(code, expected);
-		long t0 = System.nanoTime();
-		final int n = complete(session, code + more).size();
-		final long cached = System.nanoTime() - t0;
-		final String other = code.substring(0, code.lastIndexOf('.') + 1) + "s";
-		t0 = System.nanoTime();
-		final CompletionList all = session.completion(other, other.length()).get(
-			1, TimeUnit.MINUTES);
-		final long arrived = System.nanoTime() - t0;
-		System.out.println("[completion timing] same word (cached): " + cached /
-			1000000 + " ms, " + n + " completions; new word: " + all.getItems()
-				.size() + " completions after " + arrived / 1000000 + " ms");
+		return completeUntil(code, name).stream().filter(c -> c.getLabel().equals(
+			name)).findFirst().get();
+	}
+
+	/** The completion of the given name, as a callable. */
+	private static CompletionItem callable(final String code, final String name)
+		throws Exception
+	{
+		final CompletionItem item = item(code, name);
+		assertEquals(InsertTextFormat.Snippet, item.getInsertTextFormat(), name);
+		return item;
+	}
+
+	/** The parameters of the callable completion of the given name. */
+	private static String detail(final String code, final String name)
+		throws Exception
+	{
+		return callable(code, name).getLabelDetails().getDetail();
+	}
+
+	private static List<String> labels(final List<CompletionItem> items) {
+		return items.stream().map(CompletionItem::getLabel).collect(Collectors
+			.toList());
 	}
 }

@@ -37,7 +37,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -46,31 +45,26 @@ import javax.script.ScriptEngine;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.SignatureHelp;
-import org.eclipse.lsp4j.services.LanguageServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;
 
 /**
- * Tests {@link JythonLanguageServer}: what it makes of plain Jython, as its
- * clients send it.
+ * Tests {@link JythonLanguageServer}
  *
- * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
 public class JythonLanguageServerTest {
 
-	/** A test fixture: a script language whose scripts are plain Jython. */
 	private static final ScriptLanguage TEST_LANGUAGE =
 		new AbstractScriptLanguage()
 	{
@@ -228,6 +222,11 @@ public class JythonLanguageServerTest {
 			live)).orElseGet(() -> new ScriptSession(servers, TEST_LANGUAGE));
 	}
 
+	/**
+	 * Makes {@code TEST_LANGUAGE} Jython, with no header, so that the tests
+	 * reach the real {@link JythonLanguageServerPlugin} through a
+	 * {@link ScriptSession}. (The real Jython dialect lives elsewhere.)
+	 */
 	@Plugin(type = ScriptDialect.class)
 	public static class TestDialect implements ScriptDialect {
 
@@ -238,31 +237,12 @@ public class JythonLanguageServerTest {
 
 		@Override
 		public String languageId() {
-			return "test";
+			return "jython";
 		}
 
 		@Override
 		public Header header(final Map<String, Variable> variables) {
 			return new Header("", Collections.emptySet());
-		}
-	}
-
-	@Plugin(type = LanguageServerPlugin.class)
-	public static class TestServers implements LanguageServerPlugin {
-
-		@Parameter
-		private LanguageServerService servers;
-
-		@Override
-		public boolean supports(final String languageId) {
-			return "test".equals(languageId);
-		}
-
-		@Override
-		public LanguageServer create(final String languageId,
-			final Environment environment)
-		{
-			return new JythonLanguageServer(environment, servers);
 		}
 	}
 

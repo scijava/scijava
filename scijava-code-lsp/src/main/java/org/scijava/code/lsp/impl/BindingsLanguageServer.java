@@ -50,10 +50,12 @@ import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.Members;
 
 /**
- * A language server knowing only the variables of a running interpreter (see
- * {@link Environment#live()}): their names, and the members of their values'
- * classes. It serves {@code plaintext} (see {@link BindingsServerPlugin}), as
- * scripts become whose languages have no servers of their own.
+ * A language server that knows the existing variables of a running interpreter
+ * (see {@link Environment#live()})
+ * <p>
+ * This language server should be considered a fallback when no dedicated
+ * language server is available.
+ * </p>
  *
  * @author Gabriel Selzer
  */

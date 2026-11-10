@@ -1,21 +1,15 @@
 # SciJava Code LSP ty
 
-Python code intelligence for SciJava scripts: [ty](https://docs.astral.sh/ty/)'s language server, offered to `scijava-code-lsp` for `python` by `TyLanguageServerPlugin`, made to work well in editors:
+A language server for `python`, backed by [ty](https://docs.astral.sh/ty/), for use with `scijava-code-lsp`.
 
-* Completions are asked about a word once (usually at its first character), and reused as the word is typed on; questions no longer of interest are cancelled; and the first completions of a word get their signatures, as snippets with their parameters and types.
-
-Script languages whose scripts become plain Python (e.g. scripting-appose-python's) get it this way; and servers building on Python's (e.g. scijava-code-lsp-jython's, beside Jython's own analysis).
-
-The server runs as a process, one per environment scripts run in (see `TyLauncher`), in a small environment of its own (`code-lsp-ty`: Python, ty, and NumPy), which [Appose](https://github.com/apposed/appose) builds next to its other environments the first time the server is needed; that takes a while only then. Its error output goes to `code-lsp-ty-server.log`, next to the environment.
-
-Each server analyzes scripts in exactly the environment it is given: its Python (if any; otherwise the server's own) and extra search paths (e.g. stubs of Java packages).
+ty runs as a process per environment scripts run in, in a small environment of its own, which [Appose](https://github.com/apposed/appose) builds the first time it is needed (see `TyLauncher`).
 
 ## Example
 
 ```java
 Context context = new Context(LanguageServerService.class);
 // (a) Start the server: the plugin offering "python", for scripts run by the
-// server's own Python (or, e.g., new Environment(python, paths, null)).
+// server's own Python (or, e.g., new Environment().withInterpreter(python)).
 LanguageServer server = context.service(LanguageServerService.class)
 	.launch("python", new Environment());
 server.initialize(new InitializeParams()).get();
@@ -31,5 +25,3 @@ server.getTextDocumentService().completion(new CompletionParams(
 
 context.dispose(); // Stops the server, too.
 ```
-
-`TyLifecycleIntegrationTest` does all this (and asks for hover too), then checks that disposing the context stops the server's process.

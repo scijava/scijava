@@ -50,10 +50,13 @@ import org.scijava.code.lsp.Positions;
 
 
 /**
- * Integration tests for {@link TyLanguageServerPlugin}.
- * Additionally useful for understanding usage.
+ * Tests that {@link TyLanguageServerPlugin}'s ty processes start when first
+ * used, and stop when the context is disposed. Also an example of using a
+ * server directly, through the {@link LanguageServer} API
  *
  * @author Gabriel Selzer
+ * @see TyLanguageServerIntegrationTest for specific tests of
+ * {@link LanguageServer} functionality
  */
 public class TyLifecycleIntegrationTest {
 

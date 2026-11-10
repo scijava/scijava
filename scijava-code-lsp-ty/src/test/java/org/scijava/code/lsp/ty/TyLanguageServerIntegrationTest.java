@@ -174,18 +174,18 @@ public class TyLanguageServerIntegrationTest {
 
 	/**
 	 * ty returns overloaded functions' signatures all together; e.g.
-	 * "Overload[(path: LiteralString, ...) -> LiteralString, ...]", for
-	 * os.path.join. This test ensures such completions are returned as
-	 * snippets, with the first overload's parameters.
+	 * "Overload[[_T](i: SupportsNext[_T], /) -> _T, [_T, _VT](i:
+	 * SupportsNext[_T], default: _VT, /) -> _T | _VT]", for next. This test
+	 * ensures such completions are returned as snippets, with the first
+	 * overload's parameters.
 	 */
 	@Test
 	public void testOverloads() throws Exception {
-		// The first overload's signature.
-		final CompletionItem join = completeUntil("import os\nos.path.jo", "join")
-			.stream().filter(c -> c.getLabel().equals("join")).findFirst().get();
-		assertEquals(InsertTextFormat.Snippet, join.getInsertTextFormat());
-		assertTrue(join.getLabelDetails().getDetail().startsWith(
-			"(LiteralString path"), join.getLabelDetails().getDetail());
+		// The first overload's signature (next(i), not next(i, default)); after
+		// its type parameters ([_T]).
+		final CompletionItem next = callable("x = nex", "next");
+		assertEquals("(SupportsNext[_T] i)", next.getLabelDetails().getDetail());
+		assertEquals("_T", next.getLabelDetails().getDescription());
 	}
 
 	/**

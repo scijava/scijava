@@ -29,11 +29,7 @@
 
 package org.scijava.code.lsp;
 
-
-import java.util.Map;
-
 import org.eclipse.lsp4j.services.LanguageServer;
-import org.scijava.code.lsp.ScriptDialect.Variable;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
 
@@ -55,17 +51,6 @@ public interface LanguageServerService extends SciJavaService {
 	 * @throws IllegalArgumentException If the language has none.
 	 */
 	ScriptDialect dialect(ScriptLanguage language);
-
-	/**
-	 * Gets a script as plain code of the LSP language of the given dialect: its
-	 * parameters declared, and the lines SciJava removes before it runs
-	 * blanked, as SciJava's own script processors find them.
-	 *
-	 * @param variables Others to declare too (e.g. a live interpreter's),
-	 *          which its parameters of the same names win over.
-	 */
-	ScriptDocument document(String script, ScriptDialect dialect,
-		Map<String, Variable> variables);
 
 	/** Whether any plugin serves scripts of the given language. */
 	boolean supports(ScriptLanguage language);

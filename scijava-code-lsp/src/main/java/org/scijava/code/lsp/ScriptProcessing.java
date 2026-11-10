@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp;
 
 import java.io.StringReader;
 import java.util.ArrayList;

@@ -29,16 +29,13 @@
 
 package org.scijava.code.lsp.impl;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.ScriptDialect;
-import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.Disposable;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
@@ -69,25 +66,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 	@Parameter(required = false)
 	private LogService log;
 
-	private final ScriptProcessing processing = new ScriptProcessing(
-			this::context);
-
 	private List<LanguageServerPlugin> plugins;
-
-	@Override
-	public ScriptDocument document(final String script,
-		final ScriptDialect dialect,
-		final Map<String, ScriptDialect.Variable> variables)
-	{
-		final ScriptProcessing.Processed p = processing.of(script);
-		final Map<String, ScriptDialect.Variable> all = new LinkedHashMap<>(
-			variables);
-		// NB: Parameters win, declared last.
-		all.keySet().removeAll(p.parameters.keySet());
-		p.parameters.forEach((name, type) -> all.put(name, ScriptDialect.Variable
-			.ofType(type)));
-		return ScriptDocument.of(script, all, p.removedLines, dialect);
-	}
 
 	@Override
 	public boolean supports(final ScriptLanguage language) {
@@ -126,6 +105,20 @@ public class DefaultLanguageServerService extends AbstractService implements
 		return plugin.create(languageId, environment);
 	}
 
+	/**
+	 * The highest-priority dialect of a script language.
+	 *
+	 * @throws IllegalArgumentException If the language has none.
+	 */
+	@Override
+	public synchronized ScriptDialect dialect(final ScriptLanguage language) {
+		for (var p : pluginService.createInstancesOfType(ScriptDialect.class)) {
+			if (p.supports(language)) return p;
+		}
+		throw new IllegalArgumentException(
+				"No ScriptDialect for script language: " + language);
+	}
+
 	// -- Disposable methods --
 
 	@Override
@@ -139,20 +132,6 @@ public class DefaultLanguageServerService extends AbstractService implements
 	}
 
 	// -- Helper methods --
-
-	/**
-	 * The highest-priority dialect of a script language.
-	 *
-	 * @throws IllegalArgumentException If the language has none.
-	 */
-	@Override
-	public synchronized ScriptDialect dialect(final ScriptLanguage language) {
-		for (var p : pluginService.createInstancesOfType(ScriptDialect.class)) {
-			if (p.supports(language)) return p;
-		}
-		throw new IllegalArgumentException(
-			"No ScriptDialect for script language: " + language);
-	}
 
 	/**
 	 * The highest-priority plugin serving an LSP language.

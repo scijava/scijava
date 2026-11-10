@@ -377,7 +377,9 @@ public final class ScriptSession implements AutoCloseable {
 		try {
 			final ScriptDialect dialect = servers.dialect(language);
 			if (servers.supports(dialect.languageId())) {
-				return text -> servers.document(text, dialect, live.map(
+				final ScriptProcessing processing = new ScriptProcessing(
+					servers::context);
+				return text -> document(processing, text, dialect, live.map(
 					ScriptSession::variables).orElse(Collections.emptyMap()));
 			}
 		}
@@ -385,6 +387,28 @@ public final class ScriptSession implements AutoCloseable {
 			// NB: The language has no dialect.
 		}
 		return ScriptDocument::of;
+	}
+
+	/**
+	 * A script as plain code of the LSP language of the given dialect: its
+	 * parameters declared, and the lines SciJava removes before it runs
+	 * blanked, as SciJava's own script processors find them.
+	 *
+	 * @param variables Others to declare too (e.g. a live interpreter's),
+	 *          which its parameters of the same names win over.
+	 */
+	private static ScriptDocument document(final ScriptProcessing processing,
+		final String script, final ScriptDialect dialect,
+		final Map<String, ScriptDialect.Variable> variables)
+	{
+		final ScriptProcessing.Processed p = processing.of(script);
+		final Map<String, ScriptDialect.Variable> all = new LinkedHashMap<>(
+			variables);
+		// NB: Parameters win, declared last.
+		all.keySet().removeAll(p.parameters.keySet());
+		p.parameters.forEach((name, type) -> all.put(name, ScriptDialect.Variable
+			.ofType(type)));
+		return ScriptDocument.of(script, all, p.removedLines, dialect);
 	}
 
 	/**

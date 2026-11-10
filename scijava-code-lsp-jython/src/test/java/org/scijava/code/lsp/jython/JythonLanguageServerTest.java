@@ -33,10 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -275,7 +272,7 @@ public class JythonLanguageServerTest {
 		try (ScriptSession s = session) {
 			final List<CompletionItem> items = new java.util.ArrayList<>(s.completion(
 				code, code.length()).get(30, TimeUnit.SECONDS).getItems());
-			items.sort((a, b) -> a.getSortText().compareTo(b.getSortText()));
+			items.sort(Comparator.comparing(CompletionItem::getSortText));
 			return items;
 		}
 		catch (final Exception exc) {

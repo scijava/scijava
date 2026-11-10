@@ -61,7 +61,7 @@ import org.scijava.script.ScriptLanguage;
 
 /**
  * End-to-end tests of the {@code python} server (see
- * {@link PythonServerPlugin}), with a real ty server, on plain
+ * {@link TyLanguageServerPlugin}), with a real ty server, on plain
  * Python, as editors use it.
  * <p>
  * The first request builds ty's environment, which
@@ -70,7 +70,7 @@ import org.scijava.script.ScriptLanguage;
  *
  * @author Gabriel Selzer
  */
-public class PythonLanguageServerIntegrationTest {
+public class TyLanguageServerPluginIntegrationTest {
 
 	/** How long to wait for environments to build. */
 	private static final long BUILD_TIMEOUT = TimeUnit.MINUTES.toMillis(15);

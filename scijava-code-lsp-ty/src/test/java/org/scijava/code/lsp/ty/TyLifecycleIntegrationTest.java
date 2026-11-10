@@ -48,7 +48,7 @@ import org.scijava.code.lsp.Positions;
 
 
 /**
- * Integration tests for {@link PythonServerPlugin}.
+ * Integration tests for {@link TyLanguageServerPlugin}.
  * Additionally useful for understanding usage.
  *
  * @author Gabriel Selzer

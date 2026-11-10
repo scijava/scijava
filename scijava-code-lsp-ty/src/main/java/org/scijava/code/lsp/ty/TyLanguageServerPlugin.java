@@ -42,16 +42,15 @@ import org.scijava.plugin.Plugin;
 /**
  * Serves {@code python}: ty's language server (see {@link TyLauncher}), one
  * process per environment, made to work well in an editor (see
- * {@link PythonLanguageServer}). A server analyzes scripts in exactly the
+ * {@link TyLanguageServer}). A server analyzes scripts in exactly the
  * environment it is given. The processes stop when this is disposed.
  *
  * @author Gabriel Selzer
  */
 @Plugin(type = LanguageServerPlugin.class, name = "Python")
-public class PythonServerPlugin implements LanguageServerPlugin, Disposable {
-
-	/** How many completions get signatures, once a word is begun. */
-	private static final int SIGNATURES = 30;
+public class TyLanguageServerPlugin implements LanguageServerPlugin,
+	Disposable
+{
 
 	@Parameter(required = false)
 	private LogService log;
@@ -67,7 +66,7 @@ public class PythonServerPlugin implements LanguageServerPlugin, Disposable {
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
-		return new PythonLanguageServer(ty().server(environment), SIGNATURES);
+		return new TyLanguageServer(ty().server(environment));
 	}
 
 	// -- Disposable methods --

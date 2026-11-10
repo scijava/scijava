@@ -1,6 +1,6 @@
 # SciJava Code LSP ty
 
-Python code intelligence for SciJava scripts: [ty](https://docs.astral.sh/ty/)'s language server, offered to `scijava-code-lsp` for `python` by `PythonServerPlugin`, made to work well in editors:
+Python code intelligence for SciJava scripts: [ty](https://docs.astral.sh/ty/)'s language server, offered to `scijava-code-lsp` for `python` by `TyLanguageServerPlugin`, made to work well in editors:
 
 * Completions are asked about a word once (usually at its first character), and reused as the word is typed on; questions no longer of interest are cancelled; and the first completions of a word get their signatures, as snippets with their parameters and types.
 

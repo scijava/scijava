@@ -98,7 +98,7 @@
  * }
  * </pre>
  * <p>
- * scijava-code-lsp-ty's {@code TyLauncher} and {@code PythonServerPlugin}
+ * scijava-code-lsp-ty's {@code TyLauncher} and {@code TyLanguageServerPlugin}
  * do this for ty's language server, building the environment it runs in the
  * first time it is needed. (Servers written in Java can run in this JVM
  * instead: see {@link org.scijava.code.lsp.jvm.AbstractLanguageServer}.)

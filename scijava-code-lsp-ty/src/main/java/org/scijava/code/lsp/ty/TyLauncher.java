@@ -40,10 +40,10 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.server.ServerLauncher;
 
 /**
- * Starts ty's language server: run in an environment of its own (built by
+ * Starts ty's language server, run in an environment of its own (built by
  * Appose the first time it is needed), to analyze scripts against their
  * environment's Python (if known) and extra search paths (e.g. stubs of Java
- * packages). {@link PythonServerPlugin} serves
+ * packages). {@link TyLanguageServerPlugin} serves
  * {@code python} with it.
  *
  * @author Gabriel Selzer
@@ -194,7 +194,7 @@ final class TyLauncher implements ServerLauncher {
 			"numpy = \"*\"\n" + //
 			"\n" + //
 			"[pypi-dependencies]\n" + //
-			"ty = \">=0.0.10\"\n";
+			"ty = \"==0.0.100\"\n";
 	}
 
 	/** The conda platform (e.g. {@code linux-64}) of this machine. */

@@ -107,12 +107,6 @@ public final class ScriptSession implements AutoCloseable {
 
 	private static final AtomicInteger UNTITLED = new AtomicInteger();
 
-	/**
-	 * The LSP language of scripts as they are (see
-	 * {@link ScriptDocument#of(String)}).
-	 */
-	private static final String PLAINTEXT = "plaintext";
-
 	/** How long to wait for a server to initialize, in milliseconds. */
 	private static final long INITIALIZE_TIMEOUT = 10_000;
 
@@ -350,45 +344,25 @@ public final class ScriptSession implements AutoCloseable {
 
 	/**
 	 * Gets servers for scripts of a language: of the LSP language its dialect
-	 * says, if served; otherwise (or if one cannot be created), of
-	 * {@code plaintext}, as the script is then shown (see
-	 * {@link ScriptDocument#of(String)}).
+	 * says, if any; otherwise, of plain text (see
+	 * {@link ScriptDocument#of(String)}). The service gives its fallback if no
+	 * plugin serves the language (see {@link LanguageServerService#launch}).
 	 */
 	private static Function<Environment, LanguageServer> launcher(
 		final LanguageServerService servers, final ScriptLanguage language,
 		final Optional<ScriptContext> live)
 	{
-		final LogService log = servers.context().getService(LogService.class);
-		final String languageId = servedLanguage(servers, language);
-		return env -> {
-			final Environment typedInto = live.map(env::withLive).orElse(env);
-			try {
-				return servers.launch(languageId, typedInto);
-			}
-			catch (final RuntimeException | LinkageError exc) {
-				if (PLAINTEXT.equals(languageId)) throw exc;
-				if (log != null) log.warn("Could not create a language server for " +
-					languageId, exc);
-				return servers.launch(PLAINTEXT, typedInto);
-			}
-		};
-	}
-
-	/**
-	 * The LSP language of a script language's dialect, if a plugin serves it;
-	 * or {@code plaintext}.
-	 */
-	private static String servedLanguage(final LanguageServerService servers,
-		final ScriptLanguage language)
-	{
+		String id;
 		try {
-			final String languageId = servers.dialect(language).languageId();
-			if (servers.supports(languageId)) return languageId;
+			id = servers.dialect(language).languageId();
 		}
 		catch (final IllegalArgumentException exc) {
 			// NB: The language has no dialect.
+			id = ScriptDocument.of("").languageId();
 		}
-		return PLAINTEXT;
+		final String languageId = id;
+		return env -> servers.launch(languageId, live.map(env::withLive).orElse(
+			env));
 	}
 
 	/**

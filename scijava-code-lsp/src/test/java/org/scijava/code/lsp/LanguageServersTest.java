@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -101,7 +101,7 @@ import org.scijava.script.ScriptService;
 
 /**
  * Tests {@link LanguageServerService} and {@link ScriptSession}, with fake
- * in-process servers; and the {@code plaintext} server, of an interpreter's
+ * in-process servers; and the fallback server, of an interpreter's
  * variables.
  *
  * @author Gabriel Selzer
@@ -342,8 +342,9 @@ public class LanguageServersTest {
 		final SimpleScriptContext live = new SimpleScriptContext();
 		live.setAttribute("text", "hello", ScriptContext.ENGINE_SCOPE);
 		live.setAttribute("count", 3, ScriptContext.ENGINE_SCOPE);
-		final LanguageServer server = service.launch("plaintext",
-			new Environment().withLive(live));
+		// NB: No plugin serves cobol: the service falls back.
+		final LanguageServer server = service.launch("cobol", new Environment()
+			.withLive(live));
 		assertEquals(Collections.singletonList("count"), labels(complete(server,
 			"x = co")));
 		assertEquals(Arrays.asList("count", "text"), labels(complete(server, "")));
@@ -385,8 +386,6 @@ public class LanguageServersTest {
 		// By LSP language.
 		assertTrue(service.supports("fake"));
 		assertFalse(service.supports("cobol"));
-		// Scripts as they are: their interpreters' variables.
-		assertTrue(service.supports("plaintext"));
 	}
 
 	@Test
@@ -433,9 +432,9 @@ public class LanguageServersTest {
 		assertEquals("high", SERVERS.get(0).name);
 		assertEquals("fake", SERVERS.get(0).languageId);
 		assertSame(env, SERVERS.get(0).environment());
-		// No plugin, no server.
-		assertThrows(IllegalArgumentException.class, () -> service.launch("cobol",
-			new Environment()));
+		// No plugin: the fallback (none of the fake servers).
+		assertNotNull(service.launch("cobol", new Environment()));
+		assertEquals(1, SERVERS.size());
 	}
 
 	// -- Helper methods --

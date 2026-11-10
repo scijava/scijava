@@ -72,7 +72,8 @@ public interface LanguageServerService extends SciJavaService {
 
 	/**
 	 * Whether any plugin serves documents of the given LSP language (e.g.
-	 * {@code python}): i.e. whether {@link #launch} can give a server for it.
+	 * {@code python}): i.e. whether {@link #launch} gives a server of that
+	 * language, rather than the fallback.
 	 */
 	boolean supports(String languageId);
 
@@ -81,11 +82,12 @@ public interface LanguageServerService extends SciJavaService {
 	 * {@code python}), from the highest-priority {@link LanguageServerPlugin}
 	 * serving it (e.g. in-process, or a proxy to a server process). It sees
 	 * documents as plain code of the language, and
-	 * analyzes them as running in the given environment. The caller
+	 * analyzes them as running in the given environment. If no plugin serves
+	 * the language, a fallback is given, which completes only a live
+	 * interpreter's variables (see {@link Environment#live()}). The caller
 	 * initializes it, and shuts it down.
 	 *
 	 * @param environment Where the scripts run.
-	 * @throws IllegalArgumentException If no plugin serves the language.
 	 */
 	LanguageServer launch(String languageId, Environment environment);
 }

@@ -114,7 +114,16 @@ public class DefaultLanguageServerService extends AbstractService implements
 	public LanguageServer launch(final String languageId,
 		final Environment environment)
 	{
-		return plugin(languageId).create(languageId, environment);
+		final LanguageServerPlugin plugin;
+		try {
+			plugin = plugin(languageId);
+		}
+		catch (final IllegalArgumentException exc) {
+			// NB: No plugin serves the language.
+			return new BindingsLanguageServer(environment);
+		}
+		// NB: Not caught: a server failing to start is a problem to be seen.
+		return plugin.create(languageId, environment);
 	}
 
 	// -- Disposable methods --

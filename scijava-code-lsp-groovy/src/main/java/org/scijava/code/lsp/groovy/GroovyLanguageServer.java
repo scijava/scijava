@@ -65,7 +65,6 @@ import org.codehaus.groovy.ast.expr.StaticMethodCallExpression;
 import org.codehaus.groovy.control.ResolveVisitor;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
-import org.eclipse.lsp4j.CompletionItemLabelDetails;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.DiagnosticSeverity;
@@ -73,7 +72,6 @@ import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureInformation;
 import org.eclipse.lsp4j.TextEdit;
-import org.scijava.code.lsp.jvm.Callable;
 import org.scijava.code.lsp.jvm.ClassIndex;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.Members;
@@ -197,8 +195,8 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			// The caret isn't in a call (or is in a string or comment)
 			return null;
 		}
-		final List<Callable> callables = callables(call.ast, call.call);
-		if (callables.isEmpty()) {
+		final List<Overload> overloads = overloads(call.ast, call.call);
+		if (overloads.isEmpty()) {
 			// Nothing the call could be calling is known, e.g. the receiver's
 			// type is unknown, or nothing of the method's name exists
 			return null;
@@ -210,16 +208,16 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			argTypes.add(i == call.call.active ? null : call.ast.typeName(
 				call.call.arguments.get(i)));
 		}
-		// Order callables by how well those arguments fit them (the first is
+		// Order overloads by how well those arguments fit them (the first is
 		// shown), then by their parameter types, so that equally good fits are
 		// always in the same order.
 		final ClassLoader loader = loader();
-		final Map<Callable, Fit> fits = new HashMap<>();
-		for (final Callable c : callables) fits.put(c, fit(c, argTypes, loader));
-		callables.sort(Comparator.comparing((Callable c) -> fits.get(c))
-			.thenComparing(Callable::parameterTypes));
+		final Map<Overload, Fit> fits = new HashMap<>();
+		for (final Overload o : overloads) fits.put(o, fit(o, argTypes, loader));
+		overloads.sort(Comparator.comparing((Overload o) -> fits.get(o))
+			.thenComparing(Overload::parameterTypes));
 		final List<SignatureInformation> signatures = new ArrayList<>();
-		for (final Callable c : callables) signatures.add(c.toSignature());
+		for (final Overload o : overloads) signatures.add(o.toSignature());
 		return new SignatureHelp(signatures, 0, call.call.active);
 	}
 
@@ -249,7 +247,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 
 	// -- Helper methods --
 
-	/** How well arguments fit a callable, best first. */
+	/** How well arguments fit an overload, best first. */
 	private enum Fit {
 			/** The arguments fit as they are. */
 			MATCH,
@@ -262,17 +260,17 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	}
 
 	/**
-	 * Rates a callable against the types of the arguments typed so far: as
+	 * Rates an overload against the types of the arguments typed so far: as
 	 * well as its worst-fitting argument; {@link Fit#MISMATCH} if there are
 	 * more arguments than parameters; {@link Fit#UNKNOWN} if no argument's type
 	 * is known.
 	 *
 	 * @param argTypes Types of the arguments, null where unknown.
 	 */
-	private static Fit fit(final Callable callable, final List<String> argTypes,
+	private static Fit fit(final Overload overload, final List<String> argTypes,
 		final ClassLoader loader)
 	{
-		final List<Callable.Param> params = callable.params();
+		final List<Overload.Param> params = overload.params();
 		Fit worst = null;
 		for (int i = 0; i < argTypes.size(); i++) {
 			if (argTypes.get(i) == null) continue;
@@ -370,9 +368,9 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		final CallContext call = callContext(doc, caret, line);
 		if (call == null) return new ArrayList<>();
 		final Set<Class<?>> targets = new HashSet<>();
-		for (final Callable c : callables(call.ast, call.call)) {
-			if (call.call.active >= c.params().size()) continue;
-			final String type = c.params().get(call.call.active).type();
+		for (final Overload o : overloads(call.ast, call.call)) {
+			if (call.call.active >= o.params().size()) continue;
+			final String type = o.params().get(call.call.active).type();
 			final Class<?> t = type == null ? null : Types.box(TypedAST.load(
 				type, loader()));
 			if (t != null && t != Object.class) targets.add(t);
@@ -442,7 +440,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		final List<CompletionItem> out = sorted(Members.of(c, prefix,
 			staticOnly));
 		if (!staticOnly) {
-			for (final Callable m : gdkMethods(c, prefix)) out.add(m.toItem());
+			for (final Overload m : gdkMethods(c, prefix)) out.add(m.toItem());
 		}
 		return out;
 	}
@@ -465,7 +463,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 					.getName()) != null) continue;
 			out.add(field(f.getName(), f.getType().toString(false)));
 		}
-		for (final Callable m : scriptMethods(type, prefix, staticOnly, false)) {
+		for (final Overload m : scriptMethods(type, prefix, staticOnly, false)) {
 			out.add(m.toItem());
 		}
 		final List<CompletionItem> sorted = sorted(out);
@@ -478,10 +476,10 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	}
 
 	/** Methods of a class defined in the script: by prefix, or exact name. */
-	private static List<Callable> scriptMethods(final ClassNode type,
+	private static List<Overload> scriptMethods(final ClassNode type,
 		final String name, final boolean staticOnly, final boolean exact)
 	{
-		final List<Callable> out = new ArrayList<>();
+		final List<Overload> out = new ArrayList<>();
 		for (final MethodNode m : type.getMethods()) {
 			if (!m.isPublic() || m.isSynthetic() || staticOnly && !m.isStatic() || m
 				.getName().contains("$")) continue;
@@ -512,27 +510,27 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	 * The GDK methods Groovy adds to {@code c}, e.g. {@code each} and
 	 * {@code collect} for collections; by prefix.
 	 */
-	private static List<Callable> gdkMethods(final Class<?> c,
+	private static List<Overload> gdkMethods(final Class<?> c,
 		final String prefix)
 	{
-		final Map<String, Callable> out = new LinkedHashMap<>();
+		final Map<String, Overload> out = new LinkedHashMap<>();
 		for (final MetaMethod m : GroovySystem.getMetaClassRegistry()
 			.getMetaClass(c).getMetaMethods())
 		{
 			if (m.isStatic() || !matches(m.getName(), prefix)) continue;
-			final List<Callable.Param> params = new ArrayList<>();
+			final List<Overload.Param> params = new ArrayList<>();
 			final Class<?>[] types = m.getNativeParameterTypes();
 			for (int i = 0; i < types.length; i++) {
-				params.add(new Callable.Param("arg" + i, typeName(types[i])));
+				params.add(new Overload.Param("arg" + i, typeName(types[i])));
 			}
 			final String signature = typeName(m.getReturnType()) + " " + m
-				.getName() + params.stream().map(Callable.Param::type).collect(
+				.getName() + params.stream().map(Overload.Param::type).collect(
 					Collectors.joining(", ", "(", ")"));
 			// NB: Groovy lists some methods more than once.
-			out.putIfAbsent(signature, new Callable(m.getName(), params, typeName(m
+			out.putIfAbsent(signature, new Overload(m.getName(), params, typeName(m
 				.getReturnType())).detail("GDK: " + signature));
 		}
-		final List<Callable> sorted = new ArrayList<>(out.values());
+		final List<Overload> sorted = new ArrayList<>(out.values());
 		sorted.sort(Comparator.comparing(m -> m.name().toLowerCase(Locale.ROOT)));
 		return sorted;
 	}
@@ -650,14 +648,14 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	}
 
 	/** The signatures the call may be calling: methods or constructors. */
-	private List<Callable> callables(final TypedAST ast,
+	private List<Overload> overloads(final TypedAST ast,
 		final TypedAST.Call call)
 	{
-		final List<Callable> out = new ArrayList<>();
+		final List<Overload> out = new ArrayList<>();
 		if (call.expression instanceof ConstructorCallExpression) {
 			final ClassNode type = call.expression.getType().redirect();
 			final Class<?> c = ast.toClass(type);
-			if (c != null) out.addAll(Members.constructors(c));
+			if (c != null) out.addAll(Overload.constructors(c));
 			else if (type.isPrimaryClassNode()) {
 				for (final ConstructorNode ctor : type.getDeclaredConstructors()) {
 					out.add(methodNode(type.getNameWithoutPackage(), ctor));
@@ -668,7 +666,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (call.expression instanceof StaticMethodCallExpression) {
 			final StaticMethodCallExpression e =
 				(StaticMethodCallExpression) call.expression;
-			return Members.methods(ast.toClass(e.getOwnerType()), e.getMethod(),
+			return Overload.methods(ast.toClass(e.getOwnerType()), e.getMethod(),
 				true);
 		}
 		final MethodCallExpression e = (MethodCallExpression) call.expression;
@@ -691,27 +689,27 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		}
 		final Class<?> c = Types.box(ast.toClass(type));
 		if (c == null) return out;
-		out.addAll(Members.methods(c, name, staticOnly));
+		out.addAll(Overload.methods(c, name, staticOnly));
 		if (!staticOnly) out.addAll(named(gdkMethods(c, name), name));
 		return out;
 	}
 
-	/** The callables with exactly the given name. */
-	private static List<Callable> named(final List<Callable> callables,
+	/** The overloads with exactly the given name. */
+	private static List<Overload> named(final List<Overload> overloads,
 		final String name)
 	{
-		return callables.stream().filter(c -> c.name().equals(name)).collect(
+		return overloads.stream().filter(c -> c.name().equals(name)).collect(
 			Collectors.toList());
 	}
 
-	/** A callable defined in the script itself. */
-	private static Callable methodNode(final String name, final MethodNode m) {
-		final List<Callable.Param> params = new ArrayList<>();
+	/** A method defined in the script itself. */
+	private static Overload methodNode(final String name, final MethodNode m) {
+		final List<Overload.Param> params = new ArrayList<>();
 		for (final org.codehaus.groovy.ast.Parameter p : m.getParameters()) {
-			params.add(new Callable.Param(p.getName(), p.isDynamicTyped() ? null : p
+			params.add(new Overload.Param(p.getName(), p.isDynamicTyped() ? null : p
 				.getType().getName()));
 		}
-		return new Callable(name, params, m.getReturnType().toString(false));
+		return new Overload(name, params, m.getReturnType().toString(false));
 	}
 
 	private static CompletionItem item(final String text,
@@ -732,12 +730,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	}
 
 	private static CompletionItem field(final String name, final String type) {
-		final CompletionItem item = item(name, CompletionItemKind.Field, type +
-			" " + name);
-		final CompletionItemLabelDetails details = new CompletionItemLabelDetails();
-		details.setDescription(type);
-		item.setLabelDetails(details);
-		return item;
+		return item(name, CompletionItemKind.Field, type + " " + name);
 	}
 
 	private static ClassLoader loader() {

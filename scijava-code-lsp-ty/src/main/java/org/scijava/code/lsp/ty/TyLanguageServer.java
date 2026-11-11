@@ -60,7 +60,7 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.scijava.code.lsp.jvm.Callable;
+import org.scijava.code.lsp.CompletionItems;
 import org.scijava.code.lsp.Positions;
 
 /**
@@ -71,8 +71,8 @@ import org.scijava.code.lsp.Positions;
  * private ones (starting with {@code _}) unless the word does.</li>
  * <li>Those with signatures (e.g.
  * {@code def dumps(obj, *, skipkeys: bool = False) -> str}) as
- * {@link Callable}s: snippets with their parameters and types. (Not in
- * imports: an import names things, rather than calling them.)</li>
+ * {@link CompletionItems#methodSnippet method snippets}, with their parameters.
+ * (Not in imports: an import names things, rather than calling them.)</li>
  * </ul>
  * <p>
  * Everything else is passed on to the server as is.
@@ -196,7 +196,7 @@ class TyLanguageServer implements LanguageServer,
 	 * ty gives a function's signature only as text (e.g.
 	 * {@code def dumps(obj: Any, *, indent: int | None = None) -> str}), so an
 	 * editor would insert just its name. As a callable, it is a snippet with
-	 * its parameters, as Java methods are (see {@link Callable}). NB: The
+	 * its parameters (see {@link CompletionItems#methodSnippet}). NB: The
 	 * detail comes with the completion: ty does not resolve completions.
 	 * </p>
 	 */
@@ -210,11 +210,9 @@ class TyLanguageServer implements LanguageServer,
 		if (item.getDetail() == null) return null;
 		final String name = item.getInsertText() != null ? item.getInsertText()
 			: item.getLabel();
-		final Callable parsed = parseCallable(name, item.getDetail());
-		if (parsed == null) return null;
-		final CompletionItem out = new Callable(name, parsed.params(), parsed
-			.returnType()).kind(CompletionItemKind.Method).detail(item.getDetail())
-				.toItem();
+		final CompletionItem out = parseCallable(name, item.getDetail());
+		if (out == null) return null;
+		out.setDetail(item.getDetail());
 		out.setSortText(item.getSortText());
 		out.setDocumentation(item.getDocumentation());
 		out.setData(item.getData());
@@ -223,10 +221,13 @@ class TyLanguageServer implements LanguageServer,
 
 	/**
 	 * Parses a signature, as ty writes it in a completion's detail, into a
-	 * {@link Callable}: its parameters' names and types, and its return type.
-	 * E.g. {@code def dumps(obj: Any, *, indent: int | None = None) -> str}
-	 * becomes {@code dumps}, with parameters {@code Any obj} and
-	 * {@code int | None indent}, returning {@code str}. Also reads methods
+	 * {@link CompletionItems#methodSnippet method snippet}: its parameters'
+	 * names and its parameter list (as ty writes it). E.g.
+	 * {@code def dumps(obj: Any, *, indent: int | None = None) -> str} becomes
+	 * {@code dumps}, with parameters {@code obj} and {@code indent}, listed as
+	 * {@code (obj: Any, indent: int | None = None)}.
+	 * (Bare {@code *} and {@code /} are left out: they are not parameters, but
+	 * mark keyword-only and positional-only ones.) Also reads methods
 	 * ({@code bound method str.upper() -> str}) and overloads
 	 * ({@code Overload[(...) -> A, (...) -> B]}, as the first). Returns null if
 	 * it is not a signature (e.g. {@code <class 'Path'>}, or {@code str}).
@@ -234,35 +235,28 @@ class TyLanguageServer implements LanguageServer,
 	 * @param name The callable's name (the signature's may be qualified).
 	 * @param signature The signature, as ty writes it.
 	 */
-	private static Callable parseCallable(final String name, String signature) {
+	private static CompletionItem parseCallable(final String name,
+		String signature)
+	{
 		if (signature.startsWith("Overload[")) signature = signature.substring(9);
 		final int open = signature.indexOf('(');
 		if (open < 0) return null;
 		final int close = closing(signature, open);
 		if (close < 0) return null;
-		final List<Callable.Param> params = new ArrayList<>();
+		final List<String> names = new ArrayList<>();
+		final List<String> params = new ArrayList<>();
 		for (final String part : split(signature.substring(open + 1, close))) {
 			final String p = part.trim();
-			// NB: Bare * and / only mark keyword-only and positional-only ones.
 			if (p.isEmpty() || p.equals("*") || p.equals("/")) continue;
+			// NB: The name is up to its type or default, without * or **.
 			final int colon = topLevel(p, ':'), eq = topLevel(p, '=');
-			String paramName = p, type = null;
-			if (colon >= 0 && (eq < 0 || colon < eq)) {
-				paramName = p.substring(0, colon);
-				type = p.substring(colon + 1, eq < 0 ? p.length() : eq).trim();
-			}
-			else if (eq >= 0) paramName = p.substring(0, eq);
-			paramName = paramName.trim().replaceFirst("^\\*{1,2}", "");
-			params.add(new Callable.Param(paramName, type == null || type
-				.isEmpty() ? null : type));
+			final int end = colon < 0 ? eq : eq < 0 ? colon : Math.min(colon, eq);
+			names.add((end < 0 ? p : p.substring(0, end)).trim().replaceFirst(
+				"^\\*{1,2}", ""));
+			params.add(p);
 		}
-		final String rest = signature.substring(close + 1).trim();
-		String returns = rest.startsWith("->") ? rest.substring(2).trim() : null;
-		// NB: Up to the next overload, if any.
-		final int comma = returns == null ? -1 : topLevel(returns, ',');
-		if (comma >= 0) returns = returns.substring(0, comma).trim();
-		return new Callable(name, params, returns == null || returns.isEmpty()
-			? null : returns);
+		return CompletionItems.methodSnippet(name, names, "(" + String.join(
+			", ", params) + ")");
 	}
 
 	/** The index of the bracket closing the one at {@code open}, or -1. */

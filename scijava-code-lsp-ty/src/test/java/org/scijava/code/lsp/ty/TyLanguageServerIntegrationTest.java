@@ -124,7 +124,7 @@ public class TyLanguageServerIntegrationTest {
 		final CompletionItem dumps = completions.stream().filter(c -> c.getLabel()
 			.equals("dumps") && c.getLabelDetails() != null).findFirst().get();
 		assertTrue(dumps.getLabelDetails().getDetail().startsWith(
-			"(Any obj, bool skipkeys"), dumps.getLabelDetails().getDetail());
+			"(obj: Any, skipkeys: bool"), dumps.getLabelDetails().getDetail());
 		assertNotNull(dumps.getDocumentation());
 	}
 
@@ -148,25 +148,28 @@ public class TyLanguageServerIntegrationTest {
 	/**
 	 * ty returns functions' signatures only as text, in each completion's
 	 * detail; e.g. "def len(obj: Sized, /) -> int". This test ensures such
-	 * completions are converted to snippets, with their parameters and return
-	 * types parsed correctly from the many forms of signatures.
+	 * completions are converted to snippets, with their parameters parsed
+	 * correctly from the many forms of signatures.
 	 */
 	@Test
 	public void testCallables() throws Exception {
-		// Brackets in types (their commas do not separate parameters).
-		final String dumps = detail("import json\njson.dum", "dumps");
-		assertTrue(dumps.contains(", tuple[str, str] | None separators, " +
-			"((Any, /) -> Any) | None default, "), dumps);
-		// Positional-only ones; and the return type.
+		// Commas in types do not separate parameters (e.g. separators:
+		// tuple[str, str], and default: ((Any) -> Any) | None, which would
+		// shift the tab stops after them); and **kwargs.
+		final String dumps = callable("import json\njson.dum", "dumps")
+			.getInsertText();
+		assertTrue(dumps.endsWith(", ${8:separators}, ${9:default}, " +
+			"${10:sort_keys}, ${11:kwds})"), dumps);
+		// Positional-only ones (without the /).
 		final CompletionItem len = callable("x = le", "len");
-		assertEquals("(Sized obj)", len.getLabelDetails().getDetail());
-		assertEquals("int", len.getLabelDetails().getDescription());
+		assertEquals("(obj: Sized)", len.getLabelDetails().getDetail());
 		// Methods.
 		assertEquals("()", detail("s = 'x'\ns.isu", "isupper"));
-		// Strings in types; keyword-only ones; and **kwargs.
-		assertEquals("(tuple[int, str] a, Literal[\"x\", \"y\"] b, kw)", detail(
+		// Strings in types and defaults; and keyword-only ones (without the *).
+		assertEquals("func(${1:a}, ${2:b}, ${3:kw})", callable(
 			"from typing import Literal\ndef func(a: tuple[int, str] = (1, \",\"), " +
-				"/, *, b: Literal['x', 'y'] = 'x', **kw):\n    pass\nfu", "func"));
+				"/, *, b: Literal['x', 'y'] = 'x', **kw):\n    pass\nfu", "func")
+					.getInsertText());
 		// Not classes, which ty gives no signatures of.
 		assertNotEquals(InsertTextFormat.Snippet, item("import json\njson.JSONDec",
 			"JSONDecoder").getInsertTextFormat());
@@ -184,8 +187,7 @@ public class TyLanguageServerIntegrationTest {
 		// The first overload's signature (next(i), not next(i, default)); after
 		// its type parameters ([_T]).
 		final CompletionItem next = callable("x = nex", "next");
-		assertEquals("(SupportsNext[_T] i)", next.getLabelDetails().getDetail());
-		assertEquals("_T", next.getLabelDetails().getDescription());
+		assertEquals("(i: SupportsNext[_T])", next.getLabelDetails().getDetail());
 	}
 
 	/**

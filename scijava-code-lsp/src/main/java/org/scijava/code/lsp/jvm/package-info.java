@@ -35,9 +35,8 @@
  * base class: it keeps the open documents, and turns requests into questions
  * about a document and an offset. The rest help answer them for Java classes:
  * {@link org.scijava.code.lsp.jvm.Members} (completions for their members, by
- * reflection), {@link org.scijava.code.lsp.jvm.Callable} (something to call,
- * as a completion snippet), and {@link org.scijava.code.lsp.jvm.ClassIndex}
- * (the classes on the classpath, with their javadoc).
+ * reflection) and {@link org.scijava.code.lsp.jvm.ClassIndex} (the classes on
+ * the classpath, with their javadoc).
  * </p>
  */
 package org.scijava.code.lsp.jvm;

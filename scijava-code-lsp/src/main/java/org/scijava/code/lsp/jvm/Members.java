@@ -29,7 +29,6 @@
 
 package org.scijava.code.lsp.jvm;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -39,7 +38,7 @@ import java.util.Locale;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
-import org.eclipse.lsp4j.CompletionItemLabelDetails;
+import org.scijava.code.lsp.CompletionItems;
 
 /**
  * Completions for the members of Java classes, by reflection: for in-process
@@ -55,7 +54,8 @@ public final class Members {
 
 	/**
 	 * Completions for the public fields and methods of a class whose names
-	 * start with a (case-insensitive) prefix; methods as {@link Callable}s.
+	 * start with a (case-insensitive) prefix; methods as
+	 * {@link CompletionItems#methodSnippet method snippets}.
 	 *
 	 * @param c The class.
 	 * @param prefix The prefix; empty matches everything.
@@ -75,35 +75,7 @@ public final class Members {
 		for (final Method m : c.getMethods()) {
 			if (staticOnly && !Modifier.isStatic(m.getModifiers())) continue;
 			if (!m.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
-			out.add(method(m).toItem());
-		}
-		return out;
-	}
-
-	/** The public methods of a class with exactly the given name. */
-	public static List<Callable> methods(final Class<?> c, final String name,
-		final boolean staticOnly)
-	{
-		final List<Callable> out = new ArrayList<>();
-		if (c == null) return out;
-		for (final Method m : c.getMethods()) {
-			if (staticOnly && !Modifier.isStatic(m.getModifiers())) continue;
-			if (m.getName().equals(name)) out.add(method(m));
-		}
-		return out;
-	}
-
-	/** The public constructors of a class. */
-	public static List<Callable> constructors(final Class<?> c) {
-		final List<Callable> out = new ArrayList<>();
-		if (c == null) return out;
-		for (final Constructor<?> ctor : c.getConstructors()) {
-			final List<Callable.Param> params = new ArrayList<>();
-			for (final java.lang.reflect.Parameter p : ctor.getParameters()) {
-				params.add(new Callable.Param(p.getName(), typeName(p.getType())));
-			}
-			out.add(new Callable(c.getSimpleName(), params, typeName(c)).kind(
-				CompletionItemKind.Constructor));
+			out.add(method(m));
 		}
 		return out;
 	}
@@ -114,20 +86,21 @@ public final class Members {
 		item.setKind(CompletionItemKind.Field);
 		item.setInsertText(f.getName());
 		item.setDetail(typeName(f.getType()) + " " + f.getName());
-		final CompletionItemLabelDetails details = new CompletionItemLabelDetails();
-		details.setDescription(typeName(f.getType()));
-		item.setLabelDetails(details);
 		return item;
 	}
 
-	/** A method, as a callable. */
-	private static Callable method(final Method m) {
-		final List<Callable.Param> params = new ArrayList<>();
+	/** A completion for a method, e.g. {@code max(double a, double b)}. */
+	private static CompletionItem method(final Method m) {
+		final List<String> names = new ArrayList<>();
+		final List<String> params = new ArrayList<>();
 		for (final java.lang.reflect.Parameter p : m.getParameters()) {
-			params.add(new Callable.Param(p.getName(), typeName(p.getType())));
+			names.add(p.getName());
+			params.add(typeName(p.getType()) + " " + p.getName());
 		}
-		return new Callable(m.getName(), params, typeName(m.getReturnType()))
-			.detail(signature(m));
+		final CompletionItem item = CompletionItems.methodSnippet(m.getName(),
+			names, "(" + String.join(", ", params) + ")");
+		item.setDetail(signature(m));
+		return item;
 	}
 
 	/** A readable method signature, e.g. {@code String concat(String)}. */

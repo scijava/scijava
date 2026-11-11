@@ -178,8 +178,8 @@ public class JythonLanguageServerTest {
 			"a = ArrayList()\na.ensureCap").stream().filter(c -> c.getLabel().equals(
 				"ensureCapacity")).findFirst().orElse(null);
 		assertNotNull(ensure);
-		assertEquals("(int arg0)", ensure.getLabelDetails().getDetail().replaceAll(
-			" \\w+\\)$", " arg0)"));
+		final String params = ensure.getLabelDetails().getDetail();
+		assertTrue(params.matches("\\(\\w+: int\\)"), params);
 		assertTrue(ensure.getInsertText().startsWith("ensureCapacity(${1:"),
 			ensure.getInsertText());
 	}

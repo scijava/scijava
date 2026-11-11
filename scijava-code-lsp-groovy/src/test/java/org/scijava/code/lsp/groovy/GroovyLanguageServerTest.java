@@ -188,8 +188,7 @@ public class GroovyLanguageServerTest {
 				.getDetail())).findFirst().orElse(null);
 		assertTrue(upper != null);
 		assertEquals("toUpperCase()", upper.getTextEdit().getLeft().getNewText());
-		// A parameter: a tab stop for it, "toUpperCase(${1:...})", and the
-		// method's return type.
+		// A parameter: a tab stop for it, "toUpperCase(${1:...})".
 		final CompletionItem locale = items("def s = 'x'\ns.toUpp").stream().filter(
 			c -> "(java.util.Locale arg0)".equals(c.getLabelDetails().getDetail()) ||
 				c.getLabelDetails().getDetail().startsWith("(java.util.Locale "))
@@ -197,8 +196,6 @@ public class GroovyLanguageServerTest {
 		assertTrue(locale != null);
 		assertTrue(locale.getTextEdit().getLeft().getNewText().startsWith(
 			"toUpperCase(${1:"));
-		assertEquals("java.lang.String", locale.getLabelDetails()
-			.getDescription());
 	}
 
 	@Test

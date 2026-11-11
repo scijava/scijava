@@ -31,7 +31,10 @@ package org.scijava.code.lsp.ty;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apposed.appose.Appose;
 import org.apposed.appose.util.Environments;
@@ -98,6 +101,10 @@ final class TyLauncher implements ServerLauncher {
 	/** The Python of the server's environment, once built. */
 	private static String python;
 
+	/** Where interpreters' installed packages are, as they said. */
+	private static final Map<String, List<String>> SITE_PACKAGES =
+		new ConcurrentHashMap<>();
+
 	/** An (empty) directory to serve as workspace root. */
 	private final File workspace;
 	/** Where to append the server's error output. */
@@ -141,7 +148,11 @@ final class TyLauncher implements ServerLauncher {
 		// NB: Without an interpreter, ty uses the server's own Python.
 		final Map<String, Object> environment = new LinkedHashMap<>();
 		env.interpreter().ifPresent(p -> environment.put("python", p));
-		environment.put("extra-paths", env.paths());
+		// NB: Also where the interpreter's packages are, as it says: ty finds
+		// them itself only where they usually are (see sitePackages).
+		final Set<String> paths = new LinkedHashSet<>(env.paths());
+		env.interpreter().ifPresent(p -> paths.addAll(sitePackages(p)));
+		environment.put("extra-paths", new ArrayList<>(paths));
 
 		// Combine them all. NB: ty reports the diagnostics (syntax errors
 		// included) of open scripts by default; stated as what we rely on.
@@ -195,6 +206,57 @@ final class TyLauncher implements ServerLauncher {
 			"\n" + //
 			"[pypi-dependencies]\n" + //
 			"ty = \"==0.0.100\"\n";
+	}
+
+	/**
+	 * Gets the directories where an interpreter's installed packages are, as
+	 * it says ({@code site.getsitepackages()}: those named
+	 * {@code site-packages} or {@code dist-packages}); or none, if it cannot
+	 * say (e.g. it is not a Python).
+	 * <p>
+	 * ty looks for them only where they usually are (e.g.
+	 * {@code Lib/site-packages}, on Windows), so it misses those of Pythons
+	 * that keep them elsewhere: e.g. conda-forge's Python 3.15 on Windows, in
+	 * {@code lib/python/site-packages}. Then, the scripts' imports would be
+	 * unknown.
+	 * </p>
+	 *
+	 * @param interpreter Path of the Python executable.
+	 */
+	static List<String> sitePackages(final String interpreter) {
+		final List<String> known = SITE_PACKAGES.get(interpreter);
+		if (known != null) return known;
+		try {
+			final Process p = new ProcessBuilder(interpreter, "-I", "-c",
+				"import site; print('\\n'.join(site.getsitepackages()))")
+					.redirectError(ProcessBuilder.Redirect.DISCARD).start();
+			if (!p.waitFor(30, TimeUnit.SECONDS)) {
+				p.destroyForcibly();
+				return Collections.emptyList();
+			}
+			if (p.exitValue() != 0) return Collections.emptyList();
+			final List<String> dirs = new ArrayList<>();
+			for (final String line : new String(p.getInputStream().readAllBytes(),
+				StandardCharsets.UTF_8).split("\\R"))
+			{
+				// NB: Not e.g. the environment's root, which Windows' Pythons list
+				// too: its folders (e.g. lib, Scripts) would become packages.
+				final File dir = new File(line.trim());
+				final String name = dir.getName();
+				if (dir.isDirectory() && (name.equalsIgnoreCase("site-packages") ||
+					name.equalsIgnoreCase("dist-packages"))) dirs.add(dir.getPath());
+			}
+			SITE_PACKAGES.put(interpreter, dirs);
+			return dirs;
+		}
+		catch (final IOException exc) {
+			// NB: Not a Python we can run; ty, given it too, then says why.
+			return Collections.emptyList();
+		}
+		catch (final InterruptedException exc) {
+			Thread.currentThread().interrupt();
+			return Collections.emptyList();
+		}
 	}
 
 	/** The conda platform (e.g. {@code linux-64}) of this machine. */

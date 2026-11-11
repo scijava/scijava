@@ -97,6 +97,24 @@ public class TyLauncherTest {
 	}
 
 	/**
+	 * Tests that an interpreter says where its installed packages are, so
+	 * that ty is told even of those it would not find itself. Skipped unless
+	 * the server's environment is already built.
+	 */
+	@Test
+	public void testSitePackages() {
+		final String python = python(new File(Environments.apposeEnvsDir(),
+			TyLauncher.ENV));
+		assumeTrue(python != null, "The server's environment is not built");
+		// The server's environment has ty installed: in its site-packages.
+		final List<String> dirs = TyLauncher.sitePackages(python);
+		assertTrue(dirs.stream().anyMatch(d -> new File(d, "ty").isDirectory()),
+			dirs.toString());
+		// Not a Python: nothing.
+		assertTrue(TyLauncher.sitePackages("/no/such/python").isEmpty());
+	}
+
+	/**
 	 * Tests a workspace root directory is always given.
 	 */
 	@Test

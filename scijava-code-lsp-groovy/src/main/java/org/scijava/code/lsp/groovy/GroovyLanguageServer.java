@@ -74,7 +74,7 @@ import org.scijava.code.lsp.jvm.ClassIndex;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.Members;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.jvm.AbstractLanguageServer;
+import org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer;
 import org.scijava.code.lsp.jvm.Signatures;
 import org.scijava.util.Types;
 
@@ -84,7 +84,7 @@ import org.scijava.util.Types;
  *
  * @author Gabriel Selzer
  */
-public class GroovyLanguageServer extends AbstractLanguageServer {
+public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 
 	private static final Set<String> KEYWORDS = keywords();
 

@@ -46,7 +46,7 @@ import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.jvm.AbstractLanguageServer;
+import org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer;
 import org.scijava.code.lsp.jvm.Members;
 
 /**
@@ -59,7 +59,7 @@ import org.scijava.code.lsp.jvm.Members;
  *
  * @author Gabriel Selzer
  */
-class BindingsLanguageServer extends AbstractLanguageServer {
+class BindingsLanguageServer extends AbstractInProcessLanguageServer {
 
 	/** A trailing {@code variable.prefix} before the caret. */
 	private static final Pattern MEMBER = Pattern.compile(

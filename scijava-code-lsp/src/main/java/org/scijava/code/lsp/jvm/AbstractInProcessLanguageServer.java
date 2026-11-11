@@ -90,7 +90,7 @@ import org.scijava.code.lsp.Positions;
  *
  * @author Gabriel Selzer
  */
-public abstract class AbstractLanguageServer implements LanguageServer,
+public abstract class AbstractInProcessLanguageServer implements LanguageServer,
 	TextDocumentService, WorkspaceService, LanguageClientAware
 {
 
@@ -118,7 +118,7 @@ public abstract class AbstractLanguageServer implements LanguageServer,
 	private final AtomicInteger ids = new AtomicInteger();
 
 	/** @param environment Where the scripts run. */
-	protected AbstractLanguageServer(final Environment environment) {
+	protected AbstractInProcessLanguageServer(final Environment environment) {
 		this.environment = Objects.requireNonNull(environment, "environment");
 	}
 

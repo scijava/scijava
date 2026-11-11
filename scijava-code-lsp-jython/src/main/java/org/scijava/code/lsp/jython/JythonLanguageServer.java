@@ -70,7 +70,7 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.jvm.AbstractLanguageServer;
+import org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer;
 import org.scijava.code.lsp.jvm.ClassIndex;
 
 /**
@@ -94,7 +94,7 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-class JythonLanguageServer extends AbstractLanguageServer {
+class JythonLanguageServer extends AbstractInProcessLanguageServer {
 
 	static {
 		// Warm the class index in the background, as completion needs it.
@@ -240,7 +240,7 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		return python.shutdown().thenCompose(done -> super.shutdown());
 	}
 
-	// -- AbstractLanguageServer --
+	// -- AbstractInProcessLanguageServer --
 
 	/** Java classes, and their packages, as the caret's line is typed. */
 	@Override

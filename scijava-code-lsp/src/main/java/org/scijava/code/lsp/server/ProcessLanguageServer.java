@@ -72,7 +72,8 @@ import org.scijava.code.lsp.Environment;
  * document is brought up to date on the process just before each request,
  * and, for diagnostics, a moment after it last changed.
  * <p>
- * NB: Not an {@link org.scijava.code.lsp.jvm.AbstractLanguageServer}, which
+ * NB: Not an
+ * {@link org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer}, which
  * answers requests itself, as questions about a document's text and an
  * offset: this one passes them on as they are, and is answered later.
  * </p>

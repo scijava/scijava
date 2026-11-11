@@ -32,8 +32,9 @@ package org.scijava.code.lsp;
 import org.eclipse.lsp4j.Position;
 
 /**
- * Converts between offsets in a text and LSP positions: a line, and a
- * character in that line, counted in UTF-16 code units (as Java does).
+ * Helpers for places in a text: converting between offsets and LSP positions
+ * (a line, and a character in that line, counted in UTF-16 code units, as Java
+ * does), and finding the call around the caret.
  *
  * @author Gabriel Selzer
  */
@@ -67,5 +68,23 @@ public final class Positions {
 		int end = text.indexOf('\n', start);
 		if (end < 0) end = text.length();
 		return Math.min(start + position.getCharacter(), end);
+	}
+
+	/**
+	 * Finds the opening parenthesis of the call around the caret: the nearest
+	 * unclosed {@code (} before it, on the same line; or -1 if none.
+	 */
+	public static int callStart(final String text, final int caret) {
+		int depth = 0;
+		for (int i = Math.min(caret, text.length()) - 1; i >= 0; i--) {
+			final char c = text.charAt(i);
+			if (c == '\n') return -1;
+			if (c == ')' || c == ']' || c == '}') depth++;
+			else if (c == '(' || c == '[' || c == '{') {
+				if (depth > 0) depth--;
+				else return c == '(' ? i : -1; // NB: Not in a call, but a list.
+			}
+		}
+		return -1;
 	}
 }

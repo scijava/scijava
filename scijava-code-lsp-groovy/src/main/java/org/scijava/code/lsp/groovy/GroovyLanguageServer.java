@@ -29,10 +29,13 @@
 
 package org.scijava.code.lsp.groovy;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -68,6 +71,7 @@ import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.SignatureHelp;
+import org.eclipse.lsp4j.SignatureInformation;
 import org.eclipse.lsp4j.TextEdit;
 import org.scijava.code.lsp.jvm.Callable;
 import org.scijava.code.lsp.jvm.ClassIndex;
@@ -75,7 +79,6 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.Members;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer;
-import org.scijava.code.lsp.jvm.Signatures;
 import org.scijava.util.Types;
 
 /**
@@ -200,10 +203,6 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			// type is unknown, or nothing of the method's name exists
 			return null;
 		}
-		// Sort callables by their parameter types, so that equally good fits
-		// are always in the same order.
-		callables.sort(Comparator.comparing(Callable::parameterTypes));
-
 		// The types of the arguments typed so far (the one at the caret, being
 		// typed, isn't known yet)
 		final List<String> argTypes = new ArrayList<>();
@@ -211,11 +210,17 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			argTypes.add(i == call.call.active ? null : call.ast.typeName(
 				call.call.arguments.get(i)));
 		}
-		// Return callables in order of best match to those arguments (the
-		// first is shown)
+		// Order callables by how well those arguments fit them (the first is
+		// shown), then by their parameter types, so that equally good fits are
+		// always in the same order.
 		final ClassLoader loader = loader();
-		return new SignatureHelp(Signatures.rateAll(callables, argTypes, (a,
-			p) -> Signatures.fit(a, p, loader)), 0, call.call.active);
+		final Map<Callable, Fit> fits = new HashMap<>();
+		for (final Callable c : callables) fits.put(c, fit(c, argTypes, loader));
+		callables.sort(Comparator.comparing((Callable c) -> fits.get(c))
+			.thenComparing(Callable::parameterTypes));
+		final List<SignatureInformation> signatures = new ArrayList<>();
+		for (final Callable c : callables) signatures.add(c.toSignature());
+		return new SignatureHelp(signatures, 0, call.call.active);
 	}
 
 	/**
@@ -243,6 +248,85 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	}
 
 	// -- Helper methods --
+
+	/** How well arguments fit a callable, best first. */
+	private enum Fit {
+			/** The arguments fit as they are. */
+			MATCH,
+			/** The arguments fit after a conversion (e.g. int to double). */
+			CONVERSION,
+			/** Not known (e.g. the arguments' types are unknown). */
+			UNKNOWN,
+			/** Some argument cannot fit. */
+			MISMATCH
+	}
+
+	/**
+	 * Rates a callable against the types of the arguments typed so far: as
+	 * well as its worst-fitting argument; {@link Fit#MISMATCH} if there are
+	 * more arguments than parameters; {@link Fit#UNKNOWN} if no argument's type
+	 * is known.
+	 *
+	 * @param argTypes Types of the arguments, null where unknown.
+	 */
+	private static Fit fit(final Callable callable, final List<String> argTypes,
+		final ClassLoader loader)
+	{
+		final List<Callable.Param> params = callable.params();
+		Fit worst = null;
+		for (int i = 0; i < argTypes.size(); i++) {
+			if (argTypes.get(i) == null) continue;
+			if (i >= params.size()) return Fit.MISMATCH;
+			final Fit f = fit(argTypes.get(i), params.get(i).type(), loader);
+			if (f == Fit.UNKNOWN) continue;
+			if (worst == null || f.compareTo(worst) > 0) worst = f;
+		}
+		return worst == null ? Fit.UNKNOWN : worst;
+	}
+
+	/**
+	 * Rates passing a value of type {@code argType} to a parameter of type
+	 * {@code paramType}, with the conversions Groovy makes calling Java:
+	 * <ul>
+	 * <li>{@link Fit#MATCH}: the same type, an assignable one (with boxing), or
+	 * the same kind of number (integral to integral, floating-point to
+	 * floating-point).</li>
+	 * <li>{@link Fit#CONVERSION}: an integral number to a floating-point
+	 * parameter.</li>
+	 * <li>{@link Fit#MISMATCH}: anything else.</li>
+	 * <li>{@link Fit#UNKNOWN}: either type is unknown.</li>
+	 * </ul>
+	 *
+	 * @param argType E.g. {@code int}, {@code java.lang.String} or
+	 *          {@code long[]}; or null if unknown.
+	 * @param paramType Likewise.
+	 */
+	private static Fit fit(final String argType, final String paramType,
+		final ClassLoader loader)
+	{
+		if (argType == null || paramType == null) return Fit.UNKNOWN;
+		if (argType.equals(paramType)) return Fit.MATCH;
+		final Class<?> a = TypedAST.load(argType, loader);
+		final Class<?> p = TypedAST.load(paramType, loader);
+		if (a == null || p == null) return Fit.UNKNOWN;
+		final Class<?> ba = Types.box(a), bp = Types.box(p);
+		if (bp.isAssignableFrom(ba)) return Fit.MATCH;
+		if (isIntegral(ba)) {
+			if (isIntegral(bp)) return Fit.MATCH;
+			if (isFloating(bp)) return Fit.CONVERSION;
+		}
+		if (isFloating(ba) && isFloating(bp)) return Fit.MATCH;
+		return Fit.MISMATCH;
+	}
+
+	private static boolean isIntegral(final Class<?> c) {
+		return c == Integer.class || c == Long.class || c == Short.class ||
+			c == Byte.class || c == BigInteger.class;
+	}
+
+	private static boolean isFloating(final Class<?> c) {
+		return c == Double.class || c == Float.class || c == BigDecimal.class;
+	}
 
 	/** A call around the caret, as analyzed. */
 	private static final class CallContext {
@@ -282,7 +366,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	private List<CompletionItem> argumentChoices(final Document doc,
 		final int caret, final String line)
 	{
-		if (Signatures.callStart(doc.text(), caret) < 0) return new ArrayList<>();
+		if (Positions.callStart(doc.text(), caret) < 0) return new ArrayList<>();
 		final CallContext call = callContext(doc, caret, line);
 		if (call == null) return new ArrayList<>();
 		final Set<Class<?>> targets = new HashSet<>();

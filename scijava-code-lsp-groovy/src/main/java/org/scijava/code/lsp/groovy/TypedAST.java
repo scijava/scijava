@@ -602,8 +602,8 @@ final class TypedAST {
 	}
 
 	/**
-	 * Gets the type of an expression, e.g. an argument, as a type name for
-	 * {@link org.scijava.code.lsp.jvm.Signatures}; or null if unknown.
+	 * Gets the type of an expression, e.g. an argument, as a type name (e.g.
+	 * {@code int} or {@code java.lang.String}); or null if unknown.
 	 */
 	String typeName(final Expression e) {
 		if (e instanceof GStringExpression) return String.class.getName();

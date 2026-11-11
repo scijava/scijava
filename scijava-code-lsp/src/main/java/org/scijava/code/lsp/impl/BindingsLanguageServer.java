@@ -45,9 +45,9 @@ import javax.script.SimpleBindings;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
+import org.scijava.code.lsp.CompletionItems;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer;
-import org.scijava.code.lsp.jvm.Members;
 
 /**
  * A language server that knows the existing variables of a running interpreter
@@ -85,7 +85,8 @@ class BindingsLanguageServer extends AbstractInProcessLanguageServer {
 			final Object value = bindings.get(member.group(1));
 			final String prefix = member.group(2);
 			return sorted(doc, offset - prefix.length(), offset, value == null
-				? new ArrayList<>() : Members.of(value.getClass(), prefix, false));
+				? new ArrayList<>() : CompletionItems.members(value
+					.getClass(), prefix, false));
 		}
 		final Matcher word = WORD.matcher(line);
 		final String prefix = word.find() ? word.group(1) : "";
@@ -96,7 +97,8 @@ class BindingsLanguageServer extends AbstractInProcessLanguageServer {
 			final CompletionItem item = new CompletionItem(name);
 			item.setKind(CompletionItemKind.Variable);
 			final Object value = bindings.get(name);
-			if (value != null) item.setDetail(Members.typeName(value.getClass()));
+			if (value != null) item.setDetail(CompletionItems.typeName(value
+				.getClass()));
 			items.add(item);
 		}
 		return sorted(doc, offset - prefix.length(), offset, items);

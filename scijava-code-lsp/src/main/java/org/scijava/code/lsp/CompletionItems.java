@@ -29,7 +29,12 @@
 
 package org.scijava.code.lsp;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
@@ -80,7 +85,7 @@ public final class CompletionItems {
 	 *          entry per name, in the same order, e.g.
 	 *          {@code (double a, double b)}.
 	 */
-	public static CompletionItem methodSnippet(final String name,
+	public static CompletionItem method(final String name,
 		final List<String> paramNames, final String paramList)
 	{
 		final CompletionItem item = new CompletionItem(name);
@@ -98,6 +103,85 @@ public final class CompletionItems {
 		details.setDetail(paramList);
 		item.setLabelDetails(details);
 		return item;
+	}
+
+	/**
+	 * Completions for the public fields and methods of a Java class whose
+	 * names start with a (case-insensitive) prefix, by reflection; methods as
+	 * {@link #method(String, List, String) method snippets}, with Java-style
+	 * parameter lists (e.g. {@code (double a, double b)}), and their
+	 * signatures as their details.
+	 *
+	 * @param c The class.
+	 * @param prefix The prefix; empty matches everything.
+	 * @param staticOnly Whether to include only static members.
+	 */
+	public static List<CompletionItem> members(final Class<?> c,
+		final String prefix, final boolean staticOnly)
+	{
+		final List<CompletionItem> out = new ArrayList<>();
+		if (c == null) return out;
+		final String lp = prefix == null ? "" : prefix.toLowerCase(Locale.ROOT);
+		for (final Field f : c.getFields()) {
+			if (staticOnly && !Modifier.isStatic(f.getModifiers())) continue;
+			if (!f.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
+			out.add(field(f));
+		}
+		for (final Method m : c.getMethods()) {
+			if (staticOnly && !Modifier.isStatic(m.getModifiers())) continue;
+			if (!m.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
+			out.add(method(m));
+		}
+		return out;
+	}
+
+	/**
+	 * The name of a Java type, as code writes it and as these completions
+	 * show it: its canonical name (e.g. {@code int[]}, or
+	 * {@code java.util.Map.Entry}), or else (e.g. for local classes) its
+	 * binary name.
+	 */
+	public static String typeName(final Class<?> c) {
+		final String n = c.getCanonicalName();
+		return n == null ? c.getName() : n;
+	}
+
+	// -- Helper methods --
+
+	/** A completion for a field. */
+	private static CompletionItem field(final Field f) {
+		final CompletionItem item = new CompletionItem(f.getName());
+		item.setKind(CompletionItemKind.Field);
+		item.setInsertText(f.getName());
+		item.setDetail(typeName(f.getType()) + " " + f.getName());
+		return item;
+	}
+
+	/** A completion for a method, e.g. {@code max(double a, double b)}. */
+	private static CompletionItem method(final Method m) {
+		final List<String> names = new ArrayList<>();
+		final List<String> params = new ArrayList<>();
+		for (final java.lang.reflect.Parameter p : m.getParameters()) {
+			names.add(p.getName());
+			params.add(typeName(p.getType()) + " " + p.getName());
+		}
+		final CompletionItem item = method(m.getName(), names, "(" + String.join(
+			", ", params) + ")");
+		item.setDetail(signature(m));
+		return item;
+	}
+
+	/** A readable method signature, e.g. {@code String concat(String)}. */
+	private static String signature(final Method m) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(typeName(m.getReturnType())).append(' ').append(m.getName())
+			.append('(');
+		final Class<?>[] types = m.getParameterTypes();
+		for (int i = 0; i < types.length; i++) {
+			if (i > 0) sb.append(", ");
+			sb.append(typeName(types[i]));
+		}
+		return sb.append(')').toString();
 	}
 
 	/** Escapes a snippet's special characters. */

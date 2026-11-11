@@ -71,7 +71,8 @@ import org.scijava.code.lsp.Positions;
  * private ones (starting with {@code _}) unless the word does.</li>
  * <li>Those with signatures (e.g.
  * {@code def dumps(obj, *, skipkeys: bool = False) -> str}) as
- * {@link CompletionItems#methodSnippet method snippets}, with their parameters.
+ * {@link CompletionItems#method(String, List, String) method snippets},
+ * with their parameters.
  * (Not in imports: an import names things, rather than calling them.)</li>
  * </ul>
  * <p>
@@ -196,8 +197,9 @@ class TyLanguageServer implements LanguageServer,
 	 * ty gives a function's signature only as text (e.g.
 	 * {@code def dumps(obj: Any, *, indent: int | None = None) -> str}), so an
 	 * editor would insert just its name. As a callable, it is a snippet with
-	 * its parameters (see {@link CompletionItems#methodSnippet}). NB: The
-	 * detail comes with the completion: ty does not resolve completions.
+	 * its parameters (see
+	 * {@link CompletionItems#method(String, List, String)}). NB: The detail
+	 * comes with the completion: ty does not resolve completions.
 	 * </p>
 	 */
 	private static CompletionItem callable(final CompletionItem item) {
@@ -221,8 +223,8 @@ class TyLanguageServer implements LanguageServer,
 
 	/**
 	 * Parses a signature, as ty writes it in a completion's detail, into a
-	 * {@link CompletionItems#methodSnippet method snippet}: its parameters'
-	 * names and its parameter list (as ty writes it). E.g.
+	 * {@link CompletionItems#method(String, List, String) method snippet}:
+	 * its parameters' names and its parameter list (as ty writes it). E.g.
 	 * {@code def dumps(obj: Any, *, indent: int | None = None) -> str} becomes
 	 * {@code dumps}, with parameters {@code obj} and {@code indent}, listed as
 	 * {@code (obj: Any, indent: int | None = None)}.
@@ -255,7 +257,7 @@ class TyLanguageServer implements LanguageServer,
 				"^\\*{1,2}", ""));
 			params.add(p);
 		}
-		return CompletionItems.methodSnippet(name, names, "(" + String.join(
+		return CompletionItems.method(name, names, "(" + String.join(
 			", ", params) + ")");
 	}
 

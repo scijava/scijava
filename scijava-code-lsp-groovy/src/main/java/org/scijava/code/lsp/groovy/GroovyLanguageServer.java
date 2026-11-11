@@ -73,8 +73,8 @@ import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureInformation;
 import org.eclipse.lsp4j.TextEdit;
 import org.scijava.code.lsp.jvm.ClassIndex;
+import org.scijava.code.lsp.CompletionItems;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.jvm.Members;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer;
 import org.scijava.util.Types;
@@ -437,7 +437,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		}
 		final Class<?> c = Types.box(ast.toClass(type));
 		if (c == null) return new ArrayList<>();
-		final List<CompletionItem> out = sorted(Members.of(c, prefix,
+		final List<CompletionItem> out = sorted(CompletionItems.members(c, prefix,
 			staticOnly));
 		if (!staticOnly) {
 			for (final Overload m : gdkMethods(c, prefix)) out.add(m.toItem());
@@ -470,7 +470,8 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		// Plus what it inherits from (compiled) superclasses.
 		final Class<?> superclass = ast.toClass(type.getSuperClass());
 		if (superclass != null && superclass != Object.class) {
-			sorted.addAll(sorted(Members.of(superclass, prefix, staticOnly)));
+			sorted.addAll(sorted(CompletionItems.members(superclass, prefix,
+				staticOnly)));
 		}
 		return sorted;
 	}

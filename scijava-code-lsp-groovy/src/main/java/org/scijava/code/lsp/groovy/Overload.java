@@ -40,7 +40,6 @@ import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.ParameterInformation;
 import org.eclipse.lsp4j.SignatureInformation;
 import org.scijava.code.lsp.CompletionItems;
-import org.scijava.code.lsp.jvm.Members;
 
 /**
  * One overload of a method or constructor that Groovy code may call: its
@@ -106,8 +105,8 @@ final class Overload {
 		for (final Method m : c.getMethods()) {
 			if (staticOnly && !Modifier.isStatic(m.getModifiers())) continue;
 			if (!m.getName().equals(name)) continue;
-			out.add(new Overload(m.getName(), params(m.getParameters()), Members
-				.typeName(m.getReturnType())));
+			out.add(new Overload(m.getName(), params(m.getParameters()),
+				CompletionItems.typeName(m.getReturnType())));
 		}
 		return out;
 	}
@@ -118,7 +117,7 @@ final class Overload {
 		if (c == null) return out;
 		for (final Constructor<?> ctor : c.getConstructors()) {
 			out.add(new Overload(c.getSimpleName(), params(ctor.getParameters()),
-				Members.typeName(c)));
+				CompletionItems.typeName(c)));
 		}
 		return out;
 	}
@@ -147,11 +146,14 @@ final class Overload {
 		return sb.toString();
 	}
 
-	/** As a completion (see {@link CompletionItems#methodSnippet}). */
+	/**
+	 * As a completion (see
+	 * {@link CompletionItems#method(String, List, String)}).
+	 */
 	CompletionItem toItem() {
 		final List<String> names = new ArrayList<>();
 		for (final Param p : params) names.add(p.name());
-		final CompletionItem item = CompletionItems.methodSnippet(name, names,
+		final CompletionItem item = CompletionItems.method(name, names,
 			parameterList());
 		item.setDetail(detail);
 		return item;
@@ -186,7 +188,7 @@ final class Overload {
 	{
 		final List<Param> out = new ArrayList<>();
 		for (final java.lang.reflect.Parameter p : parameters) {
-			out.add(new Param(p.getName(), Members.typeName(p.getType())));
+			out.add(new Param(p.getName(), CompletionItems.typeName(p.getType())));
 		}
 		return out;
 	}

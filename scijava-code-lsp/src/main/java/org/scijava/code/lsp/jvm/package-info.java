@@ -33,10 +33,10 @@
  * <p>
  * {@link org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer} is a
  * base class: it keeps the open documents, and turns requests into questions
- * about a document and an offset. The rest help answer them for Java classes:
- * {@link org.scijava.code.lsp.jvm.Members} (completions for their members, by
- * reflection) and {@link org.scijava.code.lsp.jvm.ClassIndex} (the classes on
- * the classpath, with their javadoc).
+ * about a document and an offset. {@link org.scijava.code.lsp.jvm.ClassIndex}
+ * helps answer them for Java classes: it knows the classes on the classpath,
+ * with their javadoc. (Completions for Java classes' members are built by
+ * {@link org.scijava.code.lsp.CompletionItems#members}.)
  * </p>
  */
 package org.scijava.code.lsp.jvm;

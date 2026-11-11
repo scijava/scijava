@@ -224,8 +224,7 @@ class JythonLanguageServer extends AbstractInProcessLanguageServer {
 		final SignatureHelpParams params)
 	{
 		// TODO: All of a Java method's overloads, rated against the arguments
-		// typed, as Jython's own analysis did: jedi-language-server offers only
-		// the last of a stub's typing.overloads.
+		// typed, as Jython's own analysis did.
 		return orNull(documents().signatureHelp(params));
 	}
 

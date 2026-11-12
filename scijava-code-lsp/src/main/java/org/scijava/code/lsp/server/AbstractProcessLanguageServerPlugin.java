@@ -39,13 +39,11 @@ import org.scijava.log.StderrLogService;
 import org.scijava.plugin.Parameter;
 
 /**
- * Serves a language with a language server that runs as a process, as its
- * {@link #launcher()} starts it: one process per environment scripts run in,
- * started when first needed (in the background), restarted if it stops, and
- * stopped when unused for a while, or when this is disposed.
+ * Creates a {@link LanguageServerPlugin} wrapping an external language server.
  * <p>
- * Implementations need only say how to start the server; to adapt its
- * answers, they may also wrap the servers {@link #create} gives.
+ * Implementations only need to specify the {@link ServerLauncher}
+ * implementation via {@link #launcher}, but can also overwrite {@link #create}
+ * to e.g. augment the plain language server with additional features.
  * </p>
  *
  * @author Gabriel Selzer

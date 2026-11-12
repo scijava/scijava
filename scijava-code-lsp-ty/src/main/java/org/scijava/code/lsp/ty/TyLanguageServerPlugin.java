@@ -55,6 +55,7 @@ public class TyLanguageServerPlugin extends
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
+		// Wrap a plain Ty server with additional features
 		return new TyLanguageServer(super.create(languageId, environment));
 	}
 }

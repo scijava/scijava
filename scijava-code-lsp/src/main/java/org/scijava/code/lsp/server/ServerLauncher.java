@@ -36,8 +36,8 @@ import org.scijava.code.lsp.Environment;
 /**
  * How to start a language server that runs as a process (e.g.
  * jedi-language-server), for scripts running in a given environment. Its
- * {@link ServerProcesses} start it when first needed, one per environment,
- * restart it if it stops, and stop it when idle.
+ * {@link AbstractProcessLanguageServerPlugin} starts it when first needed, one
+ * per environment, restarts it if it stops, and stops it when idle.
  *
  * @author Gabriel Selzer
  */

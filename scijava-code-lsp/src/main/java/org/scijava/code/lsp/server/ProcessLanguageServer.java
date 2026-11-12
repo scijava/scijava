@@ -63,20 +63,9 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.scijava.code.lsp.Environment;
 
 /**
- * The language server process of an environment (see
- * {@link ServerProcesses}), seen as a {@link LanguageServer} of its own:
- * started when first asked, restarted if it stops, stopped when idle. Each
- * document is brought up to date on the process just before each request,
- * and, for diagnostics, a moment after it last changed.
- * <p>
- * NB: Not an
- * {@link org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer}, which
- * answers requests itself, as questions about a document's text and an
- * offset: this one passes them on as they are, and is answered later.
- * </p>
+ * A {@link LanguageServer} wrapping an external process.
  *
  * @author Gabriel Selzer
  */
@@ -100,22 +89,18 @@ class ProcessLanguageServer implements LanguageServer,
 			return t;
 		});
 
-	private final ServerProcesses servers;
-	private final Environment environment;
+	/** The environment's process. */
+	private final ServerProcesses.Slot slot;
 	private volatile LanguageClient client;
 
 	/** The open documents' texts and versions, by URI. */
 	private final Map<String, Doc> docs = new ConcurrentHashMap<>();
 
 	/**
-	 * @param servers The server processes.
-	 * @param environment Where the scripts run: whose process to ask.
+	 * @param slot An indirect reference to the language server process
 	 */
-	ProcessLanguageServer(final ServerProcesses servers,
-		final Environment environment)
-	{
-		this.servers = servers;
-		this.environment = environment;
+	ProcessLanguageServer(final ServerProcesses.Slot slot) {
+		this.slot = slot;
 	}
 
 	@Override
@@ -136,9 +121,7 @@ class ProcessLanguageServer implements LanguageServer,
 
 	@Override
 	public CompletableFuture<Object> shutdown() {
-		for (final String uri : docs.keySet()) {
-			servers.forEach(s -> s.close(uri));
-		}
+		slot.running().ifPresent(s -> docs.keySet().forEach(s::close));
 		docs.clear();
 		return CompletableFuture.completedFuture(null);
 	}
@@ -180,7 +163,7 @@ class ProcessLanguageServer implements LanguageServer,
 		final String uri = params.getTextDocument().getUri();
 		final Doc doc = docs.remove(uri);
 		if (doc != null && doc.pending != null) doc.pending.cancel(false);
-		servers.forEach(s -> s.close(uri));
+		slot.running().ifPresent(s -> s.close(uri));
 	}
 
 	@Override
@@ -200,7 +183,7 @@ class ProcessLanguageServer implements LanguageServer,
 	public CompletableFuture<CompletionItem> resolveCompletionItem(
 		final CompletionItem item)
 	{
-		return servers.process(environment).thenCompose(s -> s.remote()
+		return slot.process().thenCompose(s -> s.remote()
 			.getTextDocumentService().resolveCompletionItem(item)).handle((
 				resolved, error) -> resolved != null ? resolved : item);
 	}
@@ -227,7 +210,7 @@ class ProcessLanguageServer implements LanguageServer,
 	public void didChangeWatchedFiles(final DidChangeWatchedFilesParams p) {
 		// NB: Servers may cache files they read, and so must be told
 		// when they change. A process started later reads them anew.
-		servers.forEach(s -> s.remote().getWorkspaceService()
+		slot.running().ifPresent(s -> s.remote().getWorkspaceService()
 			.didChangeWatchedFiles(p));
 	}
 
@@ -247,7 +230,7 @@ class ProcessLanguageServer implements LanguageServer,
 		// NB: Cancelling the answer cancels the request, which tells the process
 		// ($/cancelRequest).
 		final CompletableFuture<T> answer = new CompletableFuture<>();
-		servers.process(environment).thenAccept(s -> {
+		slot.process().thenAccept(s -> {
 			if (answer.isDone()) return;
 			final CompletableFuture<T> raw = s.request(uri, item.getText(), request);
 			answer.whenComplete((r, error) -> {
@@ -286,8 +269,7 @@ class ProcessLanguageServer implements LanguageServer,
 	private void diagnose(final Doc doc, final TextDocumentItem item) {
 		final String uri = item.getUri();
 		final int version = item.getVersion();
-		servers.process(environment).thenCompose(s -> s.diagnostics(uri, item
-			.getText()))
+		slot.process().thenCompose(s -> s.diagnostics(uri, item.getText()))
 			.orTimeout(DIAGNOSE_TIMEOUT, TimeUnit.MILLISECONDS).thenAccept(found -> {
 				final LanguageClient c = client;
 				// NB: Only if still current.

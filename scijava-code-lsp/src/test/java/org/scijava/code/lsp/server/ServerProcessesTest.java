@@ -30,10 +30,12 @@
 package org.scijava.code.lsp.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,8 +79,10 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.Positions;
+import org.scijava.log.LogService;
 import org.scijava.log.StderrLogService;
 
 /**
@@ -168,21 +172,150 @@ public class ServerProcessesTest {
 	}
 
 	@Test
+	public void testPlugin() throws Exception {
+		// Only the launcher given: the rest comes with the plugin.
+		final Context context = new Context(LogService.class);
+		try {
+			final AbstractProcessLanguageServerPlugin plugin =
+				new AbstractProcessLanguageServerPlugin()
+				{
+
+					@Override
+					protected ServerLauncher launcher() {
+						return new FakeLauncher();
+					}
+				};
+			context.inject(plugin);
+			// NB: Its log, declared by the superclass, is injected too.
+			final java.lang.reflect.Field log =
+				AbstractProcessLanguageServerPlugin.class.getDeclaredField("log");
+			log.setAccessible(true);
+			assertSame(context.getService(LogService.class), log.get(plugin));
+
+			assertTrue(plugin.supports("python"));
+			assertFalse(plugin.supports("groovy"));
+			assertEquals(0, started.size()); // NB: Not until needed.
+
+			final ProcessLanguageServer s = (ProcessLanguageServer) plugin.create(
+				"python", ENV);
+			final String uri = "untitled:/p.py";
+			s.didOpen(new DidOpenTextDocumentParams(
+				new org.eclipse.lsp4j.TextDocumentItem(uri, "python", 1, "x")));
+			assertEquals(3, complete(s, uri).size());
+			assertEquals(1, started.size());
+
+			// Disposed: the processes stop.
+			plugin.dispose();
+			waitFor(() -> started.get(0).shutdown);
+		}
+		finally {
+			context.dispose();
+		}
+	}
+
+	@Test
 	public void testRestartAndIdle() throws Exception {
 		setUp(60_000);
-		final ServerProcess first = servers.process(ENV).get(10, TimeUnit.SECONDS);
-		assertSame(first, servers.process(ENV).get(10, TimeUnit.SECONDS));
+		final ServerProcesses.Slot slot = servers.slot(ENV);
+		final ServerProcess first = slot.process().get(10, TimeUnit.SECONDS);
+		assertSame(slot, servers.slot(ENV));
+		assertSame(first, slot.process().get(10, TimeUnit.SECONDS));
 		// The server dies: the next request starts another.
 		started.get(0).alive = false;
-		final ServerProcess second = servers.process(ENV).get(10, TimeUnit.SECONDS);
+		final ServerProcess second = slot.process().get(10, TimeUnit.SECONDS);
 		assertNotSame(first, second);
 		assertEquals(2, started.size());
 
-		// Unused for long: stopped.
+		// Unused for long: stopped, and not started again until asked.
 		now.addAndGet(120_000);
 		servers.stopIdle();
 		waitFor(() -> started.get(1).shutdown);
-		assertNotSame(second, servers.process(ENV).get(10, TimeUnit.SECONDS));
+		assertFalse(slot.running().isPresent());
+		assertEquals(2, started.size());
+		assertNotSame(second, slot.process().get(10, TimeUnit.SECONDS));
+	}
+
+	@Test
+	public void testReleased() throws Exception {
+		// Stopped: the environment is let go, and a new slot may take over.
+		setUp(60_000);
+		final ServerProcesses.Slot old = servers.slot(ENV);
+		old.process().get(10, TimeUnit.SECONDS);
+		now.addAndGet(120_000);
+		servers.stopIdle();
+		final ServerProcesses.Slot fresh = servers.slot(ENV);
+		assertNotSame(old, fresh);
+		final ServerProcess s = fresh.process().get(10, TimeUnit.SECONDS);
+		// The old slot's users get the new slot's process: no second one.
+		assertSame(s, old.process().get(10, TimeUnit.SECONDS));
+		assertSame(s, old.running().get());
+		assertEquals(2, started.size());
+	}
+
+	@Test
+	public void testRetry() throws Exception {
+		// Failed to start: tried again only after a while.
+		final AtomicLong tries = new AtomicLong();
+		servers = new ServerProcesses(new FakeLauncher() {
+
+			@Override
+			public Process start(final Environment env) throws IOException {
+				tries.incrementAndGet();
+				throw new IOException("No such server");
+			}
+		}, new StderrLogService(), 60_000, 2, now::get);
+		final ServerProcesses.Slot slot = servers.slot(ENV);
+		final CompletableFuture<ServerProcess> failed = slot.process();
+		assertThrows(java.util.concurrent.ExecutionException.class, () -> failed
+			.get(10, TimeUnit.SECONDS));
+		waitFor(() -> slot.process() == failed); // NB: Its failure noted.
+		assertEquals(1, tries.get());
+		now.addAndGet(60_000);
+		assertThrows(java.util.concurrent.ExecutionException.class, () -> slot
+			.process().get(10, TimeUnit.SECONDS));
+		assertEquals(2, tries.get());
+	}
+
+	@Test
+	public void testTooMany() throws Exception {
+		// At most two: a third stops the least recently used.
+		setUp(60_000);
+		final ServerProcesses.Slot a = servers.slot(ENV);
+		final ServerProcesses.Slot b = servers.slot(ENV.withPaths(Collections
+			.singletonList("/b")));
+		final ServerProcesses.Slot c = servers.slot(ENV.withPaths(Collections
+			.singletonList("/c")));
+		final ServerProcess first = a.process().get(10, TimeUnit.SECONDS);
+		Thread.sleep(20);
+		b.process().get(10, TimeUnit.SECONDS);
+		Thread.sleep(20);
+		first.remote(); // NB: Used: now b is the least recently used.
+		c.process().get(10, TimeUnit.SECONDS);
+		waitFor(() -> started.get(1).shutdown);
+		assertFalse(started.get(0).shutdown);
+		assertSame(first, a.running().get());
+		assertFalse(b.running().isPresent());
+	}
+
+	@Test
+	public void testCloseOwnOnly() throws Exception {
+		// Closing a document tells only its environment's process.
+		setUp(60_000);
+		final ProcessLanguageServer a = (ProcessLanguageServer) servers.server(
+			ENV);
+		final ProcessLanguageServer b = (ProcessLanguageServer) servers.server(ENV
+			.withPaths(Collections.singletonList("/b")));
+		final String uri = "untitled:/same.py";
+		for (final ProcessLanguageServer s : Arrays.asList(a, b)) {
+			s.didOpen(new DidOpenTextDocumentParams(
+				new org.eclipse.lsp4j.TextDocumentItem(uri, "python", 1, "x")));
+			complete(s, uri);
+		}
+		assertEquals(2, started.size());
+		a.didClose(new DidCloseTextDocumentParams(
+			new org.eclipse.lsp4j.TextDocumentIdentifier(uri)));
+		waitFor(() -> started.get(0).events.contains("close " + uri));
+		assertFalse(started.get(1).events.contains("close " + uri));
 	}
 
 	@Test
@@ -216,7 +349,7 @@ public class ServerProcessesTest {
 	}
 
 	/** Starts fake servers, connected by pipes. */
-	private final class FakeLauncher implements ServerLauncher {
+	private class FakeLauncher implements ServerLauncher {
 
 		@Override
 		public String languageId() {

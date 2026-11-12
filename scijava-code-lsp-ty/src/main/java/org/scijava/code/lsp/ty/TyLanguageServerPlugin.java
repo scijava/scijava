@@ -30,61 +30,31 @@
 package org.scijava.code.lsp.ty;
 
 import org.eclipse.lsp4j.services.LanguageServer;
-import org.scijava.Disposable;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
-import org.scijava.code.lsp.server.ServerProcesses;
-import org.scijava.log.LogService;
-import org.scijava.log.StderrLogService;
-import org.scijava.plugin.Parameter;
+import org.scijava.code.lsp.server.AbstractProcessLanguageServerPlugin;
+import org.scijava.code.lsp.server.ServerLauncher;
 import org.scijava.plugin.Plugin;
 
 /**
- * Serves {@code python}: ty's language server (see {@link TyLauncher}), one
- * process per environment, made to work well in an editor (see
- * {@link TyLanguageServer}). A server analyzes scripts in exactly the
- * environment it is given. The processes stop when this is disposed.
+ * A {@code ty}-based {@link LanguageServerPlugin}.
  *
  * @author Gabriel Selzer
  */
 @Plugin(type = LanguageServerPlugin.class, name = "Python")
-public class TyLanguageServerPlugin implements LanguageServerPlugin,
-	Disposable
+public class TyLanguageServerPlugin extends
+	AbstractProcessLanguageServerPlugin
 {
 
-	@Parameter(required = false)
-	private LogService log;
-
-	private ServerProcesses ty;
-
 	@Override
-	public boolean supports(final String languageId) {
-		return "python".equals(languageId);
+	protected ServerLauncher launcher() {
+		return new TyLauncher();
 	}
 
 	@Override
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
-		return new TyLanguageServer(ty().server(environment));
-	}
-
-	// -- Disposable methods --
-
-	@Override
-	public synchronized void dispose() {
-		if (ty != null) ty.shutdown();
-		ty = null;
-	}
-
-	// -- Helper methods --
-
-	/** Gets the ty server processes, creating them on first use. */
-	private synchronized ServerProcesses ty() {
-		if (ty == null) {
-			ty = new ServerProcesses(new TyLauncher(), log != null ? log
-				: new StderrLogService());
-		}
-		return ty;
+		return new TyLanguageServer(super.create(languageId, environment));
 	}
 }

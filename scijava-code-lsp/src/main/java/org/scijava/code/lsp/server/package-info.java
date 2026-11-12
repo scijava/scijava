@@ -28,29 +28,19 @@
  */
 
 /**
- * A toolkit for offering language servers that run as processes, e.g. an
- * existing server for some language, speaking LSP over its standard input and
- * output.
+ * Tooling for managing inter-process language servers.
  * <p>
- * {@link org.scijava.code.lsp.server.ServerProcesses} keeps the server
- * processes of one kind: one per environment scripts run in, started when
- * first needed (in the background), restarted if they stop, and stopped when
- * unused for a while. Each is seen as a
- * {@link org.eclipse.lsp4j.services.LanguageServer} of its own.
+ * {@link org.scijava.code.lsp.server.ServerLauncher} implementations describe
+ * how a language server can be started up in a new process.
  * </p>
- * <h2>Offering a server of your own</h2>
- * <ol>
- * <li>Implement {@link org.scijava.code.lsp.server.ServerLauncher}: the
- * language it serves, and how to start its process for an environment, e.g.
- * against that environment's interpreter and extra search paths. Optionally,
- * also the server's initialization options and workspace root.</li>
- * <li>Offer it as a {@link org.scijava.code.lsp.LanguageServerPlugin}, which
- * keeps one {@code ServerProcesses} of it, gets each environment's server from
- * it, and shuts it down when disposed (stopping the processes).</li>
- * <li>For scripts of a SciJava script language to be served by it, a
- * {@link org.scijava.code.lsp.ScriptDialect} must make them code of that
- * language.</li>
- * </ol>
+ * <p>
+ * {@link org.scijava.code.lsp.server.AbstractProcessLanguageServerPlugin}
+ * implementations wrap processes started with a
+ * {@link org.scijava.code.lsp.server.ServerLauncher} into a
+ * {@link org.eclipse.lsp4j.services.LanguageServer}. Override
+ * {@link org.scijava.code.lsp.server.AbstractProcessLanguageServerPlugin#create}
+ * to write a thin wrapper over the existing language server for fine-tuning.
+ * </p>
  * <p>
  * For example, for a server run as {@code my-language-server --stdio}:
  * </p>
@@ -71,38 +61,13 @@
  * }
  *
  * &#64;Plugin(type = LanguageServerPlugin.class)
- * public class MyServerPlugin implements LanguageServerPlugin, Disposable {
- *
- *   &#64;Parameter
- *   private LogService log;
- *
- *   private ServerProcesses servers;
+ * public class MyServerPlugin extends AbstractProcessLanguageServerPlugin {
  *
  *   &#64;Override
- *   public boolean supports(String languageId) {
- *     return "mylang".equals(languageId);
- *   }
- *
- *   &#64;Override
- *   public synchronized LanguageServer create(String languageId,
- *     Environment environment)
- *   {
- *     if (servers == null) servers = new ServerProcesses(new MyLauncher(), log);
- *     return servers.server(environment);
- *   }
- *
- *   &#64;Override
- *   public synchronized void dispose() {
- *     if (servers != null) servers.shutdown();
+ *   protected ServerLauncher launcher() {
+ *     return new MyLauncher();
  *   }
  * }
  * </pre>
- * <p>
- * scijava-code-lsp-ty's {@code TyLauncher} and {@code TyLanguageServerPlugin}
- * do this for ty's language server, building the environment it runs in the
- * first time it is needed. (Servers written in Java can run in this JVM
- * instead: see
- * {@link org.scijava.code.lsp.jvm.AbstractInProcessLanguageServer}.)
- * </p>
  */
 package org.scijava.code.lsp.server;

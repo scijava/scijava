@@ -117,7 +117,7 @@ public final class ScriptSession implements AutoCloseable {
 	private CompletableFuture<Optional<LanguageServer>> server =
 		CompletableFuture.completedFuture(Optional.empty());
 	/** Where the script runs, as the server is launched for. */
-	private Environment environment = new Environment();
+	private Optional<Environment> environment = Optional.empty();
 	/** How many servers were moved to: which one is meant, as of now. */
 	private int generation;
 	/** The server whose messages are heard (set as it is launched). */
@@ -453,8 +453,8 @@ public final class ScriptSession implements AutoCloseable {
 	 */
 	private boolean follow() {
 		final Environment env = doc.environment(file.get());
-		if (closed || environment.equals(env)) return false;
-		environment = env;
+		if (closed || environment.equals(Optional.of(env))) return false;
+		environment = Optional.of(env);
 		generation++;
 		server = server.thenApplyAsync(old -> {
 			old.ifPresent(this::stop);

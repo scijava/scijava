@@ -64,7 +64,7 @@ final class ScriptDocument {
 
 	private final String original;
 	private final String text;
-	private final String languageId;
+	private final String language;
 	/** Where the script runs, as its dialect says, given its file. */
 	private final BiFunction<String, Optional<File>, Environment> where;
 	/** Number of characters prepended. */
@@ -72,13 +72,13 @@ final class ScriptDocument {
 	private final Set<String> hiddenNames;
 
 	private ScriptDocument(final String original, final String text,
-		final String languageId,
+		final String language,
 		final BiFunction<String, Optional<File>, Environment> where,
 		final int headerLength, final Set<String> hiddenNames)
 	{
 		this.original = original;
 		this.text = text;
-		this.languageId = languageId;
+		this.language = language;
 		this.where = where;
 		this.headerLength = headerLength;
 		this.hiddenNames = Collections.unmodifiableSet(hiddenNames);
@@ -114,7 +114,7 @@ final class ScriptDocument {
 			if (!mentions(script, name)) hidden.add(name);
 		}
 		return new ScriptDocument(script, header + blank(script, removedLines),
-			dialect.languageId(), dialect::environment, header.length(),
+			dialect.outputLanguage(), dialect::environment, header.length(),
 			hidden);
 	}
 
@@ -136,8 +136,8 @@ final class ScriptDocument {
 	 * The LSP language of the {@link #text()} (e.g. {@code python}), as its
 	 * dialect says; or {@code plaintext}, for a script as it is.
 	 */
-	String languageId() {
-		return languageId;
+	String language() {
+		return language;
 	}
 
 	/**

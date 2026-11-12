@@ -233,7 +233,7 @@ public class JythonLanguageServerTest {
 		}
 
 		@Override
-		public String languageId() {
+		public String outputLanguage() {
 			return "jython";
 		}
 

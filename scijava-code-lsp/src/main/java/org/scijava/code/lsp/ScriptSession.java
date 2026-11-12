@@ -352,17 +352,17 @@ public final class ScriptSession implements AutoCloseable {
 		final LanguageServerService servers, final ScriptLanguage language,
 		final Optional<ScriptContext> live)
 	{
-		String id;
+		String output;
 		try {
-			id = servers.dialect(language).languageId();
+			output = servers.dialect(language).outputLanguage();
 		}
 		catch (final IllegalArgumentException exc) {
 			// NB: The language has no dialect.
-			id = ScriptDocument.of("").languageId();
+			output = ScriptDocument.of("").language();
 		}
-		final String languageId = id;
-		return env -> servers.launch(languageId, live.map(env::withLive).orElse(
-			env));
+		final String outputLanguage = output;
+		return env -> servers.launch(outputLanguage, live.map(env::withLive)
+			.orElse(env));
 	}
 
 	/**
@@ -376,7 +376,7 @@ public final class ScriptSession implements AutoCloseable {
 	{
 		try {
 			final ScriptDialect dialect = servers.dialect(language);
-			if (servers.supports(dialect.languageId())) {
+			if (servers.supports(dialect.outputLanguage())) {
 				final ScriptProcessing processing = new ScriptProcessing(
 					servers::context);
 				return text -> document(processing, text, dialect, live.map(
@@ -575,7 +575,7 @@ public final class ScriptSession implements AutoCloseable {
 
 	/** Opens the server's copy of the script. */
 	private void open() {
-		final TextDocumentItem item = new TextDocumentItem(uri, doc.languageId(),
+		final TextDocumentItem item = new TextDocumentItem(uri, doc.language(),
 			version, doc.text());
 		tell(s -> s.getTextDocumentService().didOpen(
 			new DidOpenTextDocumentParams(item)));

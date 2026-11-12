@@ -90,7 +90,7 @@ final class ServerProcess {
 			return t;
 		});
 
-	private final String languageId;
+	private final String language;
 	private final Process process;
 	private final LanguageServer remote;
 	private final Future<Void> listening;
@@ -103,11 +103,11 @@ final class ServerProcess {
 
 	private volatile long lastUsed = System.currentTimeMillis();
 
-	private ServerProcess(final String languageId, final Process process,
+	private ServerProcess(final String language, final Process process,
 		final LanguageServer remote, final Future<Void> listening,
 		final Published published)
 	{
-		this.languageId = languageId;
+		this.language = language;
 		this.published = published;
 		this.process = process;
 		this.remote = remote;
@@ -148,7 +148,7 @@ final class ServerProcess {
 			init.setInitializationOptions(launcher.initializationOptions(env));
 			remote.initialize(init).get(timeout, TimeUnit.MILLISECONDS);
 			remote.initialized(new InitializedParams());
-			return new ServerProcess(launcher.languageId(), process, remote, listening,
+			return new ServerProcess(launcher.language(), process, remote, listening,
 				published);
 		}
 		catch (final Exception exc) {
@@ -245,7 +245,7 @@ final class ServerProcess {
 			documents.put(uri, new Document(text));
 			published.sent(uri, 1);
 			docs.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(uri,
-				languageId, 1, text)));
+				language, 1, text)));
 			return true;
 		}
 		if (doc.text.equals(text)) return false;

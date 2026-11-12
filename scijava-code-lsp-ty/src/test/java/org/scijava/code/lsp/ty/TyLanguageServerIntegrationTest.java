@@ -269,7 +269,7 @@ public class TyLanguageServerIntegrationTest {
 		}
 
 		@Override
-		public String languageId() {
+		public String outputLanguage() {
 			return "python";
 		}
 

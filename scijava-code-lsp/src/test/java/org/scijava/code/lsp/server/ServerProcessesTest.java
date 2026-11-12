@@ -352,7 +352,7 @@ public class ServerProcessesTest {
 	private class FakeLauncher implements ServerLauncher {
 
 		@Override
-		public String languageId() {
+		public String language() {
 			return "python";
 		}
 

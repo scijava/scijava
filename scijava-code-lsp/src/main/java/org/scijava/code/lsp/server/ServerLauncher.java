@@ -43,8 +43,8 @@ import org.scijava.code.lsp.Environment;
  */
 public interface ServerLauncher {
 
-	/** The LSP language identifier of the documents, e.g. {@code python}. */
-	String languageId();
+	/** The LSP language of the documents, e.g. {@code python}. */
+	String language();
 
 	/**
 	 * Starts a server, which speaks LSP over its standard input and output. (Its

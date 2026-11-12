@@ -60,7 +60,7 @@ public interface LanguageServerService extends SciJavaService {
 	 * {@code python}): i.e. whether {@link #launch} gives a server of that
 	 * language, rather than the fallback.
 	 */
-	boolean supports(String languageId);
+	boolean supports(String language);
 
 	/**
 	 * Gets a new server for an LSP language (e.g. {@code groovy}, or
@@ -74,5 +74,5 @@ public interface LanguageServerService extends SciJavaService {
 	 *
 	 * @param environment Where the scripts run.
 	 */
-	LanguageServer launch(String languageId, Environment environment);
+	LanguageServer launch(String language, Environment environment);
 }

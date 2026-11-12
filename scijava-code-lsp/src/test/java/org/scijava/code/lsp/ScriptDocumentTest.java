@@ -65,7 +65,7 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public String languageId() {
+		public String outputLanguage() {
 			return "python";
 		}
 
@@ -94,7 +94,7 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public String languageId() {
+		public String outputLanguage() {
 			return "groovy";
 		}
 

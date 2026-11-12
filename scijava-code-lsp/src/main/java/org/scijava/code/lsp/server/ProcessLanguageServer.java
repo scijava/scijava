@@ -283,17 +283,17 @@ class ProcessLanguageServer implements LanguageServer,
 
 	private static final class Doc {
 
-		private final String languageId;
+		private final String language;
 		private String text;
 		private int version;
 		private ScheduledFuture<?> pending;
 
-		private Doc(final String languageId) {
-			this.languageId = languageId;
+		private Doc(final String language) {
+			this.language = language;
 		}
 
 		private synchronized TextDocumentItem item(final String uri) {
-			return new TextDocumentItem(uri, languageId, version, text);
+			return new TextDocumentItem(uri, language, version, text);
 		}
 	}
 }

@@ -55,9 +55,9 @@ public class TyLauncherTest {
 	 * Tests that the plugin offers servers for {@code python} documents
 	 */
 	@Test
-	public void testLanguageId() {
+	public void testLanguage() {
 		final TyLauncher plugin = new TyLauncher();
-		assertEquals("python", plugin.languageId());
+		assertEquals("python", plugin.language());
 	}
 
 	/**

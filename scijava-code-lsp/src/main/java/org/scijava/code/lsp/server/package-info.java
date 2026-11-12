@@ -48,7 +48,7 @@
  * class MyLauncher implements ServerLauncher {
  *
  *   &#64;Override
- *   public String languageId() {
+ *   public String language() {
  *     return "mylang";
  *   }
  *

@@ -78,7 +78,7 @@ public abstract class AbstractProcessLanguageServerPlugin implements
 			log().warn("No launcher from " + getClass().getName(), exc);
 			return false;
 		}
-		return l.languageId().equals(language);
+		return l.language().equals(language);
 	}
 
 	/**

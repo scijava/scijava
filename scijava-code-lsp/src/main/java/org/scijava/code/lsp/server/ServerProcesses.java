@@ -110,7 +110,7 @@ final class ServerProcesses {
 		this.idle = idle;
 		this.max = max;
 		this.clock = clock;
-		final String name = "scijava-lsp-" + launcher.languageId();
+		final String name = "scijava-lsp-" + launcher.language();
 		starter = Executors.newSingleThreadExecutor(daemon(name));
 		reaper = Executors.newSingleThreadScheduledExecutor(daemon(name +
 			"-reaper"));
@@ -158,7 +158,7 @@ final class ServerProcesses {
 		for (final Slot slot : new ArrayList<>(slots.values())) {
 			final ServerProcess s = slot.started();
 			if (s != null && now - s.lastUsed() > idle) {
-				log.debug("Stopping idle " + launcher.languageId() +
+				log.debug("Stopping idle " + launcher.language() +
 					" language server for " + slot.env);
 				slot.stop();
 			}
@@ -259,12 +259,12 @@ final class ServerProcesses {
 			final CompletableFuture<ServerProcess> s = CompletableFuture
 				.supplyAsync(() -> {
 					try {
-						log.debug("Starting " + launcher.languageId() +
+						log.debug("Starting " + launcher.language() +
 							" language server for " + env);
 						return ServerProcess.start(launcher, env, log, INIT_TIMEOUT);
 					}
 					catch (final Exception exc) {
-						log.warn("Could not start " + launcher.languageId() +
+						log.warn("Could not start " + launcher.language() +
 							" language server for " + env, exc);
 						throw new CompletionException(exc);
 					}

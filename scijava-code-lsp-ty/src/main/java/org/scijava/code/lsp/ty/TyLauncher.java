@@ -118,7 +118,7 @@ final class TyLauncher implements ServerLauncher {
 	}
 
 	@Override
-	public String languageId() {
+	public String language() {
 		return "python";
 	}
 

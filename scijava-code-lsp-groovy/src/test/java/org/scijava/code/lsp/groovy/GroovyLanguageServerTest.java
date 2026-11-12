@@ -487,7 +487,7 @@ public class GroovyLanguageServerTest {
 		}
 
 		@Override
-		public String languageId() {
+		public String outputLanguage() {
 			return "test";
 		}
 

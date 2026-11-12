@@ -145,7 +145,7 @@ public class LanguageServersTest {
 			assertEquals(1, SERVERS.size());
 			assertEquals("high", SERVERS.get(0).name);
 			// For the LSP language the script language's dialect names.
-			assertEquals("fake", SERVERS.get(0).languageId);
+			assertEquals("fake", SERVERS.get(0).language);
 		}
 		// Each session gets a server of its own.
 		try (ScriptSession other = new ScriptSession(service, fake)) {
@@ -430,7 +430,7 @@ public class LanguageServersTest {
 		final LanguageServer server = service.launch("fake", env);
 		assertSame(SERVERS.get(0), server);
 		assertEquals("high", SERVERS.get(0).name);
-		assertEquals("fake", SERVERS.get(0).languageId);
+		assertEquals("fake", SERVERS.get(0).language);
 		assertSame(env, SERVERS.get(0).environment());
 		// No plugin: the fallback (none of the fake servers).
 		assertNotNull(service.launch("cobol", new Environment()));
@@ -551,7 +551,7 @@ public class LanguageServersTest {
 		}
 
 		@Override
-		public String languageId() {
+		public String outputLanguage() {
 			return "fake";
 		}
 
@@ -635,7 +635,7 @@ public class LanguageServersTest {
 
 		final String name;
 		/** The LSP language it was created for, if any. */
-		final String languageId;
+		final String language;
 		final Environment environment;
 		final List<String> events = new CopyOnWriteArrayList<>();
 		/** The URIs of the documents opened, in order. */
@@ -647,11 +647,11 @@ public class LanguageServersTest {
 			this(name, null, environment);
 		}
 
-		FakeServer(final String name, final String languageId,
+		FakeServer(final String name, final String language,
 			final Environment environment)
 		{
 			this.name = name;
-			this.languageId = languageId;
+			this.language = language;
 			this.environment = environment;
 		}
 

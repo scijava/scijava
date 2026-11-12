@@ -71,7 +71,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 	@Override
 	public boolean supports(final ScriptLanguage language) {
 		try {
-			return supports(dialect(language).languageId());
+			return supports(dialect(language).outputLanguage());
 		}
 		catch (final IllegalArgumentException exc) {
 			return false;
@@ -79,9 +79,9 @@ public class DefaultLanguageServerService extends AbstractService implements
 	}
 
 	@Override
-	public boolean supports(final String languageId) {
+	public boolean supports(final String language) {
 		try {
-			plugin(languageId);
+			plugin(language);
 			return true;
 		}
 		catch (final IllegalArgumentException exc) {
@@ -90,19 +90,19 @@ public class DefaultLanguageServerService extends AbstractService implements
 	}
 
 	@Override
-	public LanguageServer launch(final String languageId,
+	public LanguageServer launch(final String language,
 		final Environment environment)
 	{
 		final LanguageServerPlugin plugin;
 		try {
-			plugin = plugin(languageId);
+			plugin = plugin(language);
 		}
 		catch (final IllegalArgumentException exc) {
 			// NB: No plugin serves the language.
 			return new BindingsLanguageServer(environment);
 		}
 		// NB: Not caught: a server failing to start is a problem to be seen.
-		return plugin.create(languageId, environment);
+		return plugin.create(language, environment);
 	}
 
 	/**
@@ -138,15 +138,15 @@ public class DefaultLanguageServerService extends AbstractService implements
 	 *
 	 * @throws IllegalArgumentException If no plugin serves the language.
 	 */
-	private synchronized LanguageServerPlugin plugin(final String languageId) {
+	private synchronized LanguageServerPlugin plugin(final String language) {
 		if (plugins == null) {
 			plugins = pluginService.createInstancesOfType(
 				LanguageServerPlugin.class);
 		}
 		for (var p : plugins) {
-			if (p.supports(languageId)) return p;
+			if (p.supports(language)) return p;
 		}
 		throw new IllegalArgumentException(
-			"No LanguageServerPlugin serves language: " + languageId);
+			"No LanguageServerPlugin serves language: " + language);
 	}
 }

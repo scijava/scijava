@@ -67,9 +67,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 * Gets the LSP language (e.g. {@code python}) of the code scripts become:
 	 * whose servers analyze them (see {@link LanguageServerService#launch}).
 	 */
-	// TODO: Consider whether this is necessary: could the script language name
-	// it, or servers be found some other way (e.g. by the dialect's class)?
-	String languageId();
+	String outputLanguage();
 
 	/**
 	 * Gets where a script runs, as far as its text says (e.g. an Appose

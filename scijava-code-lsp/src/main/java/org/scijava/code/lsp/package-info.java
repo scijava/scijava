@@ -31,32 +31,16 @@
  * Code intelligence for SciJava scripts (completions, signature help, hover
  * and diagnostics), in the terms of the Language Server Protocol, via lsp4j.
  * <p>
- * This package brokers between scripts and the language servers that know
- * about them. {@link org.scijava.code.lsp.ScriptDialect}s turn scripts of
- * SciJava script languages into plain code of LSP languages (e.g.
- * {@code python}); {@link org.scijava.code.lsp.LanguageServerPlugin}s offer
- * lsp4j {@link org.eclipse.lsp4j.services.LanguageServer}s for LSP languages.
- * Clients (e.g. an editor) ask about a script through a
- * {@link org.scijava.code.lsp.ScriptSession}, made with the
- * {@link org.scijava.code.lsp.LanguageServerService}, in terms of the
- * script's text and offsets into it (see
- * {@link org.scijava.code.lsp.Positions}); behind it is a server of its own,
- * from the highest-priority plugin serving its dialect's language, for where
- * the script runs (moving to another as that changes).
+ * SciJava scripts are a major use case for this library; however, the
+ * {@link org.scijava.code.lsp.LanguageServerService} is written to offer
+ * {@link org.eclipse.lsp4j.services.LanguageServer}s more generally.
+ * {@link org.scijava.code.lsp.ScriptDialect}s convert SciJava scripts to plain
+ * code that language servers can analyze, and clients ask about a script
+ * through a {@link org.scijava.code.lsp.ScriptSession}.
  * </p>
  * <p>
- * Servers need know nothing of SciJava scripts. A SciJava script's {@code #@}
- * parameters define variables before it runs, which plain code of its
- * language would declare. A {@link org.scijava.code.lsp.ScriptDocument} is
- * the script as such code, with its parameters declared with their run-time
- * types, as its {@link org.scijava.code.lsp.ScriptDialect} says. A session
- * shows its servers this text, and maps positions in their answers back to
- * the script.
- * </p>
- * <p>
- * The subpackages are for those writing language servers:
- * {@link org.scijava.code.lsp.server} (servers that run as processes, and
- * servers routing documents by where they run) and
+ * Some subpackages are useful for writing language servers:
+ * {@link org.scijava.code.lsp.server} (servers that run as processes) and
  * {@link org.scijava.code.lsp.jvm} (servers written in Java).
  * </p>
  */

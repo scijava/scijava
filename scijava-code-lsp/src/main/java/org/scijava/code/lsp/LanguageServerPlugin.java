@@ -34,11 +34,6 @@ import org.scijava.plugin.SciJavaPlugin;
 
 /**
  * A {@link SciJavaPlugin} that can create {@link LanguageServer}s.
- * <p>
- * Servers need not know SciJava scripts: sessions show them each script as
- * plain code of their language, as a {@link ScriptDialect} turns it, its
- * parameters declared (see {@link ScriptDocument}).
- * </p>
  *
  * @author Gabriel Selzer
  */

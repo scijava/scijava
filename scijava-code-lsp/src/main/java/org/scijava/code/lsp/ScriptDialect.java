@@ -42,28 +42,21 @@ import org.scijava.script.ScriptLanguage;
 
 /**
  * A {@link SciJavaPlugin} that knows how to turn the scripts of a SciJava
- * language into plain code of an LSP language (a {@link ScriptDocument}), for
- * language servers of that language to analyze (see
- * {@link ScriptSession}). E.g. Appose-Python scripts become
- * plain Python, their parameters declared as NumPy arrays and the like.
+ * language into plain code for language servers to analyze.
  * <p>
- * So script languages need not offer language servers themselves: servers
- * know their language, not SciJava scripts (see {@link LanguageServerPlugin}).
- * </p>
- * <p>
- * A dialect supplies the declarations, rather than translating scripts: a
- * {@link ScriptDocument} translates every script the same way, prepending the
- * dialect's {@link #header}, and blanking in place the lines SciJava removes
- * before a script runs (e.g. its {@code #@} lines). So, for every language,
- * positions in a script and in its document differ by just the header's
- * length, which is how a session maps servers' answers back to the script
- * (and leaves out those about the header); and that mapping is written, and
- * tested, once. A language whose scripts need more (e.g. wrapping in a class)
- * would extend that rule in {@link ScriptDocument}, for all languages.
+ * A dialect supplies the declarations, rather than translating scripts:
+ * every script is translated the same way, prepending the dialect's
+ * {@link #header} (and a line break), and blanking in place, with spaces, the
+ * lines SciJava removes before a script runs (e.g. its {@code #@} lines).
+ * Nothing else changes. So, for every language, positions in a script and in
+ * the code it becomes differ by just the header's length, which is how a
+ * session maps servers' answers back to the script (and leaves out those
+ * about the header); and that mapping is written, and tested, once. A
+ * language whose scripts need more (e.g. wrapping in a class) would extend
+ * that one rule, for all languages.
  * </p>
  *
  * @author Gabriel Selzer
- * @see ScriptDocument
  */
 public interface ScriptDialect extends SciJavaPlugin {
 
@@ -99,15 +92,15 @@ public interface ScriptDialect extends SciJavaPlugin {
 
 	/**
 	 * Gets the code declaring the variables a script has before it runs, with
-	 * the types they have then, for a {@link ScriptDocument} to prepend to the
-	 * script: e.g. {@code import numpy; image: numpy.ndarray} for an image in
-	 * CPython. It may also import what the declarations need, and declare other
-	 * variables scripts can use (e.g. Appose's {@code task}); variables without
-	 * a useful type may be left out.
+	 * the types they have then, to prepend to the script: e.g.
+	 * {@code import numpy; image: numpy.ndarray} for an image in CPython. It may
+	 * also import what the declarations need, and declare other variables
+	 * scripts can use (e.g. Appose's {@code task}); variables without a useful
+	 * type may be left out.
 	 *
 	 * @param variables The script's variables, by name, in order: its
-	 *          parameters (see {@link ScriptDocument}), and, if typed into a
-	 *          live interpreter, the interpreter's (see {@link ScriptSession}).
+	 *          parameters ({@code #@}), and, if typed into a live interpreter,
+	 *          the interpreter's (see {@link ScriptSession}).
 	 */
 	Header header(Map<String, Variable> variables);
 
@@ -160,7 +153,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 
 		/**
 		 * @param code The code: one line, without a line break (the
-		 *          {@link ScriptDocument} adds one after it), or empty if none.
+		 *          translation adds one after it), or empty if none.
 		 * @param hiddenNames The names to leave out of completion: those the
 		 *          code binds only to declare the parameters, e.g.
 		 *          {@code numpy} for {@code import numpy}.
@@ -184,8 +177,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 		/**
 		 * The names to leave out of completion: those the code binds only to
 		 * declare the parameters, e.g. {@code numpy} for {@code import numpy}
-		 * (unless the script itself mentions them, see
-		 * {@link ScriptDocument#hiddenNames()}).
+		 * (unless the script itself mentions them).
 		 */
 		public Set<String> hiddenNames() {
 			return hiddenNames;

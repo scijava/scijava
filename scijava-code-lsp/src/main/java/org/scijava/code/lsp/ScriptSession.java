@@ -90,12 +90,12 @@ import org.scijava.script.ScriptLanguage;
  * A session controls its own {@link LanguageServer}: it a server of its own, which it shuts down when closed; it
  * keeps the server's copy of the script up to date when mutated by the
  * client. The server sees the script as plain code of its language (see
- * {@link ScriptDocument}); the session maps positions in its answers back,
+ * {@link ScriptDialect}); the session maps positions in its answers back,
  * leaving out what concerns only the lines it added.
  * </p>
  * <p>
- * The server analyzes the script where it runs, as its document says (see
- * {@link ScriptDocument#environment}). As that changes (e.g. as the script's
+ * The server analyzes the script where it runs, as its dialect says (see
+ * {@link ScriptDialect#environment}). As that changes (e.g. as the script's
  * declared environment is edited), the session moves to a new server, of the
  * new environment. It talks to its server off the caller's thread, telling
  * and asking it everything in order.

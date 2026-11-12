@@ -60,7 +60,7 @@ import org.eclipse.lsp4j.Range;
  * @author Gabriel Selzer
  * @see ScriptDialect
  */
-public final class ScriptDocument {
+final class ScriptDocument {
 
 	private final String original;
 	private final String text;
@@ -88,7 +88,7 @@ public final class ScriptDocument {
 	 * A script as it is, as plain text ({@code plaintext}): nothing declared,
 	 * nothing blanked.
 	 */
-	public static ScriptDocument of(final String script) {
+	static ScriptDocument of(final String script) {
 		return new ScriptDocument(script, script, "plaintext", (t,
 			f) -> new Environment(), 0, Collections.emptySet());
 	}
@@ -103,7 +103,7 @@ public final class ScriptDocument {
 	 *          before running the script (e.g. its {@code #@} lines).
 	 * @param dialect How the script's language declares them.
 	 */
-	public static ScriptDocument of(final String script,
+	static ScriptDocument of(final String script,
 		final Map<String, ScriptDialect.Variable> variables,
 		final Set<Integer> removedLines, final ScriptDialect dialect)
 	{
@@ -128,7 +128,7 @@ public final class ScriptDocument {
 	}
 
 	/** The script as plain code of its language. */
-	public String text() {
+	String text() {
 		return text;
 	}
 
@@ -160,7 +160,7 @@ public final class ScriptDocument {
 	 * Maps an offset in {@link #text()} to one in the script; or
 	 * returns -1 if it lies in the header prepended.
 	 */
-	public int toOriginal(final int offset) {
+	int toOriginal(final int offset) {
 		return offset < headerLength ? -1 : offset - headerLength;
 	}
 

@@ -50,13 +50,13 @@ public class JythonLanguageServerPlugin implements LanguageServerPlugin {
 	private LanguageServerService servers;
 
 	@Override
-	public boolean supports(final String languageId) {
+	public boolean supports(final String language) {
 		// NB: Not "python", which this builds on (see JythonLanguageServer).
-		return "jython".equals(languageId);
+		return "jython".equals(language);
 	}
 
 	@Override
-	public LanguageServer create(final String languageId,
+	public LanguageServer create(final String language,
 		final Environment environment)
 	{
 		return new JythonLanguageServer(environment, servers);

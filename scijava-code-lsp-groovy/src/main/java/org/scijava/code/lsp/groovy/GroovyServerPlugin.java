@@ -47,12 +47,12 @@ import org.scijava.plugin.Plugin;
 public class GroovyServerPlugin implements LanguageServerPlugin {
 
 	@Override
-	public boolean supports(final String languageId) {
-		return "groovy".equals(languageId);
+	public boolean supports(final String language) {
+		return "groovy".equals(language);
 	}
 
 	@Override
-	public LanguageServer create(final String languageId,
+	public LanguageServer create(final String language,
 		final Environment environment)
 	{
 		return new GroovyLanguageServer(environment);

@@ -590,18 +590,18 @@ public class LanguageServersTest {
 		static volatile FakeServer next;
 
 		@Override
-		public boolean supports(final String languageId) {
-			return "fake".equals(languageId);
+		public boolean supports(final String language) {
+			return "fake".equals(language);
 		}
 
 
 		@Override
-		public LanguageServer create(final String languageId,
+		public LanguageServer create(final String language,
 			final Environment environment)
 		{
 			final FakeServer special = next;
 			return register(special != null ? special : new FakeServer("high",
-				languageId, environment));
+				language, environment));
 		}
 	}
 
@@ -610,16 +610,16 @@ public class LanguageServersTest {
 	public static class LowPlugin implements LanguageServerPlugin {
 
 		@Override
-		public boolean supports(final String languageId) {
-			return "fake".equals(languageId);
+		public boolean supports(final String language) {
+			return "fake".equals(language);
 		}
 
 
 		@Override
-		public LanguageServer create(final String languageId,
+		public LanguageServer create(final String language,
 			final Environment environment)
 		{
-			return register(new FakeServer("low", languageId, environment));
+			return register(new FakeServer("low", language, environment));
 		}
 	}
 

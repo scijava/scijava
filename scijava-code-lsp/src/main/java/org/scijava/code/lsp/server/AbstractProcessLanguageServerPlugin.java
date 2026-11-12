@@ -68,7 +68,7 @@ public abstract class AbstractProcessLanguageServerPlugin implements
 	 * launcher.
 	 */
 	@Override
-	public boolean supports(final String languageId) {
+	public boolean supports(final String language) {
 		final ServerLauncher l;
 		try {
 			l = launcherOnce();
@@ -78,7 +78,7 @@ public abstract class AbstractProcessLanguageServerPlugin implements
 			log().warn("No launcher from " + getClass().getName(), exc);
 			return false;
 		}
-		return l.languageId().equals(languageId);
+		return l.languageId().equals(language);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public abstract class AbstractProcessLanguageServerPlugin implements
 	 * process (see {@link #dispose}).
 	 */
 	@Override
-	public LanguageServer create(final String languageId,
+	public LanguageServer create(final String language,
 		final Environment environment)
 	{
 		return servers().server(environment);

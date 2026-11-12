@@ -45,28 +45,22 @@ import org.scijava.plugin.SciJavaPlugin;
 public interface LanguageServerPlugin extends SciJavaPlugin {
 
 	/**
-	 * Declares whether {@link LanguageServer}s can be created to satisfy
-	 * scripts of the given LSP language (e.g. {@code groovy}), as
-	 * {@link LanguageServerService#launch} asks; and so sessions, for scripts
-	 * whose {@link ScriptDialect#languageId() dialect} makes them code of it.
+	 * Declares whether this plugin can create {@link LanguageServer}s for
+	 * language {@code language}.
+	 *
+	 * @param language a language
+	 * @return {@code true} iff this plugin can support {@code language}
 	 */
-	boolean supports(String languageId);
+	boolean supports(String language);
 
 	/**
-	 * Creates a server for documents of an LSP language this serves: for a
-	 * session (see {@link ScriptSession}), which initializes
-	 * it, and shuts it down when closed; or for whoever
-	 * {@link LanguageServerService#launch launches} it.
-	 * <p>
-	 * NB: The server analyzes documents in exactly the given environment: a
-	 * session moves to a new server as where its script runs changes.
-	 * </p>
+	 * Creates a {@link LanguageServer} for the given {@code language}
+	 * using the provided {@link Environment}.
 	 *
-	 * @param languageId The LSP language asked for, one this
-	 *          {@link #supports(String) serves} (e.g. {@code groovy}).
-	 * @param environment Where the scripts run, as far as known: e.g., for
-	 *          code typed into a running interpreter, its state (see
-	 *          {@link Environment#live()}).
+	 * @param language a language
+	 * @param environment the interpreter, libraries, etc. the
+	 *          {@link LanguageServer} needs
+	 * @return a {@link LanguageServer}
 	 */
-	LanguageServer create(String languageId, Environment environment);
+	LanguageServer create(String language, Environment environment);
 }

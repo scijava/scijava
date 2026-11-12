@@ -52,10 +52,10 @@ public class TyLanguageServerPlugin extends
 	}
 
 	@Override
-	public LanguageServer create(final String languageId,
+	public LanguageServer create(final String language,
 		final Environment environment)
 	{
 		// Wrap a plain Ty server with additional features
-		return new TyLanguageServer(super.create(languageId, environment));
+		return new TyLanguageServer(super.create(language, environment));
 	}
 }

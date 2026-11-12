@@ -506,12 +506,12 @@ public class GroovyLanguageServerTest {
 	public static class TestServers implements LanguageServerPlugin {
 
 		@Override
-		public boolean supports(final String languageId) {
-			return "test".equals(languageId);
+		public boolean supports(final String language) {
+			return "test".equals(language);
 		}
 
 		@Override
-		public LanguageServer create(final String languageId,
+		public LanguageServer create(final String language,
 			final Environment environment)
 		{
 			return new GroovyLanguageServer(environment);

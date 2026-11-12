@@ -437,8 +437,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		}
 		final Class<?> c = Types.box(ast.toClass(type));
 		if (c == null) return new ArrayList<>();
-		final List<CompletionItem> out = sorted(CompletionItems.members(c, prefix,
-			staticOnly));
+		final List<CompletionItem> out = sorted(members(c, prefix, staticOnly));
 		if (!staticOnly) {
 			for (final Overload m : gdkMethods(c, prefix)) out.add(m.toItem());
 		}
@@ -470,10 +469,17 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		// Plus what it inherits from (compiled) superclasses.
 		final Class<?> superclass = ast.toClass(type.getSuperClass());
 		if (superclass != null && superclass != Object.class) {
-			sorted.addAll(sorted(CompletionItems.members(superclass, prefix,
-				staticOnly)));
+			sorted.addAll(sorted(members(superclass, prefix, staticOnly)));
 		}
 		return sorted;
+	}
+
+	/** A compiled class's members, as reached through it or an instance. */
+	private static List<CompletionItem> members(final Class<?> c,
+		final String prefix, final boolean staticOnly)
+	{
+		return staticOnly ? CompletionItems.staticMembers(c, prefix)
+			: CompletionItems.instanceMembers(c, prefix);
 	}
 
 	/** Methods of a class defined in the script: by prefix, or exact name. */

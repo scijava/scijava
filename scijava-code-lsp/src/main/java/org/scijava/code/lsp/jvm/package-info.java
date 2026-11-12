@@ -36,7 +36,8 @@
  * about a document and an offset. {@link org.scijava.code.lsp.jvm.ClassIndex}
  * helps answer them for Java classes: it knows the classes on the classpath,
  * with their javadoc. (Completions for Java classes' members are built by
- * {@link org.scijava.code.lsp.CompletionItems#members}.)
+ * {@link org.scijava.code.lsp.CompletionItems#instanceMembers} and
+ * {@link org.scijava.code.lsp.CompletionItems#staticMembers}.)
  * </p>
  */
 package org.scijava.code.lsp.jvm;

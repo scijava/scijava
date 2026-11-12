@@ -85,8 +85,8 @@ class BindingsLanguageServer extends AbstractInProcessLanguageServer {
 			final Object value = bindings.get(member.group(1));
 			final String prefix = member.group(2);
 			return sorted(doc, offset - prefix.length(), offset, value == null
-				? new ArrayList<>() : CompletionItems.members(value
-					.getClass(), prefix, false));
+				? new ArrayList<>() : CompletionItems.instanceMembers(value
+					.getClass(), prefix));
 		}
 		final Matcher word = WORD.matcher(line);
 		final String prefix = word.find() ? word.group(1) : "";

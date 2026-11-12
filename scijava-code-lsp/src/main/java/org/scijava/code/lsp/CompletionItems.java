@@ -53,43 +53,28 @@ public final class CompletionItems {
 	}
 
 	/**
-	 * Builds a completion that inserts a call to a method (or function, or
-	 * constructor), from its name and its parameters.
-	 * <p>
-	 * LSP offers the parts, but leaves how to put them together to each
-	 * server: its snippet syntax, for inserting a call with tab stops through
-	 * its arguments; and its label details, whose {@code detail} it suggests
-	 * for function signatures. Here, they are put together in one way, which
-	 * clients can rely on:
-	 * </p>
-	 * <ul>
-	 * <li>The insert text is a snippet calling the method, with a tab stop per
-	 * parameter, holding the parameter's name as a placeholder, e.g.
-	 * {@code max(${1:a}, ${2:b})}.</li>
-	 * <li>The label details' {@code detail} is the parameter list: one entry
-	 * per tab stop, in order, e.g. {@code (double a, double b)} or
-	 * {@code (a: float, b: float = 0.0)}.</li>
-	 * </ul>
-	 * <p>
-	 * The filter text is the method's name. (By LSP, clients filter on the
-	 * label, which is the name, anyway; this guards against those filtering on
-	 * the insert text.) The kind is {@link CompletionItemKind#Method}. Callers
-	 * may change the kind, and add e.g. a detail (such as the full signature,
-	 * with the return type), documentation, or the label details'
-	 * {@code description} (such as a qualified name).
-	 * </p>
+	 * Builds a method completion from name and parameters.
 	 *
-	 * @param name The name, e.g. {@code max}.
-	 * @param paramNames The parameters' names, as the tab stops show them.
-	 * @param paramList The parameter list, as the language writes it: one
-	 *          entry per name, in the same order, e.g.
-	 *          {@code (double a, double b)}.
+	 * @param name The name of the method
+	 * @param paramNames The names of the method's parameters, in order
+	 * @param paramList An enclosed list of parameter names and types as
+	 *          they'd appear in this method's programming language. In Java,
+	 *          for example, {@code (double a, double b)}. In Python,
+	 *          {@code (a: double, b: double)}
+	 * @return a {@link CompletionItem} describing a method.
 	 */
 	public static CompletionItem method(final String name,
 		final List<String> paramNames, final String paramList)
 	{
 		final CompletionItem item = new CompletionItem(name);
+		// Kind
 		item.setKind(CompletionItemKind.Method);
+		// Label
+		item.setLabel(name); // Should just be the name since we're adding details
+		final CompletionItemLabelDetails details = new CompletionItemLabelDetails();
+		details.setDetail(paramList);
+		item.setLabelDetails(details);
+		// InsertText
 		final StringBuilder snippet = new StringBuilder(escape(name)).append('(');
 		for (int i = 0; i < paramNames.size(); i++) {
 			if (i > 0) snippet.append(", ");
@@ -98,41 +83,40 @@ public final class CompletionItems {
 		}
 		item.setInsertText(snippet.append(')').toString());
 		item.setInsertTextFormat(InsertTextFormat.Snippet);
-		item.setFilterText(name);
-		final CompletionItemLabelDetails details = new CompletionItemLabelDetails();
-		details.setDetail(paramList);
-		item.setLabelDetails(details);
+		// FilterText
+		item.setFilterText(item.getLabel());
 		return item;
 	}
 
 	/**
-	 * Completions for the public fields and methods of a Java class whose
-	 * names start with a (case-insensitive) prefix, by reflection; methods as
+	 * Completions for the public instance fields and methods of a Java class,
+	 * as reached through an instance (e.g. {@code s.}), whose names start with
+	 * a (case-insensitive) prefix, by reflection; methods as
 	 * {@link #method(String, List, String) method snippets}, with Java-style
 	 * parameter lists (e.g. {@code (double a, double b)}), and their
 	 * signatures as their details.
 	 *
 	 * @param c The class.
 	 * @param prefix The prefix; empty matches everything.
-	 * @param staticOnly Whether to include only static members.
 	 */
-	public static List<CompletionItem> members(final Class<?> c,
-		final String prefix, final boolean staticOnly)
+	public static List<CompletionItem> instanceMembers(final Class<?> c,
+		final String prefix)
 	{
-		final List<CompletionItem> out = new ArrayList<>();
-		if (c == null) return out;
-		final String lp = prefix == null ? "" : prefix.toLowerCase(Locale.ROOT);
-		for (final Field f : c.getFields()) {
-			if (staticOnly && !Modifier.isStatic(f.getModifiers())) continue;
-			if (!f.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
-			out.add(field(f));
-		}
-		for (final Method m : c.getMethods()) {
-			if (staticOnly && !Modifier.isStatic(m.getModifiers())) continue;
-			if (!m.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
-			out.add(method(m));
-		}
-		return out;
+		return members(c, prefix, false);
+	}
+
+	/**
+	 * Completions for the public static fields and methods of a Java class,
+	 * as reached through the class (e.g. {@code Math.}); otherwise as
+	 * {@link #instanceMembers}.
+	 *
+	 * @param c The class.
+	 * @param prefix The prefix; empty matches everything.
+	 */
+	public static List<CompletionItem> staticMembers(final Class<?> c,
+		final String prefix)
+	{
+		return members(c, prefix, true);
 	}
 
 	/**
@@ -147,6 +131,25 @@ public final class CompletionItems {
 	}
 
 	// -- Helper methods --
+
+	private static List<CompletionItem> members(final Class<?> c,
+		final String prefix, final boolean staticMembers)
+	{
+		final List<CompletionItem> out = new ArrayList<>();
+		if (c == null) return out;
+		final String lp = prefix == null ? "" : prefix.toLowerCase(Locale.ROOT);
+		for (final Field f : c.getFields()) {
+			if (Modifier.isStatic(f.getModifiers()) != staticMembers) continue;
+			if (!f.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
+			out.add(field(f));
+		}
+		for (final Method m : c.getMethods()) {
+			if (Modifier.isStatic(m.getModifiers()) != staticMembers) continue;
+			if (!m.getName().toLowerCase(Locale.ROOT).startsWith(lp)) continue;
+			out.add(method(m));
+		}
+		return out;
+	}
 
 	/** A completion for a field. */
 	private static CompletionItem field(final Field f) {

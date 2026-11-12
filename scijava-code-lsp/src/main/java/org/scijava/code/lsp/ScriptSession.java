@@ -85,21 +85,7 @@ import org.scijava.log.Logger;
 import org.scijava.script.ScriptLanguage;
 
 /**
- * A {@link LanguageServerService} session for a given SciJava script.
- * <p>
- * A session controls its own {@link LanguageServer}: it a server of its own, which it shuts down when closed; it
- * keeps the server's copy of the script up to date when mutated by the
- * client. The server sees the script as plain code of its language (see
- * {@link ScriptDialect}); the session maps positions in its answers back,
- * leaving out what concerns only the lines it added.
- * </p>
- * <p>
- * The server analyzes the script where it runs, as its dialect says (see
- * {@link ScriptDialect#environment}). As that changes (e.g. as the script's
- * declared environment is edited), the session moves to a new server, of the
- * new environment. It talks to its server off the caller's thread, telling
- * and asking it everything in order.
- * </p>
+ * A {@link LanguageServer} session for a SciJava script.
  *
  * @author Gabriel Selzer
  */
@@ -131,7 +117,7 @@ public final class ScriptSession implements AutoCloseable {
 	private CompletableFuture<Optional<LanguageServer>> server =
 		CompletableFuture.completedFuture(Optional.empty());
 	/** Where the script runs, as the server is launched for. */
-	private Optional<Environment> environment = Optional.empty();
+	private Environment environment = new Environment();
 	/** How many servers were moved to: which one is meant, as of now. */
 	private int generation;
 	/** The server whose messages are heard (set as it is launched). */
@@ -467,8 +453,8 @@ public final class ScriptSession implements AutoCloseable {
 	 */
 	private boolean follow() {
 		final Environment env = doc.environment(file.get());
-		if (closed || environment.equals(Optional.of(env))) return false;
-		environment = Optional.of(env);
+		if (closed || environment.equals(env)) return false;
+		environment = env;
 		generation++;
 		server = server.thenApplyAsync(old -> {
 			old.ifPresent(this::stop);

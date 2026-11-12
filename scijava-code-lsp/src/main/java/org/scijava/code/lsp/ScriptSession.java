@@ -466,7 +466,7 @@ public final class ScriptSession implements AutoCloseable {
 	 *         of the open document).
 	 */
 	private boolean follow() {
-		final Environment env = doc.environment(Optional.ofNullable(file.get()));
+		final Environment env = doc.environment(file.get());
 		if (closed || environment.equals(Optional.of(env))) return false;
 		environment = Optional.of(env);
 		generation++;

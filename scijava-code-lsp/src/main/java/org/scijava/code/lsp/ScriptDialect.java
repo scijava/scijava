@@ -70,21 +70,16 @@ public interface ScriptDialect extends SciJavaPlugin {
 	String outputLanguage();
 
 	/**
-	 * Gets where a script runs, as far as its text says (e.g. an Appose
-	 * environment it declares), to analyze it there. Asked before each request
-	 * about the script, as that may change; its session then moves to a server
-	 * of where it runs now (see {@link ScriptSession#update}). The default
-	 * knows nothing: a blank {@link Environment}.
+	 * Describes any {@link Environment} constraints described within the
+	 * script code.
 	 *
-	 * @param text The script, as written (e.g. with its {@code #@script} line,
-	 *          which its servers do not see).
-	 * @param file The script's file, if it has one (not if e.g. unsaved).
+	 * @param text SciJava script text.
+	 * @param file The location where {@code text} is saved, or null if it is
+	 *          not saved.
+	 * @return An {@link Environment} describing any environmental knowledge
+	 *         embedded within the script text.
 	 */
-	// TODO: Consider whether this is necessary: so far only Appose-Python
-	// scripts say where they run, and dialects otherwise only translate.
-	default Environment environment(final String text,
-		final Optional<File> file)
-	{
+	default Environment environment(final String text, final File file) {
 		return new Environment();
 	}
 

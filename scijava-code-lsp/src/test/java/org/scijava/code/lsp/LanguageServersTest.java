@@ -556,9 +556,7 @@ public class LanguageServersTest {
 		}
 
 		@Override
-		public Environment environment(final String text,
-			final Optional<File> file)
-		{
+		public Environment environment(final String text, final File file) {
 			for (final String line : text.split("\n")) {
 				if (line.startsWith("#@script(env=")) {
 					final String env = line.substring(13, line.length() - 1);

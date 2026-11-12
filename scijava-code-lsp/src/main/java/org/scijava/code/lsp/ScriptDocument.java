@@ -33,7 +33,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
@@ -66,14 +65,14 @@ final class ScriptDocument {
 	private final String text;
 	private final String language;
 	/** Where the script runs, as its dialect says, given its file. */
-	private final BiFunction<String, Optional<File>, Environment> where;
+	private final BiFunction<String, File, Environment> where;
 	/** Number of characters prepended. */
 	private final int headerLength;
 	private final Set<String> hiddenNames;
 
 	private ScriptDocument(final String original, final String text,
 		final String language,
-		final BiFunction<String, Optional<File>, Environment> where,
+		final BiFunction<String, File, Environment> where,
 		final int headerLength, final Set<String> hiddenNames)
 	{
 		this.original = original;
@@ -145,9 +144,9 @@ final class ScriptDocument {
 	 * {@link ScriptDialect#environment}); or a blank {@link Environment}, for a
 	 * script as it is.
 	 *
-	 * @param file The script's file, if it has one.
+	 * @param file The script's file, or null if it has none.
 	 */
-	Environment environment(final Optional<File> file) {
+	Environment environment(final File file) {
 		return where.apply(original, file);
 	}
 

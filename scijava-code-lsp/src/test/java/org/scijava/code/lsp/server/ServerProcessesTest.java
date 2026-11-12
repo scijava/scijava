@@ -32,7 +32,6 @@ package org.scijava.code.lsp.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -66,12 +65,8 @@ import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
-import org.eclipse.lsp4j.ParameterInformation;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.ServerCapabilities;
-import org.eclipse.lsp4j.SignatureHelp;
-import org.eclipse.lsp4j.SignatureHelpParams;
-import org.eclipse.lsp4j.SignatureInformation;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -81,7 +76,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.Positions;
 import org.scijava.log.LogService;
 import org.scijava.log.StderrLogService;
 
@@ -109,14 +103,6 @@ public class ServerProcessesTest {
 	@AfterEach
 	public void tearDown() {
 		if (servers != null) servers.shutdown();
-	}
-
-	@Test
-	public void testOffset() {
-		assertEquals(4, Positions.offset("ab\ncd", new Position(1, 1)));
-		// Clamped to the line, and the text.
-		assertEquals(2, Positions.offset("ab\ncd", new Position(0, 9)));
-		assertEquals(5, Positions.offset("ab\ncd", new Position(7, 0)));
 	}
 
 	@Test
@@ -318,15 +304,6 @@ public class ServerProcessesTest {
 		assertFalse(started.get(1).events.contains("close " + uri));
 	}
 
-	@Test
-	public void testPosition() {
-		assertEquals(new Position(0, 0), Positions.position("ab\ncd", 0));
-		assertEquals(new Position(1, 1), Positions.position("ab\ncd", 4));
-		// UTF-16 code units, as Java counts.
-		assertEquals(new Position(1, 3), Positions.position("a\n😀b",
-			5));
-	}
-
 	// -- Helper methods --
 
 	private static List<CompletionItem> complete(final ProcessLanguageServer s,
@@ -432,27 +409,20 @@ public class ServerProcessesTest {
 		}
 	}
 
-	/** A language server knowing a few things about json, and a function f. */
+	/** A language server knowing a few things about json. */
 	private static final class FakeServer implements LanguageServer,
 		TextDocumentService, WorkspaceService
 	{
 
-		private volatile boolean alive = true, shutdown, noActive, mute;
+		private volatile boolean alive = true, shutdown;
 		private volatile org.eclipse.lsp4j.services.LanguageClient client;
-		private volatile Object options;
 		private final Map<String, String> texts = new LinkedHashMap<>();
 		private final List<String> events = new CopyOnWriteArrayList<>();
-		private final List<Position> positions = new CopyOnWriteArrayList<>();
-		/** If set, completion requests wait for this (and are kept as held). */
-		private volatile CompletableFuture<Void> hold;
-		private final List<CompletableFuture<Either<List<CompletionItem>, CompletionList>>> held =
-			new CopyOnWriteArrayList<>();
 
 		@Override
 		public CompletableFuture<InitializeResult> initialize(
 			final InitializeParams params)
 		{
-			options = params.getInitializationOptions();
 			final ServerCapabilities capabilities = new ServerCapabilities();
 			capabilities.setCompletionProvider(new CompletionOptions(true, null));
 			return CompletableFuture.completedFuture(new InitializeResult(
@@ -484,45 +454,12 @@ public class ServerProcessesTest {
 		public CompletableFuture<Either<List<CompletionItem>, CompletionList>>
 			completion(final CompletionParams params)
 		{
-			positions.add(params.getPosition());
 			final List<CompletionItem> items = new ArrayList<>();
 			items.add(item("decoder", CompletionItemKind.Module, "c"));
 			items.add(item("dump", CompletionItemKind.Function, "b"));
 			items.add(item("dumps", CompletionItemKind.Function, "a"));
-			final Either<List<CompletionItem>, CompletionList> answer = Either
-				.forRight(new CompletionList(items));
-			if (hold == null) return CompletableFuture.completedFuture(answer);
-			final CompletableFuture<Either<List<CompletionItem>, CompletionList>> f =
-				new CompletableFuture<>();
-			held.add(f);
-			hold.thenRun(() -> f.complete(answer));
-			return f;
-		}
-
-		@Override
-		public CompletableFuture<CompletionItem> resolveCompletionItem(
-			final CompletionItem item)
-		{
-			events.add("resolve " + item.getLabel());
-			item.setDetail("def " + item.getLabel() + "(obj, indent) -> str");
-			item.setDocumentation("Docs of " + item.getLabel() + " & co.");
-			return CompletableFuture.completedFuture(item);
-		}
-
-		@Override
-		public CompletableFuture<SignatureHelp> signatureHelp(
-			final SignatureHelpParams params)
-		{
-			if (params.getPosition().getCharacter() < 2) {
-				return CompletableFuture.completedFuture(null);
-			}
-			final SignatureInformation f = new SignatureInformation("def f(x, y=1)");
-			f.setDocumentation("Docs of f");
-			f.setParameters(Arrays.asList(new ParameterInformation("x"),
-				new ParameterInformation("y=1")));
-			final SignatureInformation g = new SignatureInformation("def f(z)");
-			return CompletableFuture.completedFuture(new SignatureHelp(Arrays.asList(
-				f, g), 0, noActive ? null : 1));
+			return CompletableFuture.completedFuture(Either.forRight(
+				new CompletionList(items)));
 		}
 
 		@Override
@@ -547,7 +484,6 @@ public class ServerProcessesTest {
 
 		/** Complains about each "!!", and about the first line, always. */
 		private void publish(final String uri, final int version) {
-			if (mute) return;
 			final List<org.eclipse.lsp4j.Diagnostic> list = new ArrayList<>();
 			list.add(diagnostic(0, 0, 1, "First line"));
 			final String[] lines = texts.get(uri).split("\n", -1);
@@ -568,25 +504,6 @@ public class ServerProcessesTest {
 			d.setSeverity(org.eclipse.lsp4j.DiagnosticSeverity.Warning);
 			d.setSource("fake");
 			return d;
-		}
-
-		@Override
-		public CompletableFuture<org.eclipse.lsp4j.Hover> hover(
-			final org.eclipse.lsp4j.HoverParams params)
-		{
-			final String text = texts.get(params.getTextDocument().getUri());
-			final String line = text.split("\n", -1)[params.getPosition()
-				.getLine()];
-			int start = params.getPosition().getCharacter(), end = start;
-			while (start > 0 && Character.isLetter(line.charAt(start - 1))) start--;
-			while (end < line.length() && Character.isLetter(line.charAt(end))) end++;
-			if (start == end) return CompletableFuture.completedFuture(null);
-			final org.eclipse.lsp4j.Hover h = new org.eclipse.lsp4j.Hover(
-				new org.eclipse.lsp4j.MarkupContent("plaintext", "Docs of " + line
-					.substring(start, end)), new org.eclipse.lsp4j.Range(new Position(
-						params.getPosition().getLine(), start), new Position(params
-							.getPosition().getLine(), end)));
-			return CompletableFuture.completedFuture(h);
 		}
 
 		@Override

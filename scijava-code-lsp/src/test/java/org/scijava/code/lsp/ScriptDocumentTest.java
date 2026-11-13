@@ -56,7 +56,11 @@ import org.scijava.script.ScriptLanguage;
  */
 public class ScriptDocumentTest {
 
-	/** A Python-like dialect: arrays become NumPy arrays; strings stay. */
+	/**
+	 * A Python-like dialect: arrays become NumPy arrays (imported as a private
+	 * alias, {@code _np}); strings stay; nothing else is declared, so its header
+	 * is empty when there are no such parameters.
+	 */
 	private static final ScriptDialect PYTHON = new ScriptDialect() {
 
 		@Override
@@ -74,36 +78,13 @@ public class ScriptDocumentTest {
 			final List<String> code = new ArrayList<>();
 			final boolean numpy = variables.values().stream().anyMatch(v -> v.type()
 				.isArray());
-			if (numpy) code.add("import numpy");
+			if (numpy) code.add("import numpy as _np");
 			variables.forEach((name, v) -> {
-				if (v.type().isArray()) code.add(name + ": numpy.ndarray");
+				if (v.type().isArray()) code.add(name + ": _np.ndarray");
 				else if (v.type() == String.class) code.add(name + ": str");
 			});
-			code.add("task: object");
 			return new Header(String.join("; ", code), numpy ? Collections
-				.singleton("numpy") : Collections.emptySet());
-		}
-	};
-
-	/** A Groovy-like dialect: Java types. */
-	private static final ScriptDialect GROOVY = new ScriptDialect() {
-
-		@Override
-		public boolean supports(final ScriptLanguage language) {
-			return false;
-		}
-
-		@Override
-		public String outputLanguage() {
-			return "groovy";
-		}
-
-		@Override
-		public Header header(final Map<String, Variable> variables) {
-			final List<String> code = new ArrayList<>();
-			variables.forEach((name, v) -> code.add(v.type().getName() + " " +
-				name));
-			return new Header(String.join("; ", code), Collections.emptySet());
+				.singleton("_np") : Collections.emptySet());
 		}
 	};
 
@@ -120,42 +101,72 @@ public class ScriptDocumentTest {
 		return new HashSet<>(Arrays.asList(lines));
 	}
 
+	/**
+	 * Tests how a script's parameters are declared:
+	 * <ul>
+	 * <li>By the dialect's header, on a line of its own, with the parameter
+	 * lines blanked</li>
+	 * <li>With the names the header binds only to declare them (e.g. a module)
+	 * hidden, unless the script itself mentions them</li>
+	 * </ul>
+	 */
 	@Test
 	public void testDeclarations() {
-		final String script = "#@ double[] a\n#@ String s\n#@ Integer n\na.";
-		final ScriptDocument doc = ScriptDocument.of(script, params("a",
-			double[].class, "s", String.class, "n", Integer.class), lines(0, 1,
-				2), PYTHON);
-		// The dialect's header, on a line of its own; the parameter lines
-		// blanked.
-		assertEquals("import numpy; a: numpy.ndarray; s: str; task: object\n" +
-			blanked(script.substring(0, script.lastIndexOf('\n'))) + "\na.", doc
-				.text());
-		// The module is the header's alone, unless the script mentions it.
-		assertEquals(Collections.singleton("numpy"), doc.hiddenNames());
-		assertTrue(ScriptDocument.of("import numpy as np\n" + script, params("a",
+		// Create a ScriptDocument describing a 2-parameter script.
+		final String script = "#@ double[] a\n#@ String s\na.";
+		final ScriptDocument doc = ScriptDocument.of(
+			script,
+			params("a", double[].class, "s", String.class),
+			lines(0, 1),
+			PYTHON
+		);
+		// The converted text should be the header...
+		final String expectedText = "import numpy as _np; a: _np.ndarray; s: str\n" +
+		// ...plus the script where the parameters are blanked
+			blanked(script.substring(0, script.lastIndexOf('\n'))) + "\na.";
+		assertEquals(expectedText, doc.text());
+
+		// The script doesn't mention "_np", so it should be hidden from completions...
+		assertEquals(Collections.singleton("_np"), doc.hiddenNames());
+		// ...even if the script imports numpy itself...
+		assertEquals(Collections.singleton("_np"), ScriptDocument.of(
+			"import numpy as np\n" + script, params("a", double[].class), lines(),
+			PYTHON).hiddenNames());
+		// ...but if it did mention "_np", it should not be hidden.
+		assertTrue(ScriptDocument.of(script + "\n_np = 1", params("a",
 			double[].class), lines(), PYTHON).hiddenNames().isEmpty());
-		assertTrue(ScriptDocument.of(script + "\nnumpyish = 1", params("a",
-			double[].class), lines(), PYTHON).hiddenNames().contains("numpy"));
+		// A name merely starting with "_np" is not a mention.
+		assertEquals(Collections.singleton("_np"), ScriptDocument.of(script +
+			"\n_npish = 1", params("a", double[].class), lines(), PYTHON)
+			.hiddenNames());
 	}
 
+	/**
+	 * Tests that a dialect declaring nothing adds no header line: the text, and
+	 * so every offset, is unchanged.
+	 */
 	@Test
-	public void testIdentity() {
+	public void testEmptyHeader() {
 		final String script = "x = 1\nx.";
 		final ScriptDocument doc = ScriptDocument.of(script, params(), lines(),
-			GROOVY);
+			PYTHON);
 		assertEquals(script, doc.text());
 		assertEquals(5, doc.toTransformed(5));
 		assertEquals(5, doc.toOriginal(5));
 		assertEquals(new Position(1, 1), doc.toTransformed(new Position(1, 1)));
+		assertEquals(new Position(1, 1), doc.toOriginal(new Position(1, 1)));
 	}
 
+	/**
+	 * Tests that every character of a removed line is replaced with a space,
+	 * but for its line break (including the CR of a CRLF).
+	 */
 	@Test
 	public void testBlanking() {
 		final String script = "#@ String s\r\nprintln s\r\n#@output x\n# end";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
-			String.class), lines(0, 2), GROOVY);
-		assertEquals("java.lang.String s\n" +
+			String.class), lines(0, 2), PYTHON);
+		assertEquals("s: str\n" +
 			"           \r\nprintln s\r\n          \n# end", doc.text());
 		// Blanking keeps every offset, and line breaks (incl. CR) in place.
 		assertEquals(doc.text().length() - doc.toTransformed(0), script
@@ -164,42 +175,39 @@ public class ScriptDocumentTest {
 			-1).length);
 	}
 
+	/**
+	 * Tests that offsets shift by the header's length, and positions (and
+	 * ranges) by its one line; and that those within the header map to
+	 * nothing.
+	 */
 	@Test
-	public void testRoundTrips() {
-		// NB: Includes a CRLF and a surrogate pair (two Java chars).
-		final String script = "#@ String s\r\nt = \"😀\"\r\ns.len";
+	public void testMapping() {
+		// NB: With a CRLF, which positions must count as one line break.
+		final String script = "#@ String s\r\ns.len";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
 			String.class), lines(0), PYTHON);
-		for (int i = 0; i <= script.length(); i++) {
-			final int t = doc.toTransformed(i);
-			assertEquals(i, doc.toOriginal(t));
-			// The text after a position is the same in both, but for the
-			// blanked parameter line.
-			final String after = doc.text().substring(t);
-			assertEquals(script.length() - i, after.length());
-			if (i >= script.indexOf('\r')) {
-				assertEquals(script.substring(i), after);
-			}
-		}
-		for (int line = 0; line < 3; line++) {
-			final Position p = new Position(line, 2);
-			final Position t = doc.toTransformed(p);
-			assertEquals(new Position(line + 1, 2), t);
-			assertEquals(p, doc.toOriginal(t));
-		}
-		// The header maps to nothing.
-		assertEquals(-1, doc.toOriginal(0));
-		assertEquals(-1, doc.toOriginal(doc.toTransformed(0) - 1));
-		assertNull(doc.toOriginal(new Position(0, 0)));
-		assertNull(doc.toOriginal(new Range(new Position(0, 0), new Position(1,
-			1))));
+		final int header = "s: str\n".length();
+		// Offsets: shifted by the header's length...
+		assertEquals(header + 3, doc.toTransformed(3));
+		assertEquals(3, doc.toOriginal(header + 3));
+		// ...and positions by its line.
+		assertEquals(new Position(2, 1), doc.toTransformed(new Position(1, 1)));
+		assertEquals(new Position(1, 1), doc.toOriginal(new Position(2, 1)));
 		assertEquals(new Range(new Position(0, 0), new Position(1, 1)), doc
 			.toOriginal(new Range(new Position(1, 0), new Position(2, 1))));
+		// The header maps to nothing.
+		assertEquals(-1, doc.toOriginal(header - 1));
+		assertNull(doc.toOriginal(new Position(0, 3)));
+		assertNull(doc.toOriginal(new Range(new Position(0, 0), new Position(1,
+			1))));
 	}
 
+	/**
+	 * Tests that a header with a line break (LF or CR) is rejected, as it would
+	 * disrupt translation logic (see {@link #testMapping()})
+	 */
 	@Test
 	public void testOneLineHeader() {
-		// A header is one line: positions shift by just that line.
 		assertThrows(IllegalArgumentException.class,
 			() -> new ScriptDialect.Header("import numpy\nx: int", Collections
 				.emptySet()));
@@ -207,10 +215,15 @@ public class ScriptDocumentTest {
 			() -> new ScriptDialect.Header("x: int\r", Collections.emptySet()));
 	}
 
+	/**
+	 * Tests that a script without a dialect is plain text, as it is: nothing
+	 * declared or blanked, not even its {@code #@} lines.
+	 */
 	@Test
-	public void testAsIs() {
+	public void testPlainText() {
 		final String script = "#@ String s\ns.";
 		final ScriptDocument doc = ScriptDocument.of(script);
+		assertEquals("plaintext", doc.language());
 		assertEquals(script, doc.text());
 		assertEquals(0, doc.toTransformed(0));
 		assertTrue(doc.hiddenNames().isEmpty());

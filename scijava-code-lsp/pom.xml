@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>45.1.0</version>
+		<relativePath />
+	</parent>
+
+	<artifactId>scijava-code-lsp</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+
+	<name>SciJava Code LSP</name>
+	<description>Language Server Protocol bridge for SciJava code intelligence.</description>
+	<url>https://github.com/scijava/scijava</url>
+	<inceptionYear>2026</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>gselzer</id>
+			<name>Gabriel Selzer</name>
+			<url>https://imagej.net/people/gselzer</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>None</name>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/scijava</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
+		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/scijava</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/scijava/scijava/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/scijava/actions</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>org.scijava.code.lsp</package-name>
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<!-- TEMP: Remove once pom-scijava manages scijava-common 2.101.0. -->
+		<scijava-common.version>2.101.0</scijava-common.version>
+		<lsp4j.version>1.0.0</lsp4j.version>
+	</properties>
+
+	<dependencies>
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
+
+		<!-- Third-party dependencies -->
+		<dependency>
+			<groupId>org.eclipse.lsp4j</groupId>
+			<artifactId>org.eclipse.lsp4j</artifactId>
+			<version>${lsp4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.lsp4j</groupId>
+			<artifactId>org.eclipse.lsp4j.jsonrpc</artifactId>
+			<version>${lsp4j.version}</version>
+		</dependency>
+		<!--
+		NB: lsp4j asks for a range of Gson versions ([2.9.1,3.0)), as is usual
+		for OSGi bundles. Maven resolves a range to the newest matching release
+		in the remote repositories: a network lookup, and a result that changes
+		as Gson releases. Declaring Gson here (its version managed by
+		pom-scijava) fixes one version in our published POM, which wins over
+		lsp4j's range for anyone depending on us (nearest wins), whether or not
+		their build manages Gson's version.
+		-->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
+		<!-- Test scope dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!--
+					NB: On the module path, the tests' plugin index would shadow the
+					module's own (both are META-INF/json/org.scijava.plugin.Plugin),
+					hiding its services from SciJava Common. On the classpath, as in
+					Fiji, both are found.
+					-->
+					<useModulePath>false</useModulePath>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

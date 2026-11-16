@@ -50,6 +50,7 @@ import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.HoverCapabilities;
 import org.eclipse.lsp4j.InitializeParams;
+import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.InitializedParams;
 import org.eclipse.lsp4j.MarkupKind;
 import org.eclipse.lsp4j.MessageActionItem;
@@ -57,6 +58,7 @@ import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.MessageType;
 import org.eclipse.lsp4j.PublishDiagnosticsCapabilities;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
+import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.SignatureHelpCapabilities;
 import org.eclipse.lsp4j.SignatureInformationCapabilities;
@@ -95,6 +97,9 @@ final class ServerProcess {
 	private final LanguageServer remote;
 	private final Future<Void> listening;
 
+	/** What the server said it can do, when initialized. */
+	private final ServerCapabilities capabilities;
+
 	/** Open documents' versions and texts, by URI. */
 	private final Map<String, Document> documents = new HashMap<>();
 
@@ -105,13 +110,14 @@ final class ServerProcess {
 
 	private ServerProcess(final String language, final Process process,
 		final LanguageServer remote, final Future<Void> listening,
-		final Published published)
+		final Published published, final ServerCapabilities capabilities)
 	{
 		this.language = language;
 		this.published = published;
 		this.process = process;
 		this.remote = remote;
 		this.listening = listening;
+		this.capabilities = capabilities;
 	}
 
 	/**
@@ -138,7 +144,7 @@ final class ServerProcess {
 			final InitializeParams init = new InitializeParams();
 			init.setProcessId((int) ProcessHandle.current().pid());
 			init.setClientInfo(new org.eclipse.lsp4j.ClientInfo("SciJava"));
-			init.setCapabilities(capabilities());
+			init.setCapabilities(clientCapabilities());
 			final String root = launcher.rootUri(env);
 			if (root != null) {
 				init.setRootUri(root);
@@ -146,10 +152,14 @@ final class ServerProcess {
 					root, "scripts")));
 			}
 			init.setInitializationOptions(launcher.initializationOptions(env));
-			remote.initialize(init).get(timeout, TimeUnit.MILLISECONDS);
+			final InitializeResult result = remote.initialize(init).get(timeout,
+				TimeUnit.MILLISECONDS);
 			remote.initialized(new InitializedParams());
+			final ServerCapabilities capabilities = result == null || result
+				.getCapabilities() == null ? new ServerCapabilities() : result
+					.getCapabilities();
 			return new ServerProcess(launcher.language(), process, remote, listening,
-				published);
+				published, capabilities);
 		}
 		catch (final Exception exc) {
 			destroy(process);
@@ -205,6 +215,11 @@ final class ServerProcess {
 	public LanguageServer remote() {
 		lastUsed = System.currentTimeMillis();
 		return remote;
+	}
+
+	/** What the server said it can do, when initialized. */
+	public ServerCapabilities capabilities() {
+		return capabilities;
 	}
 
 	/** Whether the server still runs. */
@@ -267,7 +282,7 @@ final class ServerProcess {
 	}
 
 	/** What this client can do: plain text documentation, no snippets. */
-	private static ClientCapabilities capabilities() {
+	private static ClientCapabilities clientCapabilities() {
 		final CompletionItemCapabilities item = new CompletionItemCapabilities(
 			false);
 		item.setDocumentationFormat(Collections.singletonList(

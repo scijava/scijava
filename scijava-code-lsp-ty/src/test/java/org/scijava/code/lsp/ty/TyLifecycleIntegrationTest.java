@@ -50,8 +50,8 @@ import org.scijava.code.lsp.Positions;
 
 
 /**
- * Tests that {@link TyLanguageServerPlugin}'s ty processes start when first
- * used, and stop when the context is disposed. Also an example of using a
+ * Tests that {@link TyLanguageServerPlugin}'s ty processes start when their
+ * servers are initialized, and stop when the context is disposed. Also an example of using a
  * server directly, through the {@link LanguageServer} API
  *
  * @author Gabriel Selzer

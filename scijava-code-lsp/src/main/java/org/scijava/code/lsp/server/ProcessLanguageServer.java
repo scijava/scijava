@@ -57,6 +57,7 @@ import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.TextDocumentItem;
+import org.eclipse.lsp4j.TextDocumentSyncKind;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -114,9 +115,10 @@ class ProcessLanguageServer implements LanguageServer,
 	public CompletableFuture<InitializeResult> initialize(
 		final InitializeParams params)
 	{
-		// NB: The process is initialized when started (see ServerProcesses).
-		return CompletableFuture.completedFuture(new InitializeResult(
-			new ServerCapabilities()));
+		// NB: Starts the process, to say what it can do; if it cannot start, says
+		// what it could, as it may start later (when asked again).
+		return slot.process().handle((s, error) -> new InitializeResult(
+			capabilities(s == null ? fallback() : s.capabilities())));
 	}
 
 	@Override
@@ -215,6 +217,41 @@ class ProcessLanguageServer implements LanguageServer,
 	}
 
 	// -- Helper methods --
+
+	/**
+	 * The capabilities of this {@link ProcessLanguageServer}. Mostly, this is an
+	 * intersection: of the features this proxy passes on (completion, signature
+	 * help and hover), those the process has, as it described them.
+	 * <p>
+	 * Documents are synchronized as the proxy does it (by
+	 * their whole text; see {@link #didChange}), whatever the process said.
+	 * </p>
+	 *
+	 * @param process What the process said it can do.
+	 */
+	private static ServerCapabilities capabilities(
+		final ServerCapabilities process)
+	{
+		final ServerCapabilities c = new ServerCapabilities();
+		c.setCompletionProvider(process.getCompletionProvider());
+		c.setSignatureHelpProvider(process.getSignatureHelpProvider());
+		c.setHoverProvider(process.getHoverProvider());
+		// NB: Not intersected: how documents are synced is up to the proxy.
+		c.setTextDocumentSync(TextDocumentSyncKind.Full);
+		return c;
+	}
+
+	/**
+	 * What to assume a process can do when it could not be started: nothing.
+	 * <p>
+	 * NB: The client keeps the capabilities it is told at initialization for
+	 * good, so it is offered no features even should the process start later
+	 * (when asked again, e.g. once its environment can be built).
+	 * </p>
+	 */
+	private static ServerCapabilities fallback() {
+		return new ServerCapabilities();
+	}
 
 	/**
 	 * Asks the process, with the document's current text.

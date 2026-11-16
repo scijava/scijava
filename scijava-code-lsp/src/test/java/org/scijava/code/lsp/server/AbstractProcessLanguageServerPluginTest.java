@@ -38,7 +38,9 @@ import static org.scijava.code.lsp.server.FakeServers.open;
 import static org.scijava.code.lsp.server.FakeServers.waitFor;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.eclipse.lsp4j.InitializeParams;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,18 +88,15 @@ public class AbstractProcessLanguageServerPluginTest {
 	}
 
 	/**
-	 * Tests that a process is not started when a server is created, only once
-	 * the server is used.
+	 * Tests that a process is not started when a server is created, but once
+	 * the server is initialized.
 	 */
 	@Test
-	public void testLazyStart() throws Exception {
+	public void testStartOnInitialize() throws Exception {
 		final ProcessLanguageServer s = (ProcessLanguageServer) plugin.create(
 			"python", ENV);
 		assertEquals(0, started.size());
-		// Using it starts it
-		final String uri = "untitled:/p.py";
-		open(s, uri, "x");
-		assertEquals(3, complete(s, uri).size());
+		s.initialize(new InitializeParams()).get(10, TimeUnit.SECONDS);
 		assertEquals(1, started.size());
 	}
 

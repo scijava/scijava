@@ -31,27 +31,35 @@ package org.scijava.code.lsp.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.scijava.code.lsp.server.FakeServers.ENV;
 import static org.scijava.code.lsp.server.FakeServers.complete;
 import static org.scijava.code.lsp.server.FakeServers.open;
 import static org.scijava.code.lsp.server.FakeServers.waitFor;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.lsp4j.DidCloseTextDocumentParams;
+import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
+import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
+import org.eclipse.lsp4j.TextDocumentSyncKind;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.scijava.code.lsp.Environment;
 import org.scijava.log.StderrLogService;
 
 /**
@@ -143,6 +151,59 @@ public class ProcessLanguageServerTest {
 			uri)));
 		waitFor(() -> started.get(0).events.contains("close " + uri));
 		assertFalse(started.get(1).events.contains("close " + uri));
+	}
+
+	/**
+	 * Tests that initializing the server says what its process can do, as far
+	 * as passed on: those of its features passed on, as it said; and documents
+	 * synchronized by their whole text, whatever it said.
+	 */
+	@Test
+	public void testCapabilities() throws Exception {
+		final ProcessLanguageServer s = (ProcessLanguageServer) servers.server(
+			ENV);
+		final ServerCapabilities c = s.initialize(new InitializeParams()).get(10,
+			TimeUnit.SECONDS).getCapabilities();
+		// NB: The fake server completes (resolving completions), but has no
+		// hover or signature help...
+		assertTrue(c.getCompletionProvider().getResolveProvider());
+		assertNull(c.getHoverProvider());
+		assertNull(c.getSignatureHelpProvider());
+		// ...and its definitions and incremental changes are not passed on.
+		assertNull(c.getDefinitionProvider());
+		assertEquals(TextDocumentSyncKind.Full, c.getTextDocumentSync()
+			.getLeft());
+	}
+
+	/**
+	 * Tests that initializing a server whose process cannot start says it can
+	 * do nothing, but still syncs documents by their whole text.
+	 */
+	@Test
+	public void testFallbackCapabilities() throws Exception {
+		final ServerProcesses failing = new ServerProcesses(
+			new FakeServers.Launcher()
+		{
+
+			@Override
+			public Process start(final Environment env) throws IOException {
+				throw new IOException("No such server");
+			}
+		}, new StderrLogService(), 60_000, 2, System::currentTimeMillis);
+		try {
+			final ProcessLanguageServer s = (ProcessLanguageServer) failing.server(
+				ENV);
+			final ServerCapabilities c = s.initialize(new InitializeParams()).get(
+				10, TimeUnit.SECONDS).getCapabilities();
+			assertNull(c.getCompletionProvider());
+			assertNull(c.getHoverProvider());
+			assertNull(c.getSignatureHelpProvider());
+			assertEquals(TextDocumentSyncKind.Full, c.getTextDocumentSync()
+				.getLeft());
+		}
+		finally {
+			failing.shutdown();
+		}
 	}
 
 	// -- Helper methods --

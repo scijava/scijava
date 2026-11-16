@@ -58,6 +58,7 @@ import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.ServerCapabilities;
+import org.eclipse.lsp4j.TextDocumentSyncKind;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -208,8 +209,12 @@ final class FakeServers {
 		public CompletableFuture<InitializeResult> initialize(
 			final InitializeParams params)
 		{
+			// NB: Completion (resolved), but no hover or signature help; and what
+			// a proxy cannot pass on: incremental changes, and definitions.
 			final ServerCapabilities capabilities = new ServerCapabilities();
 			capabilities.setCompletionProvider(new CompletionOptions(true, null));
+			capabilities.setTextDocumentSync(TextDocumentSyncKind.Incremental);
+			capabilities.setDefinitionProvider(true);
 			return CompletableFuture.completedFuture(new InitializeResult(
 				capabilities));
 		}

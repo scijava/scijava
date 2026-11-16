@@ -151,7 +151,9 @@ public class ServerProcessesTest {
 	public void testRetry() throws Exception {
 		// Create a ServerProcesses whose starts always fail, counting the tries
 		final AtomicLong tries = new AtomicLong();
-		servers = new ServerProcesses(new FakeServers.Launcher() {
+		final ServerProcesses failing = new ServerProcesses(
+			new FakeServers.Launcher()
+		{
 
 			@Override
 			public Process start(final Environment env) throws IOException {
@@ -159,26 +161,30 @@ public class ServerProcessesTest {
 				throw new IOException("No such server");
 			}
 		}, new StderrLogService(), 60_000, 2, now::get);
+		try {
+			// Ask for a ServerProcess, get a failure
+			final ServerProcesses.Slot slot = failing.slot(ENV);
+			final CompletableFuture<ServerProcess> failed = slot.process();
+			assertThrows(ExecutionException.class, () -> failed.get(10,
+				TimeUnit.SECONDS));
+			assertEquals(1, tries.get());
 
-		// Ask for a ServerProcess, get a failure
-		final ServerProcesses.Slot slot = servers.slot(ENV);
-		final CompletableFuture<ServerProcess> failed = slot.process();
-		assertThrows(ExecutionException.class, () -> failed.get(10,
-			TimeUnit.SECONDS));
-		assertEquals(1, tries.get());
+			// Ask again, get another failure...
+			assertSame(failed, slot.process());
+			// ...but make sure we didn't actually try.
+			assertEquals(1, tries.get());
 
-		// Ask again, get another failure...
-		assertSame(failed, slot.process());
-		// ...but make sure we didn't actually try.
-		assertEquals(1, tries.get());
-
-		// After waiting for the retry delay...
-		now.addAndGet(60_000);
-		// ...try again...
-		assertThrows(ExecutionException.class, () -> slot.process().get(10,
-			TimeUnit.SECONDS));
-		// ...and we should see another try
-		assertEquals(2, tries.get());
+			// After waiting for the retry delay...
+			now.addAndGet(60_000);
+			// ...try again...
+			assertThrows(ExecutionException.class, () -> slot.process().get(10,
+				TimeUnit.SECONDS));
+			// ...and we should see another try
+			assertEquals(2, tries.get());
+		}
+		finally {
+			failing.shutdown();
+		}
 	}
 
 	/**

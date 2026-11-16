@@ -152,7 +152,7 @@ final class ServerProcess {
 				published);
 		}
 		catch (final Exception exc) {
-			process.destroy();
+			destroy(process);
 			throw exc;
 		}
 	}
@@ -229,12 +229,20 @@ final class ServerProcess {
 			// NB: Stopped below, regardless.
 		}
 		finally {
-			process.destroy();
+			destroy(process);
 			listening.cancel(true);
 		}
 	}
 
 	// -- Helper methods --
+
+	/** Destroy the process and all of its descendants. */
+	private static void destroy(final Process process) {
+		// Destroy any children (some langauge servers are wrappers around other processes)
+		process.descendants().forEach(ProcessHandle::destroy);
+		// Then destroy the given process.
+		process.destroy();
+	}
 
 	/** Brings the server's copy of a document up to date: whether it was not. */
 	private boolean sync(final String uri, final String text) {

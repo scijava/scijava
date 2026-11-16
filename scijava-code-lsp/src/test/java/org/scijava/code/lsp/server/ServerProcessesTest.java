@@ -38,11 +38,14 @@ import static org.scijava.code.lsp.server.FakeServers.ENV;
 import static org.scijava.code.lsp.server.FakeServers.waitFor;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.AfterEach;
@@ -201,5 +204,101 @@ public class ServerProcessesTest {
 		// But the first process should still be running
 		assertFalse(started.get(0).shutdown);
 		assertSame(first, a.running().get());
+	}
+
+	/**
+	 * Tests that a process that fails to initialize is stopped, and that
+	 * any children it started are stopped as well.
+	 */
+	@Test
+	public void testNestedProcessDestruction() throws Exception {
+		final NestedServerLauncher nested = new NestedServerLauncher();
+		try {
+			// NB: The wrapper never answers, so initializing it times out. Started
+			// directly, as ServerProcesses waits a minute for that.
+			assertThrows(
+				TimeoutException.class,
+				() -> ServerProcess.start(nested, ENV, new StderrLogService(), 1000)
+			);
+			waitFor(() -> !nested.wrapper.isAlive());
+			waitFor(() -> !nested.child.isAlive());
+		}
+		finally {
+			// NB: Whatever happened, leave nothing running.
+			if (nested.child != null) nested.child.destroyForcibly();
+			if (nested.wrapper != null) nested.wrapper.destroyForcibly();
+		}
+	}
+
+	/**
+	 * Starts a wrapper (see {@link Wrapper}) {@link Process} which starts a child
+	 * of its own.
+	 */
+	static class NestedServerLauncher implements ServerLauncher {
+
+		volatile ProcessHandle wrapper, child;
+
+		@Override
+		public String language() {
+			return "python";
+		}
+
+		@Override
+		public Process start(final Environment env) throws IOException {
+			// Starts a JVM process running the main class of Wrapper with a
+			// "wrap" arg
+			final Process process = new ProcessBuilder(java(), "-cp", System
+				.getProperty("java.class.path"), Wrapper.class.getName(), "wrap")
+					.redirectError(ProcessBuilder.Redirect.DISCARD).start();
+			wrapper = process.toHandle();
+			try {
+				// Wait until the wrapper starts up its child to return.
+				// NB: Notes the child now: once the wrapper is gone, it is no one's
+				// descendant, so it could not be found to check.
+				waitFor(() -> javaChild(process).isPresent());
+			}
+			catch (final InterruptedException exc) {
+				throw new IOException(exc);
+			}
+			child = javaChild(process).get();
+			return process;
+		}
+
+		/**
+		 * The child the wrapper started, if yet. NB: Not e.g. the console host
+		 * Windows starts for it too.
+		 */
+		private static Optional<ProcessHandle> javaChild(final Process process) {
+			return process.children().filter(h -> h.info().command().map(c -> c
+				.toLowerCase().matches(".*[\\\\/]java(\\.exe)?")).orElse(false))
+				.findAny();
+		}
+	}
+
+	/**
+	 * A process that sleeps forever; given {@code wrap}, it first starts another
+	 * (which just sleeps), sharing its input and output.
+	 */
+	public static class Wrapper {
+
+		public static void main(final String... args) throws Exception {
+			if (args.length > 0 && args[0].equals("wrap")) {
+				// If asked to wrap start up another instance.
+				new ProcessBuilder(
+					 java(),
+					"-cp",
+					System.getProperty("java.class.path"),
+					Wrapper.class.getName()
+				).inheritIO().start();
+			}
+			// This Process does nothing (specifically, it DOESN'T speak LSP)
+			Thread.sleep(Long.MAX_VALUE);
+		}
+	}
+
+	/** The java executable of this JVM. */
+	private static String java() {
+		return Paths.get(System.getProperty("java.home"), "bin", "java")
+			.toString();
 	}
 }

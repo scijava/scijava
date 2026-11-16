@@ -29,6 +29,7 @@
 
 package org.scijava.code.lsp.server;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -123,8 +124,9 @@ class ProcessLanguageServer implements LanguageServer,
 
 	@Override
 	public CompletableFuture<Object> shutdown() {
-		slot.running().ifPresent(s -> docs.keySet().forEach(s::close));
-		docs.clear();
+		// NB: Closing each document also cancels its pending diagnosis, which
+		// would otherwise start the process anew.
+		new ArrayList<>(docs.keySet()).forEach(this::close);
 		return CompletableFuture.completedFuture(null);
 	}
 
@@ -162,10 +164,7 @@ class ProcessLanguageServer implements LanguageServer,
 
 	@Override
 	public void didClose(final DidCloseTextDocumentParams params) {
-		final String uri = params.getTextDocument().getUri();
-		final Doc doc = docs.remove(uri);
-		if (doc != null && doc.pending != null) doc.pending.cancel(false);
-		slot.running().ifPresent(s -> s.close(uri));
+		close(params.getTextDocument().getUri());
 	}
 
 	@Override
@@ -269,7 +268,15 @@ class ProcessLanguageServer implements LanguageServer,
 		final CompletableFuture<T> answer = new CompletableFuture<>();
 		slot.process().thenAccept(s -> {
 			if (answer.isDone()) return;
-			final CompletableFuture<T> raw = s.request(uri, item.getText(), request);
+			final CompletableFuture<T> raw;
+			// NB: The process may have taken long to start (see current).
+			synchronized (doc) {
+				if (stale(uri, doc, item.getVersion())) {
+					answer.complete(null);
+					return;
+				}
+				raw = s.request(uri, item.getText(), request);
+			}
 			answer.whenComplete((r, error) -> {
 				if (answer.isCancelled()) raw.cancel(true);
 			});
@@ -306,16 +313,49 @@ class ProcessLanguageServer implements LanguageServer,
 	private void diagnose(final Doc doc, final TextDocumentItem item) {
 		final String uri = item.getUri();
 		final int version = item.getVersion();
-		slot.process().thenCompose(s -> s.diagnostics(uri, item.getText()))
-			.orTimeout(DIAGNOSE_TIMEOUT, TimeUnit.MILLISECONDS).thenAccept(found -> {
-				final LanguageClient c = client;
-				// NB: Only if still current.
-				if (docs.get(uri) != doc || doc.version != version || c == null) {
-					return;
+		slot.process().thenCompose(s -> {
+			// NB: The process may have taken long to start (see current).
+			synchronized (doc) {
+				if (stale(uri, doc, version)) {
+					return CompletableFuture.completedFuture(null);
 				}
-				c.publishDiagnostics(new PublishDiagnosticsParams(uri, found,
-					version));
-			});
+				return s.diagnostics(uri, item.getText());
+			}
+		}).orTimeout(DIAGNOSE_TIMEOUT, TimeUnit.MILLISECONDS).thenAccept(found -> {
+			final LanguageClient c = client;
+			// NB: Only if still current, as it may have changed meanwhile.
+			synchronized (doc) {
+				if (stale(uri, doc, version) || c == null) return;
+			}
+			c.publishDiagnostics(new PublishDiagnosticsParams(uri, found,
+				version));
+		});
+	}
+
+	/**
+	 * Whether a document is still open, at the given version: whether it may be
+	 * synced as it was then. NB: Not so, by the time a process that took long to
+	 * start is asked: syncing it then would give the process stale text, or
+	 * open it anew once closed. Callers hold its lock, until done syncing it.
+	 */
+	private boolean stale(final String uri, final Doc doc, final int version)
+	{
+		return docs.get(uri) != doc || doc.version != version;
+	}
+
+	/**
+	 * Forgets a document, cancelling its pending diagnosis; and closes it in
+	 * the process, if running.
+	 */
+	private void close(final String uri) {
+		final Doc doc = docs.remove(uri);
+		if (doc == null) return;
+		// NB: Under its lock, so that whatever syncs it (see current) does so
+		// either before (and is then closed) or not at all.
+		synchronized (doc) {
+			if (doc.pending != null) doc.pending.cancel(false);
+			slot.running().ifPresent(s -> s.close(uri));
+		}
 	}
 
 	private static final class Doc {

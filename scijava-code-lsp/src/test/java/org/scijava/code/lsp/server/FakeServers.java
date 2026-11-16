@@ -127,7 +127,7 @@ final class FakeServers {
 			final PipedOutputStream serverOut = new PipedOutputStream(clientIn);
 			final PipedInputStream serverIn = new PipedInputStream(1 << 16);
 			final PipedOutputStream clientOut = new PipedOutputStream(serverIn);
-			final Server server = new Server();
+			final Server server = newServer();
 			final org.eclipse.lsp4j.jsonrpc.Launcher<org.eclipse.lsp4j.services.LanguageClient> launcher =
 				LSPLauncher.createServerLauncher(server, serverIn, serverOut);
 			server.client = launcher.getRemoteProxy();
@@ -193,10 +193,15 @@ final class FakeServers {
 		public String rootUri(final Environment env) {
 			return "file:///scripts";
 		}
+
+		/** Makes the server to start (e.g. one of a kind of its own). */
+		Server newServer() {
+			return new Server();
+		}
 	}
 
 	/** A language server knowing a few things about json. */
-	static final class Server implements LanguageServer, TextDocumentService,
+	static class Server implements LanguageServer, TextDocumentService,
 		WorkspaceService
 	{
 

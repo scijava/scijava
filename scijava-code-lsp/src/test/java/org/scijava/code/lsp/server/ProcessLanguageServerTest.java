@@ -50,7 +50,6 @@ import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.DidChangeTextDocumentParams;
 import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.InitializeParams;
-import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.Position;
@@ -218,7 +217,8 @@ public class ProcessLanguageServerTest {
 	 */
 	@Test
 	public void testClosedDuringStartup() throws Exception {
-		final DelayingLauncher launcher = new DelayingLauncher();
+		final FakeServers.DelayingLauncher launcher =
+			new FakeServers.DelayingLauncher();
 		final ServerProcesses delayed = servers(launcher);
 		try {
 			final ProcessLanguageServer s = (ProcessLanguageServer) delayed.server(
@@ -228,7 +228,7 @@ public class ProcessLanguageServerTest {
 			// Asked while the process starts...
 			final CompletableFuture<?> answer = s.completion(new CompletionParams(
 				new TextDocumentIdentifier(uri), new Position(0, 1)));
-			final DelayedFakeServer late = launcher.server();
+			final FakeServers.DelayedFakeServer late = launcher.awaitStart();
 			// ...then closed, before it has finished starting.
 			s.didClose(new DidCloseTextDocumentParams(new TextDocumentIdentifier(
 				uri)));
@@ -249,7 +249,8 @@ public class ProcessLanguageServerTest {
 	 */
 	@Test
 	public void testChangedDuringStartup() throws Exception {
-		final DelayingLauncher launcher = new DelayingLauncher();
+		final FakeServers.DelayingLauncher launcher =
+			new FakeServers.DelayingLauncher();
 		final ServerProcesses delayed = servers(launcher);
 		try {
 			final ProcessLanguageServer s = (ProcessLanguageServer) delayed.server(
@@ -258,7 +259,7 @@ public class ProcessLanguageServerTest {
 			final String uri = "untitled:/l.py";
 			open(s, uri, "old");
 			// Version 1's diagnosis waits for the process to start...
-			final DelayedFakeServer late = launcher.server();
+			final FakeServers.DelayedFakeServer late = launcher.awaitStart();
 			s.didChange(new DidChangeTextDocumentParams(
 				new VersionedTextDocumentIdentifier(uri, 2), Collections.singletonList(
 					new TextDocumentContentChangeEvent("new"))));
@@ -290,43 +291,6 @@ public class ProcessLanguageServerTest {
 	private static ServerProcesses servers(final FakeServers.Launcher launcher) {
 		return new ServerProcesses(launcher, new StderrLogService(), 60_000, 2,
 			System::currentTimeMillis);
-	}
-
-	/** Starts fake servers that finish initializing only once told. */
-	private static final class DelayingLauncher extends FakeServers.Launcher {
-
-		@Override
-		FakeServers.Server newServer() {
-			return new DelayedFakeServer();
-		}
-
-		/** The server started first, once started. */
-		DelayedFakeServer server() throws InterruptedException {
-			waitFor(() -> !started.isEmpty());
-			return (DelayedFakeServer) started.get(0);
-		}
-	}
-
-	/**
-	 * A fake server that finishes initializing only once told, as a process
-	 * that is slow to start does: until then, its process is still starting.
-	 */
-	private static final class DelayedFakeServer extends FakeServers.Server {
-
-		private final CompletableFuture<InitializeResult> initFuture =
-			new CompletableFuture<>();
-
-		@Override
-		public CompletableFuture<InitializeResult> initialize(
-			final InitializeParams params)
-		{
-			return initFuture;
-		}
-
-		/** Finishes the initialize request, as the fake server would have. */
-		void finishInitializing() {
-			initFuture.complete(super.initialize(null).join());
-		}
 	}
 
 	/**

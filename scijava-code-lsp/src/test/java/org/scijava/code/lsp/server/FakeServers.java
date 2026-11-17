@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
@@ -165,6 +166,13 @@ final class FakeServers {
 				public int waitFor() throws InterruptedException {
 					while (server.alive) Thread.sleep(10);
 					return 0;
+				}
+
+				@Override
+				public Stream<ProcessHandle> descendants() {
+					// NB: Not a process of the operating system, so none of its
+					// own (where the default would throw).
+					return Stream.empty();
 				}
 
 				@Override
@@ -327,6 +335,48 @@ final class FakeServers {
 			item.setInsertText(label);
 			item.setSortText(sort);
 			return item;
+		}
+	}
+
+	/** Starts fake servers that finish initializing only once told. */
+	static final class DelayingLauncher extends Launcher {
+
+		@Override
+		Server newServer() {
+			return new DelayedFakeServer();
+		}
+
+		/**
+		 * Waits until the first server has started: created, but (until told)
+		 * not yet initialized, so its process is still starting.
+		 *
+		 * @return That server.
+		 */
+		DelayedFakeServer awaitStart() throws InterruptedException {
+			waitFor(() -> !started.isEmpty());
+			return (DelayedFakeServer) started.get(0);
+		}
+	}
+
+	/**
+	 * A fake server that finishes initializing only once told, as a process
+	 * that is slow to start does: until then, its process is still starting.
+	 */
+	static final class DelayedFakeServer extends Server {
+
+		private final CompletableFuture<InitializeResult> initFuture =
+			new CompletableFuture<>();
+
+		@Override
+		public CompletableFuture<InitializeResult> initialize(
+			final InitializeParams params)
+		{
+			return initFuture;
+		}
+
+		/** Finishes the initialize request, as the fake server would have. */
+		void finishInitializing() {
+			initFuture.complete(super.initialize(null).join());
 		}
 	}
 }

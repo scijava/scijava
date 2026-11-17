@@ -34,8 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -90,6 +90,9 @@ final class ServerProcesses {
 	/** Stops idle servers. */
 	private final ScheduledExecutorService reaper;
 
+	/** Whether all servers were stopped, for good (see {@link #shutdown}). */
+	private boolean shutdown;
+
 	/**
 	 * Servers stopped after ten minutes unused, four at most (or as the system
 	 * properties {@code scijava.lsp.idle}, in ms, and {@code scijava.lsp.max}
@@ -136,16 +139,21 @@ final class ServerProcesses {
 		return known != null ? known : new Slot(env);
 	}
 
-	/** Stops all servers. */
+	/** Stops all servers, for good: none are started after. */
 	synchronized void shutdown() {
+		shutdown = true;
 		reaper.shutdownNow();
-		for (final Slot slot : slots.values()) {
+		// NB: A copy, as failing a start forgets its slot (see Slot.start).
+		for (final Slot slot : new ArrayList<>(slots.values())) {
 			final CompletableFuture<ServerProcess> s = slot.server;
 			if (s == null) continue;
-			// NB: Not via the starter, which stops next (dropping what it has not
-			// begun): those started, now; those starting, once started.
+			// NB: Those started, now. Those starting fail at once, as their waiters
+			// must not wait on the starter, which stops next (dropping what it has
+			// not begun); a start that finishes anyway shuts its process down
+			// itself (see Slot.start).
 			if (s.isDone()) s.thenAccept(ServerProcess::shutdown);
-			else s.thenAcceptAsync(ServerProcess::shutdown);
+			else s.completeExceptionally(new CancellationException(
+				"Shutting down all servers"));
 			slot.server = null;
 		}
 		slots.clear();
@@ -220,10 +228,16 @@ final class ServerProcesses {
 		/**
 		 * Gets the process, starting it if needed. Never blocks.
 		 *
-		 * @return The process, once started; fails if it could not be.
+		 * @return The process, once started; fails if it could not be, or if all
+		 *         servers were shut down.
 		 */
 		CompletableFuture<ServerProcess> process() {
 			synchronized (ServerProcesses.this) {
+				// NB: Shut down? Then no starter to start one, nor slots to keep it.
+				if (shutdown) {
+					return CompletableFuture.failedFuture(new CancellationException(
+						"All servers were shut down"));
+				}
 				// NB: Replaced while this one had no process? Ask that one.
 				final Slot known = slots.get(env);
 				if (known != null && known != this) return known.process();
@@ -256,30 +270,52 @@ final class ServerProcesses {
 
 		private void start() {
 			failed = -1;
-			final CompletableFuture<ServerProcess> s = CompletableFuture
-				.supplyAsync(() -> {
-					try {
-						log.debug("Starting " + launcher.language() +
-							" language server for " + env);
-						return ServerProcess.start(launcher, env, log, INIT_TIMEOUT);
-					}
-					catch (final Exception exc) {
-						log.warn("Could not start " + launcher.language() +
-							" language server for " + env, exc);
-						throw new CompletionException(exc);
-					}
-				}, starter);
-			// NB: Before the callback, which runs at once if the start failed.
+			final CompletableFuture<ServerProcess> s = new CompletableFuture<>();
 			server = s;
-			s.whenComplete((started, error) -> {
-				if (error == null) return;
-				synchronized (ServerProcesses.this) {
-					if (server != s) return;
+			starter.execute(() -> {
+				try {
+					log.debug("Starting " + launcher.language() +
+						" language server for " + env);
+					final ServerProcess p = ServerProcess.start(launcher, env, log,
+						INIT_TIMEOUT);
+					if (!s.complete(p)) {
+						// Already failed by a shutdown, so no one else will stop it.
+						p.shutdown();
+					}
+				}
+				catch (final Throwable t) {
+					if (noteFailure(s)) {
+						// Could not start (e.g. the process failed, or did not
+						// initialize in time): say so (it waits before trying again).
+						s.completeExceptionally(t);
+						log.warn("Could not start " + launcher.language() +
+							" language server for " + env, t);
+					}
+					else {
+						// NB: Interrupted by a shutdown, which failed it already:
+						// nothing to warn of, nor note (its slot is gone).
+					}
+				}
+			});
+		}
+
+		/**
+		 * Notes that the given start failed, before its users can see it (lest
+		 * they ask again too soon), unless replaced since.
+		 *
+		 * @return Whether it failed by itself; false if a shutdown failed it
+		 *         first.
+		 */
+		private boolean noteFailure(final CompletableFuture<ServerProcess> s) {
+			synchronized (ServerProcesses.this) {
+				if (s.isDone()) return false;
+				if (server == s) {
 					failed = clock.getAsLong();
 					// NB: Holds no process. Its users still wait out RETRY_DELAY.
 					slots.remove(env, this);
 				}
-			});
+				return true;
+			}
 		}
 
 		/** The process, if started (successfully); null otherwise. */

@@ -253,7 +253,8 @@ final class ServerProcess {
 
 	/** Destroy the process and all of its descendants. */
 	private static void destroy(final Process process) {
-		// Destroy any children (some langauge servers are wrappers around other processes)
+		// Destroy any children (some language servers are wrappers around other
+		// processes).
 		process.descendants().forEach(ProcessHandle::destroy);
 		// Then destroy the given process.
 		process.destroy();

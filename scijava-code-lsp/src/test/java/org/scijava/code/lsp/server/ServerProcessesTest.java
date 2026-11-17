@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.scijava.code.lsp.server.FakeServers.ENV;
 import static org.scijava.code.lsp.server.FakeServers.waitFor;
 
@@ -42,6 +43,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -210,6 +212,62 @@ public class ServerProcessesTest {
 		// But the first process should still be running
 		assertFalse(started.get(0).shutdown);
 		assertSame(first, a.running().get());
+	}
+
+	/**
+	 * Tests that shutting down fails, at once, the processes still starting,
+	 * and those waiting to start: rather than leaving their users waiting.
+	 */
+	@Test
+	public void testShutdownFailsStarting() throws Exception {
+		final FakeServers.DelayingLauncher delaying =
+			new FakeServers.DelayingLauncher();
+		final ServerProcesses processes = new ServerProcesses(delaying,
+			new StderrLogService(), 60_000, 2, now::get);
+		// One process starts. Once it is starting, it won't finish (since we
+		// never call DelayedFakeServer.finishInitializing), which means...
+		final CompletableFuture<ServerProcess> starting = processes.slot(ENV)
+			.process();
+		delaying.awaitStart();
+		// ...starting a second will wait its turn.
+		final CompletableFuture<ServerProcess> waiting = processes.slot(ENV
+			.withPaths(Collections.singletonList("/b"))).process();
+		// Now shut down all processes.
+		processes.shutdown();
+		// Both should fail, at once.
+		assertThrows(CancellationException.class, () -> waiting.getNow(null));
+		assertThrows(CancellationException.class, () -> starting.getNow(null));
+		// NB: The one waiting was never started at all.
+		assertEquals(1, delaying.started.size());
+	}
+
+	/**
+	 * Tests that shutting down stops a process still starting, rather than
+	 * leaving it running.
+	 */
+	@Test
+	public void testShutdownStopsStarting() throws Exception {
+		final FakeServers.DelayingLauncher delaying =
+			new FakeServers.DelayingLauncher();
+		final ServerProcesses delayed = new ServerProcesses(delaying,
+			new StderrLogService(), 60_000, 2, now::get);
+		delayed.slot(ENV).process();
+		final FakeServers.DelayedFakeServer late = delaying.awaitStart();
+		delayed.shutdown();
+		// NB: Stopped while it waits to be initialized, by the interruption of
+		// its start; or, should it finish starting anyway, once it has.
+		late.finishInitializing();
+		waitFor(() -> !late.alive);
+	}
+
+	/** Tests that once shut down, no process is started: asking fails. */
+	@Test
+	public void testNoneAfterShutdown() throws Exception {
+		final ServerProcesses.Slot slot = servers.slot(ENV);
+		servers.shutdown();
+		assertThrows(CancellationException.class, () -> slot.process().getNow(
+			null));
+		assertTrue(started.isEmpty());
 	}
 
 	/**

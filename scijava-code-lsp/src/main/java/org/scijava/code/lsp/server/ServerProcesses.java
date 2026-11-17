@@ -264,7 +264,7 @@ final class ServerProcesses {
 		private void stop() {
 			slots.remove(env, this);
 			if (server == null) return;
-			server.thenAcceptAsync(ServerProcess::shutdown, starter);
+			server.thenAcceptAsync(ServerProcess::shutdown);
 			server = null;
 		}
 

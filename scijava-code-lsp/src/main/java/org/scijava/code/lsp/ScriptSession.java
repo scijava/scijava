@@ -628,6 +628,9 @@ public final class ScriptSession implements AutoCloseable {
 					// at the start of the script, as it would without a header (e.g.
 					// an import, where the script has none, as Jython's server puts
 					// it). Only there: nowhere else in the header maps to the script.
+					// TODO: In SciJava scripts, imports conventionally come after a
+					// SciJava script parameter block. Ideally, we'd instead map
+					// imports to that conventional position.
 					if (r == null && atStart(e.getRange())) r = new Range(new Position(
 						0, 0), new Position(0, 0));
 					if (r != null) edits.add(new TextEdit(r, e.getNewText()));

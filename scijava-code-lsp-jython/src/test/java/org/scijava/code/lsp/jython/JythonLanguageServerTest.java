@@ -40,8 +40,12 @@ import java.util.stream.Collectors;
 import javax.script.ScriptEngine;
 
 import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.SignatureHelp;
+import org.eclipse.lsp4j.TextEdit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -63,6 +67,17 @@ import org.scijava.script.ScriptLanguage;
 public class JythonLanguageServerTest {
 
 	private static final ScriptLanguage TEST_LANGUAGE =
+		new AbstractScriptLanguage()
+	{
+
+		@Override
+		public ScriptEngine getScriptEngine() {
+			return null;
+		}
+	};
+
+	/** A language whose dialect prepends a header (see {@link HeaderDialect}). */
+	private static final ScriptLanguage HEADER_LANGUAGE =
 		new AbstractScriptLanguage()
 	{
 
@@ -140,6 +155,32 @@ public class JythonLanguageServerTest {
 		final List<String> texts = complete("from java.util import ArrayLi");
 		assertTrue(texts.contains(
 			"from java.util import ArrayList"), "expected ArrayList import among " + texts);
+	}
+
+	/**
+	 * Tests that accepting a Java class imports it at the top of the script,
+	 * when the script imports nothing yet, even if its dialect prepends a
+	 * header (which is not part of the script, so cannot take the import).
+	 */
+	@Test
+	public void testClassImportAfterHeader() {
+		ClassIndex.ensureCache();
+		final LanguageServerService servers = context.service(
+			LanguageServerService.class);
+		final String importList = "from java.util import ArrayList";
+
+		try (ScriptSession session = new ScriptSession(servers, HEADER_LANGUAGE)) {
+			// Find the CompletionItem that is importing java.util.ArrayList
+			List<CompletionItem> items = items(session, "#@String s\n#@Double d\n\nArrayLi");
+			CompletionItem arrayList = items.stream()
+					.filter(c -> c.getKind() == CompletionItemKind.Class)
+					.filter(c -> importList.equals(c.getDetail()))
+					.findFirst().orElseThrow();
+			// NB: At the top of the script itself, as the header is not part of it.
+			final Position top = new Position(0, 0);
+			assertEquals(Collections.singletonList(new TextEdit(new Range(top, top),
+					importList + "\n")), arrayList.getAdditionalTextEdits());
+		}
 	}
 
 	@Test
@@ -240,6 +281,29 @@ public class JythonLanguageServerTest {
 		@Override
 		public Header header(final Map<String, Variable> variables) {
 			return new Header("", Collections.emptySet());
+		}
+	}
+
+	/**
+	 * Makes {@code HEADER_LANGUAGE} Jython, with a header that imports nothing
+	 * (as one declaring a parameter might).
+	 */
+	@Plugin(type = ScriptDialect.class)
+	public static class HeaderDialect implements ScriptDialect {
+
+		@Override
+		public boolean supports(final ScriptLanguage language) {
+			return language == HEADER_LANGUAGE;
+		}
+
+		@Override
+		public String outputLanguage() {
+			return "jython";
+		}
+
+		@Override
+		public Header header(final Map<String, Variable> variables) {
+			return new Header("name = None", Collections.emptySet());
 		}
 	}
 

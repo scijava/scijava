@@ -623,7 +623,13 @@ public final class ScriptSession implements AutoCloseable {
 			if (item.getAdditionalTextEdits() != null) {
 				final List<TextEdit> edits = new ArrayList<>();
 				for (final TextEdit e : item.getAdditionalTextEdits()) {
-					final Range r = doc.toOriginal(e.getRange());
+					Range r = doc.toOriginal(e.getRange());
+					// HACK: An insertion at the very start, before the header, goes
+					// at the start of the script, as it would without a header (e.g.
+					// an import, where the script has none, as Jython's server puts
+					// it). Only there: nowhere else in the header maps to the script.
+					if (r == null && atStart(e.getRange())) r = new Range(new Position(
+						0, 0), new Position(0, 0));
 					if (r != null) edits.add(new TextEdit(r, e.getNewText()));
 				}
 				item.setAdditionalTextEdits(edits);
@@ -631,6 +637,12 @@ public final class ScriptSession implements AutoCloseable {
 			items.add(item);
 		}
 		return new CompletionList(list.isIncomplete(), items);
+	}
+
+	/** Whether the range is empty, at the very start of the text. */
+	private static boolean atStart(final Range r) {
+		final Position start = new Position(0, 0);
+		return start.equals(r.getStart()) && start.equals(r.getEnd());
 	}
 
 	/**

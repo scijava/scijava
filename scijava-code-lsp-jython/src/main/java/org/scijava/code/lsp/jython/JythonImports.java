@@ -163,9 +163,13 @@ final class JythonImports {
 		}
 		final int targetLine = imported.isEmpty() ? 0 : lastImportLine + 1;
 		final int offset = offsetOfLine(text, targetLine);
-		final Position at = Positions.position(text, Math.min(offset, text
-			.length()));
-		return new TextEdit(new Range(at, at), importStatement + "\n");
+		final Position at = Positions.position(text, offset);
+		// NB: After a last line without a line break (at the end), the import
+		// goes on a line of its own.
+		final boolean lineStart = offset == 0 || text.charAt(offset - 1) == '\n';
+		final String newText = lineStart ? importStatement + "\n" : "\n" +
+			importStatement;
+		return new TextEdit(new Range(at, at), newText);
 	}
 
 	/** Character offset of the start of the given (0-based) line in {@code text}. */

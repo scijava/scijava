@@ -52,6 +52,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerService;
+import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
@@ -183,6 +184,28 @@ public class JythonLanguageServerTest {
 		}
 	}
 
+	/**
+	 * Tests that accepting a Java class, when the script's last line is an
+	 * import without a line break, puts its import on a line of its own.
+	 */
+	@Test
+	public void testClassImportAtEOF() {
+		ClassIndex.ensureCache();
+		final String additionalEdit = "from java.util import ArrayList";
+		final String code = "x = ArrayLi\nfrom java.lang import Math";
+		// Find the CompletionItem that is importing java.util.ArrayList.
+		final List<CompletionItem> items = items(session(new Environment()), code,
+			code.indexOf('\n'));
+		final CompletionItem arrayList = items.stream() //
+			.filter(c -> c.getKind() == CompletionItemKind.Class) //
+			.filter(c -> additionalEdit.equals(c.getDetail())) //
+			.findFirst().orElseThrow();
+		// The insertion point should be at the end of the script.
+		final Position end = Positions.position(code, code.length());
+		assertEquals(Collections.singletonList(new TextEdit(new Range(end, end),
+			"\n" + additionalEdit)), arrayList.getAdditionalTextEdits());
+	}
+
 	@Test
 	public void testInheritedMembers() {
 		// NB: The stubs of the packages java.util refers to (e.g. java.lang, of
@@ -228,8 +251,7 @@ public class JythonLanguageServerTest {
 	@Test
 	public void testDunders() {
 		// Names like __name__: Jython's, not Python 3's.
-		final List<String> dunders = labels(items(session(new Environment()),
-			"x = __"));
+		final List<String> dunders = labels(completions("x = __"));
 		assertTrue(dunders.contains("__name__"), dunders.toString());
 		assertFalse(dunders.contains("__build_class__"), dunders.toString());
 	}
@@ -333,9 +355,15 @@ public class JythonLanguageServerTest {
 	private static List<CompletionItem> items(final ScriptSession session,
 		final String code)
 	{
+		return items(session, code, code.length());
+	}
+
+	private static List<CompletionItem> items(final ScriptSession session,
+		final String code, final int offset)
+	{
 		try (ScriptSession s = session) {
 			final List<CompletionItem> items = new java.util.ArrayList<>(s.completion(
-				code, code.length()).get(30, TimeUnit.SECONDS).getItems());
+				code, offset).get(30, TimeUnit.SECONDS).getItems());
 			items.sort(Comparator.comparing(CompletionItem::getSortText));
 			return items;
 		}

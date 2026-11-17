@@ -68,6 +68,26 @@ public class PositionsTest {
 		assertEquals(new Position(1, 1), Positions.position(text, 5));
 	}
 
+	/**
+	 * Tests that a position past the end of a line ending in \r\n is clamped
+	 * to before the \r: the end of the line's content, not within its line
+	 * break.
+	 */
+	@Test
+	public void testCrlfClamped() {
+		assertEquals(2, Positions.offset("ab\r\ncd", new Position(0, 99)));
+	}
+
+	/**
+	 * Tests that a huge character (as some clients send, for the end of the
+	 * line) is clamped to the line, rather than overflowing.
+	 */
+	@Test
+	public void testHugeCharacter() {
+		assertEquals(5, Positions.offset("ab\ncd", new Position(1,
+			Integer.MAX_VALUE)));
+	}
+
 	@Test
 	public void testCallStart() {
 		// The call around the caret: its opening parenthesis.

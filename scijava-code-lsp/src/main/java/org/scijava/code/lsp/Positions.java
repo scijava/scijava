@@ -67,7 +67,11 @@ public final class Positions {
 		}
 		int end = text.indexOf('\n', start);
 		if (end < 0) end = text.length();
-		return Math.min(start + position.getCharacter(), end);
+		// NB: The line ends before its line break, a \r\n included.
+		else if (end > start && text.charAt(end - 1) == '\r') end--;
+		// NB: Clamped before adding the line's start, lest a huge character (as
+		// some clients send, for the end of the line) overflow.
+		return start + Math.min(position.getCharacter(), end - start);
 	}
 
 	/**

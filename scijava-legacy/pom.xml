@@ -86,7 +86,7 @@
 		<imagej-common.version>2.1.2</imagej-common.version>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
 		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
 		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>

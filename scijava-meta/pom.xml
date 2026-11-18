@@ -94,7 +94,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
 	</properties>
 
 	<dependencies>

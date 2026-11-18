@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-common3</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Common</name>
 	<description>Common functionality widely used across SciJava modules.</description>

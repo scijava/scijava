@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-lsp-jython</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 
 	<name>SciJava LSP Jython</name>
 	<description>Jython code intelligence for SciJava, via Jython's own parser.</description>
@@ -59,7 +59,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-lsp-jython-0.1.0</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
@@ -78,8 +78,8 @@
 
 		<!-- TEMP: Remove once pom-scijava manages scijava-common 2.101.0. -->
 		<scijava-common.version>2.101.0</scijava-common.version>
-		<scijava-lsp.version>0.1.1-SNAPSHOT</scijava-lsp.version>
-		<scijava-lsp-ty.version>0.1.1-SNAPSHOT</scijava-lsp-ty.version>
+		<scijava-lsp.version>0.1.0</scijava-lsp.version>
+		<scijava-lsp-ty.version>0.1.0</scijava-lsp-ty.version>
 	</properties>
 
 	<dependencies>

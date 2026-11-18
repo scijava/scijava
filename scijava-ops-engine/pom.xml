@@ -117,7 +117,7 @@
 		<scijava.surefire.args>--add-exports org.scijava.ops.engine/org.scijava.ops.engine=ALL-UNNAMED</scijava.surefire.args>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-collections.version>1.0.1-SNAPSHOT</scijava-collections.version>
+		<scijava-collections.version>1.0.2-SNAPSHOT</scijava-collections.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>

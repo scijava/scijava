@@ -246,7 +246,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-collections.version>1.0.1-SNAPSHOT</scijava-collections.version>
+		<scijava-collections.version>1.0.2-SNAPSHOT</scijava-collections.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-concurrent.version>1.0.1-SNAPSHOT</scijava-concurrent.version>
 		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>

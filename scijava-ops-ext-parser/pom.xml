@@ -96,10 +96,6 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<!-- NB: Do not install/deploy this non-library component. -->
-		<maven.deploy.skip>true</maven.deploy.skip>
-		<maven.install.skip>true</maven.install.skip>
-
 		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-ops-opencv.version>1.0.1-SNAPSHOT</scijava-ops-opencv.version>
 	</properties>

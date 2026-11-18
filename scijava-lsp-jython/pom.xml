@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-lsp-jython</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 
 	<name>SciJava LSP Jython</name>
 	<description>Jython code intelligence for SciJava, via Jython's own parser.</description>

@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-concurrent</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
 	<name>SciJava Concurrent</name>
 	<description>SciJava library facilitating consistent parallel processing.</description>
@@ -68,7 +68,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-concurrent-1.0.1</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>

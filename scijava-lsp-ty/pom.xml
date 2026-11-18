@@ -78,7 +78,7 @@
 
 		<!-- TEMP: Remove once pom-scijava manages scijava-common 2.101.0. -->
 		<scijava-common.version>2.101.0</scijava-common.version>
-		<scijava-lsp.version>0.1.0-SNAPSHOT</scijava-lsp.version>
+		<scijava-lsp.version>0.1.1-SNAPSHOT</scijava-lsp.version>
 		<!-- TODO: Move to pom-scijava -->
 		<awaitility.version>4.3.0</awaitility.version>
 		<appose.version>0.12.0</appose.version>

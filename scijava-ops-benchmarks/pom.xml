@@ -100,7 +100,7 @@
 		<scijava.ops.parse>true</scijava.ops.parse>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-ops-indexer.version>1.0.1-SNAPSHOT</scijava-ops-indexer.version>
+		<scijava-ops-indexer.version>1.0.2-SNAPSHOT</scijava-ops-indexer.version>
 	</properties>
 
 	<repositories>

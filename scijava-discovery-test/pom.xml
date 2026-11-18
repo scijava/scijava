@@ -90,7 +90,7 @@
 		<maven.install.skip>true</maven.install.skip>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-discovery.version>1.0.2-SNAPSHOT</scijava-discovery.version>
 		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
 	</properties>
 

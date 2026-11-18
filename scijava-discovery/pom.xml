@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-discovery</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Discovery</name>
 	<description>Plugin discovery subsystem for SciJava libraries.</description>

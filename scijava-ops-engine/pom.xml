@@ -119,7 +119,7 @@
 		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-collections.version>1.0.2-SNAPSHOT</scijava-collections.version>
 		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
-		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-discovery.version>1.0.2-SNAPSHOT</scijava-discovery.version>
 		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>
 		<scijava-indexer.version>1.0.2-SNAPSHOT</scijava-indexer.version>
 		<scijava-meta.version>1.0.1-SNAPSHOT</scijava-meta.version>

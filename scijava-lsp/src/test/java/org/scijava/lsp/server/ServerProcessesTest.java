@@ -153,6 +153,7 @@ public class ServerProcessesTest {
 	public void testRetry() throws Exception {
 		// Create a ServerProcesses whose starts always fail, counting the tries
 		final AtomicLong tries = new AtomicLong();
+		final FakeServers.RecordingLog log = new FakeServers.RecordingLog();
 		final ServerProcesses failing = new ServerProcesses(
 			new FakeServers.Launcher()
 		{
@@ -162,7 +163,7 @@ public class ServerProcessesTest {
 				tries.incrementAndGet();
 				throw new IOException("No such server");
 			}
-		}, new StderrLogService(), 60_000, 2, now::get);
+		}, log, 60_000, 2, now::get);
 		try {
 			// Ask for a ServerProcess, get a failure
 			final ServerProcesses.Slot slot = failing.slot(ENV);
@@ -170,6 +171,8 @@ public class ServerProcessesTest {
 			assertThrows(ExecutionException.class, () -> failed.get(10,
 				TimeUnit.SECONDS));
 			assertEquals(1, tries.get());
+			// ...and a warning of it.
+			waitFor(() -> log.warned("No such server"));
 
 			// Ask again, get another failure...
 			assertSame(failed, slot.process());

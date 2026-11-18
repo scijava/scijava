@@ -288,8 +288,11 @@ final class ServerProcesses {
 						// Could not start (e.g. the process failed, or did not
 						// initialize in time): say so (it waits before trying again).
 						s.completeExceptionally(t);
+						// NB: Typically the server is simply not installed, and this
+						// recurs with each retry, so the details are only for debugging.
 						log.warn("Could not start " + launcher.language() +
-							" language server for " + env, t);
+							" language server for " + env + ": " + t);
+						log.debug(t);
 					}
 					else {
 						// NB: Interrupted by a shutdown, which failed it already:

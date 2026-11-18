@@ -194,7 +194,7 @@ public class ProcessLanguageServerTest {
 			public Process start(final Environment env) throws IOException {
 				throw new IOException("No such server");
 			}
-		}, new StderrLogService(), 60_000, 2, System::currentTimeMillis);
+		}, new FakeServers.RecordingLog(), 60_000, 2, System::currentTimeMillis);
 		try {
 			final ProcessLanguageServer s = (ProcessLanguageServer) failing.server(
 				ENV);

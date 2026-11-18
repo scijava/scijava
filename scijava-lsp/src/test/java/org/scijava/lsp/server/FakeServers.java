@@ -29,6 +29,7 @@
 
 package org.scijava.lsp.server;
 
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,6 +66,9 @@ import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.scijava.log.AbstractLogService;
+import org.scijava.log.LogLevel;
+import org.scijava.log.LogMessage;
 import org.scijava.lsp.Environment;
 
 /**
@@ -111,6 +115,24 @@ final class FakeServers {
 		}
 	}
 
+	/** A log that keeps its messages, rather than printing them. */
+	static final class RecordingLog extends AbstractLogService {
+
+		/** The messages logged, in order. */
+		final List<LogMessage> messages = new CopyOnWriteArrayList<>();
+
+		@Override
+		protected void messageLogged(final LogMessage message) {
+			messages.add(message);
+		}
+
+		/** Whether a warning containing the given text was logged. */
+		boolean warned(final String text) {
+			return messages.stream().anyMatch(m -> m.level() == LogLevel.WARN && m
+				.text().contains(text));
+		}
+	}
+
 	/** Starts fake servers, connected by pipes. */
 	static class Launcher implements ServerLauncher {
 
@@ -129,8 +151,34 @@ final class FakeServers {
 			final PipedInputStream serverIn = new PipedInputStream(1 << 16);
 			final PipedOutputStream clientOut = new PipedOutputStream(serverIn);
 			final Server server = newServer();
+			// NB: Once destroyed, a process writes nothing more; so too a fake
+			// server, rather than failing (loudly) to write to its closed pipe.
+			final OutputStream serverOutput = new FilterOutputStream(serverOut) {
+
+				@Override
+				public void write(final int b) throws IOException {
+					try {
+						out.write(b);
+					}
+					catch (final IOException exc) {
+						if (server.alive) throw exc;
+					}
+				}
+
+				@Override
+				public void write(final byte[] b, final int off, final int len)
+					throws IOException
+				{
+					try {
+						out.write(b, off, len);
+					}
+					catch (final IOException exc) {
+						if (server.alive) throw exc;
+					}
+				}
+			};
 			final org.eclipse.lsp4j.jsonrpc.Launcher<org.eclipse.lsp4j.services.LanguageClient> launcher =
-				LSPLauncher.createServerLauncher(server, serverIn, serverOut);
+				LSPLauncher.createServerLauncher(server, serverIn, serverOutput);
 			server.client = launcher.getRemoteProxy();
 			launcher.startListening();
 			started.add(server);

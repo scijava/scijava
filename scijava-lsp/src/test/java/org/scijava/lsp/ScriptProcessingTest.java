@@ -61,6 +61,8 @@ public class ScriptProcessingTest {
 	@BeforeEach
 	public void setUp() {
 		context = new Context();
+		// NB: The tests' unusual scripts are warned of, as expected; quiet that.
+		context.service(LogService.class).setLevel(LogLevel.ERROR);
 		processing = new ScriptProcessing(() -> context);
 	}
 

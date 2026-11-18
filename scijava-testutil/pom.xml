@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-testutil</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
 	<name>SciJava Test Util</name>
 	<description>Shared test utilities for SciJava projects.</description>
@@ -66,7 +66,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-testutil-1.0.1</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>

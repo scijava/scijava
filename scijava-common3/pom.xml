@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-common3</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
 	<name>SciJava Common</name>
 	<description>Common functionality widely used across SciJava modules.</description>
@@ -76,7 +76,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-common3-1.0.1</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
@@ -95,7 +95,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-testutil.version>1.0.2-SNAPSHOT</scijava-testutil.version>
+		<scijava-testutil.version>1.0.1</scijava-testutil.version>
 	</properties>
 
 	<dependencies>

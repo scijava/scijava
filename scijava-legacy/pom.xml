@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-legacy</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
 	<name>SciJava Legacy</name>
 	<description>Interoperability with legacy SciJava libraries.</description>
@@ -66,7 +66,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-legacy-1.0.1</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
@@ -86,14 +86,14 @@
 		<imagej-common.version>2.1.2</imagej-common.version>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
-		<scijava-discovery.version>1.0.2-SNAPSHOT</scijava-discovery.version>
-		<scijava-ops-api.version>1.0.2-SNAPSHOT</scijava-ops-api.version>
-		<scijava-ops-engine.version>1.0.2-SNAPSHOT</scijava-ops-engine.version>
-		<scijava-ops-spi.version>1.0.2-SNAPSHOT</scijava-ops-spi.version>
-		<scijava-priority.version>1.0.2-SNAPSHOT</scijava-priority.version>
-		<scijava-progress.version>1.0.2-SNAPSHOT</scijava-progress.version>
-		<scijava-types.version>1.0.2-SNAPSHOT</scijava-types.version>
+		<scijava-common3.version>1.0.1</scijava-common3.version>
+		<scijava-discovery.version>1.0.1</scijava-discovery.version>
+		<scijava-ops-api.version>1.0.1</scijava-ops-api.version>
+		<scijava-ops-engine.version>1.0.1</scijava-ops-engine.version>
+		<scijava-ops-spi.version>1.0.1</scijava-ops-spi.version>
+		<scijava-priority.version>1.0.1</scijava-priority.version>
+		<scijava-progress.version>1.0.1</scijava-progress.version>
+		<scijava-types.version>1.0.1</scijava-types.version>
 	</properties>
 
 	<dependencies>

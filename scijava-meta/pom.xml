@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-meta</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Meta</name>
 	<description>Utility functions to introspect metadata of SciJava libraries.</description>

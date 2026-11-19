@@ -250,7 +250,7 @@
 		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
 		<scijava-concurrent.version>1.0.2-SNAPSHOT</scijava-concurrent.version>
 		<scijava-function.version>1.0.2-SNAPSHOT</scijava-function.version>
-		<scijava-meta.version>1.0.1-SNAPSHOT</scijava-meta.version>
+		<scijava-meta.version>1.0.2-SNAPSHOT</scijava-meta.version>
 		<scijava-ops-api.version>1.0.2-SNAPSHOT</scijava-ops-api.version>
 		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
 		<scijava-ops-indexer.version>1.0.2-SNAPSHOT</scijava-ops-indexer.version>

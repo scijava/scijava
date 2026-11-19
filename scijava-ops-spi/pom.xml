@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-ops-spi</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Ops SPI</name>
 	<description>Service descriptors used by the SciJava Ops framework.</description>

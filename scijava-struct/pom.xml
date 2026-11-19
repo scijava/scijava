@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-struct</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Struct</name>
 	<description>A library for building and introspecting structs.</description>

@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-progress</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Progress</name>
 	<description>An interrupt-based subsystem for progress reporting.</description>

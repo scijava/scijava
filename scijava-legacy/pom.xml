@@ -92,7 +92,7 @@
 		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
 		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
 		<scijava-priority.version>1.0.2-SNAPSHOT</scijava-priority.version>
-		<scijava-progress.version>1.0.1-SNAPSHOT</scijava-progress.version>
+		<scijava-progress.version>1.0.2-SNAPSHOT</scijava-progress.version>
 		<scijava-types.version>1.0.2-SNAPSHOT</scijava-types.version>
 	</properties>
 

@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-struct</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
 	<name>SciJava Struct</name>
 	<description>A library for building and introspecting structs.</description>
@@ -81,7 +81,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-struct-1.0.1</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
@@ -100,7 +100,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
+		<scijava-common3.version>1.0.1</scijava-common3.version>
 	</properties>
 
 	<dependencies>

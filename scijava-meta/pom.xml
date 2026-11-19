@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-meta</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
 	<name>SciJava Meta</name>
 	<description>Utility functions to introspect metadata of SciJava libraries.</description>
@@ -75,7 +75,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-meta-1.0.1</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
@@ -94,7 +94,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-common3.version>1.0.2-SNAPSHOT</scijava-common3.version>
+		<scijava-common3.version>1.0.1</scijava-common3.version>
 	</properties>
 
 	<dependencies>

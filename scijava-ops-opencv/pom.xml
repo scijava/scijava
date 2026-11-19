@@ -106,7 +106,7 @@
 		<scijava-ops-indexer.version>1.0.2-SNAPSHOT</scijava-ops-indexer.version>
 		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
 		<scijava-taglets.version>1.0.2-SNAPSHOT</scijava-taglets.version>
-		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
+		<scijava-types.version>1.0.2-SNAPSHOT</scijava-types.version>
 
 		<scijava.ops.parse>true</scijava.ops.parse>
 	</properties>

@@ -109,7 +109,7 @@
 		<scijava-ops-spi.version>1.0.2-SNAPSHOT</scijava-ops-spi.version>
 		<scijava-progress.version>1.0.1-SNAPSHOT</scijava-progress.version>
 		<scijava-taglets.version>1.0.2-SNAPSHOT</scijava-taglets.version>
-		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
+		<scijava-types.version>1.0.2-SNAPSHOT</scijava-types.version>
 
 		<scijava.ops.parse>true</scijava.ops.parse>
 	</properties>

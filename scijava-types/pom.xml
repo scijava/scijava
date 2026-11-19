@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-types</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Types</name>
 	<description>SciJava library for generic type reasoning.</description>

@@ -623,14 +623,13 @@ final class TypedAST {
 		return name == null ? c.getName() : name;
 	}
 
-	/** Gets the script's own methods (e.g. {@code def area(w, h)}) by name. */
-	List<MethodNode> scriptMethods(final String name) {
-		final List<MethodNode> methods = new ArrayList<>();
-		if (module == null) return methods;
-		for (final ClassNode c : module.getClasses()) {
-			if (c.isScript()) methods.addAll(c.getMethods(name));
-		}
-		return methods;
+	/**
+	 * Gets all the methods the script itself declares (e.g.
+	 * {@code def area(w, h)}), leaving out those Groovy generates for it, such
+	 * as {@code run} and {@code main}.
+	 */
+	List<MethodNode> scriptMethods() {
+		return module == null ? Collections.emptyList() : module.getMethods();
 	}
 
 	/** True iff the expression is, or contains, the caret marker. */

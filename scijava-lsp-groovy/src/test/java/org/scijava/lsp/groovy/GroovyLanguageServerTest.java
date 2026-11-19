@@ -390,6 +390,27 @@ public class GroovyLanguageServerTest {
 		assertTrue(labels(items).contains("s"));
 	}
 
+	@Test
+	public void testCompleteScriptFunctions() {
+		final String foo = "def foo() {\n  println 'hi'\n}\n";
+		// Completable after declaration
+		final List<String> after = complete(foo + "x = 1\nfo");
+		assertTrue(after.contains("foo"), String.valueOf(after));
+		// Completable within its own body (e.g. a recursive call)
+		final List<String> inside = complete("def foo() {\n  fo");
+		assertTrue(inside.contains("foo"), String.valueOf(inside));
+		// Before its declaration: not offered.
+		// TODO: Functions can be called anywhere in the script, so we could
+		// enable this at a later date
+		final List<String> before = completeAt("fo|\n" + foo);
+		assertFalse(before.contains("foo"), String.valueOf(before));
+		// Groovy gives every script class a run() method (holding the script's
+		// top-level code) and a main(String[]) method, but the script didn't
+		// write them, so they must not be offered as its functions.
+		final List<String> generated = complete(foo + "ru");
+		assertFalse(generated.contains("run"), String.valueOf(generated));
+	}
+
 	// -- Helper methods --
 
 	/** A session about plain Groovy, with a server of its own. */
@@ -458,9 +479,15 @@ public class GroovyLanguageServerTest {
 	private static List<CompletionItem> items(final ScriptSession session,
 		final String code)
 	{
+		return items(session, code, code.length());
+	}
+
+	private static List<CompletionItem> items(final ScriptSession session,
+		final String code, final int caret)
+	{
 		try (ScriptSession s = session) {
 			final List<CompletionItem> items = new ArrayList<>(s.completion(
-				code, code.length()).get(30, TimeUnit.SECONDS).getItems());
+				code, caret).get(30, TimeUnit.SECONDS).getItems());
 			items.sort((a, b) -> a.getSortText().compareTo(b.getSortText()));
 			return items;
 		}
@@ -471,6 +498,14 @@ public class GroovyLanguageServerTest {
 
 	private static List<String> complete(final String code) {
 		return labels(items(code));
+	}
+
+	/** Completes at the caret, marked in the code by {@code |}. */
+	private static List<String> completeAt(final String marked) {
+		final int caret = marked.indexOf('|');
+		final String code = marked.substring(0, caret) + marked.substring(caret +
+			1);
+		return labels(items(session(new Environment()), code, caret));
 	}
 
 	private static List<String> labels(final List<CompletionItem> items) {

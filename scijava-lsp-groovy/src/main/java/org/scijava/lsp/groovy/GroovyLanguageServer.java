@@ -181,6 +181,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (member) items.addAll(memberCompletions(ast, before, prefix));
 		else {
 			items.addAll(variableCompletions(ast.variablesAtCaret(), prefix));
+			items.addAll(functionCompletions(ast, prefix));
 			items.addAll(keywordCompletions(prefix));
 			items.addAll(classCompletions(doc, prefix));
 		}
@@ -462,7 +463,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 					.getName()) != null) continue;
 			out.add(field(f.getName(), f.getType().toString(false)));
 		}
-		for (final Overload m : scriptMethods(type, prefix, staticOnly, false)) {
+		for (final Overload m : classMethods(type, prefix, staticOnly, false)) {
 			out.add(m.toItem());
 		}
 		final List<CompletionItem> sorted = sorted(out);
@@ -483,7 +484,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	}
 
 	/** Methods of a class defined in the script: by prefix, or exact name. */
-	private static List<Overload> scriptMethods(final ClassNode type,
+	private static List<Overload> classMethods(final ClassNode type,
 		final String name, final boolean staticOnly, final boolean exact)
 	{
 		final List<Overload> out = new ArrayList<>();
@@ -555,6 +556,20 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			out.add(variable(name, type != null ? type.toString(false) : "Object"));
 		}
 		return out;
+	}
+
+	private static List<CompletionItem> functionCompletions(final TypedAST ast,
+		final String prefix)
+	{
+		final List<CompletionItem> out = new ArrayList<>();
+		for (final MethodNode m : ast.scriptMethods()) {
+			if (!matches(m.getName(), prefix) || m.getName().equals(prefix)) {
+				continue;
+			}
+			out.add(methodNode(m.getName(), m).detail(m.getTypeDescriptor())
+				.toItem());
+		}
+		return sorted(out);
 	}
 
 	/** Groovy's keywords */
@@ -681,8 +696,8 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (name == null) return out;
 		if (e.isImplicitThis()) {
 			// A function defined in the script, or a GDK method such as println.
-			for (final MethodNode m : ast.scriptMethods(name)) {
-				out.add(methodNode(name, m));
+			for (final MethodNode m : ast.scriptMethods()) {
+				if (m.getName().equals(name)) out.add(methodNode(name, m));
 			}
 			out.addAll(named(gdkMethods(Object.class, name), name));
 			return out;
@@ -692,7 +707,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (type == null) return out;
 		final boolean staticOnly = receiver instanceof ClassExpression;
 		if (type.redirect().isPrimaryClassNode()) {
-			return scriptMethods(type.redirect(), name, staticOnly, true);
+			return classMethods(type.redirect(), name, staticOnly, true);
 		}
 		final Class<?> c = Types.box(ast.toClass(type));
 		if (c == null) return out;

@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-legacy</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Legacy</name>
 	<description>Interoperability with legacy SciJava libraries.</description>

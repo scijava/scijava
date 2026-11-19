@@ -252,7 +252,7 @@
 		<scijava-function.version>1.0.2-SNAPSHOT</scijava-function.version>
 		<scijava-meta.version>1.0.2-SNAPSHOT</scijava-meta.version>
 		<scijava-ops-api.version>1.0.2-SNAPSHOT</scijava-ops-api.version>
-		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
+		<scijava-ops-engine.version>1.0.2-SNAPSHOT</scijava-ops-engine.version>
 		<scijava-ops-indexer.version>1.0.2-SNAPSHOT</scijava-ops-indexer.version>
 		<scijava-ops-spi.version>1.0.2-SNAPSHOT</scijava-ops-spi.version>
 		<scijava-priority.version>1.0.2-SNAPSHOT</scijava-priority.version>

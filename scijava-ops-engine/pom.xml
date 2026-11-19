@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-ops-engine</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Ops Engine</name>
 	<description>Java implementation of the SciJava Ops matching engine.</description>

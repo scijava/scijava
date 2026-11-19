@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-ops-api</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<name>SciJava Ops API</name>
 	<description>The public API of SciJava Ops.</description>

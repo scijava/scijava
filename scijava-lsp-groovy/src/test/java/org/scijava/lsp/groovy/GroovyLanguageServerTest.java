@@ -399,11 +399,24 @@ public class GroovyLanguageServerTest {
 		// Completable within its own body (e.g. a recursive call)
 		final List<String> inside = complete("def foo() {\n  fo");
 		assertTrue(inside.contains("foo"), String.valueOf(inside));
-		// Before its declaration: not offered.
-		// TODO: Functions can be called anywhere in the script, so we could
-		// enable this at a later date
+		// Completable before its declaration, as Groovy can call it from there
 		final List<String> before = completeAt("fo|\n" + foo);
-		assertFalse(before.contains("foo"), String.valueOf(before));
+		assertTrue(before.contains("foo"), String.valueOf(before));
+		// ...including inside a block
+		final List<String> block = completeAt("if (true) {\n  fo|\n}\n" + foo);
+		assertTrue(block.contains("foo"), String.valueOf(block));
+		// ...but not if what follows the caret doesn't parse
+		final List<String> broken = completeAt("fo|\n" + foo + "x = (1 +]\n");
+		assertFalse(broken.contains("foo"), String.valueOf(broken));
+		// Completable on its own line
+		final List<String> same = completeAt("def foo() { fo| }\n");
+		assertTrue(same.contains("foo"), String.valueOf(same));
+		// Completable after its declaration, even if the caret's line is
+		// unfinished (so the whole script doesn't parse)
+		final List<String> open = completeAt(foo +
+			"println(fo|\ndef bar() {}\n");
+		assertTrue(open.contains("foo"), String.valueOf(open));
+		assertFalse(open.contains("bar"), String.valueOf(open));
 		// Groovy gives every script class a run() method (holding the script's
 		// top-level code) and a main(String[]) method, but the script didn't
 		// write them, so they must not be offered as its functions.

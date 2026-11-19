@@ -181,7 +181,8 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (member) items.addAll(memberCompletions(ast, before, prefix));
 		else {
 			items.addAll(variableCompletions(ast.variablesAtCaret(), prefix));
-			items.addAll(functionCompletions(ast, prefix));
+			items.addAll(functionCompletions(scriptFunctions(ast, text,
+				replaceStart, caret), prefix));
 			items.addAll(keywordCompletions(prefix));
 			items.addAll(classCompletions(doc, prefix));
 		}
@@ -558,11 +559,28 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		return out;
 	}
 
-	private static List<CompletionItem> functionCompletions(final TypedAST ast,
-		final String prefix)
+	/**
+	 * {@link MethodNode}s defined in a script: in the whole script, with the
+	 * caret marked, if it parses; else before the caret.
+	 */
+	private List<MethodNode> scriptFunctions(final TypedAST before,
+		final String text, final int replaceStart, final int caret)
+	{
+		// NB: A newline ends the text, in case it ends with a line comment.
+		final String code = TypedAST.closeBrackets(TypedAST.markCaret(text
+			.substring(0, replaceStart)) + text.substring(caret) + "\n");
+		if (code != null) {
+			final TypedAST whole = TypedAST.of(code, loader());
+			if (whole.isParsed()) return whole.scriptMethods();
+		}
+		return before.scriptMethods();
+	}
+
+	private static List<CompletionItem> functionCompletions(
+		final List<MethodNode> functions, final String prefix)
 	{
 		final List<CompletionItem> out = new ArrayList<>();
-		for (final MethodNode m : ast.scriptMethods()) {
+		for (final MethodNode m : functions) {
 			if (!matches(m.getName(), prefix) || m.getName().equals(prefix)) {
 				continue;
 			}

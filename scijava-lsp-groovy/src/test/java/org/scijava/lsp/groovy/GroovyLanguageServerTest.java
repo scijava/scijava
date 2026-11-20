@@ -424,6 +424,13 @@ public class GroovyLanguageServerTest {
 		// ...but not if what follows the caret doesn't parse
 		final List<String> broken = completeAt("fo|\n" + foo + "x = (1 +]\n");
 		assertFalse(broken.contains("foo"), String.valueOf(broken));
+		// Completable when its whole name is typed, as the snippet still adds the
+		// call's arguments
+		final CompletionItem whole = items("def foo(int n) { n }\nfoo").stream()
+			.filter(c -> c.getLabel().equals("foo")).findFirst().orElse(null);
+		assertTrue(whole != null);
+		assertTrue(whole.getTextEdit().getLeft().getNewText().startsWith(
+			"foo(${1:"), whole.getTextEdit().getLeft().getNewText());
 		// Completable on its own line
 		final List<String> same = completeAt("def foo() { fo| }\n");
 		assertTrue(same.contains("foo"), String.valueOf(same));

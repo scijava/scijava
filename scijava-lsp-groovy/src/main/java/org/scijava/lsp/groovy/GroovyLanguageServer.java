@@ -608,9 +608,9 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	{
 		final List<CompletionItem> out = new ArrayList<>();
 		for (final MethodNode m : functions) {
-			if (!matches(m.getName(), prefix) || m.getName().equals(prefix)) {
-				continue;
-			}
+			// NB: An exact match is kept: its snippet still adds the call's
+			// parentheses and arguments.
+			if (!matches(m.getName(), prefix)) continue;
 			out.add(methodNode(m.getName(), m).detail(m.getTypeDescriptor())
 				.toItem());
 		}

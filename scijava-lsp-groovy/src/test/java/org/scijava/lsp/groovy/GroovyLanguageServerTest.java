@@ -223,7 +223,7 @@ public class GroovyLanguageServerTest {
 	}
 
 	@Test
-	public void testCompleteMembersOfScriptClasses() {
+	public void testCompleteMembersOfClassesDefinedInScript() {
 		final List<String> texts = complete("class Foo {\n" + //
 			"  int bar\n" + //
 			"  String baz() { 'x' }\n" + //
@@ -232,6 +232,22 @@ public class GroovyLanguageServerTest {
 			"f.ba");
 		assertTrue(texts.contains("bar"), texts.toString());
 		assertTrue(texts.contains("baz"), texts.toString());
+		// Including what they inherit: from classes the script declares, however
+		// far up...
+		final String classes = "class A { def quux() {} }\n" +
+			"class B extends A {}\nclass C extends B {}\ndef c = new C()\n";
+		final List<String> declared = complete(classes + "c.quu");
+		assertTrue(declared.contains("quux"), declared.toString());
+		// ...and from compiled classes, Object included
+		final String list = "class A extends ArrayList {}\n" +
+			"class B extends A {}\ndef b = new B()\n";
+		final List<String> compiled = complete(list + "b.ensureCap");
+		assertTrue(compiled.contains("ensureCapacity"), compiled.toString());
+		final List<String> object = complete(classes + "c.toStr");
+		assertTrue(object.contains("toString"), object.toString());
+		// But only public methods, as they're called from outside the class
+		final List<String> hidden = complete(list + "b.removeRa");
+		assertFalse(hidden.contains("removeRange"), hidden.toString());
 	}
 
 	@Test
@@ -417,11 +433,106 @@ public class GroovyLanguageServerTest {
 			"println(fo|\ndef bar() {}\n");
 		assertTrue(open.contains("foo"), String.valueOf(open));
 		assertFalse(open.contains("bar"), String.valueOf(open));
-		// Groovy gives every script class a run() method (holding the script's
-		// top-level code) and a main(String[]) method, but the script didn't
-		// write them, so they must not be offered as its functions.
-		final List<String> generated = complete(foo + "ru");
-		assertFalse(generated.contains("run"), String.valueOf(generated));
+		// Deliberately don't offer `run` and `main` completions
+		final List<String> generated = items(foo + "ru").stream().filter(
+			c -> c.getLabel().equals("run")).map(c -> c.getLabelDetails()
+				.getDetail()).collect(Collectors.toList());
+		assertFalse(generated.contains("()"), String.valueOf(generated));
+		final List<String> main = complete(foo + "mai");
+		assertFalse(main.contains("main"), String.valueOf(main));
+		// But what the script class inherits from groovy.lang.Script is offered
+		final List<String> inherited = complete(foo + "printl");
+		assertTrue(inherited.contains("println"), String.valueOf(inherited));
+		// Not completable within a class's methods: the class is not the script
+		// class, so calling a script function from there fails when it runs
+		final List<String> inClass = completeAt(foo +
+			"class C {\n  def bar() {\n    fo|\n  }\n}\n");
+		assertFalse(inClass.contains("foo"), String.valueOf(inClass));
+		// ...even when the class is declared before the function
+		final List<String> classBefore = completeAt(
+			"class C {\n  def bar() {\n    fo|\n  }\n}\n" + foo);
+		assertFalse(classBefore.contains("foo"), String.valueOf(classBefore));
+		// But completable within an anonymous class in the script, whose outer
+		// class is the script class...
+		final String anon = "def r = new Runnable() {\n  void run() {\n" +
+			"    %s|\n  }\n}\n";
+		final List<String> inAnon = completeAt(foo + String.format(anon, "fo"));
+		assertTrue(inAnon.contains("foo"), String.valueOf(inAnon));
+		// ...though still without the methods Groovy generates for the script
+		final List<String> anonMain = completeAt(foo + String.format(anon, "ma"));
+		assertFalse(anonMain.contains("main"), String.valueOf(anonMain));
+	}
+
+	@Test
+	public void testCompleteNothingInDeclaredNames() {
+		// The name a declaration declares is new: nothing completes it.
+		final String foo = "def foo() {}\n";
+		for (final String keyword : new String[] { "class", "interface", "enum",
+			"trait", "record", "@interface" })
+		{
+			final List<String> texts = completeAt(foo + keyword + " fo|");
+			assertTrue(texts.isEmpty(), keyword + ": " + texts);
+		}
+		// ...whether of a type, a method, or a variable
+		final List<String> method = completeAt(foo + "def fo|() {}\n");
+		assertTrue(method.isEmpty(), String.valueOf(method));
+		final List<String> variable = completeAt(foo + "def fo|");
+		assertTrue(variable.isEmpty(), String.valueOf(variable));
+		final List<String> modified = completeAt(foo + "static def fo|");
+		assertTrue(modified.isEmpty(), String.valueOf(modified));
+		// Even if the declaration is indented, or nested in another
+		final List<String> nested = completeAt(foo + "class C {\n  class Fo|");
+		assertTrue(nested.isEmpty(), String.valueOf(nested));
+		// But the types it extends or implements are completed
+		final List<String> parent = completeAt("class C extends ArrayLis|");
+		assertTrue(parent.contains("ArrayList"), String.valueOf(parent));
+	}
+
+	@Test
+	public void testCompleteClassMethodsWithinClass() {
+		// A class's methods are completable within its own methods...
+		final List<String> own = completeAt("class C {\n  def baz() {}\n" +
+			"  def bar() {\n    ba|\n  }\n}\n");
+		assertTrue(own.contains("baz"), String.valueOf(own));
+		// ...including those declared after the caret...
+		final List<String> later = completeAt("class C {\n  def bar() {\n" +
+			"    ba|\n  }\n  def baz() {}\n}\n");
+		assertTrue(later.contains("baz"), String.valueOf(later));
+		// ...and those inherited from classes the script declares...
+		final List<String> inherited = completeAt("class A { def qux() {} }\n" +
+			"class B extends A {\n  def bar() {\n    qu|\n  }\n}\n");
+		assertTrue(inherited.contains("qux"), String.valueOf(inherited));
+		// ...and those inherited from compiled classes, Object included,
+		// protected ones too (they're called from within the class)...
+		final String list = "class B extends ArrayList {\n  def bar() {\n" +
+			"    %s|\n  }\n}\n";
+		final List<String> compiled = completeAt(String.format(list, "ensureCap"));
+		assertTrue(compiled.contains("ensureCapacity"), String.valueOf(compiled));
+		final List<String> object = completeAt(String.format(list, "toStr"));
+		assertTrue(object.contains("toString"), String.valueOf(object));
+		final List<String> prot = completeAt(String.format(list, "removeRa"));
+		assertTrue(prot.contains("removeRange"), String.valueOf(prot));
+		// ...but not their private ones...
+		final List<String> priv = completeAt(String.format(list, "grow"));
+		assertFalse(priv.contains("grow"), String.valueOf(priv));
+		// ...but not in the script's own code.
+		final List<String> outside = completeAt("class C { def baz() {} }\nba|\n");
+		assertFalse(outside.contains("baz"), String.valueOf(outside));
+	}
+
+	@Test
+	public void testSignatureHelpForCallsWithinClasses() {
+		// A class's own methods...
+		assertEquals("[int]", describe(help("class C {\n  def baz(int a) {}\n" +
+			"  def bar() {\n    baz(")));
+		// ...and those it inherits from compiled classes...
+		assertEquals("[int]", describe(help("class B extends ArrayList {\n" +
+			"  def bar() {\n    ensureCapacity(")));
+		// ...also when called on an instance...
+		assertEquals("[int]", describe(help("class B extends ArrayList {}\n" +
+			"def b = new B()\nb.ensureCapacity(")));
+		// ...but not the script's functions, which it cannot call.
+		assertNull(help("def foo(int a) {}\nclass C {\n  def bar() {\n    foo("));
 	}
 
 	// -- Helper methods --

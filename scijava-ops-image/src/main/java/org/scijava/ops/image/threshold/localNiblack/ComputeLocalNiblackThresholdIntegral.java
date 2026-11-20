@@ -36,14 +36,17 @@ import net.imglib2.converter.RealDoubleConverter;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.util.Intervals;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.image.threshold.Thresholds;
 import org.scijava.ops.spi.OpDependency;
 
 /**
  * <p>
- * Niblack's local thresholding algorithm.
+ * Niblack's local thresholding algorithm, with the population standard
+ * deviation (see {@link ComputeLocalNiblackThreshold}).
  * </p>
  * <p>
  * This implementation improves execution speed by using integral images for the
@@ -70,13 +73,15 @@ public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U exten
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<U>>, DoubleType> integralVarianceOp;
 
 	/**
-	 * TODO
+	 * Applies Niblack's rule to one pixel.
 	 *
-	 * @param inputNeighborhood
-	 * @param inputCenterPixel
-	 * @param c
-	 * @param k
-	 * @param output
+	 * @param inputNeighborhood the neighborhood of the pixel in the integral
+	 *          images of order 1 and 2
+	 * @param inputCenterPixel the pixel
+	 * @param c the constant subtracted from the threshold (Fiji default: 0)
+	 * @param k the weight of the standard deviation (Fiji default: 0.2 for
+	 *          bright objects)
+	 * @param output true if the pixel is foreground
 	 */
 	@Override
 	public void compute(
@@ -94,7 +99,10 @@ public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U exten
 		final var variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
 
-		final var stdDev = new DoubleType(Math.sqrt(variance.get()));
+		final var n = Intervals.numElements(Intervals.expand(inputNeighborhood,
+			-1));
+		final var stdDev = new DoubleType(Math.sqrt(Thresholds.populationVariance(
+			variance.get(), n)));
 		stdDev.mul(k);
 
 		threshold.add(stdDev);

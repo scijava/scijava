@@ -53,6 +53,15 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 		testComputeThresholdOp(36874, "threshold.huang");
 	}
 
+	/**
+	 * Tests {@link org.scijava.ops.image.threshold.huang2.ComputeHuang2Threshold}.
+	 */
+	@Test
+	public void testHuang2() {
+		// Note: Fiji Auto_Threshold Huang and Huang2 agree on this histogram.
+		testComputeThresholdOp(36874, "threshold.huang2");
+	}
+
 	/** Tests {@link org.scijava.ops.image.threshold.ij1.ComputeIJ1Threshold}. */
 	@Test
 	public void testIJ1() {
@@ -141,7 +150,8 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	 */
 	@Test
 	public void testOtsu() {
-		testComputeThresholdOp(34103, "threshold.otsu");
+		// Note: Fiji Auto_Threshold.Otsu on the same histogram yields bin 128.
+		testComputeThresholdOp(32591, "threshold.otsu");
 	}
 
 	/**

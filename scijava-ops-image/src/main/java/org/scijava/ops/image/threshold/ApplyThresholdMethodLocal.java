@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.threshold;
 
-import java.util.function.Function;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
@@ -45,6 +44,16 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Ops which compute and apply a local threshold to an image.
+ * <p>
+ * Each pixel is compared to the threshold of the histogram of its
+ * neighborhood. The histogram spans the range of the neighborhood. If the
+ * image has an integer type and the neighborhood spans at most 256 grey
+ * levels (as on any 8-bit image), the histogram has one bin per grey level,
+ * as the global threshold methods do; otherwise, it has 256 equally sized
+ * bins, so the threshold is only resolved to 1/256 of the local range. A
+ * histogram per grey level would cost time and memory proportional to the
+ * local range for every pixel (up to 65536 bins per pixel on 16-bit images).
+ * </p>
  *
  * @author Stefan Helfrich (University of Konstanz)
  */
@@ -62,6 +71,22 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.huang")
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
+
+		@Override
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
+			return computeThresholdOp;
+		}
+	}
+
+	/**
+	 * @implNote op names='threshold.huang2'
+	 */
+	public static class LocalHuang2<T extends RealType<T>> extends
+		AbstractApplyLocalHistogramBasedThreshold<T>
+	{
+
+		@OpDependency(name = "threshold.huang2")
 		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
@@ -347,9 +372,6 @@ public final class ApplyThresholdMethodLocal {
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 				RandomAccessibleInterval<BitType>> {
 
-		@OpDependency(name = "image.histogram")
-		private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
-
 		// TODO: Would be cool if Computers.Arity2<T, T, BitType> would be matched.
 		@OpDependency(name = "threshold.apply")
 		private Computers.Arity2<Comparable<? super T>, T, BitType> applyThresholdOp;
@@ -389,11 +411,15 @@ public final class ApplyThresholdMethodLocal {
 				public void compute(final Iterable<T> inputNeighborhood,
 					final T inputCenterPixel, final BitType output)
 				{
-					final var histogram = createHistogramOp.apply(
-						inputNeighborhood);
+					// Note: one bin per grey level, as for global thresholds, would
+					// cost up to 65536 bins per pixel on 16-bit images.
+					final var histogram = Thresholds.histogram(inputNeighborhood,
+						null, Thresholds.MAX_LOCAL_LEVEL_BINS);
 					final var threshold = inputNeighborhood.iterator().next()
 						.createVariable();
-					computeThresholdOp.compute(histogram, threshold);
+					if (histogram.getBinCount() < 2) histogram.getCenterValue(0,
+						threshold);
+					else computeThresholdOp.compute(histogram, threshold);
 					applyThresholdOp.compute(inputCenterPixel, threshold, output);
 				}
 			};

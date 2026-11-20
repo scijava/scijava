@@ -170,7 +170,10 @@ public class MTKTTest extends AbstractColocalisationTest {
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		double result = (Double) ops.op("coloc.maxTKendallTau").input(vImage1,
 			vImage2).apply();
-		assertEquals(1.0, result, 0.0);
+		// Note: The Otsu threshold of these ten values lies in a gap of their
+		// 256-bin histogram. Since threshold.otsu resolves ties toward the lowest
+		// bin, as Fiji does, it is about 5 rather than 6, so more ranks are kept.
+		assertEquals(2.0380986614602725, result, 0.0);
 	}
 
 	// Thirdly, we test random datasets.

@@ -37,6 +37,7 @@ import org.scijava.ops.image.AbstractFeatureTest;
 import org.scijava.ops.image.geom.GeomUtils;
 import net.imglib2.RealLocalizable;
 import net.imglib2.RealPoint;
+import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -189,6 +190,40 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 		// replaced and the numbers will change.
 		assertEquals(94.1937028134837, ops.op("geom.majorAxis").input(contour)
 			.outType(DoubleType.class).apply().get(), EPSILON, "geom.majorAxis");
+	}
+
+	/**
+	 * Tests the moment-equivalent ellipse axes on polygons approximating an
+	 * ellipse with semi-axes 40 and 10, for which the major and minor axis
+	 * lengths must be 80 and 20, whatever the orientation and vertex order.
+	 * ImageJ 1.x Fit Ellipse on the rasterized polygons gives 79.7 to 80.1 and
+	 * 20.0 to 20.1, depending on the orientation.
+	 */
+	@Test
+	public void testEllipseAxes() {
+		final int n = 360;
+		for (final double angle : new double[] { 0, 30, 90, 135 }) {
+			for (final boolean ccw : new boolean[] { true, false }) {
+				final double t = Math.toRadians(angle);
+				final double[] x = new double[n], y = new double[n];
+				for (int i = 0; i < n; i++) {
+					final double phi = (ccw ? 1 : -1) * 2 * Math.PI * i / n;
+					final double ex = 40 * Math.cos(phi), ey = 10 * Math.sin(phi);
+					x[i] = 100 + ex * Math.cos(t) - ey * Math.sin(t);
+					y[i] = 50 + ex * Math.sin(t) + ey * Math.cos(t);
+				}
+				final Polygon2D ellipse = new DefaultWritablePolygon2D(x, y);
+				final double major = ops.op("geom.majorAxis").input(ellipse).outType(
+					DoubleType.class).apply().get();
+				final double minor = ops.op("geom.minorAxis").input(ellipse).outType(
+					DoubleType.class).apply().get();
+				// Note: the 360-gon is slightly smaller than the true ellipse.
+				assertEquals(80, major, 0.01, "major axis at " + angle + "°, ccw=" +
+					ccw);
+				assertEquals(20, minor, 0.01, "minor axis at " + angle + "°, ccw=" +
+					ccw);
+			}
+		}
 	}
 
 	@Test

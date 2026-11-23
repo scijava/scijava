@@ -100,6 +100,13 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 	private static final Pattern IMPORT = Pattern.compile(
 		"^\\s*import\\s+(static\\s+)?([\\w$.]*)$");
 
+	/**
+	 * A declaration's keyword, e.g. "class " or "def ": what follows is the
+	 * name of the new type, method or variable.
+	 */
+	private static final Pattern DECLARATION = Pattern.compile(
+		"(?<![\\w$.@])(def|class|interface|@interface|enum|trait|record)\\s+$");
+
 	/** The identifier (possibly empty) being typed at the caret. */
 	private static final Pattern IDENTIFIER = Pattern.compile("[\\w$]*$");
 
@@ -157,6 +164,11 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			.isEmpty() || Character.isDigit(prefix.charAt(0)));
 		final boolean member = before.trim().endsWith(".") && !before.trim()
 			.endsWith("..") && !decimal;
+		if (!member && DECLARATION.matcher(before).find()) {
+			// A name being declared, e.g. "class Fo" or "def fo": it's new, so
+			// there is nothing to complete it with.
+			return list(doc, caret, caret, none);
+		}
 		// If it's not a member, there are two cases with less work to do:
 		if (!member && prefix.isEmpty()) {
 			// Nothing typed yet: only a call's arguments are worth offering, e.g.
@@ -181,6 +193,8 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (member) items.addAll(memberCompletions(ast, before, prefix));
 		else {
 			items.addAll(variableCompletions(ast.variablesAtCaret(), prefix));
+			items.addAll(functionCompletions(functionsAtCaret(ast, text,
+				replaceStart, caret), prefix));
 			items.addAll(keywordCompletions(prefix));
 			items.addAll(classCompletions(doc, prefix));
 		}
@@ -450,28 +464,38 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		final boolean staticOnly)
 	{
 		final List<CompletionItem> out = new ArrayList<>();
-		for (final PropertyNode p : type.getProperties()) {
-			if (staticOnly && !p.isStatic() || !matches(p.getName(), prefix)) {
-				continue;
+		// Its properties and public fields, and those it inherits.
+		final Set<String> names = new HashSet<>();
+		for (ClassNode t = type; t != null; t = t.getSuperClass() == null ? null
+			: t.getSuperClass().redirect())
+		{
+			final List<PropertyNode> properties;
+			final List<FieldNode> fields;
+			try {
+				properties = t.getProperties();
+				fields = t.getFields();
 			}
-			out.add(field(p.getName(), p.getType().toString(false)));
+			catch (final RuntimeException | LinkageError exc) {
+				break; // NB: An unloadable class; its members are unknown.
+			}
+			for (final PropertyNode p : properties) {
+				if (staticOnly && !p.isStatic() || !matches(p.getName(), prefix) ||
+					!names.add(p.getName())) continue;
+				out.add(field(p.getName(), p.getType().toString(false)));
+			}
+			for (final FieldNode f : fields) {
+				if (!f.isPublic() || f.isSynthetic() || staticOnly && !f.isStatic() ||
+					!matches(f.getName(), prefix) || !names.add(f.getName())) continue;
+				out.add(field(f.getName(), f.getType().toString(false)));
+			}
 		}
-		for (final FieldNode f : type.getFields()) {
-			if (!f.isPublic() || f.isSynthetic() || staticOnly && !f.isStatic() ||
-				!matches(f.getName(), prefix) || type.getProperty(f
-					.getName()) != null) continue;
-			out.add(field(f.getName(), f.getType().toString(false)));
-		}
-		for (final Overload m : scriptMethods(type, prefix, staticOnly, false)) {
+		// Its public methods, and those it inherits.
+		for (final Overload m : classMethods(ast, type, prefix, staticOnly,
+			false))
+		{
 			out.add(m.toItem());
 		}
-		final List<CompletionItem> sorted = sorted(out);
-		// Plus what it inherits from (compiled) superclasses.
-		final Class<?> superclass = ast.toClass(type.getSuperClass());
-		if (superclass != null && superclass != Object.class) {
-			sorted.addAll(sorted(members(superclass, prefix, staticOnly)));
-		}
-		return sorted;
+		return sorted(out);
 	}
 
 	/** A compiled class's members, as reached through it or an instance. */
@@ -482,14 +506,17 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			: CompletionItems.instanceMembers(c, prefix);
 	}
 
-	/** Methods of a class defined in the script: by prefix, or exact name. */
-	private static List<Overload> scriptMethods(final ClassNode type,
-		final String name, final boolean staticOnly, final boolean exact)
+	/**
+	 * Public methods of a class defined in the script, including those it
+	 * inherits (see {@link TypedAST#methodsOf}): by prefix, or exact name.
+	 */
+	private static List<Overload> classMethods(final TypedAST ast,
+		final ClassNode type, final String name, final boolean staticOnly,
+		final boolean exact)
 	{
 		final List<Overload> out = new ArrayList<>();
-		for (final MethodNode m : type.getMethods()) {
-			if (!m.isPublic() || m.isSynthetic() || staticOnly && !m.isStatic() || m
-				.getName().contains("$")) continue;
+		for (final MethodNode m : ast.methodsOf(type)) {
+			if (!m.isPublic() || staticOnly && !m.isStatic()) continue;
 			if (exact ? !m.getName().equals(name) : !matches(m.getName(), name)) {
 				continue;
 			}
@@ -555,6 +582,39 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 			out.add(variable(name, type != null ? type.toString(false) : "Object"));
 		}
 		return out;
+	}
+
+	/**
+	 * The {@link MethodNode}s callable without a receiver at the caret (see
+	 * {@link TypedAST#methodsAtCaret()}): as the whole script declares them,
+	 * with the caret marked, if it parses (as they may be declared after the
+	 * caret); else as declared before the caret.
+	 */
+	private List<MethodNode> functionsAtCaret(final TypedAST before,
+		final String text, final int replaceStart, final int caret)
+	{
+		// NB: A newline ends the text, in case it ends with a line comment.
+		final String code = TypedAST.closeBrackets(TypedAST.markCaret(text
+			.substring(0, replaceStart)) + text.substring(caret) + "\n");
+		if (code != null) {
+			final TypedAST whole = TypedAST.of(code, loader());
+			if (whole.isParsed()) return whole.methodsAtCaret();
+		}
+		return before.methodsAtCaret();
+	}
+
+	private static List<CompletionItem> functionCompletions(
+		final List<MethodNode> functions, final String prefix)
+	{
+		final List<CompletionItem> out = new ArrayList<>();
+		for (final MethodNode m : functions) {
+			// NB: An exact match is kept: its snippet still adds the call's
+			// parentheses and arguments.
+			if (!matches(m.getName(), prefix)) continue;
+			out.add(methodNode(m.getName(), m).detail(m.getTypeDescriptor())
+				.toItem());
+		}
+		return sorted(out);
 	}
 
 	/** Groovy's keywords */
@@ -680,9 +740,10 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		final String name = e.getMethodAsString();
 		if (name == null) return out;
 		if (e.isImplicitThis()) {
-			// A function defined in the script, or a GDK method such as println.
-			for (final MethodNode m : ast.scriptMethods(name)) {
-				out.add(methodNode(name, m));
+			// A method callable at the caret, e.g. a function the script defines;
+			// or a GDK method such as println.
+			for (final MethodNode m : ast.methodsAtCaret()) {
+				if (m.getName().equals(name)) out.add(methodNode(name, m));
 			}
 			out.addAll(named(gdkMethods(Object.class, name), name));
 			return out;
@@ -692,7 +753,7 @@ public class GroovyLanguageServer extends AbstractInProcessLanguageServer {
 		if (type == null) return out;
 		final boolean staticOnly = receiver instanceof ClassExpression;
 		if (type.redirect().isPrimaryClassNode()) {
-			return scriptMethods(type.redirect(), name, staticOnly, true);
+			return classMethods(ast, type.redirect(), name, staticOnly, true);
 		}
 		final Class<?> c = Types.box(ast.toClass(type));
 		if (c == null) return out;

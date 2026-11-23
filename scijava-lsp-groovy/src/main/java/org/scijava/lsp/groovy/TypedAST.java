@@ -37,10 +37,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import groovy.lang.Script;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.ClassCodeVisitorSupport;
 import org.codehaus.groovy.ast.ClassNode;
@@ -623,14 +627,100 @@ final class TypedAST {
 		return name == null ? c.getName() : name;
 	}
 
-	/** Gets the script's own methods (e.g. {@code def area(w, h)}) by name. */
-	List<MethodNode> scriptMethods(final String name) {
-		final List<MethodNode> methods = new ArrayList<>();
-		if (module == null) return methods;
-		for (final ClassNode c : module.getClasses()) {
-			if (c.isScript()) methods.addAll(c.getMethods(name));
+	/**
+	 * Gets the methods callable without a receiver (e.g. {@code area(3, 4)}) at
+	 * the caret.
+	 */
+	List<MethodNode> methodsAtCaret() {
+		if (module == null) return Collections.emptyList();
+		final ClassNode enclosing = caretClass();
+		if (enclosing == null) return module.getMethods();
+		final List<MethodNode> out = new ArrayList<>();
+		// NB: An inner class's method hides an outer class's of the same
+		// signature.
+		final Set<String> signatures = new HashSet<>();
+		for (ClassNode c = enclosing; c != null; c = c.getOuterClass()) {
+			for (final MethodNode m : methodsOf(c)) {
+				if (signatures.add(signature(m))) out.add(m);
+			}
 		}
-		return methods;
+		return out;
+	}
+
+	/**
+	 * Gets the methods of a type, namely:
+	 * <ol>
+	 *     <li>those it declares</li>
+	 *     <li>public members inherited from superclasses</li>
+	 * </ol>
+	 * but not:
+	 * <ol>
+	 *     <li>superclass members overridden by subclasses</li>
+	 *     <li>synthetic methods</li>
+	 * </ol>
+	 */
+	List<MethodNode> methodsOf(final ClassNode type) {
+		final List<MethodNode> out = new ArrayList<>();
+		final Set<String> signatures = new HashSet<>();
+		final Set<ClassNode> visited = new HashSet<>();
+		boolean own = true;
+		for (ClassNode t = type.redirect(); t != null && visited.add(t); t =
+			superclass(t))
+		{
+			final List<MethodNode> methods;
+			try {
+				methods = t.getMethods();
+			}
+			catch (final RuntimeException | LinkageError exc) {
+				break; // NB: An unloadable class; its methods are unknown.
+			}
+			// NB: The script class's methods include those Groovy generates for it
+			// (e.g. run and main); the module has only those the script declares.
+			final Set<MethodNode> declared = Collections.newSetFromMap(
+				new IdentityHashMap<>());
+			declared.addAll(isScriptClass(t) ? module.getMethods() : methods);
+			for (final MethodNode m : methods) {
+				if (m.getName().startsWith("<") || m.isSynthetic() || m.getName()
+					.contains("$") || !own && m.isPrivate()) continue;
+				if (signatures.add(signature(m)) && declared.contains(m)) out.add(m);
+			}
+			own = false;
+		}
+		return out;
+	}
+
+	/**
+	 * True iff the type is the class Groovy generates for the script, i.e. the
+	 * one whose {@code run} method holds the script's top-level code. NB: Not
+	 * {@link ClassNode#isScript()}, which is also true of
+	 * {@code groovy.lang.Script} and its other subclasses.
+	 */
+	private boolean isScriptClass(final ClassNode type) {
+		if (module == null || !type.isPrimaryClassNode()) return false;
+		for (final MethodNode m : type.getDeclaredMethods("run")) {
+			if (m.isScriptBody()) return true;
+		}
+		return false;
+	}
+
+	/** A type's superclass, or null if it has none or it is unknown. */
+	private static ClassNode superclass(final ClassNode type) {
+		try {
+			final ClassNode s = type.getSuperClass();
+			return s == null ? null : s.redirect();
+		}
+		catch (final RuntimeException | LinkageError exc) {
+			return null;
+		}
+	}
+
+	/** A method's name and parameter types, e.g. {@code add,java.lang.Object}. */
+	private static String signature(final MethodNode m) {
+		final StringBuilder signature = new StringBuilder(m.getName());
+		for (final Parameter p : m.getParameters()) {
+			signature.append(',').append(p.getType().getName());
+		}
+		return signature.toString();
 	}
 
 	/** True iff the expression is, or contains, the caret marker. */
@@ -701,28 +791,55 @@ final class TypedAST {
 
 	/** Gets the node of the caret marker. */
 	private ASTNode caretNode() {
-		final ASTNode[] found = { null };
-		visit(new Visitor() {
+		final CaretFinder finder = new CaretFinder();
+		visit(finder);
+		return finder.found;
+	}
 
-			@Override
-			public void visitVariableExpression(final VariableExpression e) {
-				if (CARET.equals(e.getName())) found[0] = e;
-				super.visitVariableExpression(e);
+	/**
+	 * Gets the class whose code contains the caret: the script class (for the
+	 * script's body and functions), or a class the script declares; or null if
+	 * the caret is not found.
+	 */
+	private ClassNode caretClass() {
+		if (module == null) return null;
+		// NB: A class's visit skips the classes nested in it, so the first class
+		// found containing the caret is the innermost.
+		for (final ClassNode c : module.getClasses()) {
+			final CaretFinder finder = new CaretFinder();
+			try {
+				finder.visitClass(c);
 			}
+			catch (final RuntimeException exc) {
+				continue; // NB: Malformed tree; skip this class.
+			}
+			if (finder.found != null) return c;
+		}
+		return null;
+	}
 
-			@Override
-			public void visitPropertyExpression(final PropertyExpression e) {
-				if (CARET.equals(e.getPropertyAsString())) found[0] = e.getProperty();
-				super.visitPropertyExpression(e);
-			}
+	/** Finds the node of the caret marker. */
+	private class CaretFinder extends Visitor {
 
-			@Override
-			public void visitMethodCallExpression(final MethodCallExpression e) {
-				if (CARET.equals(e.getMethodAsString())) found[0] = e.getMethod();
-				super.visitMethodCallExpression(e);
-			}
-		});
-		return found[0];
+		private ASTNode found;
+
+		@Override
+		public void visitVariableExpression(final VariableExpression e) {
+			if (CARET.equals(e.getName())) found = e;
+			super.visitVariableExpression(e);
+		}
+
+		@Override
+		public void visitPropertyExpression(final PropertyExpression e) {
+			if (CARET.equals(e.getPropertyAsString())) found = e.getProperty();
+			super.visitPropertyExpression(e);
+		}
+
+		@Override
+		public void visitMethodCallExpression(final MethodCallExpression e) {
+			if (CARET.equals(e.getMethodAsString())) found = e.getMethod();
+			super.visitMethodCallExpression(e);
+		}
 	}
 
 	/** Visits every class (including the script itself) of the source. */

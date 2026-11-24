@@ -40,7 +40,10 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Local threshold method which determines whether a pixel is closer to the
- * maximum or minimum pixel of a neighborhood.
+ * maximum or minimum pixel of a neighborhood. Pixels closer to the maximum (or
+ * equally close to both) are foreground, except pixels with the minimum value
+ * of the type (black), which are always background. This matches the Contrast
+ * method of ImageJ Auto_Local_Threshold (v1.10+) by G. Landini.
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
@@ -77,10 +80,10 @@ public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 		final var diffMin = centerValue - outputs.getA().getRealDouble();
 		final var diffMax = outputs.getB().getRealDouble() - centerValue;
 
-		// set to background (false) if pixel closer to min value,
-		// and to foreground (true) if pixel closer to max value.
-		// If diffMin and diffMax are equal, output will be set to fg.
-		output.set(diffMin <= diffMax);
+		// Note: Like ImageJ, ties go to the foreground, except for black pixels,
+		// which would otherwise make flat black regions foreground.
+		output.set(diffMax <= diffMin && centerValue != inputCenterPixel
+			.getMinValue());
 	}
 
 }

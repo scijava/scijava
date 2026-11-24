@@ -30,15 +30,18 @@
 package org.scijava.ops.image.coloc.pValue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
 import org.scijava.ops.image.AbstractColocalisationTest;
+import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
@@ -69,6 +72,75 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 	public void testPValueSomeColoc() {
 		double[] array = { 0.25, 0.25, 0.75, 0.75, 0.75 };
 		assertColoc(0.6, 0.25, array, 0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
+	}
+
+	/**
+	 * Runs the Costes et al. (2004) significance test (Pearson coefficient,
+	 * PSF-sized blocks) on a channel and a noisy copy of it: the observed
+	 * coefficient must exceed all shuffled ones (Costes P = 100%, p-value 0),
+	 * and is not significant against an unrelated channel.
+	 */
+	@Test
+	public void testCostes() {
+		final Img<FloatType> ch1 = ArrayImgs.floats(60, 60);
+		final Img<FloatType> ch2 = ArrayImgs.floats(60, 60);
+		final Img<FloatType> ch3 = ArrayImgs.floats(60, 60);
+		final var rng = new java.util.Random(42);
+		final var c1 = ch1.localizingCursor();
+		final var c2 = ch2.cursor();
+		final var c3 = ch3.cursor();
+		while (c1.hasNext()) {
+			c1.fwd();
+			final double x = c1.getDoublePosition(0), y = c1.getDoublePosition(1);
+			final double v = Math.sin(x / 3) * Math.cos(y / 4);
+			c1.get().setReal(100 + 50 * v);
+			c2.next().setReal(100 + 50 * v + 20 * rng.nextGaussian());
+			c3.next().setReal(100 + 20 * rng.nextGaussian());
+		}
+		final BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> pearsons =
+			ops.op("coloc.pearsons").inType(new Nil<RandomAccessibleInterval<FloatType>>() {},
+				new Nil<RandomAccessibleInterval<FloatType>>() {}).outType(Double.class)
+				.function();
+		final PValueResult coloc = new PValueResult();
+		ops.op("coloc.pValue").input(ch1, ch2, pearsons, 50, new FinalDimensions(
+			5, 5)).output(coloc).compute();
+		assertEquals(0.0, coloc.getPValue(), 0.0);
+		final PValueResult noColoc = new PValueResult();
+		ops.op("coloc.pValue").input(ch1, ch3, pearsons, 50, new FinalDimensions(
+			5, 5)).output(noColoc).compute();
+		assertTrue(noColoc.getPValue() > 0.05);
+	}
+
+	/**
+	 * Tests that the shuffled images stay aligned with the second image when the
+	 * images are trimmed to a multiple of the block size: with a single block,
+	 * every shuffle is the identity, so each shuffled image must equal the
+	 * (trimmed) first image.
+	 */
+	@Test
+	public void testTrimmedAlignment() {
+		final Img<FloatType> image = ArrayImgs.floats(8, 8);
+		int i = 0;
+		for (final FloatType t : image)
+			t.setReal(i++);
+		// Returns the largest absolute difference between the two images.
+		final BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
+			ops.typeLambda(new Nil<>() {}, (a, b) -> {
+				final var ca = Views.flatIterable(a).cursor();
+				final var cb = Views.flatIterable(b).cursor();
+				double max = 0;
+				while (ca.hasNext()) {
+					max = Math.max(max, Math.abs(ca.next().get() - cb.next().get()));
+				}
+				return max;
+			});
+		final PValueResult output = new PValueResult();
+		ops.op("coloc.pValue").input(image, image, op, 4, new FinalDimensions(6,
+			6)).output(output).compute();
+		assertEquals(0.0, output.getColocValue(), 0.0);
+		for (final double v : output.getColocValuesArray()) {
+			assertEquals(0.0, v, 0.0);
+		}
 	}
 
 	/**

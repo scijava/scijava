@@ -58,6 +58,7 @@ import org.scijava.ops.image.threshold.localSauvola.LocalSauvolaThreshold;
 import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.CenteredRectangleShape;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
@@ -319,7 +320,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 			new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(
 				Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		// Note: The first pixel is closer to its local maximum than to its local
+		// minimum, so it is foreground.
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -831,6 +834,108 @@ public class LocalThresholdTest extends AbstractOpTest {
 		assertEquals(true, out.firstElement().get());
 	}
 
+	/**
+	 * Tests that the local threshold ops give the same masks when they compute
+	 * rectangular neighborhoods via integral images as when they compute them
+	 * directly.
+	 */
+	@Test
+	public void testIntegralMatchesNonIntegral() {
+		// Note: A CenteredRectangleShape yields the same neighborhoods as the
+		// RectangleShape, but is not computed via integral images.
+		final Shape integral = new RectangleShape(3, false);
+		final Shape direct = new CenteredRectangleShape(new int[] { 3, 3 }, false);
+		final var oob =
+			new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(
+				Boundary.SINGLE);
+		for (final var name : new String[] { "localMean", "localNiblack",
+			"localSauvola" })
+		{
+			final Img<BitType> expected = ArrayImgs.bits(in.dimensionsAsLongArray());
+			final Img<BitType> actual = ArrayImgs.bits(in.dimensionsAsLongArray());
+			computeLocal(name, direct, oob, expected);
+			computeLocal(name, integral, oob, actual);
+			testRandomAccessibleInterval(expected, actual);
+		}
+	}
+
+	private void computeLocal(final String name, final Shape shape,
+		final OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oob,
+		final Img<BitType> output)
+	{
+		final var op = "threshold." + name;
+		switch (name) {
+			case "localMean":
+				ops.op(op).input(in, shape, 0.0, oob).output(output).compute();
+				break;
+			case "localNiblack":
+				ops.op(op).input(in, shape, 0.0, 0.2, oob).output(output).compute();
+				break;
+			default:
+				ops.op(op).input(in, shape, 0.5, 128.0, oob).output(output).compute();
+		}
+	}
+
+	/**
+	 * Tests that {@code threshold.localPhansalkar} stretches its input to [0, 1],
+	 * so that a raw image and its normalized copy (stretched to the 256 grey
+	 * levels of ByteType and rounded down, as ImageJ does) give the same mask,
+	 * with neighborhoods computed directly or via integral images; and that
+	 * {@code normalize = false} uses the values as they are.
+	 */
+	@Test
+	public void testLocalPhansalkarStretchesInput() {
+		final var shape = new RectangleShape(3, false);
+		final var oob =
+			new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(
+				Boundary.SINGLE);
+		ops.op("threshold.localPhansalkar").input(in, shape, 0.25, 0.5, oob)
+			.output(out).compute();
+
+		var min = Double.POSITIVE_INFINITY;
+		var max = Double.NEGATIVE_INFINITY;
+		for (final var t : in) {
+			min = Math.min(min, t.get());
+			max = Math.max(max, t.get());
+		}
+		final var quantized = ArrayImgs.doubles(in.dimensionsAsLongArray());
+		final var c = in.cursor();
+		for (final var t : quantized)
+			t.set(Math.floor((c.next().get() - min) / (max - min) * 255) / 255);
+		final var doubleOob =
+			new OutOfBoundsMirrorFactory<DoubleType, RandomAccessibleInterval<DoubleType>>(
+				Boundary.SINGLE);
+		final Img<BitType> expected = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(quantized, shape, 0.25, 0.5,
+			doubleOob, false).output(expected).compute();
+		testRandomAccessibleInterval(expected, out);
+
+		// Note: A CenteredRectangleShape yields the same neighborhoods as the
+		// RectangleShape, but is not computed via integral images.
+		final Img<BitType> nonIntegral = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(in, new CenteredRectangleShape(
+			new int[] { 3, 3 }, false), 0.25, 0.5, oob).output(nonIntegral)
+			.compute();
+		testRandomAccessibleInterval(expected, nonIntegral);
+
+		// Floating-point images are stretched exactly.
+		final Img<BitType> stretched = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(normalizedIn, shape, 0.25, 0.5,
+			doubleOob).output(stretched).compute();
+		final var scaled = ArrayImgs.doubles(in.dimensionsAsLongArray());
+		final var nc = normalizedIn.cursor();
+		for (final var t : scaled)
+			t.set(nc.next().get() * 3 - 7);
+		final Img<BitType> scaledOut = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(scaled, shape, 0.25, 0.5,
+			doubleOob).output(scaledOut).compute();
+		testRandomAccessibleInterval(stretched, scaledOut);
+		final Img<BitType> raw = ArrayImgs.bits(in.dimensionsAsLongArray());
+		ops.op("threshold.localPhansalkar").input(normalizedIn, shape, 0.25, 0.5,
+			doubleOob, false).output(raw).compute();
+		testRandomAccessibleInterval(stretched, raw);
+	}
+
 	// /**
 	// * @see LocalPhansalkarThresholdIntegral
 	// */
@@ -921,7 +1026,23 @@ public class LocalThresholdTest extends AbstractOpTest {
 
 		opToTest.compute(in, new RectangleShape(2, false), out);
 
-		assertEquals(true, out.firstElement().get());
+		// Note: the defaults are k = 0.5 and r = 128 (half the range of ByteType),
+		// and the 5x5 neighborhood of the first pixel is extended at the border.
+		final var ra = Views.extendBorder(in).randomAccess();
+		var sum = 0.0;
+		var sum2 = 0.0;
+		for (var y = -2; y <= 2; y++) {
+			for (var x = -2; x <= 2; x++) {
+				final double v = ra.setPositionAndGet(x, y).get();
+				sum += v;
+				sum2 += v * v;
+			}
+		}
+		final var mean = sum / 25;
+		final var sd = Math.sqrt(sum2 / 25 - mean * mean);
+		final var expected = in.firstElement().get() > mean * (1 + 0.5 * (sd /
+			128 - 1));
+		assertEquals(expected, out.firstElement().get());
 	}
 
 	// /**

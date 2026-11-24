@@ -1,0 +1,25 @@
+SciJava Ops Image LGPL
+Copyright (C) 2026 SciJava developers.
+
+This component is licensed under the GNU Lesser General Public License,
+version 3 or later; see LICENSE.txt.
+
+This component contains functionality derived from MorphoLibJ:
+
+  MorphoLibJ: integrated library and plugins for mathematical morphology
+  with ImageJ.
+  Copyright (C) 2014-2026 INRA.
+  Licensed under the GNU Lesser General Public License, version 3.
+  https://github.com/ijpb/MorphoLibJ
+
+  D. Legland, I. Arganda-Carreras and P. Andrey, "MorphoLibJ: integrated
+  library and plugins for mathematical morphology with ImageJ",
+  Bioinformatics 32(22):3532-3534, 2016. doi:10.1093/bioinformatics/btw413
+
+It contains code adapted from MorphoLibJ's source code:
+
+  - org.scijava.ops.image.lgpl.intrinsicvolumes
+    (features.intrinsicVolumes.* ops)
+
+Each class's javadoc credits the original authors and the papers it is
+based on.

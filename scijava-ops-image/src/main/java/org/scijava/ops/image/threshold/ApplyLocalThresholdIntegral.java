@@ -191,7 +191,29 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 		final var offsetInterval2 = Views.offsetInterval(extendedInput,
 			expandedInterval);
 		final var img = integralOp.apply(offsetInterval2);
-		return addLeadingZeros(img);
+		return addLeadingZeros(cropLeadingZeros(img, offsetInterval2));
+	}
+
+	/**
+	 * Crops an integral image to the size of its input. Some integral image ops
+	 * (such as ImgLib2's {@code IntegralImg}) prepend a row of zeros in each
+	 * dimension, while others produce an image of the size of their input.
+	 *
+	 * @param img Integral image
+	 * @param input The input of the integral image
+	 * @return The last pixels of the integral image in each dimension, as many
+	 *         as the input has
+	 */
+	private static <T> RandomAccessibleInterval<T> cropLeadingZeros(
+		final RandomAccessibleInterval<T> img, final RandomAccessibleInterval<?> input)
+	{
+		if (Intervals.equalDimensions(img, input)) return img;
+		final var min = Intervals.maxAsLongArray(img);
+		for (var d = 0; d < min.length; d++) {
+			min[d] -= input.dimension(d) - 1;
+		}
+		return Views.zeroMin(Views.offsetInterval(img, min, input
+			.dimensionsAsLongArray()));
 	}
 
 	/**

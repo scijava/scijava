@@ -494,6 +494,85 @@ public class ScriptSessionTest {
 			.equals(Arrays.asList(expected)));
 	}
 
+	/** Tests that server startup is reported correctly to listeners. */
+	@Test
+	public void testServerStarted() throws Exception {
+		final List<String> fared = new CopyOnWriteArrayList<>();
+		try (ScriptSession session = new ScriptSession(service, fake)) {
+			session.setServerListener(listener(fared));
+			session.update("x");
+			waitFor(() -> !fared.isEmpty());
+			assertEquals(Collections.singletonList("started"), fared);
+		}
+	}
+
+	/** Tests that a failed server start is reported to listeners. */
+	@Test
+	public void testServerFailed() throws Exception {
+		final List<String> fared = new CopyOnWriteArrayList<>();
+		HighPlugin.failure = new IllegalStateException("broken plugin");
+		try (ScriptSession session = new ScriptSession(service, fake)) {
+			session.setServerListener(listener(fared));
+			session.update("x");
+			// NB: Without a server, completion gives an empty list.
+			assertTrue(session.completion("x", 1).get(10, TimeUnit.SECONDS)
+				.getItems().isEmpty());
+			assertEquals(Collections.singletonList("failed broken plugin"), fared);
+		}
+		finally {
+			HighPlugin.failure = null;
+		}
+	}
+
+	/**
+	 * Tests that a failed server initialization is reported to listeners, and
+	 * that the server is still used.
+	 */
+	@Test
+	public void testServerNotInitialized() {
+		final List<String> fared = new CopyOnWriteArrayList<>();
+		final FakeServer refusing = new FakeServer("refusing", new Environment()) {
+
+			@Override
+			public CompletableFuture<InitializeResult> initialize(
+				final InitializeParams params)
+			{
+				final CompletableFuture<InitializeResult> no =
+					new CompletableFuture<>();
+				no.completeExceptionally(new IllegalStateException("no init"));
+				return no;
+			}
+		};
+		HighPlugin.next = refusing;
+		try (ScriptSession session = new ScriptSession(service, fake)) {
+			session.setServerListener(listener(fared));
+			session.update("x");
+			waitFor(() -> refusing.events.contains("open 1 x"));
+			assertEquals(Collections.singletonList("failed no init"), fared);
+		}
+		finally {
+			HighPlugin.next = null;
+		}
+	}
+
+	/** Creates a listener which records the events it receives. */
+	private static ScriptSession.ServerListener listener(
+		final List<String> fared)
+	{
+		return new ScriptSession.ServerListener() {
+
+			@Override
+			public void started() {
+				fared.add("started");
+			}
+
+			@Override
+			public void failed(final Throwable cause) {
+				fared.add("failed " + cause.getMessage());
+			}
+		};
+	}
+
 	private static List<String> messages(final List<Diagnostic> diagnostics) {
 		return diagnostics.stream().map(d -> d.getMessage().getLeft()).collect(
 			Collectors.toList());

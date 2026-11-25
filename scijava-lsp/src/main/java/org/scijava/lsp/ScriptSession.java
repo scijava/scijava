@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -112,6 +113,7 @@ public final class ScriptSession implements AutoCloseable {
 	private volatile Supplier<File> file = () -> null;
 	private final Logger log;
 	private volatile Consumer<List<Diagnostic>> diagnosticsListener;
+	private volatile ServerListener serverListener;
 
 	/** The server, once all it was told or asked so far is sent. */
 	private CompletableFuture<Optional<LanguageServer>> server =
@@ -194,6 +196,14 @@ public final class ScriptSession implements AutoCloseable {
 		final Consumer<List<Diagnostic>> listener)
 	{
 		diagnosticsListener = listener;
+	}
+
+	/**
+	 * Sets the listener for LSP server status updates. This lets clients tell
+	 * a server that failed to start apart from one with nothing to complete.
+	 */
+	public void setServerListener(final ServerListener listener) {
+		serverListener = listener;
 	}
 
 	/**
@@ -464,6 +474,7 @@ public final class ScriptSession implements AutoCloseable {
 			catch (final RuntimeException | LinkageError exc) {
 				final Logger l = log;
 				if (l != null) l.warn("Could not start a language server", exc);
+				report(listener -> listener.failed(exc));
 				return Optional.empty();
 			}
 		}, TALK);
@@ -535,16 +546,39 @@ public final class ScriptSession implements AutoCloseable {
 		if (s instanceof LanguageClientAware) {
 			((LanguageClientAware) s).connect(new Client(s));
 		}
+		Throwable failure = null;
 		try {
 			final CompletableFuture<InitializeResult> init = s.initialize(
 				new InitializeParams());
 			if (init != null) init.get(INITIALIZE_TIMEOUT, TimeUnit.MILLISECONDS);
 		}
+		catch (final ExecutionException exc) {
+			failure = exc.getCause() == null ? exc : exc.getCause();
+		}
 		catch (final Exception exc) {
-			// NB: Not initialized (in time): asked anyway, answering what it can.
+			failure = exc;
 		}
 		s.initialized(new InitializedParams());
+		// NB: The server is used even if it failed to initialize in time.
+		final Throwable cause = failure;
+		report(listener -> {
+			if (cause == null) listener.started();
+			else listener.failed(cause);
+		});
 		return s;
+	}
+
+	/** Reports an event to the LSP server listener, if any. */
+	private void report(final Consumer<ServerListener> message) {
+		final ServerListener listener = serverListener;
+		if (listener == null) return;
+		try {
+			message.accept(listener);
+		}
+		catch (final RuntimeException exc) {
+			final Logger l = log;
+			if (l != null) l.debug("Server listener failed", exc);
+		}
 	}
 
 	/** Shuts a server down. */
@@ -688,6 +722,25 @@ public final class ScriptSession implements AutoCloseable {
 	}
 
 	// -- Helper classes --
+
+	/**
+	 * The listener interface for LSP server status updates. Its methods are
+	 * called on the session's thread.
+	 */
+	public interface ServerListener {
+
+		/** Invoked when a server has started and initialized. */
+		void started();
+
+		/**
+		 * Invoked when a server fails to start, or fails to initialize in time.
+		 * After a failed start, requests get empty answers until another server
+		 * starts. After a failed initialization, the server is still used.
+		 *
+		 * @param cause The exception that caused the failure.
+		 */
+		void failed(Throwable cause);
+	}
 
 	/** Receives a server's messages. */
 	private final class Client implements LanguageClient {

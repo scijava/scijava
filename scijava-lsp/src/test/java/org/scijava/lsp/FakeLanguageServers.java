@@ -214,6 +214,8 @@ public final class FakeLanguageServers {
 
 		/** The server to create next, if not a new one (e.g. a special one). */
 		static volatile FakeServer next;
+		/** Exception to throw when creating a server, to simulate a failed start. */
+		static volatile RuntimeException failure;
 
 		@Override
 		public boolean supports(final String language) {
@@ -225,6 +227,8 @@ public final class FakeLanguageServers {
 		public LanguageServer create(final String language,
 			final Environment environment)
 		{
+			final RuntimeException f = failure;
+			if (f != null) throw f;
 			final FakeServer special = next;
 			return register(special != null ? special : new FakeServer("high",
 				language, environment));

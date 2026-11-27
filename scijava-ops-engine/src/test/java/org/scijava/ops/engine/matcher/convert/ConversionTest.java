@@ -259,4 +259,13 @@ public class ConversionTest extends AbstractTestEnvironment implements
 		Assertions.assertTrue(info.toString().contains(TEST_DESC));
 	}
 
+	/** Generated names of nested array types must be valid identifiers. */
+	@Test
+	public void testClassNameOfNestedArray() {
+		assertEquals("double", Conversions.getClassName(double.class));
+		assertEquals("double_Arr", Conversions.getClassName(double[].class));
+		assertEquals("double_Arr_Arr", Conversions.getClassName(double[][].class));
+		assertEquals("Integer_Arr_Arr_Arr", Conversions.getClassName(
+			Integer[][][].class));
+	}
 }
